@@ -1,0 +1,1036 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>IEI Ventures — Design System</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<style>
+  :root {
+    /* Default theme — tenant can override --color-primary / --color-accent via TenantConfig */
+    --color-primary: #1a1f1a;        /* deep ink, near-black with green undertone */
+    --color-accent:  #263e0f;        /* moss — used sparingly */
+    --color-neutral: #6b6f69;        /* warm gray */
+    --color-surface: #fafaf7;        /* paper */
+    --color-surface-2: #f2f0e9;      /* raised panel */
+    --color-text:    #1a1f1a;
+    --color-text-muted: #6b6f69;
+    --color-border: #e4e2da;
+    --color-border-strong: #1a1f1a;
+
+    /* Status */
+    --color-status-pending:  #a8a59a;
+    --color-status-running:  #b8912e;
+    --color-status-complete: #3e6b2a;
+    --color-status-failed:   #9a3a2a;
+
+    /* Type scale */
+    --fs-display: 48px;
+    --fs-h1: 32px;
+    --fs-h2: 24px;
+    --fs-h3: 18px;
+    --fs-body: 15px;
+    --fs-small: 13px;
+    --fs-mono: 12px;
+
+    /* Spacing — 4px base */
+    --s-1: 4px; --s-2: 8px; --s-3: 12px; --s-4: 16px;
+    --s-5: 20px; --s-6: 24px; --s-8: 32px; --s-10: 40px; --s-12: 48px;
+
+    /* Radius */
+    --r-sm: 4px; --r-md: 6px; --r-lg: 10px; --r-full: 999px;
+
+    /* Shadows */
+    --sh-1: 0 1px 0 rgba(26,31,26,0.04), 0 1px 2px rgba(26,31,26,0.06);
+    --sh-2: 0 2px 4px rgba(26,31,26,0.06), 0 4px 12px rgba(26,31,26,0.08);
+    --sh-focus: 0 0 0 3px rgba(38,62,15,0.18);
+  }
+
+  html, body { background: var(--color-surface); color: var(--color-text); }
+  body { font-family: 'Geist', system-ui, sans-serif; font-size: var(--fs-body); line-height: 1.5; -webkit-font-smoothing: antialiased; }
+  .font-serif { font-family: 'Instrument Serif', Georgia, serif; font-weight: 400; letter-spacing: -0.01em; }
+  .font-mono { font-family: 'Geist Mono', ui-monospace, monospace; }
+
+  /* --------- Components (minimal CSS; mostly Tailwind in markup) --------- */
+
+  /* Brackets mark — the icon glyph */
+  .iei-mark {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 1.5px solid var(--color-primary);
+    color: var(--color-primary);
+    font-family: 'Geist Mono', monospace;
+    font-weight: 600;
+    letter-spacing: 0;
+    background: transparent;
+  }
+  .iei-mark::before, .iei-mark::after {
+    content: ''; position: absolute; width: 7px; height: 7px;
+    border: 1.5px solid var(--color-accent);
+    background: var(--color-surface);
+  }
+  .iei-mark::before { top: -5px; left: -5px; border-right: none; border-bottom: none; }
+  .iei-mark::after  { bottom: -5px; right: -5px; border-left: none; border-top: none; }
+  .iei-mark.size-sm { width: 22px; height: 22px; font-size: 9px; border-width: 1.25px; }
+  .iei-mark.size-sm::before, .iei-mark.size-sm::after { width: 5px; height: 5px; border-width: 1.25px; }
+  .iei-mark.size-md { width: 32px; height: 32px; font-size: 11px; }
+  .iei-mark.size-md::before, .iei-mark.size-md::after { width: 6px; height: 6px; }
+  .iei-mark.size-lg { width: 48px; height: 48px; font-size: 15px; border-width: 2px; }
+  .iei-mark.size-lg::before, .iei-mark.size-lg::after { width: 9px; height: 9px; border-width: 2px; }
+  .iei-mark.on-dark { border-color: var(--color-surface); color: var(--color-surface); }
+  .iei-mark.on-dark::before, .iei-mark.on-dark::after { background: var(--color-primary); border-color: var(--color-surface); }
+
+  /* Buttons */
+  .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+    font-family: inherit; font-weight: 500; font-size: var(--fs-body); line-height: 1;
+    padding: 10px 16px; border-radius: var(--r-md); border: 1px solid transparent;
+    cursor: pointer; transition: background 120ms, border-color 120ms, color 120ms, box-shadow 120ms;
+    text-decoration: none; white-space: nowrap;
+  }
+  .btn:focus-visible { outline: none; box-shadow: var(--sh-focus); }
+  .btn[disabled], .btn[aria-disabled="true"] { cursor: not-allowed; opacity: 0.5; }
+
+  .btn-primary { background: var(--color-primary); color: var(--color-surface); }
+  .btn-primary:hover:not([disabled]):not([aria-disabled="true"]) { background: #000; }
+  .btn-primary.is-active, .btn-primary:active:not([disabled]) { background: #000; box-shadow: inset 0 1px 0 rgba(255,255,255,0.08); }
+
+  .btn-secondary { background: var(--color-surface); color: var(--color-primary); border-color: var(--color-border-strong); }
+  .btn-secondary:hover:not([disabled]) { background: var(--color-surface-2); }
+  .btn-secondary.is-active, .btn-secondary:active:not([disabled]) { background: var(--color-surface-2); border-color: #000; }
+
+  .btn-ghost { background: transparent; color: var(--color-primary); }
+  .btn-ghost:hover:not([disabled]) { background: var(--color-surface-2); }
+  .btn-ghost.is-active, .btn-ghost:active:not([disabled]) { background: var(--color-border); }
+
+  .btn-destructive { background: var(--color-surface); color: var(--color-status-failed); border-color: var(--color-status-failed); }
+  .btn-destructive:hover:not([disabled]) { background: #faf0ee; }
+  .btn-destructive.is-active, .btn-destructive:active:not([disabled]) { background: var(--color-status-failed); color: var(--color-surface); }
+
+  .btn-icon { padding: 8px; width: 36px; height: 36px; }
+
+  .btn-sm { padding: 6px 10px; font-size: var(--fs-small); }
+  .btn-lg { padding: 14px 20px; font-size: 16px; }
+
+  /* Loading spinner */
+  .spinner { width: 14px; height: 14px; border: 1.5px solid currentColor; border-top-color: transparent; border-radius: 50%; animation: spin 700ms linear infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .skeleton-shimmer { background: linear-gradient(90deg, var(--color-border) 0%, var(--color-surface-2) 50%, var(--color-border) 100%);
+    background-size: 200% 100%; animation: shimmer 1.4s ease-in-out infinite; }
+  @keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+
+  /* Form controls */
+  .field { display: flex; flex-direction: column; gap: 6px; }
+  .field-label { font-size: var(--fs-small); font-weight: 500; color: var(--color-text); }
+  .field-hint { font-size: var(--fs-small); color: var(--color-text-muted); }
+  .field-error { font-size: var(--fs-small); color: var(--color-status-failed); }
+
+  .input, .textarea, .select {
+    width: 100%; font: inherit; font-size: var(--fs-body);
+    padding: 10px 12px; background: var(--color-surface);
+    border: 1px solid var(--color-border); border-radius: var(--r-md);
+    color: var(--color-text);
+    transition: border-color 120ms, box-shadow 120ms, background 120ms;
+  }
+  .input::placeholder, .textarea::placeholder { color: var(--color-text-muted); }
+  .input:hover:not([disabled]), .textarea:hover:not([disabled]), .select:hover:not([disabled]) { border-color: #bdbab0; }
+  .input:focus, .textarea:focus, .select:focus,
+  .input.is-focused, .textarea.is-focused, .select.is-focused {
+    outline: none; border-color: var(--color-primary); box-shadow: var(--sh-focus);
+  }
+  .input.is-error, .textarea.is-error, .select.is-error { border-color: var(--color-status-failed); }
+  .input[disabled], .textarea[disabled], .select[disabled] { background: var(--color-surface-2); color: var(--color-text-muted); cursor: not-allowed; }
+  .textarea { min-height: 96px; resize: vertical; }
+  .select { appearance: none; background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'><path d='M3 4.5l3 3 3-3' stroke='%231a1f1a' stroke-width='1.2' fill='none' stroke-linecap='round' stroke-linejoin='round'/></svg>"); background-repeat: no-repeat; background-position: right 12px center; padding-right: 36px; }
+
+  /* Pill / tag multi-select */
+  .pill { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border-radius: var(--r-full);
+    font-size: var(--fs-small); font-weight: 500; background: var(--color-surface-2); color: var(--color-text);
+    border: 1px solid var(--color-border); line-height: 1.2;
+  }
+  .pill-selected { background: var(--color-primary); color: var(--color-surface); border-color: var(--color-primary); }
+  .pill-removable button { background: none; border: none; padding: 0; color: inherit; font-size: 14px; line-height: 1; cursor: pointer; opacity: 0.7; }
+  .pill-removable button:hover { opacity: 1; }
+
+  /* Status badge */
+  .badge { display: inline-flex; align-items: center; gap: 6px; padding: 3px 8px 3px 7px;
+    border-radius: var(--r-full); font-size: var(--fs-mono); font-family: 'Geist Mono', monospace;
+    font-weight: 500; text-transform: uppercase; letter-spacing: 0.06em; line-height: 1.4;
+    background: var(--color-surface-2); border: 1px solid var(--color-border);
+  }
+  .badge::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: currentColor; opacity: 0.9; }
+  .badge-pending  { color: var(--color-status-pending); }
+  .badge-running  { color: var(--color-status-running); }
+  .badge-running::before { animation: pulse 1.6s ease-in-out infinite; }
+  .badge-complete { color: var(--color-status-complete); }
+  .badge-failed   { color: var(--color-status-failed); }
+  @keyframes pulse { 0%,100% { opacity: 0.35; } 50% { opacity: 1; } }
+
+  /* Project card */
+  .project-card { display: block; background: var(--color-surface); border: 1px solid var(--color-border);
+    border-radius: var(--r-lg); padding: 20px; text-decoration: none; color: inherit;
+    transition: border-color 120ms, box-shadow 120ms, transform 120ms; }
+  .project-card:hover { border-color: var(--color-primary); box-shadow: var(--sh-2); }
+
+  /* Swatch card */
+  .swatch { display: flex; flex-direction: column; gap: 0; border: 1px solid var(--color-border);
+    border-radius: var(--r-md); overflow: hidden; background: var(--color-surface); }
+  .swatch-color { height: 72px; border-bottom: 1px solid var(--color-border); }
+  .swatch-meta { padding: 10px 12px; display: flex; flex-direction: column; gap: 2px; }
+  .swatch-label { font-size: var(--fs-small); font-weight: 500; }
+  .swatch-hex { font-family: 'Geist Mono', monospace; font-size: var(--fs-mono); color: var(--color-text-muted); text-transform: uppercase; }
+
+  /* Dropzone */
+  .dropzone { border: 1.5px dashed var(--color-border); border-radius: var(--r-lg);
+    padding: 32px 20px; text-align: center; background: var(--color-surface); transition: border-color 120ms, background 120ms; }
+  .dropzone:hover, .dropzone.is-hover { border-color: var(--color-primary); background: var(--color-surface-2); }
+  .dropzone.is-error { border-color: var(--color-status-failed); }
+
+  /* Modal */
+  .modal-overlay { position: absolute; inset: 0; background: rgba(26,31,26,0.5); display: flex; align-items: center; justify-content: center; padding: 24px; }
+  .modal { background: var(--color-surface); border-radius: var(--r-lg); box-shadow: var(--sh-2); width: 100%; max-width: 440px; overflow: hidden; }
+
+  /* Toast */
+  .toast { display: flex; gap: 12px; align-items: flex-start; padding: 12px 14px;
+    background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--r-md);
+    box-shadow: var(--sh-2); min-width: 280px; max-width: 420px; }
+  .toast-rail { width: 3px; border-radius: 2px; align-self: stretch; background: var(--color-primary); }
+  .toast.toast-success .toast-rail { background: var(--color-status-complete); }
+  .toast.toast-error   .toast-rail { background: var(--color-status-failed); }
+  .toast.toast-info    .toast-rail { background: var(--color-status-running); }
+
+  /* Stepper */
+  .stepper { display: flex; align-items: center; gap: 0; width: 100%; }
+  .stepper-step { display: flex; align-items: center; gap: 10px; flex: 0 0 auto; }
+  .stepper-dot { width: 24px; height: 24px; border-radius: var(--r-full); border: 1.5px solid var(--color-border);
+    display: flex; align-items: center; justify-content: center; font-family: 'Geist Mono', monospace; font-size: 11px; color: var(--color-text-muted); background: var(--color-surface); }
+  .stepper-step.done .stepper-dot { background: var(--color-primary); color: var(--color-surface); border-color: var(--color-primary); }
+  .stepper-step.current .stepper-dot { border-color: var(--color-primary); color: var(--color-primary); font-weight: 600; }
+  .stepper-label { font-size: var(--fs-small); color: var(--color-text-muted); }
+  .stepper-step.done .stepper-label, .stepper-step.current .stepper-label { color: var(--color-text); }
+  .stepper-rule { flex: 1 1 auto; height: 1px; background: var(--color-border); margin: 0 12px; }
+  .stepper-step.done + .stepper-rule { background: var(--color-primary); }
+
+  /* Skeletons */
+  .sk { background: var(--color-border); border-radius: var(--r-sm); display: block; }
+
+  /* Nav */
+  .nav { background: var(--color-surface); border-bottom: 1px solid var(--color-border); }
+
+  /* Layout helpers for this doc */
+  .doc-shell { max-width: 1200px; margin: 0 auto; padding: 48px 32px 120px; }
+  .doc-section { padding: 40px 0; border-top: 1px solid var(--color-border); }
+  .doc-section:first-of-type { border-top: none; }
+  .doc-h1 { font-family: 'Instrument Serif', serif; font-size: 56px; line-height: 1.05; letter-spacing: -0.02em; }
+  .doc-eyebrow { font-family: 'Geist Mono', monospace; font-size: 11px; text-transform: uppercase; letter-spacing: 0.14em; color: var(--color-text-muted); }
+  .doc-h2 { font-size: 24px; font-weight: 600; letter-spacing: -0.01em; }
+  .doc-h3 { font-size: 14px; font-weight: 600; letter-spacing: -0.005em; }
+  .doc-kicker { font-family: 'Geist Mono', monospace; font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.14em; color: var(--color-text-muted); }
+  .surface-demo { background: var(--color-surface-2); border: 1px solid var(--color-border); border-radius: var(--r-md); padding: 20px; }
+
+  /* States chip */
+  .state-chip { font-family: 'Geist Mono', monospace; font-size: 10.5px; color: var(--color-text-muted);
+    letter-spacing: 0.1em; text-transform: uppercase; padding: 2px 0; border-top: 1px solid var(--color-border); margin-top: 12px; padding-top: 6px; }
+
+  /* Table of contents sticky */
+  .toc { position: sticky; top: 24px; align-self: start; font-size: var(--fs-small); }
+  .toc a { display: block; padding: 4px 0; color: var(--color-text-muted); text-decoration: none; border-left: 1.5px solid transparent; padding-left: 10px; }
+  .toc a:hover { color: var(--color-text); border-left-color: var(--color-border); }
+
+  @media (max-width: 900px) {
+    .doc-shell { padding: 24px 16px 80px; }
+    .doc-h1 { font-size: 40px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Inline mock data — matches 03-data-contracts.md shapes -->
+<script>
+  const MOCK_PROJECTS = [
+    { id:"1a2b3c4d", createdAt:"2026-04-22T14:30:00Z", status:"complete",
+      intake:{ companyName:"Aurelian Labs", industry:"AI / Financial Services", targetAudience:"Capital markets operators",
+        toneOfVoice:"confident, precise, modern", competitors:"Hebbia, Harvey", archetype:"sage", palettePreference:"", notes:"" },
+      outputs:{ brandJson:"#", playbookHtml:"#", landingHtml:"#", logoSvg:"#" }
+    },
+    { id:"5e6f7g8h", createdAt:"2026-04-21T09:15:00Z", status:"running",
+      intake:{ companyName:"Greenfield Capital", industry:"Private Credit", targetAudience:"Mid-market sponsors",
+        toneOfVoice:"institutional, discreet", competitors:"", archetype:"sage", palettePreference:"", notes:"" },
+      outputs:{}
+    },
+    { id:"9i0j1k2l", createdAt:"2026-04-19T16:40:00Z", status:"failed",
+      intake:{ companyName:"Northwind Supply", industry:"Industrial Logistics", targetAudience:"Operations directors",
+        toneOfVoice:"direct, reliable", competitors:"", archetype:"caregiver", palettePreference:"", notes:"" },
+      outputs:{}, error:"Skill timed out after 120s"
+    }
+  ];
+  const MOCK_BRAND_JSON = {
+    name:"Aurelian Labs",
+    tagline:"Brand direction for Aurelian Labs — AI / Financial Services",
+    colors:{ primary:"#1E3A8A", secondary:"#0EA5E9", accent:"#CBD5E1", neutral:"#F9FAFB" },
+    typography:{ heading:"Geist, Inter, sans-serif", body:"Geist, Inter, sans-serif" },
+    tone:["confident","precise","modern"],
+    positioning:"Aurelian Labs serves Capital markets operators in AI / Financial Services."
+  };
+</script>
+
+<div class="doc-shell">
+
+  <!-- ================= Header ================= -->
+  <header class="mb-12">
+    <div class="flex items-center gap-3 mb-10">
+      <span class="iei-mark size-md">IEI</span>
+      <div class="flex items-baseline gap-2">
+        <span class="font-medium tracking-tight">IEI Ventures</span>
+        <span class="font-mono text-xs" style="color:var(--color-text-muted); letter-spacing:0.18em; text-transform:uppercase;">Design System</span>
+      </div>
+      <span class="ml-auto font-mono text-xs" style="color:var(--color-text-muted);">v0.1 · apr 2026</span>
+    </div>
+    <div class="doc-eyebrow mb-3">Platform brand · default theme</div>
+    <h1 class="doc-h1 mb-4">Components, states, and tokens<br>for a platform agencies trust to white‑label.</h1>
+    <p style="color:var(--color-text-muted); max-width: 62ch;" class="text-base">Everything below uses CSS variables keyed to <code class="font-mono text-xs">--color-primary</code>, <code class="font-mono text-xs">--color-accent</code>, <code class="font-mono text-xs">--color-neutral</code>, <code class="font-mono text-xs">--color-surface</code>, <code class="font-mono text-xs">--color-text</code> — tenants swap these at runtime via <code class="font-mono text-xs">TenantConfig.colors</code>.</p>
+  </header>
+
+  <!-- ================= Brand ================= -->
+  <section id="brand" class="doc-section">
+    <div class="doc-eyebrow mb-2">01</div>
+    <h2 class="doc-h2 mb-6">Logo &amp; mark</h2>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+
+      <div class="surface-demo flex flex-col gap-4" style="background: var(--color-surface);">
+        <div class="doc-kicker">Primary lockup</div>
+        <!-- @bind: tenant.displayName fallback "IEI Ventures" -->
+        <div class="flex items-center gap-3 py-4">
+          <span class="iei-mark size-lg">IEI</span>
+          <div class="flex flex-col leading-tight">
+            <span class="font-medium text-lg tracking-tight">IEI Ventures</span>
+            <span class="font-mono text-[10px]" style="color:var(--color-text-muted); letter-spacing:0.18em; text-transform:uppercase;">Intake → Identity → Income</span>
+          </div>
+        </div>
+        <div class="state-chip">lockup · default theme</div>
+      </div>
+
+      <div class="surface-demo flex flex-col gap-4" style="background: var(--color-surface);">
+        <div class="doc-kicker">Icon mark — sizes</div>
+        <div class="flex items-end gap-5 py-3">
+          <span class="iei-mark size-lg">IEI</span>
+          <span class="iei-mark size-md">IEI</span>
+          <span class="iei-mark size-sm">IEI</span>
+        </div>
+        <div class="state-chip">48 · 32 · 22 — favicon and nav sizes</div>
+      </div>
+
+      <div class="surface-demo flex flex-col gap-4" style="background: var(--color-primary);">
+        <div class="doc-kicker" style="color: #bdbab0;">Reversed</div>
+        <div class="flex items-center gap-3 py-4">
+          <span class="iei-mark size-lg on-dark">IEI</span>
+          <span class="font-medium text-lg tracking-tight" style="color: var(--color-surface);">IEI Ventures</span>
+        </div>
+        <div class="state-chip" style="border-color: #2a2f2a; color:#7a7f79;">on-dark · mono</div>
+      </div>
+    </div>
+
+    <!-- Reusable SVG — primary lockup (inline, paste-able) -->
+    <details class="mt-6">
+      <summary class="doc-kicker cursor-pointer">Inline SVG (for port / favicons) ›</summary>
+      <div class="mt-3 grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="surface-demo" style="background: var(--color-surface);">
+          <div class="doc-kicker mb-3">Lockup SVG</div>
+          <!-- @bind: IEI Ventures primary lockup -->
+          <svg width="220" height="56" viewBox="0 0 220 56" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="IEI Ventures">
+            <g stroke="currentColor" stroke-width="2" fill="none">
+              <rect x="6" y="6" width="44" height="44"/>
+              <path d="M1 13 V1 H13" stroke="var(--color-accent)"/>
+              <path d="M55 43 V55 H43" stroke="var(--color-accent)"/>
+            </g>
+            <text x="18" y="36" font-family="Geist Mono, monospace" font-size="14" font-weight="600" fill="currentColor">IEI</text>
+            <text x="70" y="28" font-family="Geist, sans-serif" font-size="20" font-weight="600" fill="currentColor" letter-spacing="-0.4">IEI Ventures</text>
+            <text x="70" y="46" font-family="Geist Mono, monospace" font-size="9" letter-spacing="2" fill="var(--color-text-muted)">INTAKE → IDENTITY → INCOME</text>
+          </svg>
+        </div>
+        <div class="surface-demo" style="background: var(--color-surface);">
+          <div class="doc-kicker mb-3">Icon SVG (favicon)</div>
+          <svg width="48" height="48" viewBox="0 0 56 56" xmlns="http://www.w3.org/2000/svg" aria-label="IEI">
+            <g stroke="currentColor" stroke-width="2" fill="none">
+              <rect x="6" y="6" width="44" height="44"/>
+              <path d="M1 13 V1 H13" stroke="var(--color-accent)"/>
+              <path d="M55 43 V55 H43" stroke="var(--color-accent)"/>
+            </g>
+            <text x="14" y="36" font-family="Geist Mono, monospace" font-size="14" font-weight="600" fill="currentColor">IEI</text>
+          </svg>
+        </div>
+      </div>
+    </details>
+  </section>
+
+  <!-- ================= Color ================= -->
+  <section id="color" class="doc-section">
+    <div class="doc-eyebrow mb-2">02</div>
+    <h2 class="doc-h2 mb-2">Color</h2>
+    <p style="color: var(--color-text-muted); max-width: 62ch;" class="mb-6 text-sm">Restrained primary, one moss accent, generous neutrals. All role-named — tenant overrides happen at the variable level.</p>
+
+    <div class="grid grid-cols-2 md:grid-cols-5 gap-4">
+      <div class="swatch"><div class="swatch-color" style="background: var(--color-primary);"></div>
+        <div class="swatch-meta"><span class="swatch-label">Primary</span><span class="swatch-hex">#1A1F1A</span><span class="swatch-hex" style="text-transform:none;">--color-primary</span></div></div>
+      <div class="swatch"><div class="swatch-color" style="background: var(--color-accent);"></div>
+        <div class="swatch-meta"><span class="swatch-label">Accent</span><span class="swatch-hex">#263E0F</span><span class="swatch-hex" style="text-transform:none;">--color-accent</span></div></div>
+      <div class="swatch"><div class="swatch-color" style="background: var(--color-neutral);"></div>
+        <div class="swatch-meta"><span class="swatch-label">Neutral</span><span class="swatch-hex">#6B6F69</span><span class="swatch-hex" style="text-transform:none;">--color-neutral</span></div></div>
+      <div class="swatch"><div class="swatch-color" style="background: var(--color-surface-2); border-bottom-color: var(--color-border);"></div>
+        <div class="swatch-meta"><span class="swatch-label">Surface raised</span><span class="swatch-hex">#F2F0E9</span><span class="swatch-hex" style="text-transform:none;">--color-surface-2</span></div></div>
+      <div class="swatch"><div class="swatch-color" style="background: var(--color-surface); border-bottom-color: var(--color-border);"></div>
+        <div class="swatch-meta"><span class="swatch-label">Surface</span><span class="swatch-hex">#FAFAF7</span><span class="swatch-hex" style="text-transform:none;">--color-surface</span></div></div>
+    </div>
+
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-5">
+      <div class="swatch"><div class="swatch-color" style="background: var(--color-status-pending);"></div>
+        <div class="swatch-meta"><span class="swatch-label">Status · pending</span><span class="swatch-hex">#A8A59A</span></div></div>
+      <div class="swatch"><div class="swatch-color" style="background: var(--color-status-running);"></div>
+        <div class="swatch-meta"><span class="swatch-label">Status · running</span><span class="swatch-hex">#B8912E</span></div></div>
+      <div class="swatch"><div class="swatch-color" style="background: var(--color-status-complete);"></div>
+        <div class="swatch-meta"><span class="swatch-label">Status · complete</span><span class="swatch-hex">#3E6B2A</span></div></div>
+      <div class="swatch"><div class="swatch-color" style="background: var(--color-status-failed);"></div>
+        <div class="swatch-meta"><span class="swatch-label">Status · failed</span><span class="swatch-hex">#9A3A2A</span></div></div>
+    </div>
+  </section>
+
+  <!-- ================= Typography ================= -->
+  <section id="type" class="doc-section">
+    <div class="doc-eyebrow mb-2">03</div>
+    <h2 class="doc-h2 mb-2">Typography</h2>
+    <p style="color: var(--color-text-muted); max-width: 62ch;" class="mb-6 text-sm"><strong>Geist</strong> for UI and body. <strong>Instrument Serif</strong> for hero moments — the intake "strategist" voice, landing heroes, playbook covers. <strong>Geist Mono</strong> for meta, kickers, and data.</p>
+
+    <div class="grid grid-cols-1 md:grid-cols-[1fr_240px] gap-8">
+      <div class="flex flex-col gap-5">
+        <div>
+          <div class="doc-kicker">Display · Instrument Serif · 48/56</div>
+          <div class="font-serif" style="font-size: 48px; line-height: 1.05; letter-spacing:-0.02em;">From intake to identity to income.</div>
+        </div>
+        <div>
+          <div class="doc-kicker">H1 · Geist Medium · 32/40</div>
+          <div style="font-size: 32px; font-weight: 500; letter-spacing:-0.015em;">Aurelian Labs</div>
+        </div>
+        <div>
+          <div class="doc-kicker">H2 · Geist Semibold · 24/32</div>
+          <div style="font-size: 24px; font-weight: 600; letter-spacing:-0.01em;">Brand kit</div>
+        </div>
+        <div>
+          <div class="doc-kicker">H3 · Geist Semibold · 18/28</div>
+          <div style="font-size: 18px; font-weight: 600;">Positioning statement</div>
+        </div>
+        <div>
+          <div class="doc-kicker">Body · Geist Regular · 15/24</div>
+          <div style="font-size: 15px; max-width: 62ch;">Aurelian Labs serves capital markets operators in AI and financial services. Direction is sage: clarity, precision, restraint — a system, not a performance.</div>
+        </div>
+        <div>
+          <div class="doc-kicker">Small · Geist Regular · 13/20</div>
+          <div style="font-size: 13px; color: var(--color-text-muted);">Created Apr 22, 2026 · 3 outputs ready for download</div>
+        </div>
+        <div>
+          <div class="doc-kicker">Mono · Geist Mono · 12/16</div>
+          <div class="font-mono" style="font-size: 12px; text-transform: uppercase; letter-spacing: 0.12em;">Project · 1a2b3c4d</div>
+        </div>
+      </div>
+      <aside class="surface-demo" style="background: var(--color-surface);">
+        <div class="doc-kicker mb-2">Scale</div>
+        <ul class="font-mono text-xs" style="color: var(--color-text-muted); line-height: 1.9;">
+          <li>Display · 48 / 1.05 / -0.02em</li>
+          <li>H1 · 32 / 1.25 / -0.015em</li>
+          <li>H2 · 24 / 1.33 / -0.01em</li>
+          <li>H3 · 18 / 1.55</li>
+          <li>Body · 15 / 1.6</li>
+          <li>Small · 13 / 1.54</li>
+          <li>Mono · 12 / 1.33</li>
+        </ul>
+      </aside>
+    </div>
+  </section>
+
+  <!-- ================= Buttons ================= -->
+  <section id="buttons" class="doc-section">
+    <div class="doc-eyebrow mb-2">04</div>
+    <h2 class="doc-h2 mb-6">Buttons</h2>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-5">
+      <!-- Primary -->
+      <div class="surface-demo" style="background: var(--color-surface);">
+        <div class="doc-kicker mb-3">Primary</div>
+        <div class="flex flex-col gap-2 items-start">
+          <button class="btn btn-primary">New brand</button>
+          <button class="btn btn-primary" style="background:#000;">New brand <span class="font-mono text-[10px] opacity-60">hover</span></button>
+          <button class="btn btn-primary is-active">New brand</button>
+          <button class="btn btn-primary" disabled>New brand</button>
+          <button class="btn btn-primary" aria-disabled="true"><span class="spinner"></span> Running…</button>
+        </div>
+        <div class="state-chip">default · hover · active · disabled · loading</div>
+      </div>
+
+      <!-- Secondary -->
+      <div class="surface-demo" style="background: var(--color-surface);">
+        <div class="doc-kicker mb-3">Secondary</div>
+        <div class="flex flex-col gap-2 items-start">
+          <button class="btn btn-secondary">Download kit</button>
+          <button class="btn btn-secondary" style="background: var(--color-surface-2);">Download kit <span class="font-mono text-[10px] opacity-60">hover</span></button>
+          <button class="btn btn-secondary is-active">Download kit</button>
+          <button class="btn btn-secondary" disabled>Download kit</button>
+          <button class="btn btn-secondary" aria-disabled="true"><span class="spinner"></span> Preparing…</button>
+        </div>
+        <div class="state-chip">default · hover · active · disabled · loading</div>
+      </div>
+
+      <!-- Ghost -->
+      <div class="surface-demo" style="background: var(--color-surface);">
+        <div class="doc-kicker mb-3">Ghost</div>
+        <div class="flex flex-col gap-2 items-start">
+          <button class="btn btn-ghost">Cancel</button>
+          <button class="btn btn-ghost" style="background: var(--color-surface-2);">Cancel <span class="font-mono text-[10px] opacity-60">hover</span></button>
+          <button class="btn btn-ghost is-active">Cancel</button>
+          <button class="btn btn-ghost" disabled>Cancel</button>
+        </div>
+        <div class="state-chip">default · hover · active · disabled</div>
+      </div>
+
+      <!-- Destructive -->
+      <div class="surface-demo" style="background: var(--color-surface);">
+        <div class="doc-kicker mb-3">Destructive</div>
+        <div class="flex flex-col gap-2 items-start">
+          <button class="btn btn-destructive">Delete project</button>
+          <button class="btn btn-destructive" style="background:#faf0ee;">Delete project <span class="font-mono text-[10px] opacity-60">hover</span></button>
+          <button class="btn btn-destructive is-active">Delete project</button>
+          <button class="btn btn-destructive" disabled>Delete project</button>
+        </div>
+        <div class="state-chip">default · hover · active · disabled</div>
+      </div>
+
+      <!-- Icon -->
+      <div class="surface-demo" style="background: var(--color-surface);">
+        <div class="doc-kicker mb-3">Icon</div>
+        <div class="flex flex-wrap gap-2">
+          <button class="btn btn-secondary btn-icon" aria-label="Download">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2v9M4 7.5L8 11l4-3.5M3 13h10"/></svg>
+          </button>
+          <button class="btn btn-ghost btn-icon" aria-label="Copy">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="5" width="8" height="8"/><path d="M3 11V3h8"/></svg>
+          </button>
+          <button class="btn btn-primary btn-icon" aria-label="Add">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M8 3v10M3 8h10"/></svg>
+          </button>
+          <button class="btn btn-secondary btn-icon" disabled aria-label="Delete">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 4h10M6 4V2.5h4V4M5 4v9h6V4"/></svg>
+          </button>
+        </div>
+        <div class="state-chip">primary · secondary · ghost · disabled</div>
+      </div>
+    </div>
+
+    <div class="mt-5 surface-demo" style="background: var(--color-surface);">
+      <div class="doc-kicker mb-3">Sizes</div>
+      <div class="flex flex-wrap items-center gap-3">
+        <button class="btn btn-primary btn-sm">Small</button>
+        <button class="btn btn-primary">Default</button>
+        <button class="btn btn-primary btn-lg">Large</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= Inputs ================= -->
+  <section id="inputs" class="doc-section">
+    <div class="doc-eyebrow mb-2">05</div>
+    <h2 class="doc-h2 mb-6">Inputs &amp; form controls</h2>
+
+    <!-- Input states -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 mb-6">
+      <div class="surface-demo" style="background: var(--color-surface);">
+        <div class="field">
+          <label class="field-label" for="in-1">Company name</label>
+          <input id="in-1" class="input" placeholder="Aurelian Labs" />
+          <span class="field-hint">Legal or operating name.</span>
+        </div>
+        <div class="state-chip">default</div>
+      </div>
+      <div class="surface-demo" style="background: var(--color-surface);">
+        <div class="field">
+          <label class="field-label" for="in-2">Company name</label>
+          <input id="in-2" class="input is-focused" value="Aurelian Labs" />
+          <span class="field-hint">Legal or operating name.</span>
+        </div>
+        <div class="state-chip">focused</div>
+      </div>
+      <div class="surface-demo" style="background: var(--color-surface);">
+        <div class="field">
+          <label class="field-label" for="in-3">Company name</label>
+          <input id="in-3" class="input is-error" value="" placeholder="Required" />
+          <span class="field-error">Company name is required.</span>
+        </div>
+        <div class="state-chip">error</div>
+      </div>
+      <div class="surface-demo" style="background: var(--color-surface);">
+        <div class="field">
+          <label class="field-label" for="in-4">Company name</label>
+          <input id="in-4" class="input" value="Aurelian Labs" disabled />
+          <span class="field-hint">Locked — project already created.</span>
+        </div>
+        <div class="state-chip">disabled</div>
+      </div>
+    </div>
+
+    <!-- Textarea, select, URL -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-5 mb-6">
+      <div class="surface-demo" style="background: var(--color-surface);">
+        <div class="field">
+          <label class="field-label" for="ta-1">Notes</label>
+          <!-- @bind: intake.notes -->
+          <textarea id="ta-1" class="textarea" placeholder="Anything else we should know? Markets, sensitivities, existing vendors…"></textarea>
+        </div>
+        <div class="state-chip">textarea · default</div>
+      </div>
+      <div class="surface-demo" style="background: var(--color-surface);">
+        <div class="field">
+          <label class="field-label" for="sel-1">Archetype</label>
+          <!-- @bind: intake.archetype -->
+          <select id="sel-1" class="select">
+            <option>Sage — clarity, expertise</option>
+            <option>Hero — courage, mastery</option>
+            <option>Creator — imagination, craft</option>
+            <option>Caregiver — service, trust</option>
+            <option>Explorer — discovery</option>
+            <option>Jester — levity</option>
+          </select>
+        </div>
+        <div class="state-chip">select · default</div>
+      </div>
+      <div class="surface-demo" style="background: var(--color-surface);">
+        <div class="field">
+          <label class="field-label" for="url-1">Existing website URL</label>
+          <div class="flex items-stretch">
+            <span class="font-mono text-xs inline-flex items-center px-3" style="background: var(--color-surface-2); border:1px solid var(--color-border); border-right:none; border-radius: var(--r-md) 0 0 var(--r-md); color: var(--color-text-muted);">https://</span>
+            <input id="url-1" class="input" style="border-radius: 0 var(--r-md) var(--r-md) 0;" placeholder="aurelianlabs.com" />
+          </div>
+          <span class="field-hint">We'll scan it to infer your existing brand.</span>
+        </div>
+        <div class="state-chip">URL input</div>
+      </div>
+    </div>
+
+    <!-- Multi-select pills -->
+    <div class="surface-demo mb-6" style="background: var(--color-surface);">
+      <div class="doc-kicker mb-3">Multi-select · tone of voice</div>
+      <!-- @bind: intake.toneOfVoice (comma-joined) -->
+      <div class="flex flex-wrap gap-2">
+        <span class="pill pill-selected pill-removable">confident <button aria-label="Remove">×</button></span>
+        <span class="pill pill-selected pill-removable">precise <button aria-label="Remove">×</button></span>
+        <span class="pill pill-selected pill-removable">modern <button aria-label="Remove">×</button></span>
+        <span class="pill">warm</span>
+        <span class="pill">playful</span>
+        <span class="pill">institutional</span>
+        <span class="pill">direct</span>
+        <span class="pill">discreet</span>
+      </div>
+      <div class="state-chip">selected · unselected · removable</div>
+    </div>
+
+    <!-- Dropzone -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+      <div class="dropzone" style="background: var(--color-surface);">
+        <div class="flex flex-col items-center gap-2">
+          <svg width="22" height="22" viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="color: var(--color-text-muted);"><path d="M11 3v12M5 9l6-6 6 6M3 19h16"/></svg>
+          <div class="text-sm font-medium">Drop files here</div>
+          <div class="field-hint">Logo SVG / PNG, brand guide PDF. Up to 10MB each.</div>
+          <button class="btn btn-secondary btn-sm mt-1">Browse files</button>
+        </div>
+        <div class="state-chip">default</div>
+      </div>
+      <div class="dropzone is-hover" style="background: var(--color-surface);">
+        <div class="flex flex-col items-center gap-2">
+          <svg width="22" height="22" viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="color: var(--color-primary);"><path d="M11 3v12M5 9l6-6 6 6M3 19h16"/></svg>
+          <div class="text-sm font-medium" style="color: var(--color-primary);">Release to upload</div>
+          <div class="field-hint">3 files ready.</div>
+        </div>
+        <div class="state-chip">hover · drag over</div>
+      </div>
+      <div class="dropzone is-error" style="background: var(--color-surface);">
+        <div class="flex flex-col items-center gap-2">
+          <svg width="22" height="22" viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="color: var(--color-status-failed);"><circle cx="11" cy="11" r="8"/><path d="M11 7v5M11 15h.01"/></svg>
+          <div class="text-sm font-medium" style="color: var(--color-status-failed);">File too large</div>
+          <div class="field-hint">brand-guide-final.pdf is 14MB. Max 10MB.</div>
+          <button class="btn btn-ghost btn-sm mt-1">Try another</button>
+        </div>
+        <div class="state-chip">error</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= Status badges ================= -->
+  <section id="badges" class="doc-section">
+    <div class="doc-eyebrow mb-2">06</div>
+    <h2 class="doc-h2 mb-6">Status badges</h2>
+    <div class="surface-demo" style="background: var(--color-surface);">
+      <div class="flex flex-wrap gap-3">
+        <!-- @bind: project.status -->
+        <span class="badge badge-pending">Pending</span>
+        <span class="badge badge-running">Running</span>
+        <span class="badge badge-complete">Complete</span>
+        <span class="badge badge-failed">Failed</span>
+      </div>
+      <div class="state-chip">pending · running (pulsing) · complete · failed</div>
+    </div>
+  </section>
+
+  <!-- ================= Project card ================= -->
+  <section id="project-card" class="doc-section">
+    <div class="doc-eyebrow mb-2">07</div>
+    <h2 class="doc-h2 mb-6">Project card</h2>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+      <!-- Complete -->
+      <a href="#" class="project-card">
+        <!-- @bind: project -->
+        <div class="flex items-start justify-between gap-3 mb-4">
+          <div class="iei-mark size-md" style="background: var(--color-surface-2);">AL</div>
+          <span class="badge badge-complete">Complete</span>
+        </div>
+        <div class="font-medium text-lg tracking-tight mb-0.5">Aurelian Labs</div>
+        <div class="text-sm" style="color: var(--color-text-muted);">AI / Financial Services</div>
+        <div class="flex items-center gap-2 mt-4 font-mono text-xs" style="color: var(--color-text-muted);">
+          <span>Apr 22, 2026</span><span>·</span><span>4 outputs</span>
+        </div>
+        <div class="state-chip">status · complete</div>
+      </a>
+
+      <!-- Running -->
+      <a href="#" class="project-card">
+        <div class="flex items-start justify-between gap-3 mb-4">
+          <div class="iei-mark size-md" style="background: var(--color-surface-2);">GC</div>
+          <span class="badge badge-running">Running</span>
+        </div>
+        <div class="font-medium text-lg tracking-tight mb-0.5">Greenfield Capital</div>
+        <div class="text-sm" style="color: var(--color-text-muted);">Private Credit</div>
+        <div class="flex items-center gap-2 mt-4 font-mono text-xs" style="color: var(--color-text-muted);">
+          <span>Apr 21, 2026</span><span>·</span><span>building…</span>
+        </div>
+        <div class="state-chip">status · running</div>
+      </a>
+
+      <!-- Failed -->
+      <a href="#" class="project-card">
+        <div class="flex items-start justify-between gap-3 mb-4">
+          <div class="iei-mark size-md" style="background: var(--color-surface-2);">NS</div>
+          <span class="badge badge-failed">Failed</span>
+        </div>
+        <div class="font-medium text-lg tracking-tight mb-0.5">Northwind Supply</div>
+        <div class="text-sm" style="color: var(--color-text-muted);">Industrial Logistics</div>
+        <div class="flex items-center gap-2 mt-4 font-mono text-xs" style="color: var(--color-text-muted);">
+          <span>Apr 19, 2026</span><span>·</span><span>Skill timed out</span>
+        </div>
+        <div class="state-chip">status · failed</div>
+      </a>
+    </div>
+  </section>
+
+  <!-- ================= Color swatch card (brand kit output) ================= -->
+  <section id="swatch-card" class="doc-section">
+    <div class="doc-eyebrow mb-2">08</div>
+    <h2 class="doc-h2 mb-6">Color swatch card</h2>
+    <p class="text-sm mb-4" style="color:var(--color-text-muted);">Shown on the project panel for generated brand outputs — binds to <code class="font-mono text-xs">BrandJson.colors</code>.</p>
+    <div class="surface-demo" style="background: var(--color-surface);">
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <!-- @bind: brandJson.colors.primary -->
+        <div class="swatch"><div class="swatch-color" style="background: #1E3A8A;"></div>
+          <div class="swatch-meta"><span class="swatch-label">Primary</span><span class="swatch-hex">#1E3A8A</span></div></div>
+        <div class="swatch"><div class="swatch-color" style="background: #0EA5E9;"></div>
+          <div class="swatch-meta"><span class="swatch-label">Secondary</span><span class="swatch-hex">#0EA5E9</span></div></div>
+        <div class="swatch"><div class="swatch-color" style="background: #CBD5E1;"></div>
+          <div class="swatch-meta"><span class="swatch-label">Accent</span><span class="swatch-hex">#CBD5E1</span></div></div>
+        <div class="swatch"><div class="swatch-color" style="background: #F9FAFB; border-bottom-color: var(--color-border);"></div>
+          <div class="swatch-meta"><span class="swatch-label">Neutral</span><span class="swatch-hex">#F9FAFB</span></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= Typography preview card ================= -->
+  <section id="typography-card" class="doc-section">
+    <div class="doc-eyebrow mb-2">09</div>
+    <h2 class="doc-h2 mb-6">Typography preview card</h2>
+    <div class="surface-demo" style="background: var(--color-surface);">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <!-- @bind: brandJson.typography.heading -->
+        <div>
+          <div class="doc-kicker mb-2">Heading · Geist, Inter, sans-serif</div>
+          <div style="font-size: 36px; font-weight: 600; letter-spacing:-0.015em; line-height: 1.1;">From intake<br>to income.</div>
+        </div>
+        <div>
+          <div class="doc-kicker mb-2">Body · Geist, Inter, sans-serif</div>
+          <div style="font-size: 15px; line-height: 1.6; max-width: 42ch;">Aurelian Labs serves capital markets operators. The brand reads as a system: precise, restrained, and built for decisions made under scrutiny.</div>
+        </div>
+      </div>
+      <div class="grid grid-cols-3 gap-3 mt-6">
+        <div class="font-mono text-xs" style="color: var(--color-text-muted);">Aa · 400</div>
+        <div class="font-mono text-xs" style="color: var(--color-text-muted);">Aa · 500</div>
+        <div class="font-mono text-xs" style="color: var(--color-text-muted);">Aa · 600</div>
+        <div style="font-size: 28px;">Aa</div>
+        <div style="font-size: 28px; font-weight: 500;">Aa</div>
+        <div style="font-size: 28px; font-weight: 600;">Aa</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= Nav header ================= -->
+  <section id="nav" class="doc-section">
+    <div class="doc-eyebrow mb-2">10</div>
+    <h2 class="doc-h2 mb-6">Nav header</h2>
+
+    <div class="nav" style="border-radius: var(--r-md); border: 1px solid var(--color-border); overflow:hidden;">
+      <div class="flex items-center gap-6 px-5 py-3">
+        <div class="flex items-center gap-2.5">
+          <span class="iei-mark size-md">IEI</span>
+          <span class="font-medium tracking-tight">IEI Ventures</span>
+        </div>
+        <nav class="hidden md:flex items-center gap-1 text-sm">
+          <a href="#" class="px-3 py-1.5 rounded" style="background: var(--color-surface-2);">Projects</a>
+          <a href="#" class="px-3 py-1.5 rounded" style="color: var(--color-text-muted);">Templates</a>
+          <a href="#" class="px-3 py-1.5 rounded" style="color: var(--color-text-muted);">Docs</a>
+        </nav>
+        <div class="ml-auto flex items-center gap-2">
+          <button class="btn btn-primary btn-sm">New brand</button>
+          <button class="btn btn-ghost btn-icon" aria-label="User menu">
+            <span class="inline-flex items-center justify-center w-7 h-7 rounded-full font-mono text-xs" style="background: var(--color-surface-2); border: 1px solid var(--color-border);">HB</span>
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="state-chip">default · authenticated</div>
+
+    <div class="nav mt-4" style="border-radius: var(--r-md); border: 1px solid var(--color-border); overflow:hidden; background: #fff;">
+      <div class="flex items-center gap-6 px-5 py-3">
+        <div class="flex items-center gap-2.5">
+          <!-- Tenant-branded example -->
+          <div style="width:32px;height:32px;border-radius:6px;background:#0b3a66;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:600;font-size:12px;">V</div>
+          <span class="font-medium tracking-tight">Vendasta Brand Studio</span>
+        </div>
+        <nav class="hidden md:flex items-center gap-1 text-sm">
+          <a href="#" class="px-3 py-1.5 rounded" style="background: var(--color-surface-2);">Clients</a>
+          <a href="#" class="px-3 py-1.5 rounded" style="color: var(--color-text-muted);">Templates</a>
+        </nav>
+        <div class="ml-auto flex items-center gap-2">
+          <button class="btn btn-sm" style="background:#0b3a66; color:#fff;">New client</button>
+        </div>
+      </div>
+    </div>
+    <div class="state-chip">white-label · tenant-themed</div>
+  </section>
+
+  <!-- ================= Modal & Drawer ================= -->
+  <section id="overlay" class="doc-section">
+    <div class="doc-eyebrow mb-2">11</div>
+    <h2 class="doc-h2 mb-6">Modal &amp; drawer</h2>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div class="relative surface-demo" style="height: 340px; padding: 0; overflow: hidden; background: #dedbce;">
+        <div class="modal-overlay">
+          <div class="modal">
+            <div class="px-5 py-4 border-b" style="border-color: var(--color-border);">
+              <div class="doc-kicker mb-1">Confirm</div>
+              <div class="text-lg font-medium">Delete Aurelian Labs?</div>
+            </div>
+            <div class="px-5 py-4 text-sm" style="color: var(--color-text-muted);">This removes all generated outputs and the landing page. This can't be undone.</div>
+            <div class="px-5 py-3 flex justify-end gap-2 border-t" style="border-color: var(--color-border); background: var(--color-surface-2);">
+              <button class="btn btn-ghost btn-sm">Cancel</button>
+              <button class="btn btn-destructive btn-sm">Delete project</button>
+            </div>
+          </div>
+        </div>
+        <div class="absolute bottom-2 left-3 state-chip" style="border:none; padding: 0;">modal · confirm</div>
+      </div>
+
+      <div class="relative surface-demo" style="height: 340px; padding: 0; overflow: hidden; background: #dedbce;">
+        <div class="absolute top-0 right-0 bottom-0" style="width: 70%; background: var(--color-surface); box-shadow: var(--sh-2); display:flex; flex-direction: column;">
+          <div class="flex items-center justify-between px-5 py-3 border-b" style="border-color: var(--color-border);">
+            <div class="doc-kicker">Drawer · Edit intake</div>
+            <button class="btn btn-ghost btn-icon" aria-label="Close">×</button>
+          </div>
+          <div class="px-5 py-4 flex flex-col gap-3">
+            <div class="field"><label class="field-label">Company name</label><input class="input" value="Aurelian Labs"/></div>
+            <div class="field"><label class="field-label">Industry</label><input class="input" value="AI / Financial Services"/></div>
+          </div>
+          <div class="mt-auto px-5 py-3 flex justify-end gap-2 border-t" style="border-color: var(--color-border);">
+            <button class="btn btn-ghost btn-sm">Discard</button>
+            <button class="btn btn-primary btn-sm">Save changes</button>
+          </div>
+        </div>
+        <div class="absolute bottom-2 left-3 state-chip" style="border:none; padding: 0;">drawer · right-side</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= Toasts ================= -->
+  <section id="toasts" class="doc-section">
+    <div class="doc-eyebrow mb-2">12</div>
+    <h2 class="doc-h2 mb-6">Toast &amp; inline notification</h2>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div class="toast toast-success">
+        <div class="toast-rail"></div>
+        <div class="flex-1">
+          <div class="text-sm font-medium">Brand kit ready</div>
+          <div class="text-xs" style="color: var(--color-text-muted);">Aurelian Labs · 4 files available for download.</div>
+        </div>
+        <button class="btn btn-ghost btn-sm">View</button>
+      </div>
+      <div class="toast toast-info">
+        <div class="toast-rail"></div>
+        <div class="flex-1">
+          <div class="text-sm font-medium">Running…</div>
+          <div class="text-xs" style="color: var(--color-text-muted);">Greenfield Capital · step 3 of 6.</div>
+        </div>
+      </div>
+      <div class="toast toast-error">
+        <div class="toast-rail"></div>
+        <div class="flex-1">
+          <div class="text-sm font-medium">Couldn't reach the skill</div>
+          <div class="text-xs" style="color: var(--color-text-muted);">Timed out after 120s. Try again or contact support.</div>
+        </div>
+        <button class="btn btn-ghost btn-sm">Retry</button>
+      </div>
+      <div class="toast">
+        <div class="toast-rail"></div>
+        <div class="flex-1">
+          <div class="text-sm font-medium">File saved</div>
+          <div class="text-xs" style="color: var(--color-text-muted);">brand.json copied to your clipboard.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="mt-5 surface-demo" style="background: var(--color-surface);">
+      <div class="doc-kicker mb-3">Inline notification</div>
+      <div class="p-3 rounded-md text-sm flex items-start gap-2" style="background: var(--color-surface-2); border:1px solid var(--color-border);">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" style="color: var(--color-status-running); margin-top:2px;"><circle cx="8" cy="8" r="6"/><path d="M8 5v3M8 11h.01"/></svg>
+        <div><strong>This project is still building.</strong> You'll see downloads once the skill finishes — usually under 2 minutes.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= Progress / Stepper ================= -->
+  <section id="stepper" class="doc-section">
+    <div class="doc-eyebrow mb-2">13</div>
+    <h2 class="doc-h2 mb-6">Progress indicator (stepper)</h2>
+
+    <div class="surface-demo" style="background: var(--color-surface);">
+      <div class="stepper">
+        <div class="stepper-step done"><span class="stepper-dot">✓</span><span class="stepper-label">Company</span></div>
+        <div class="stepper-rule"></div>
+        <div class="stepper-step done"><span class="stepper-dot">✓</span><span class="stepper-label">Audience</span></div>
+        <div class="stepper-rule"></div>
+        <div class="stepper-step current"><span class="stepper-dot">3</span><span class="stepper-label">Tone</span></div>
+        <div class="stepper-rule"></div>
+        <div class="stepper-step"><span class="stepper-dot">4</span><span class="stepper-label">Archetype</span></div>
+        <div class="stepper-rule"></div>
+        <div class="stepper-step"><span class="stepper-dot">5</span><span class="stepper-label">Review</span></div>
+      </div>
+      <div class="state-chip">step 3 of 5 · current = "Tone"</div>
+    </div>
+
+    <div class="surface-demo mt-4" style="background: var(--color-surface);">
+      <div class="doc-kicker mb-2">Linear progress · skill running</div>
+      <div class="w-full h-1.5 rounded-full overflow-hidden" style="background: var(--color-surface-2);">
+        <div style="width: 62%; height:100%; background: var(--color-status-running); transition: width 400ms;"></div>
+      </div>
+      <div class="flex justify-between font-mono text-xs mt-2" style="color: var(--color-text-muted);">
+        <span>Generating playbook…</span><span>62%</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= Skeletons ================= -->
+  <section id="skeletons" class="doc-section">
+    <div class="doc-eyebrow mb-2">14</div>
+    <h2 class="doc-h2 mb-6">Skeleton loader</h2>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+      <div class="project-card" aria-busy="true">
+        <div class="flex items-start justify-between gap-3 mb-4">
+          <span class="sk skeleton-shimmer" style="width:32px;height:32px;border-radius:4px;"></span>
+          <span class="sk skeleton-shimmer" style="width:70px;height:20px;border-radius:999px;"></span>
+        </div>
+        <span class="sk skeleton-shimmer" style="width:70%;height:18px; margin-bottom:8px;"></span>
+        <span class="sk skeleton-shimmer" style="width:45%;height:13px;"></span>
+        <div class="mt-4"><span class="sk skeleton-shimmer" style="width:60%;height:11px;"></span></div>
+        <div class="state-chip">card skeleton</div>
+      </div>
+
+      <div class="surface-demo" style="background: var(--color-surface);">
+        <div class="flex flex-col gap-2">
+          <span class="sk skeleton-shimmer" style="width:40%;height:12px;"></span>
+          <span class="sk skeleton-shimmer" style="width:100%;height:40px;border-radius: var(--r-md);"></span>
+          <span class="sk skeleton-shimmer" style="width:60%;height:11px;"></span>
+        </div>
+        <div class="state-chip">field skeleton</div>
+      </div>
+
+      <div class="surface-demo" style="background: var(--color-surface);">
+        <div class="grid grid-cols-2 gap-3">
+          <span class="sk skeleton-shimmer" style="width:100%;height:72px;border-radius: var(--r-md);"></span>
+          <span class="sk skeleton-shimmer" style="width:100%;height:72px;border-radius: var(--r-md);"></span>
+          <span class="sk skeleton-shimmer" style="width:100%;height:72px;border-radius: var(--r-md);"></span>
+          <span class="sk skeleton-shimmer" style="width:100%;height:72px;border-radius: var(--r-md);"></span>
+        </div>
+        <div class="state-chip">swatch grid skeleton</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= Tokens reference ================= -->
+  <section id="tokens" class="doc-section">
+    <div class="doc-eyebrow mb-2">15</div>
+    <h2 class="doc-h2 mb-6">Tokens &amp; scales</h2>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+      <div class="surface-demo" style="background: var(--color-surface);">
+        <div class="doc-kicker mb-3">Spacing · 4px base</div>
+        <div class="flex flex-col gap-2 font-mono text-xs" style="color: var(--color-text-muted);">
+          <div class="flex items-center gap-3"><span style="width:4px;height:12px;background:var(--color-primary);"></span><span>1 · 4px</span></div>
+          <div class="flex items-center gap-3"><span style="width:8px;height:12px;background:var(--color-primary);"></span><span>2 · 8px</span></div>
+          <div class="flex items-center gap-3"><span style="width:12px;height:12px;background:var(--color-primary);"></span><span>3 · 12px</span></div>
+          <div class="flex items-center gap-3"><span style="width:16px;height:12px;background:var(--color-primary);"></span><span>4 · 16px</span></div>
+          <div class="flex items-center gap-3"><span style="width:20px;height:12px;background:var(--color-primary);"></span><span>5 · 20px</span></div>
+          <div class="flex items-center gap-3"><span style="width:24px;height:12px;background:var(--color-primary);"></span><span>6 · 24px</span></div>
+          <div class="flex items-center gap-3"><span style="width:32px;height:12px;background:var(--color-primary);"></span><span>8 · 32px</span></div>
+          <div class="flex items-center gap-3"><span style="width:40px;height:12px;background:var(--color-primary);"></span><span>10 · 40px</span></div>
+          <div class="flex items-center gap-3"><span style="width:48px;height:12px;background:var(--color-primary);"></span><span>12 · 48px</span></div>
+        </div>
+      </div>
+
+      <div class="surface-demo" style="background: var(--color-surface);">
+        <div class="doc-kicker mb-3">Radius</div>
+        <div class="grid grid-cols-2 gap-3">
+          <div class="flex flex-col items-center gap-2"><span style="width:64px;height:40px;background:var(--color-surface-2);border:1px solid var(--color-border);border-radius:4px;"></span><span class="font-mono text-xs" style="color: var(--color-text-muted);">sm · 4px</span></div>
+          <div class="flex flex-col items-center gap-2"><span style="width:64px;height:40px;background:var(--color-surface-2);border:1px solid var(--color-border);border-radius:6px;"></span><span class="font-mono text-xs" style="color: var(--color-text-muted);">md · 6px</span></div>
+          <div class="flex flex-col items-center gap-2"><span style="width:64px;height:40px;background:var(--color-surface-2);border:1px solid var(--color-border);border-radius:10px;"></span><span class="font-mono text-xs" style="color: var(--color-text-muted);">lg · 10px</span></div>
+          <div class="flex flex-col items-center gap-2"><span style="width:64px;height:40px;background:var(--color-surface-2);border:1px solid var(--color-border);border-radius:999px;"></span><span class="font-mono text-xs" style="color: var(--color-text-muted);">full · 999px</span></div>
+        </div>
+      </div>
+
+      <div class="surface-demo" style="background: var(--color-surface);">
+        <div class="doc-kicker mb-3">Shadows</div>
+        <div class="flex flex-col gap-4">
+          <div class="flex items-center gap-3"><span style="width:56px;height:40px;background:var(--color-surface);border-radius:6px;box-shadow: var(--sh-1);"></span><span class="font-mono text-xs" style="color: var(--color-text-muted);">sh-1 · card rest</span></div>
+          <div class="flex items-center gap-3"><span style="width:56px;height:40px;background:var(--color-surface);border-radius:6px;box-shadow: var(--sh-2);"></span><span class="font-mono text-xs" style="color: var(--color-text-muted);">sh-2 · card hover, modal</span></div>
+          <div class="flex items-center gap-3"><span style="width:56px;height:40px;background:var(--color-surface);border-radius:6px;box-shadow: var(--sh-focus);"></span><span class="font-mono text-xs" style="color: var(--color-text-muted);">focus ring</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="mt-16 pt-6 border-t flex flex-wrap items-center justify-between gap-4" style="border-color: var(--color-border);">
+    <div class="font-mono text-xs" style="color: var(--color-text-muted);">design-system.html · v0.1 · apr 22 2026</div>
+    <div class="font-mono text-xs" style="color: var(--color-text-muted);">see style-tokens.md for the tailwind port</div>
+  </footer>
+
+</div>
+
+</body>
+</html>

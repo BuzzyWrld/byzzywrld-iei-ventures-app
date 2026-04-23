@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Projects — IEI Ventures</title>
+
+<!-- SHARED: fonts + tokens + component styles -->
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --color-primary: #1a1f1a;
+    --color-accent: #263e0f;
+    --color-neutral: #6b6f69;
+    --color-surface: #fafaf7;
+    --color-surface-2: #f2f0e9;
+    --color-text: #1a1f1a;
+    --color-text-muted: #6b6f69;
+    --color-border: #e4e2da;
+    --color-border-strong: #1a1f1a;
+    --color-status-pending: #a8a59a;
+    --color-status-running: #b8912e;
+    --color-status-complete: #3e6b2a;
+    --color-status-failed: #9a3a2a;
+    --r-sm: 4px; --r-md: 6px; --r-lg: 10px; --r-full: 999px;
+    --sh-1: 0 1px 0 rgba(26,31,26,.04), 0 1px 2px rgba(26,31,26,.06);
+    --sh-2: 0 2px 4px rgba(26,31,26,.06), 0 4px 12px rgba(26,31,26,.08);
+    --sh-focus: 0 0 0 3px rgba(38,62,15,0.18);
+  }
+  html, body { background: var(--color-surface); color: var(--color-text); }
+  body { font-family: 'Geist', system-ui, sans-serif; font-size: 15px; line-height: 1.5; -webkit-font-smoothing: antialiased; }
+  .font-serif { font-family: 'Instrument Serif', Georgia, serif; font-weight: 400; letter-spacing: -0.01em; }
+  .font-mono { font-family: 'Geist Mono', ui-monospace, monospace; }
+  .kicker { font-family: 'Geist Mono', monospace; font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.14em; color: var(--color-text-muted); }
+
+  .iei-mark { position: relative; display: inline-flex; align-items: center; justify-content: center; border: 1.5px solid var(--color-primary); color: var(--color-primary); font-family: 'Geist Mono', monospace; font-weight: 600; background: transparent; }
+  .iei-mark::before, .iei-mark::after { content: ''; position: absolute; width: 6px; height: 6px; border: 1.5px solid var(--color-accent); background: var(--color-surface); }
+  .iei-mark::before { top: -5px; left: -5px; border-right: none; border-bottom: none; }
+  .iei-mark::after { bottom: -5px; right: -5px; border-left: none; border-top: none; }
+  .iei-mark.size-sm { width: 22px; height: 22px; font-size: 9px; border-width: 1.25px; }
+  .iei-mark.size-sm::before, .iei-mark.size-sm::after { width: 5px; height: 5px; border-width: 1.25px; }
+  .iei-mark.size-md { width: 32px; height: 32px; font-size: 11px; }
+  .iei-mark.size-lg { width: 48px; height: 48px; font-size: 15px; border-width: 2px; }
+  .iei-mark.size-lg::before, .iei-mark.size-lg::after { width: 9px; height: 9px; border-width: 2px; }
+
+  .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; font-family: inherit; font-weight: 500; font-size: 15px; line-height: 1; padding: 10px 16px; border-radius: var(--r-md); border: 1px solid transparent; cursor: pointer; transition: background 120ms, border-color 120ms, color 120ms, box-shadow 120ms; text-decoration: none; white-space: nowrap; }
+  .btn:focus-visible { outline: none; box-shadow: var(--sh-focus); }
+  .btn[disabled], .btn[aria-disabled="true"] { cursor: not-allowed; opacity: 0.5; }
+  .btn-primary { background: var(--color-primary); color: var(--color-surface); }
+  .btn-primary:hover:not([disabled]) { background: #000; }
+  .btn-secondary { background: var(--color-surface); color: var(--color-primary); border-color: var(--color-border-strong); }
+  .btn-secondary:hover:not([disabled]) { background: var(--color-surface-2); }
+  .btn-ghost { background: transparent; color: var(--color-primary); }
+  .btn-ghost:hover:not([disabled]) { background: var(--color-surface-2); }
+  .btn-destructive { background: var(--color-surface); color: var(--color-status-failed); border-color: var(--color-status-failed); }
+  .btn-sm { padding: 6px 10px; font-size: 13px; }
+  .btn-lg { padding: 14px 20px; font-size: 16px; }
+  .btn-icon { padding: 8px; width: 36px; height: 36px; }
+
+  .input, .textarea, .select { width: 100%; font: inherit; font-size: 15px; padding: 10px 12px; background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--r-md); color: var(--color-text); transition: border-color 120ms, box-shadow 120ms; }
+  .input::placeholder, .textarea::placeholder { color: var(--color-text-muted); }
+  .input:focus, .textarea:focus, .select:focus { outline: none; border-color: var(--color-primary); box-shadow: var(--sh-focus); }
+  .input.is-error { border-color: var(--color-status-failed); }
+  .textarea { min-height: 96px; resize: vertical; }
+  .select { appearance: none; background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'><path d='M3 4.5l3 3 3-3' stroke='%231a1f1a' stroke-width='1.2' fill='none' stroke-linecap='round' stroke-linejoin='round'/></svg>"); background-repeat: no-repeat; background-position: right 12px center; padding-right: 36px; }
+  .input-lg { font-size: 18px; padding: 14px 16px; }
+
+  .pill { display: inline-flex; align-items: center; gap: 6px; padding: 5px 12px; border-radius: var(--r-full); font-size: 13px; font-weight: 500; background: var(--color-surface); color: var(--color-text); border: 1px solid var(--color-border); line-height: 1.2; cursor: pointer; transition: all 120ms; }
+  .pill:hover { border-color: var(--color-primary); }
+  .pill.pill-selected { background: var(--color-primary); color: var(--color-surface); border-color: var(--color-primary); }
+
+  .badge { display: inline-flex; align-items: center; gap: 6px; padding: 3px 8px 3px 7px; border-radius: var(--r-full); font-size: 11px; font-family: 'Geist Mono', monospace; font-weight: 500; text-transform: uppercase; letter-spacing: 0.06em; line-height: 1.4; background: var(--color-surface-2); border: 1px solid var(--color-border); }
+  .badge::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+  .badge-pending { color: var(--color-status-pending); }
+  .badge-running { color: var(--color-status-running); }
+  .badge-running::before { animation: pulse 1.6s ease-in-out infinite; }
+  .badge-complete { color: var(--color-status-complete); }
+  .badge-failed { color: var(--color-status-failed); }
+  @keyframes pulse { 0%,100% { opacity: 0.35; } 50% { opacity: 1; } }
+
+  .card { background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--r-lg); }
+  .card-hover:hover { border-color: var(--color-primary); box-shadow: var(--sh-2); }
+
+  .spinner { width: 14px; height: 14px; border: 1.5px solid currentColor; border-top-color: transparent; border-radius: 50%; animation: spin 700ms linear infinite; display: inline-block; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .sk { background: linear-gradient(90deg, var(--color-border) 0%, var(--color-surface-2) 50%, var(--color-border) 100%); background-size: 200% 100%; animation: shimmer 1.4s ease-in-out infinite; border-radius: var(--r-sm); display: block; }
+  @keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+
+  .nav { background: var(--color-surface); border-bottom: 1px solid var(--color-border); }
+  .nav a.active { background: var(--color-surface-2); }
+
+  .kbd { display: inline-flex; align-items: center; justify-content: center; min-width: 18px; height: 18px; padding: 0 5px; border: 1px solid var(--color-border); border-bottom-width: 2px; border-radius: 3px; font-family: 'Geist Mono', monospace; font-size: 10px; color: var(--color-text-muted); background: var(--color-surface); }
+
+  .sidebar-link { display: flex; align-items: center; gap: 10px; padding: 7px 10px; border-radius: 5px; color: var(--color-text-muted); font-size: 14px; text-decoration: none; }
+  .sidebar-link:hover { background: var(--color-surface-2); color: var(--color-text); }
+  .sidebar-link.active { background: var(--color-surface-2); color: var(--color-text); font-weight: 500; }
+
+  [data-state] + [data-state] { margin-top: 40px; border-top: 1px dashed var(--color-border); padding-top: 40px; }
+  .state-label { font-family: 'Geist Mono', monospace; font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.14em; color: var(--color-text-muted); margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
+  .state-label::before { content: ''; width: 24px; height: 1px; background: var(--color-text-muted); }
+</style>
+
+</head>
+<body>
+<script>
+  // Mock data — matches 03-data-contracts.md
+  const MOCK_PROJECTS = [
+    { id:"1a2b3c4d", createdAt:"2026-04-22T14:30:00Z", status:"complete",
+      intake:{ companyName:"Aurelian Labs", industry:"AI / Financial Services", targetAudience:"Capital markets operators",
+        toneOfVoice:"confident, precise, modern", competitors:"Hebbia, Harvey", archetype:"sage", palettePreference:"", notes:"" },
+      outputs:{ brandJson:"/api/brands/1a2b3c4d/files/brand.json", playbookHtml:"/api/brands/1a2b3c4d/files/playbook.html",
+        landingHtml:"/api/brands/1a2b3c4d/files/landing.html", logoSvg:"/api/brands/1a2b3c4d/files/logo.svg" }
+    },
+    { id:"5e6f7g8h", createdAt:"2026-04-21T09:15:00Z", status:"running",
+      intake:{ companyName:"Greenfield Capital", industry:"Private Credit", targetAudience:"Mid-market sponsors",
+        toneOfVoice:"institutional, discreet", competitors:"", archetype:"sage", palettePreference:"", notes:"" },
+      outputs:{}
+    },
+    { id:"9i0j1k2l", createdAt:"2026-04-19T16:40:00Z", status:"failed",
+      intake:{ companyName:"Northwind Supply", industry:"Industrial Logistics", targetAudience:"Operations directors",
+        toneOfVoice:"direct, reliable", competitors:"", archetype:"caregiver", palettePreference:"", notes:"" },
+      outputs:{}, error:"Skill timed out after 120s"
+    },
+    { id:"3m4n5o6p", createdAt:"2026-04-18T11:20:00Z", status:"complete",
+      intake:{ companyName:"Bramble & Sons", industry:"Specialty Coffee Roasters", targetAudience:"Independent cafes",
+        toneOfVoice:"warm, craft, unpretentious", competitors:"", archetype:"creator", palettePreference:"", notes:"" },
+      outputs:{ brandJson:"#", playbookHtml:"#", landingHtml:"#", logoSvg:"#" }
+    },
+    { id:"7q8r9s0t", createdAt:"2026-04-15T08:05:00Z", status:"complete",
+      intake:{ companyName:"Meridian Health", industry:"Primary Care Network", targetAudience:"Adults 45-70",
+        toneOfVoice:"calm, clear, trustworthy", competitors:"", archetype:"caregiver", palettePreference:"", notes:"" },
+      outputs:{ brandJson:"#", playbookHtml:"#", landingHtml:"#", logoSvg:"#" }
+    }
+  ];
+  const MOCK_BRAND_JSON = {
+    name:"Aurelian Labs",
+    tagline:"Brand direction for Aurelian Labs — AI / Financial Services",
+    colors:{ primary:"#1E3A8A", secondary:"#0EA5E9", accent:"#CBD5E1", neutral:"#F9FAFB" },
+    typography:{ heading:"Geist, Inter, sans-serif", body:"Geist, Inter, sans-serif" },
+    tone:["confident","precise","modern"],
+    positioning:"Aurelian Labs serves Capital markets operators in AI / Financial Services."
+  };
+</script>
+
+<!-- ======================== DASHBOARD HOME · / ======================== -->
+
+<section data-state="list">
+  <div class="state-label">01 · List (power user — dense, scannable)</div>
+  
+<header class="nav sticky top-0 z-30">
+  <div class="max-w-[1280px] mx-auto flex items-center gap-6 px-5 md:px-6 py-3">
+    <a href="/" class="flex items-center gap-2.5 shrink-0"><span class="iei-mark size-md">IEI</span><span class="font-medium tracking-tight hidden sm:inline">IEI Ventures</span></a>
+    <nav class="hidden md:flex items-center gap-1 text-sm">
+      <a href="/" class="px-3 py-1.5 rounded active">Projects</a>
+      <a href="#" class="px-3 py-1.5 rounded" style="color: var(--color-text-muted);">Templates</a>
+      <a href="#" class="px-3 py-1.5 rounded" style="color: var(--color-text-muted);">Docs</a>
+    </nav>
+    <div class="ml-auto flex items-center gap-2">
+      <button class="btn btn-ghost btn-sm hidden md:inline-flex"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5L14 14"/></svg><span style="color: var(--color-text-muted);">Search</span><span class="kbd">⌘K</span></button>
+      <a href="/new" class="btn btn-primary btn-sm">New brand</a>
+      <button class="btn btn-ghost btn-icon"><span class="inline-flex items-center justify-center w-7 h-7 rounded-full font-mono text-[11px]" style="background: var(--color-surface-2); border: 1px solid var(--color-border);">HB</span></button>
+    </div>
+  </div>
+</header>
+
+  <main class="max-w-[1280px] mx-auto px-5 md:px-6 py-8">
+    <!-- Header bar -->
+    <div class="flex flex-wrap items-end justify-between gap-4 mb-6">
+      <div>
+        <div class="kicker mb-1">Workspace · Hector Barbosa</div>
+        <h1 class="text-[28px] md:text-[32px] font-medium tracking-tight leading-tight">Projects</h1>
+      </div>
+      <div class="flex items-center gap-2">
+        <!-- Search -->
+        <div class="relative">
+          <svg class="absolute left-3 top-1/2 -translate-y-1/2" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" style="color: var(--color-text-muted);"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5L14 14"/></svg>
+          <input class="input pl-9 pr-16" style="width: 260px;" placeholder="Search projects" aria-label="Search" />
+          <span class="kbd absolute right-2 top-1/2 -translate-y-1/2">⌘K</span>
+        </div>
+        <select class="select" style="width: auto;" aria-label="Filter status">
+          <option>All status</option><option>Running</option><option>Complete</option><option>Failed</option>
+        </select>
+        <a href="/new" class="btn btn-primary">New brand</a>
+      </div>
+    </div>
+
+    <!-- Stat strip -->
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
+      <div class="card p-4"><div class="kicker mb-1">Total</div><div class="text-2xl font-medium">5</div></div>
+      <div class="card p-4"><div class="kicker mb-1">Running</div><div class="text-2xl font-medium" style="color: var(--color-status-running);">1</div></div>
+      <div class="card p-4"><div class="kicker mb-1">Complete</div><div class="text-2xl font-medium" style="color: var(--color-status-complete);">3</div></div>
+      <div class="card p-4"><div class="kicker mb-1">Failed</div><div class="text-2xl font-medium" style="color: var(--color-status-failed);">1</div></div>
+    </div>
+
+    <!-- Desktop table -->
+    <div class="card hidden md:block overflow-hidden">
+      <table class="w-full text-sm">
+        <thead>
+          <tr style="background: var(--color-surface-2);">
+            <th class="text-left font-mono text-[10.5px] uppercase tracking-[0.14em] py-2.5 pl-5 pr-3" style="color: var(--color-text-muted); font-weight: 500;">Project</th>
+            <th class="text-left font-mono text-[10.5px] uppercase tracking-[0.14em] py-2.5 px-3 hidden md:table-cell" style="color: var(--color-text-muted); font-weight: 500;">Status</th>
+            <th class="text-left font-mono text-[10.5px] uppercase tracking-[0.14em] py-2.5 px-3 hidden lg:table-cell" style="color: var(--color-text-muted); font-weight: 500;">Created</th>
+            <th class="text-left font-mono text-[10.5px] uppercase tracking-[0.14em] py-2.5 px-3 hidden lg:table-cell" style="color: var(--color-text-muted); font-weight: 500;">Outputs</th>
+            <th class="py-2.5 pl-3 pr-5"></th>
+          </tr>
+        </thead>
+        <!-- @bind: MOCK_PROJECTS.map(project => row) -->
+        <tbody>
+        <tr class="group border-t hover:bg-[var(--color-surface-2)] cursor-pointer" style="border-color: var(--color-border);" onclick="location.href='/brands/1a2b3c4d'">
+          <!-- @bind: project -->
+          <td class="py-3 pl-5 pr-3">
+            <div class="flex items-center gap-3">
+              <span class="iei-mark size-md" style="background: var(--color-surface-2);">A</span>
+              <div>
+                <!-- @bind: project.intake.companyName -->
+                <div class="font-medium tracking-tight">Aurelian Labs</div>
+                <!-- @bind: project.intake.industry -->
+                <div class="text-xs" style="color: var(--color-text-muted);">AI / Financial Services</div>
+              </div>
+            </div>
+          </td>
+          <td class="py-3 px-3 hidden md:table-cell">
+            <!-- @bind: project.status -->
+            <span class="badge badge-complete">Complete</span>
+          </td>
+          <td class="py-3 px-3 hidden lg:table-cell font-mono text-xs" style="color: var(--color-text-muted);">
+            <!-- @bind: project.createdAt -->
+            Apr 22, 2026
+          </td>
+          <td class="py-3 px-3 hidden lg:table-cell font-mono text-xs" style="color: var(--color-text-muted);">
+            4 files
+          </td>
+          <td class="py-3 pl-3 pr-5 text-right">
+            <span class="font-mono text-xs opacity-0 group-hover:opacity-100 transition" style="color: var(--color-text-muted);">Open →</span>
+          </td>
+        </tr>
+        <tr class="group border-t hover:bg-[var(--color-surface-2)] cursor-pointer" style="border-color: var(--color-border);" onclick="location.href='/brands/5e6f7g8h'">
+          <!-- @bind: project -->
+          <td class="py-3 pl-5 pr-3">
+            <div class="flex items-center gap-3">
+              <span class="iei-mark size-md" style="background: var(--color-surface-2);">G</span>
+              <div>
+                <!-- @bind: project.intake.companyName -->
+                <div class="font-medium tracking-tight">Greenfield Capital</div>
+                <!-- @bind: project.intake.industry -->
+                <div class="text-xs" style="color: var(--color-text-muted);">Private Credit</div>
+              </div>
+            </div>
+          </td>
+          <td class="py-3 px-3 hidden md:table-cell">
+            <!-- @bind: project.status -->
+            <span class="badge badge-running">Running</span>
+          </td>
+          <td class="py-3 px-3 hidden lg:table-cell font-mono text-xs" style="color: var(--color-text-muted);">
+            <!-- @bind: project.createdAt -->
+            Apr 21, 2026
+          </td>
+          <td class="py-3 px-3 hidden lg:table-cell font-mono text-xs" style="color: var(--color-text-muted);">
+            building…
+          </td>
+          <td class="py-3 pl-3 pr-5 text-right">
+            <span class="font-mono text-xs opacity-0 group-hover:opacity-100 transition" style="color: var(--color-text-muted);">Open →</span>
+          </td>
+        </tr>
+        <tr class="group border-t hover:bg-[var(--color-surface-2)] cursor-pointer" style="border-color: var(--color-border);" onclick="location.href='/brands/9i0j1k2l'">
+          <!-- @bind: project -->
+          <td class="py-3 pl-5 pr-3">
+            <div class="flex items-center gap-3">
+              <span class="iei-mark size-md" style="background: var(--color-surface-2);">N</span>
+              <div>
+                <!-- @bind: project.intake.companyName -->
+                <div class="font-medium tracking-tight">Northwind Supply</div>
+                <!-- @bind: project.intake.industry -->
+                <div class="text-xs" style="color: var(--color-text-muted);">Industrial Logistics</div>
+              </div>
+            </div>
+          </td>
+          <td class="py-3 px-3 hidden md:table-cell">
+            <!-- @bind: project.status -->
+            <span class="badge badge-failed">Failed</span>
+          </td>
+          <td class="py-3 px-3 hidden lg:table-cell font-mono text-xs" style="color: var(--color-text-muted);">
+            <!-- @bind: project.createdAt -->
+            Apr 19, 2026
+          </td>
+          <td class="py-3 px-3 hidden lg:table-cell font-mono text-xs" style="color: var(--color-text-muted);">
+            —
+          </td>
+          <td class="py-3 pl-3 pr-5 text-right">
+            <span class="font-mono text-xs opacity-0 group-hover:opacity-100 transition" style="color: var(--color-text-muted);">Open →</span>
+          </td>
+        </tr>
+        <tr class="group border-t hover:bg-[var(--color-surface-2)] cursor-pointer" style="border-color: var(--color-border);" onclick="location.href='/brands/3m4n5o6p'">
+          <!-- @bind: project -->
+          <td class="py-3 pl-5 pr-3">
+            <div class="flex items-center gap-3">
+              <span class="iei-mark size-md" style="background: var(--color-surface-2);">B</span>
+              <div>
+                <!-- @bind: project.intake.companyName -->
+                <div class="font-medium tracking-tight">Bramble & Sons</div>
+                <!-- @bind: project.intake.industry -->
+                <div class="text-xs" style="color: var(--color-text-muted);">Specialty Coffee Roasters</div>
+              </div>
+            </div>
+          </td>
+          <td class="py-3 px-3 hidden md:table-cell">
+            <!-- @bind: project.status -->
+            <span class="badge badge-complete">Complete</span>
+          </td>
+          <td class="py-3 px-3 hidden lg:table-cell font-mono text-xs" style="color: var(--color-text-muted);">
+            <!-- @bind: project.createdAt -->
+            Apr 18, 2026
+          </td>
+          <td class="py-3 px-3 hidden lg:table-cell font-mono text-xs" style="color: var(--color-text-muted);">
+            4 files
+          </td>
+          <td class="py-3 pl-3 pr-5 text-right">
+            <span class="font-mono text-xs opacity-0 group-hover:opacity-100 transition" style="color: var(--color-text-muted);">Open →</span>
+          </td>
+        </tr>
+        <tr class="group border-t hover:bg-[var(--color-surface-2)] cursor-pointer" style="border-color: var(--color-border);" onclick="location.href='/brands/7q8r9s0t'">
+          <!-- @bind: project -->
+          <td class="py-3 pl-5 pr-3">
+            <div class="flex items-center gap-3">
+              <span class="iei-mark size-md" style="background: var(--color-surface-2);">M</span>
+              <div>
+                <!-- @bind: project.intake.companyName -->
+                <div class="font-medium tracking-tight">Meridian Health</div>
+                <!-- @bind: project.intake.industry -->
+                <div class="text-xs" style="color: var(--color-text-muted);">Primary Care Network</div>
+              </div>
+            </div>
+          </td>
+          <td class="py-3 px-3 hidden md:table-cell">
+            <!-- @bind: project.status -->
+            <span class="badge badge-complete">Complete</span>
+          </td>
+          <td class="py-3 px-3 hidden lg:table-cell font-mono text-xs" style="color: var(--color-text-muted);">
+            <!-- @bind: project.createdAt -->
+            Apr 15, 2026
+          </td>
+          <td class="py-3 px-3 hidden lg:table-cell font-mono text-xs" style="color: var(--color-text-muted);">
+            4 files
+          </td>
+          <td class="py-3 pl-3 pr-5 text-right">
+            <span class="font-mono text-xs opacity-0 group-hover:opacity-100 transition" style="color: var(--color-text-muted);">Open →</span>
+          </td>
+        </tr></tbody>
+      </table>
+    </div>
+
+    <!-- Mobile card list -->
+    <div class="md:hidden flex flex-col gap-3">
+      
+      <a href="/brands/1a2b3c4d" class="card card-hover p-4 block">
+        <div class="flex items-start justify-between gap-3 mb-3">
+          <span class="iei-mark size-md" style="background: var(--color-surface-2);">A</span>
+          <span class="badge badge-complete">Complete</span>
+        </div>
+        <div class="font-medium tracking-tight">Aurelian Labs</div>
+        <div class="text-xs" style="color: var(--color-text-muted);">AI / Financial Services</div>
+        <div class="mt-3 font-mono text-[11px] flex justify-between" style="color: var(--color-text-muted);">
+          <span>Apr 22, 2026</span>
+          <span>4 files</span>
+        </div>
+      </a>
+      <a href="/brands/5e6f7g8h" class="card card-hover p-4 block">
+        <div class="flex items-start justify-between gap-3 mb-3">
+          <span class="iei-mark size-md" style="background: var(--color-surface-2);">G</span>
+          <span class="badge badge-running">Running</span>
+        </div>
+        <div class="font-medium tracking-tight">Greenfield Capital</div>
+        <div class="text-xs" style="color: var(--color-text-muted);">Private Credit</div>
+        <div class="mt-3 font-mono text-[11px] flex justify-between" style="color: var(--color-text-muted);">
+          <span>Apr 21, 2026</span>
+          <span>building…</span>
+        </div>
+      </a>
+      <a href="/brands/9i0j1k2l" class="card card-hover p-4 block">
+        <div class="flex items-start justify-between gap-3 mb-3">
+          <span class="iei-mark size-md" style="background: var(--color-surface-2);">N</span>
+          <span class="badge badge-failed">Failed</span>
+        </div>
+        <div class="font-medium tracking-tight">Northwind Supply</div>
+        <div class="text-xs" style="color: var(--color-text-muted);">Industrial Logistics</div>
+        <div class="mt-3 font-mono text-[11px] flex justify-between" style="color: var(--color-text-muted);">
+          <span>Apr 19, 2026</span>
+          <span>—</span>
+        </div>
+      </a>
+      <a href="/brands/3m4n5o6p" class="card card-hover p-4 block">
+        <div class="flex items-start justify-between gap-3 mb-3">
+          <span class="iei-mark size-md" style="background: var(--color-surface-2);">B</span>
+          <span class="badge badge-complete">Complete</span>
+        </div>
+        <div class="font-medium tracking-tight">Bramble & Sons</div>
+        <div class="text-xs" style="color: var(--color-text-muted);">Specialty Coffee Roasters</div>
+        <div class="mt-3 font-mono text-[11px] flex justify-between" style="color: var(--color-text-muted);">
+          <span>Apr 18, 2026</span>
+          <span>4 files</span>
+        </div>
+      </a>
+      <a href="/brands/7q8r9s0t" class="card card-hover p-4 block">
+        <div class="flex items-start justify-between gap-3 mb-3">
+          <span class="iei-mark size-md" style="background: var(--color-surface-2);">M</span>
+          <span class="badge badge-complete">Complete</span>
+        </div>
+        <div class="font-medium tracking-tight">Meridian Health</div>
+        <div class="text-xs" style="color: var(--color-text-muted);">Primary Care Network</div>
+        <div class="mt-3 font-mono text-[11px] flex justify-between" style="color: var(--color-text-muted);">
+          <span>Apr 15, 2026</span>
+          <span>4 files</span>
+        </div>
+      </a>
+    </div>
+
+    <!-- Keyboard footer -->
+    <div class="mt-6 flex flex-wrap items-center gap-4 text-xs" style="color: var(--color-text-muted);">
+      <span class="flex items-center gap-1.5"><span class="kbd">↑</span><span class="kbd">↓</span> navigate</span>
+      <span class="flex items-center gap-1.5"><span class="kbd">↵</span> open</span>
+      <span class="flex items-center gap-1.5"><span class="kbd">N</span> new brand</span>
+      <span class="flex items-center gap-1.5"><span class="kbd">/</span> search</span>
+    </div>
+  </main>
+</section>
+
+<!-- State · Empty -->
+<section data-state="empty">
+  <div class="state-label">02 · Empty (first-time user)</div>
+  
+<header class="nav sticky top-0 z-30">
+  <div class="max-w-[1280px] mx-auto flex items-center gap-6 px-5 md:px-6 py-3">
+    <a href="/" class="flex items-center gap-2.5 shrink-0"><span class="iei-mark size-md">IEI</span><span class="font-medium tracking-tight hidden sm:inline">IEI Ventures</span></a>
+    <nav class="hidden md:flex items-center gap-1 text-sm">
+      <a href="/" class="px-3 py-1.5 rounded ">Projects</a>
+      <a href="#" class="px-3 py-1.5 rounded" style="color: var(--color-text-muted);">Templates</a>
+      <a href="#" class="px-3 py-1.5 rounded" style="color: var(--color-text-muted);">Docs</a>
+    </nav>
+    <div class="ml-auto flex items-center gap-2">
+      <button class="btn btn-ghost btn-sm hidden md:inline-flex"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5L14 14"/></svg><span style="color: var(--color-text-muted);">Search</span><span class="kbd">⌘K</span></button>
+      <a href="/new" class="btn btn-primary btn-sm">New brand</a>
+      <button class="btn btn-ghost btn-icon"><span class="inline-flex items-center justify-center w-7 h-7 rounded-full font-mono text-[11px]" style="background: var(--color-surface-2); border: 1px solid var(--color-border);">HB</span></button>
+    </div>
+  </div>
+</header>
+  <main class="max-w-[1280px] mx-auto px-5 md:px-6 py-12">
+    <div class="card p-10 md:p-16 text-center max-w-2xl mx-auto">
+      <div class="kicker mb-4">Welcome</div>
+      <h1 class="font-serif mb-3" style="font-size: 44px; line-height: 1.05;">Build your first brand.</h1>
+      <p class="text-base mb-8 mx-auto" style="color: var(--color-text-muted); max-width: 52ch;">
+        Answer a short intake or upload what you have. IEI Ventures returns a complete brand kit — palette, type, logo, landing page, and playbook — in one pass.
+      </p>
+      <div class="flex flex-col sm:flex-row justify-center gap-3 mb-8">
+        <a href="/new" class="btn btn-primary btn-lg">Start new brand</a>
+        <a href="/new?mode=existing" class="btn btn-secondary btn-lg">I have existing brand assets</a>
+      </div>
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-10 text-left">
+        <div><div class="font-mono text-xs mb-1" style="color:var(--color-text-muted);">01 · INTAKE</div><div class="text-sm">A short conversation about your business — audience, tone, competitors.</div></div>
+        <div><div class="font-mono text-xs mb-1" style="color:var(--color-text-muted);">02 · IDENTITY</div><div class="text-sm">Palette, type system, logo, and a positioning statement, generated in minutes.</div></div>
+        <div><div class="font-mono text-xs mb-1" style="color:var(--color-text-muted);">03 · INCOME</div><div class="text-sm">Landing page + downloadable playbook, ready to ship.</div></div>
+      </div>
+    </div>
+  </main>
+</section>
+
+<!-- State · Loading -->
+<section data-state="loading">
+  <div class="state-label">03 · Loading skeleton</div>
+  
+<header class="nav sticky top-0 z-30">
+  <div class="max-w-[1280px] mx-auto flex items-center gap-6 px-5 md:px-6 py-3">
+    <a href="/" class="flex items-center gap-2.5 shrink-0"><span class="iei-mark size-md">IEI</span><span class="font-medium tracking-tight hidden sm:inline">IEI Ventures</span></a>
+    <nav class="hidden md:flex items-center gap-1 text-sm">
+      <a href="/" class="px-3 py-1.5 rounded ">Projects</a>
+      <a href="#" class="px-3 py-1.5 rounded" style="color: var(--color-text-muted);">Templates</a>
+      <a href="#" class="px-3 py-1.5 rounded" style="color: var(--color-text-muted);">Docs</a>
+    </nav>
+    <div class="ml-auto flex items-center gap-2">
+      <button class="btn btn-ghost btn-sm hidden md:inline-flex"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5L14 14"/></svg><span style="color: var(--color-text-muted);">Search</span><span class="kbd">⌘K</span></button>
+      <a href="/new" class="btn btn-primary btn-sm">New brand</a>
+      <button class="btn btn-ghost btn-icon"><span class="inline-flex items-center justify-center w-7 h-7 rounded-full font-mono text-[11px]" style="background: var(--color-surface-2); border: 1px solid var(--color-border);">HB</span></button>
+    </div>
+  </div>
+</header>
+  <main class="max-w-[1280px] mx-auto px-5 md:px-6 py-8">
+    <div class="flex justify-between items-end mb-6"><span class="sk" style="width:160px;height:28px;"></span><span class="sk" style="width:120px;height:36px;border-radius:6px;"></span></div>
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
+      <div class="card p-4"><span class="sk mb-2" style="width:50%;height:11px;"></span><span class="sk" style="width:30%;height:22px;"></span></div><div class="card p-4"><span class="sk mb-2" style="width:50%;height:11px;"></span><span class="sk" style="width:30%;height:22px;"></span></div><div class="card p-4"><span class="sk mb-2" style="width:50%;height:11px;"></span><span class="sk" style="width:30%;height:22px;"></span></div><div class="card p-4"><span class="sk mb-2" style="width:50%;height:11px;"></span><span class="sk" style="width:30%;height:22px;"></span></div>
+    </div>
+    <div class="card p-0 overflow-hidden">
+      <div class="flex items-center gap-3 px-5 py-3.5 border-b" style="border-color: var(--color-border);"><span class="sk" style="width:32px;height:32px;border-radius:4px;"></span><div class="flex-1"><span class="sk mb-1" style="width:40%;height:14px;"></span><span class="sk" style="width:25%;height:11px;"></span></div><span class="sk hidden md:block" style="width:70px;height:20px;border-radius:999px;"></span><span class="sk hidden lg:block" style="width:80px;height:11px;"></span></div><div class="flex items-center gap-3 px-5 py-3.5 border-b" style="border-color: var(--color-border);"><span class="sk" style="width:32px;height:32px;border-radius:4px;"></span><div class="flex-1"><span class="sk mb-1" style="width:40%;height:14px;"></span><span class="sk" style="width:25%;height:11px;"></span></div><span class="sk hidden md:block" style="width:70px;height:20px;border-radius:999px;"></span><span class="sk hidden lg:block" style="width:80px;height:11px;"></span></div><div class="flex items-center gap-3 px-5 py-3.5 border-b" style="border-color: var(--color-border);"><span class="sk" style="width:32px;height:32px;border-radius:4px;"></span><div class="flex-1"><span class="sk mb-1" style="width:40%;height:14px;"></span><span class="sk" style="width:25%;height:11px;"></span></div><span class="sk hidden md:block" style="width:70px;height:20px;border-radius:999px;"></span><span class="sk hidden lg:block" style="width:80px;height:11px;"></span></div><div class="flex items-center gap-3 px-5 py-3.5 border-b" style="border-color: var(--color-border);"><span class="sk" style="width:32px;height:32px;border-radius:4px;"></span><div class="flex-1"><span class="sk mb-1" style="width:40%;height:14px;"></span><span class="sk" style="width:25%;height:11px;"></span></div><span class="sk hidden md:block" style="width:70px;height:20px;border-radius:999px;"></span><span class="sk hidden lg:block" style="width:80px;height:11px;"></span></div><div class="flex items-center gap-3 px-5 py-3.5 border-b" style="border-color: var(--color-border);"><span class="sk" style="width:32px;height:32px;border-radius:4px;"></span><div class="flex-1"><span class="sk mb-1" style="width:40%;height:14px;"></span><span class="sk" style="width:25%;height:11px;"></span></div><span class="sk hidden md:block" style="width:70px;height:20px;border-radius:999px;"></span><span class="sk hidden lg:block" style="width:80px;height:11px;"></span></div>
+    </div>
+  </main>
+</section>
+
+</body>
+</html>

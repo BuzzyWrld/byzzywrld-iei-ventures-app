@@ -1,0 +1,958 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>IEI Ventures — Logo Directions (Wireframe)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;600&family=Kalam:wght@300;400;700&family=Geist+Mono:wght@400;500&family=Geist:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #1a1a1a;
+    --paper: #fafaf7;
+    --rule: #1a1a1a;
+    --muted: #6b6b66;
+    --grid: #e6e4dc;
+    --accent-1: #c2410c; /* dir 1 burnt orange */
+    --accent-2: #0f4c4a; /* dir 2 deep teal */
+    --accent-3: #3730a3; /* dir 3 ink indigo */
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0; padding: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'Kalam', 'Caveat', system-ui, sans-serif;
+    font-weight: 300;
+  }
+  body {
+    background-image:
+      linear-gradient(var(--grid) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+    background-size: 24px 24px;
+    background-position: -1px -1px;
+  }
+
+  /* ---------- top bar / meta ---------- */
+  .meta {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 40px 40px 20px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 40px;
+    border-bottom: 1.5px dashed var(--ink);
+  }
+  .meta h1 {
+    font-family: 'Kalam', cursive;
+    font-weight: 700;
+    font-size: 34px;
+    margin: 0 0 4px;
+    letter-spacing: -0.5px;
+  }
+  .meta .sub {
+    font-family: 'Kalam', cursive;
+    font-weight: 300;
+    font-size: 16px;
+    color: var(--muted);
+    max-width: 560px;
+    line-height: 1.4;
+  }
+  .meta .stamp {
+    font-family: 'Geist Mono', monospace;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--muted);
+    border: 1.5px solid var(--ink);
+    padding: 8px 14px;
+    transform: rotate(-1.5deg);
+    background: var(--paper);
+  }
+  .legend {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 14px 40px 8px;
+    display: flex;
+    gap: 28px;
+    font-family: 'Geist Mono', monospace;
+    font-size: 10.5px;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--muted);
+  }
+  .legend span::before {
+    content: '';
+    display: inline-block;
+    width: 10px; height: 10px;
+    margin-right: 8px;
+    border: 1.5px solid var(--ink);
+    vertical-align: -1px;
+  }
+  .legend .s1::before { background: var(--accent-1); }
+  .legend .s2::before { background: var(--accent-2); }
+  .legend .s3::before { background: var(--accent-3); }
+
+  /* ---------- column grid ---------- */
+  .columns {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 20px 40px 60px;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 28px;
+  }
+  .col {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+  }
+  .col-head {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    border-bottom: 1.5px solid var(--ink);
+    padding-bottom: 6px;
+  }
+  .col-head .num {
+    font-family: 'Kalam', cursive;
+    font-weight: 700;
+    font-size: 40px;
+    line-height: 1;
+  }
+  .col-head .name {
+    font-family: 'Kalam', cursive;
+    font-weight: 700;
+    font-size: 22px;
+  }
+  .col-head .tag {
+    margin-left: auto;
+    font-family: 'Geist Mono', monospace;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--muted);
+  }
+
+  /* ---------- panel (each card) ---------- */
+  .panel {
+    background: var(--paper);
+    border: 1.5px solid var(--ink);
+    position: relative;
+    padding: 22px;
+  }
+  .panel + .panel { /* not needed, using gap */ }
+  .panel .p-label {
+    position: absolute;
+    top: -9px; left: 14px;
+    background: var(--paper);
+    padding: 0 8px;
+    font-family: 'Geist Mono', monospace;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    color: var(--muted);
+  }
+  .panel .p-note {
+    font-family: 'Kalam', cursive;
+    font-size: 13.5px;
+    color: var(--muted);
+    line-height: 1.45;
+    margin-top: 14px;
+    padding-top: 12px;
+    border-top: 1px dashed var(--grid);
+  }
+  .panel .p-note b { color: var(--ink); font-weight: 700; }
+
+  /* lockup stage */
+  .stage {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 130px;
+    padding: 20px 8px;
+    background:
+      linear-gradient(var(--grid) 1px, transparent 1px) 0 0 / 12px 12px,
+      linear-gradient(90deg, var(--grid) 1px, transparent 1px) 0 0 / 12px 12px,
+      #fff;
+    border: 1px dashed var(--grid);
+  }
+  .stage.dark {
+    background:
+      linear-gradient(#2a2a27 1px, transparent 1px) 0 0 / 12px 12px,
+      linear-gradient(90deg, #2a2a27 1px, transparent 1px) 0 0 / 12px 12px,
+      #111;
+  }
+
+  /* icon row (3 sizes) */
+  .icons-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 8px;
+    align-items: end;
+  }
+  .icon-cell {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    padding: 10px 8px;
+    background: #fff;
+    border: 1px dashed var(--grid);
+  }
+  .icon-cell.dark { background: #111; }
+  .icon-cell .cap {
+    font-family: 'Geist Mono', monospace;
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+  }
+  .icon-cell.dark .cap { color: #777; }
+
+  /* mono row */
+  .mono-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+  .mono-cell {
+    padding: 18px 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px dashed var(--grid);
+  }
+  .mono-cell.light { background: #fff; }
+  .mono-cell.dark { background: #111; }
+
+  /* favicon / app icon context */
+  .context-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+  .context {
+    border: 1px dashed var(--grid);
+    padding: 10px;
+    background: #fff;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .context .tabchrome {
+    width: 100%;
+    border: 1.5px solid var(--ink);
+    border-radius: 8px 8px 0 0;
+    padding: 6px 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: 'Geist Mono', monospace;
+    font-size: 10px;
+    color: var(--muted);
+    background: #f2f0e9;
+  }
+  .appdock {
+    border: 1.5px solid var(--ink);
+    border-radius: 10px;
+    padding: 10px;
+    display: flex;
+    gap: 10px;
+    background: #f2f0e9;
+    align-items: center;
+    justify-content: center;
+  }
+  .appdock .slot {
+    width: 34px; height: 34px;
+    border: 1px dashed var(--muted);
+    border-radius: 7px;
+  }
+
+  /* sketch arrows + annotations around the page */
+  .annot {
+    font-family: 'Caveat', cursive;
+    font-size: 17px;
+    color: var(--ink);
+  }
+
+  /* rationale */
+  .rationale {
+    border: 1.5px solid var(--ink);
+    padding: 18px 20px;
+    background: var(--paper);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .rationale .r-title {
+    font-family: 'Kalam', cursive;
+    font-weight: 700;
+    font-size: 16px;
+  }
+  .rationale p {
+    margin: 0;
+    font-family: 'Kalam', cursive;
+    font-size: 14px;
+    line-height: 1.55;
+  }
+
+  /* footer question */
+  .footer {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 10px 40px 60px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    font-family: 'Kalam', cursive;
+  }
+  .footer .q {
+    font-size: 20px;
+    font-weight: 700;
+  }
+  .footer .choose {
+    display: flex; gap: 10px;
+  }
+  .footer .choose span {
+    font-family: 'Geist Mono', monospace;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    border: 1.5px solid var(--ink);
+    padding: 8px 14px;
+    background: #fff;
+  }
+
+  /* ==== logo styles per direction ==== */
+
+  /* Direction 1 — Serif monogram slab */
+  .d1-word {
+    font-family: 'Instrument Serif', serif;
+    font-weight: 400;
+    letter-spacing: -0.02em;
+    color: var(--ink);
+    display: inline-flex;
+    align-items: baseline;
+    gap: 0;
+  }
+  .d1-word .iei {
+    font-size: 64px;
+    line-height: 0.9;
+  }
+  .d1-word .dot {
+    display: inline-block;
+    width: 7px; height: 7px;
+    background: var(--accent-1);
+    border-radius: 50%;
+    margin: 0 10px 8px;
+    align-self: flex-end;
+  }
+  .d1-word .ventures {
+    font-family: 'Geist Mono', monospace;
+    font-weight: 500;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.22em;
+    color: var(--ink);
+  }
+  .d1-icon {
+    font-family: 'Instrument Serif', serif;
+    font-size: 40px;
+    color: var(--ink);
+    letter-spacing: -0.04em;
+    line-height: 1;
+  }
+  .d1-icon .dot { color: var(--accent-1); }
+  .d1-icon.mono .dot { color: inherit; }
+
+  /* Direction 2 — Bracket / container */
+  .d2-word {
+    font-family: 'Geist', sans-serif;
+    font-weight: 600;
+    font-size: 32px;
+    letter-spacing: -0.02em;
+    color: var(--ink);
+    display: inline-flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .d2-mark {
+    position: relative;
+    width: 56px; height: 56px;
+    border: 2px solid var(--ink);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Geist Mono', monospace;
+    font-weight: 600;
+    font-size: 18px;
+    letter-spacing: 0;
+  }
+  .d2-mark::before, .d2-mark::after {
+    content: '';
+    position: absolute;
+    width: 10px; height: 10px;
+    border: 2px solid var(--accent-2);
+    background: var(--paper);
+  }
+  .d2-mark::before { top: -6px; left: -6px; border-right: none; border-bottom: none; }
+  .d2-mark::after { bottom: -6px; right: -6px; border-left: none; border-top: none; }
+  .d2-word .ventures {
+    font-family: 'Geist Mono', monospace;
+    font-weight: 500;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.22em;
+    color: var(--muted);
+    margin-left: -6px;
+    align-self: flex-end;
+    padding-bottom: 4px;
+  }
+  .d2-mark.small { width: 36px; height: 36px; font-size: 13px; }
+  .d2-mark.small::before, .d2-mark.small::after { width: 7px; height: 7px; }
+  .d2-mark.tiny { width: 22px; height: 22px; font-size: 9px; border-width: 1.5px; }
+  .d2-mark.tiny::before, .d2-mark.tiny::after { width: 5px; height: 5px; border-width: 1.5px; }
+  .d2-mark.mono::before, .d2-mark.mono::after { border-color: currentColor; }
+
+  /* Direction 3 — Rule / pipe */
+  .d3-word {
+    font-family: 'Geist', sans-serif;
+    font-weight: 500;
+    font-size: 30px;
+    letter-spacing: -0.015em;
+    color: var(--ink);
+    display: inline-flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .d3-bar {
+    display: inline-block;
+    width: 3px; height: 38px;
+    background: var(--ink);
+    position: relative;
+  }
+  .d3-bar::after {
+    content: '';
+    position: absolute;
+    left: 0; bottom: -1px;
+    width: 3px; height: 10px;
+    background: var(--accent-3);
+  }
+  .d3-word .iei { font-weight: 600; letter-spacing: -0.02em; }
+  .d3-word .ventures {
+    font-family: 'Geist Mono', monospace;
+    font-weight: 500;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.22em;
+    color: var(--muted);
+  }
+  .d3-icon-box {
+    width: 44px; height: 44px;
+    border: 1.5px solid var(--ink);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .d3-icon-box .d3-bar { height: 26px; width: 2.5px; }
+  .d3-icon-box .d3-bar::after { width: 2.5px; height: 7px; }
+  .d3-icon-box.tiny { width: 22px; height: 22px; border-width: 1px; }
+  .d3-icon-box.tiny .d3-bar { height: 12px; width: 2px; }
+  .d3-icon-box.tiny .d3-bar::after { width: 2px; height: 4px; }
+
+  /* dark variants */
+  .on-dark { color: #fafaf7; }
+  .on-dark .d1-word,
+  .on-dark .d1-icon,
+  .on-dark .d2-word,
+  .on-dark .d3-word { color: #fafaf7; }
+  .on-dark .d2-mark { border-color: #fafaf7; color: #fafaf7; }
+  .on-dark .d3-bar { background: #fafaf7; }
+  .on-dark .d3-icon-box { border-color: #fafaf7; }
+  .on-dark .d2-word .ventures,
+  .on-dark .d3-word .ventures { color: #bdbdb7; }
+
+  /* mono (kill accent) */
+  .mono-only .d1-word .dot { background: currentColor; }
+  .mono-only .d2-mark::before,
+  .mono-only .d2-mark::after { border-color: currentColor; background: transparent; }
+  .mono-only .d3-bar::after { background: currentColor; }
+
+  /* scribble notes layer */
+  .scribble {
+    position: absolute;
+    font-family: 'Caveat', cursive;
+    font-size: 15px;
+    color: var(--muted);
+    pointer-events: none;
+  }
+  .arrow {
+    display: inline-block;
+    width: 40px; height: 12px;
+    position: relative;
+  }
+  .arrow::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 50%;
+    width: 100%; height: 1.5px;
+    background: var(--muted);
+  }
+  .arrow::after {
+    content: '';
+    position: absolute;
+    right: 0; top: 50%;
+    transform: translateY(-50%) rotate(-45deg);
+    transform-origin: right center;
+    width: 6px; height: 1.5px;
+    background: var(--muted);
+    box-shadow: 0 4px 0 -1px var(--muted);
+  }
+
+  /* ---------- tweaks panel ---------- */
+  .tweaks {
+    position: fixed;
+    right: 20px;
+    bottom: 20px;
+    background: var(--paper);
+    border: 1.5px solid var(--ink);
+    padding: 14px 16px;
+    font-family: 'Geist Mono', monospace;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    display: none;
+    flex-direction: column;
+    gap: 10px;
+    z-index: 100;
+    min-width: 220px;
+    box-shadow: 3px 3px 0 var(--ink);
+  }
+  .tweaks.on { display: flex; }
+  .tweaks .tw-title {
+    font-weight: 700;
+    border-bottom: 1px solid var(--ink);
+    padding-bottom: 4px;
+  }
+  .tweaks label {
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 10px;
+    text-transform: none;
+    letter-spacing: 0;
+    font-size: 12px;
+    font-family: 'Kalam', cursive;
+  }
+  .tweaks select, .tweaks input[type="range"] {
+    font: inherit;
+    font-family: 'Geist Mono', monospace;
+    font-size: 11px;
+  }
+  body.compare-mode .rationale,
+  body.compare-mode .panel.context-panel,
+  body.compare-mode .panel.icon-panel,
+  body.compare-mode .panel.mono-panel { display: none; }
+
+</style>
+</head>
+<body>
+
+<header class="meta">
+  <div>
+    <h1>IEI Ventures — logo sketches</h1>
+    <div class="sub">3 rough directions, side-by-side. Wireframe fidelity — proportions and marks are intentional; finish is not. Pick one (or mix) and I'll tighten it.</div>
+  </div>
+  <div class="stamp">v0.1 · wireframe · apr 22</div>
+</header>
+
+<div class="legend">
+  <span class="s1">dir 1 — serif monogram</span>
+  <span class="s2">dir 2 — bracketed container</span>
+  <span class="s3">dir 3 — typographic rule</span>
+  <span style="margin-left:auto;">audience: agency operators · default mark for white-label</span>
+</div>
+
+<main class="columns">
+
+  <!-- ============ DIR 1 — SERIF MONOGRAM ============ -->
+  <section class="col">
+    <div class="col-head">
+      <div class="num">1</div>
+      <div class="name">Serif monogram</div>
+      <div class="tag">ramp / arc lineage</div>
+    </div>
+
+    <!-- primary lockup -->
+    <div class="panel">
+      <div class="p-label">01 · primary lockup</div>
+      <div class="stage">
+        <div class="d1-word">
+          <span class="iei">IEI<span class="dot"></span></span>
+        </div>
+      </div>
+      <div style="display:flex; align-items:center; justify-content:center; margin-top:10px; gap:10px;">
+        <div class="d1-word" style="gap:10px;">
+          <span class="iei" style="font-size:34px;">IEI</span>
+          <span class="dot" style="width:5px;height:5px;margin:0 6px 4px;"></span>
+          <span class="ventures">Ventures</span>
+        </div>
+      </div>
+      <div class="p-note"><b>Concept:</b> a serif "IEI" anchored by a single accent dot — a period where the copy ends. Reads as an imprint or a publishing house. Stacked and inline lockups both hold.</div>
+    </div>
+
+    <!-- icon sizes -->
+    <div class="panel icon-panel">
+      <div class="p-label">02 · icon mark — sizes</div>
+      <div class="icons-row">
+        <div class="icon-cell">
+          <div class="d1-icon" style="font-size:52px;">IEI<span class="dot">.</span></div>
+          <div class="cap">128</div>
+        </div>
+        <div class="icon-cell">
+          <div class="d1-icon" style="font-size:28px;">IEI<span class="dot">.</span></div>
+          <div class="cap">32 · favicon</div>
+        </div>
+        <div class="icon-cell">
+          <div class="d1-icon" style="font-size:16px;">IEI<span class="dot">.</span></div>
+          <div class="cap">16</div>
+        </div>
+      </div>
+      <div class="p-note"><b>Legibility check:</b> at 16px the dot collapses into the I stem — still reads as "IEI." Option to swap to a solid square glyph at favicon size.</div>
+    </div>
+
+    <!-- mono variants -->
+    <div class="panel mono-panel">
+      <div class="p-label">03 · monochrome — black & reversed</div>
+      <div class="mono-row">
+        <div class="mono-cell light mono-only">
+          <div class="d1-word"><span class="iei" style="font-size:34px;">IEI<span class="dot"></span></span></div>
+        </div>
+        <div class="mono-cell dark mono-only on-dark">
+          <div class="d1-word"><span class="iei" style="font-size:34px;">IEI<span class="dot"></span></span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- context -->
+    <div class="panel context-panel">
+      <div class="p-label">04 · in context</div>
+      <div class="context-row">
+        <div class="context" style="padding:0; background:transparent; border:none;">
+          <div class="tabchrome">
+            <span style="display:inline-block;width:12px;height:12px;border-radius:50%;background:#d44;"></span>
+            <span style="display:inline-block;width:12px;height:12px;border-radius:50%;background:#dc3;"></span>
+            <span style="display:inline-block;width:12px;height:12px;border-radius:50%;background:#6c6;"></span>
+            <span style="margin-left:12px;display:inline-flex;align-items:center;gap:6px;">
+              <span class="d1-icon" style="font-size:12px;">IEI<span class="dot">.</span></span>
+              ieiventures.app
+            </span>
+          </div>
+        </div>
+        <div class="appdock">
+          <div class="slot"></div>
+          <div style="width:38px;height:38px;border:1.5px solid var(--ink);border-radius:8px;display:flex;align-items:center;justify-content:center;background:#fff;">
+            <span class="d1-icon" style="font-size:16px;">IEI<span class="dot">.</span></span>
+          </div>
+          <div class="slot"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- rationale -->
+    <div class="rationale">
+      <div class="r-title">Why this fits</div>
+      <p>A serif monogram borrows the authority of a print imprint — the same cue an agency would use for a high-trust client deliverable. The accent dot is the only "moment," so it carries voice without hijacking the mark when a tenant recolors it.</p>
+      <p style="color:var(--muted); font-size:13px;"><b>Feels like:</b> Ramp's wordmark, publishing houses, a financial-grade product.</p>
+    </div>
+  </section>
+
+  <!-- ============ DIR 2 — BRACKET / CONTAINER ============ -->
+  <section class="col">
+    <div class="col-head">
+      <div class="num">2</div>
+      <div class="name">Bracketed container</div>
+      <div class="tag">linear / vercel lineage</div>
+    </div>
+
+    <!-- primary lockup -->
+    <div class="panel">
+      <div class="p-label">01 · primary lockup</div>
+      <div class="stage">
+        <div class="d2-word">
+          <span class="d2-mark">IEI</span>
+          <span>IEI Ventures</span>
+        </div>
+      </div>
+      <div style="display:flex; justify-content:center; margin-top:14px;">
+        <div class="d2-word" style="font-size:22px; gap:10px;">
+          <span class="d2-mark small">IEI</span>
+          <span style="display:flex;flex-direction:column;line-height:1.05;">
+            <span>IEI Ventures</span>
+            <span class="ventures" style="margin:2px 0 0; padding:0; font-size:9px;">intake → identity → income</span>
+          </span>
+        </div>
+      </div>
+      <div class="p-note"><b>Concept:</b> the monogram lives inside a bordered container with corner-ticks — a system that *holds* a brand. The ticks echo intake→income: something entering and exiting a frame. Ticks can recolor to tenant accent.</div>
+    </div>
+
+    <!-- icon sizes -->
+    <div class="panel icon-panel">
+      <div class="p-label">02 · icon mark — sizes</div>
+      <div class="icons-row">
+        <div class="icon-cell">
+          <span class="d2-mark" style="width:64px;height:64px;font-size:20px;">IEI</span>
+          <div class="cap">128</div>
+        </div>
+        <div class="icon-cell">
+          <span class="d2-mark small">IEI</span>
+          <div class="cap">32 · favicon</div>
+        </div>
+        <div class="icon-cell">
+          <span class="d2-mark tiny">IEI</span>
+          <div class="cap">16</div>
+        </div>
+      </div>
+      <div class="p-note"><b>Legibility check:</b> corner ticks drop below 24px — container alone still reads. At 16px, falls back to a filled square with "I" only.</div>
+    </div>
+
+    <!-- mono variants -->
+    <div class="panel mono-panel">
+      <div class="p-label">03 · monochrome — black & reversed</div>
+      <div class="mono-row">
+        <div class="mono-cell light mono-only">
+          <div class="d2-word" style="font-size:24px; gap:10px;"><span class="d2-mark small mono">IEI</span><span>IEI Ventures</span></div>
+        </div>
+        <div class="mono-cell dark mono-only on-dark">
+          <div class="d2-word" style="font-size:24px; gap:10px;"><span class="d2-mark small mono">IEI</span><span>IEI Ventures</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- context -->
+    <div class="panel context-panel">
+      <div class="p-label">04 · in context</div>
+      <div class="context-row">
+        <div class="context" style="padding:0; background:transparent; border:none;">
+          <div class="tabchrome">
+            <span style="display:inline-block;width:12px;height:12px;border-radius:50%;background:#d44;"></span>
+            <span style="display:inline-block;width:12px;height:12px;border-radius:50%;background:#dc3;"></span>
+            <span style="display:inline-block;width:12px;height:12px;border-radius:50%;background:#6c6;"></span>
+            <span style="margin-left:12px;display:inline-flex;align-items:center;gap:6px;">
+              <span class="d2-mark tiny">IEI</span>
+              ieiventures.app
+            </span>
+          </div>
+        </div>
+        <div class="appdock">
+          <div class="slot"></div>
+          <div style="width:38px;height:38px;border:1.5px solid var(--ink);border-radius:8px;display:flex;align-items:center;justify-content:center;background:#fff;">
+            <span class="d2-mark small" style="width:26px;height:26px;font-size:10px;">IEI</span>
+          </div>
+          <div class="slot"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- rationale -->
+    <div class="rationale">
+      <div class="r-title">Why this fits</div>
+      <p>A geometric container reads as a <i>system</i> — which is what the product is. The corner ticks give it a single point of brand personality (movement, direction) without resorting to illustration. It holds up fine when recolored or stripped to one weight.</p>
+      <p style="color:var(--muted); font-size:13px;"><b>Feels like:</b> Linear's L-mark, Vercel's triangle, developer-first infra tools.</p>
+    </div>
+  </section>
+
+  <!-- ============ DIR 3 — TYPOGRAPHIC RULE ============ -->
+  <section class="col">
+    <div class="col-head">
+      <div class="num">3</div>
+      <div class="name">Typographic rule</div>
+      <div class="tag">notion / arc lineage</div>
+    </div>
+
+    <!-- primary lockup -->
+    <div class="panel">
+      <div class="p-label">01 · primary lockup</div>
+      <div class="stage">
+        <div class="d3-word">
+          <span class="d3-bar"></span>
+          <span class="iei">IEI Ventures</span>
+        </div>
+      </div>
+      <div style="display:flex; justify-content:center; margin-top:14px;">
+        <div class="d3-word" style="font-size:22px;">
+          <span class="d3-bar" style="height:28px;"></span>
+          <span style="display:flex;flex-direction:column;line-height:1.05;">
+            <span class="iei">IEI Ventures</span>
+            <span class="ventures" style="font-size:9px;">brand systems, built end to end</span>
+          </span>
+        </div>
+      </div>
+      <div class="p-note"><b>Concept:</b> a vertical rule — a margin mark, a ledger line, a block quote — sits left of the wordmark. The accent is a single tipped segment at its base: a highlight on an otherwise plain line. Minimal surface area, maximum institutional read.</div>
+    </div>
+
+    <!-- icon sizes -->
+    <div class="panel icon-panel">
+      <div class="p-label">02 · icon mark — sizes</div>
+      <div class="icons-row">
+        <div class="icon-cell">
+          <div class="d3-icon-box" style="width:64px;height:64px;"><span class="d3-bar" style="height:36px;"></span></div>
+          <div class="cap">128</div>
+        </div>
+        <div class="icon-cell">
+          <div class="d3-icon-box"><span class="d3-bar"></span></div>
+          <div class="cap">32 · favicon</div>
+        </div>
+        <div class="icon-cell">
+          <div class="d3-icon-box tiny"><span class="d3-bar"></span></div>
+          <div class="cap">16</div>
+        </div>
+      </div>
+      <div class="p-note"><b>Legibility check:</b> the rule holds at any size — it's one stroke. At 16px the accent segment may flatten to a solid bar; that's fine. Also works as a text cursor reference (invitation to start).</div>
+    </div>
+
+    <!-- mono variants -->
+    <div class="panel mono-panel">
+      <div class="p-label">03 · monochrome — black & reversed</div>
+      <div class="mono-row">
+        <div class="mono-cell light mono-only">
+          <div class="d3-word" style="font-size:22px;"><span class="d3-bar" style="height:28px;"></span><span class="iei">IEI Ventures</span></div>
+        </div>
+        <div class="mono-cell dark mono-only on-dark">
+          <div class="d3-word" style="font-size:22px;"><span class="d3-bar" style="height:28px;"></span><span class="iei">IEI Ventures</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- context -->
+    <div class="panel context-panel">
+      <div class="p-label">04 · in context</div>
+      <div class="context-row">
+        <div class="context" style="padding:0; background:transparent; border:none;">
+          <div class="tabchrome">
+            <span style="display:inline-block;width:12px;height:12px;border-radius:50%;background:#d44;"></span>
+            <span style="display:inline-block;width:12px;height:12px;border-radius:50%;background:#dc3;"></span>
+            <span style="display:inline-block;width:12px;height:12px;border-radius:50%;background:#6c6;"></span>
+            <span style="margin-left:12px;display:inline-flex;align-items:center;gap:6px;">
+              <span class="d3-icon-box tiny"><span class="d3-bar"></span></span>
+              ieiventures.app
+            </span>
+          </div>
+        </div>
+        <div class="appdock">
+          <div class="slot"></div>
+          <div style="width:38px;height:38px;border:1.5px solid var(--ink);border-radius:8px;display:flex;align-items:center;justify-content:center;background:#fff;">
+            <span class="d3-icon-box" style="width:24px;height:24px;"><span class="d3-bar" style="height:14px;"></span></span>
+          </div>
+          <div class="slot"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- rationale -->
+    <div class="rationale">
+      <div class="r-title">Why this fits</div>
+      <p>A typographic rule is the most *neutral* mark here — it barely exists, which is what you want from a default logo that disappears behind a tenant's brand. It reads as a margin, a ledger, a cursor — quiet cues of documents, work, and beginnings.</p>
+      <p style="color:var(--muted); font-size:13px;"><b>Feels like:</b> a blockquote, editorial layout, Arc's minimalism, Notion's restraint.</p>
+    </div>
+  </section>
+
+</main>
+
+<footer class="footer">
+  <div class="q">which direction feels right?</div>
+  <div class="choose">
+    <span>→ 1 · serif monogram</span>
+    <span>→ 2 · bracketed container</span>
+    <span>→ 3 · typographic rule</span>
+    <span>→ mix</span>
+  </div>
+</footer>
+
+<!-- ---------- Tweaks panel ---------- -->
+<aside class="tweaks" id="tweaks">
+  <div class="tw-title">Tweaks</div>
+  <label>Compare mode
+    <input type="checkbox" id="tw-compare">
+  </label>
+  <label>Paper
+    <select id="tw-paper">
+      <option value="#fafaf7">Warm</option>
+      <option value="#ffffff">White</option>
+      <option value="#f2efe6">Cream</option>
+    </select>
+  </label>
+  <label>Accent · Dir 1
+    <input type="color" id="tw-a1" value="#c2410c">
+  </label>
+  <label>Accent · Dir 2
+    <input type="color" id="tw-a2" value="#0f4c4a">
+  </label>
+  <label>Accent · Dir 3
+    <input type="color" id="tw-a3" value="#3730a3">
+  </label>
+  <label>Wordmark scale
+    <input type="range" id="tw-scale" min="0.85" max="1.25" step="0.05" value="1">
+  </label>
+</aside>
+
+<script>
+  // Tweaks protocol
+  const DEFAULTS = /*EDITMODE-BEGIN*/{
+    "compare": false,
+    "paper": "#fafaf7",
+    "a1": "#666100",
+    "a2": "#263e0f",
+    "a3": "#004d65",
+    "scale": 1
+  }/*EDITMODE-END*/;
+
+  const state = Object.assign({}, DEFAULTS);
+
+  function apply() {
+    document.documentElement.style.setProperty('--paper', state.paper);
+    document.documentElement.style.setProperty('--accent-1', state.a1);
+    document.documentElement.style.setProperty('--accent-2', state.a2);
+    document.documentElement.style.setProperty('--accent-3', state.a3);
+    document.body.classList.toggle('compare-mode', !!state.compare);
+    document.querySelectorAll('.stage .d1-word, .stage .d2-word, .stage .d3-word')
+      .forEach(el => { el.style.transform = `scale(${state.scale})`; el.style.transformOrigin = 'center'; });
+  }
+
+  function bind() {
+    const $ = id => document.getElementById(id);
+    $('tw-compare').checked = state.compare;
+    $('tw-paper').value = state.paper;
+    $('tw-a1').value = state.a1;
+    $('tw-a2').value = state.a2;
+    $('tw-a3').value = state.a3;
+    $('tw-scale').value = state.scale;
+
+    const push = (k, v) => {
+      state[k] = v;
+      apply();
+      window.parent.postMessage({ type: '__edit_mode_set_keys', edits: { [k]: v } }, '*');
+    };
+    $('tw-compare').addEventListener('change', e => push('compare', e.target.checked));
+    $('tw-paper').addEventListener('change', e => push('paper', e.target.value));
+    $('tw-a1').addEventListener('input', e => push('a1', e.target.value));
+    $('tw-a2').addEventListener('input', e => push('a2', e.target.value));
+    $('tw-a3').addEventListener('input', e => push('a3', e.target.value));
+    $('tw-scale').addEventListener('input', e => push('scale', parseFloat(e.target.value)));
+  }
+
+  // listener first, then announce
+  window.addEventListener('message', (e) => {
+    const d = e.data || {};
+    if (d.type === '__activate_edit_mode') document.getElementById('tweaks').classList.add('on');
+    if (d.type === '__deactivate_edit_mode') document.getElementById('tweaks').classList.remove('on');
+  });
+  window.parent.postMessage({ type: '__edit_mode_available' }, '*');
+
+  apply();
+  bind();
+</script>
+
+</body>
+</html>

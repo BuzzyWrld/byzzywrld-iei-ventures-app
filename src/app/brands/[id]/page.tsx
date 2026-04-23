@@ -4,6 +4,63 @@ import Link from "next/link";
 import { use, useEffect, useState } from "react";
 import type { BrandProject } from "@/lib/types";
 
+// The real skill produces a richer brand.json than our minimal BrandJson
+// type. We read only what we render, optional everywhere.
+type LiveBrandJson = {
+  name?: string;
+  tagline?: string;
+  positioning?: string;
+  tone?: string[];
+  colors?: Record<string, string>;
+  typography?: {
+    heading?: string | { name?: string; weights?: number[]; role?: string };
+    body?: string | { name?: string; weights?: number[]; role?: string };
+    accent?: string | { name?: string; weights?: number[]; role?: string };
+  };
+};
+
+const MONTHS = [
+  "Jan", "Feb", "Mar", "Apr", "May", "Jun",
+  "Jul", "Aug", "Sep", "Oct", "Nov", "Dec",
+];
+function fmtDate(iso: string): string {
+  const d = new Date(iso);
+  return `${MONTHS[d.getMonth()]} ${d.getUTCDate()}, ${d.getFullYear()}`;
+}
+
+function fontName(
+  v: string | { name?: string } | undefined
+): string {
+  if (!v) return "—";
+  if (typeof v === "string") return v;
+  return v.name ?? "—";
+}
+
+/** Pick out swatches to render as the primary palette row.
+ *  Real brand.json has many color keys; we show up to 4 with a primary bias. */
+function pickPalette(colors: Record<string, string> | undefined): Array<{ key: string; hex: string }> {
+  if (!colors) return [];
+  const priority = ["primary", "secondary", "accent", "background", "neutral", "surface", "text"];
+  const picked: Array<{ key: string; hex: string }> = [];
+  for (const key of priority) {
+    if (colors[key] && /^#[0-9a-f]{3,8}$/i.test(colors[key])) {
+      picked.push({ key, hex: colors[key] });
+    }
+    if (picked.length >= 4) break;
+  }
+  // Fill in from other hex-valued keys if we don't have 4 yet.
+  if (picked.length < 4) {
+    for (const [key, hex] of Object.entries(colors)) {
+      if (picked.find((p) => p.key === key)) continue;
+      if (typeof hex === "string" && /^#[0-9a-f]{3,8}$/i.test(hex)) {
+        picked.push({ key, hex });
+      }
+      if (picked.length >= 4) break;
+    }
+  }
+  return picked;
+}
+
 export default function BrandProjectPage({
   params,
 }: {
@@ -11,17 +68,18 @@ export default function BrandProjectPage({
 }) {
   const { id } = use(params);
   const [project, setProject] = useState<BrandProject | null>(null);
-  const [error, setError] = useState<string | null>(null);
+  const [brand, setBrand] = useState<LiveBrandJson | null>(null);
+  const [fetchError, setFetchError] = useState<string | null>(null);
 
+  // Poll project until it reaches a terminal state.
   useEffect(() => {
     let cancelled = false;
     let timer: ReturnType<typeof setTimeout> | null = null;
-
     async function tick() {
       try {
         const res = await fetch(`/api/brands/${id}`);
         if (!res.ok) {
-          setError(`HTTP ${res.status}`);
+          setFetchError(`HTTP ${res.status}`);
           return;
         }
         const { project } = (await res.json()) as { project: BrandProject };
@@ -31,7 +89,7 @@ export default function BrandProjectPage({
           timer = setTimeout(tick, 1500);
         }
       } catch (err) {
-        if (!cancelled) setError(err instanceof Error ? err.message : String(err));
+        if (!cancelled) setFetchError(err instanceof Error ? err.message : String(err));
       }
     }
     tick();
@@ -41,48 +99,341 @@ export default function BrandProjectPage({
     };
   }, [id]);
 
-  if (error) return <p style={{ padding: 24 }}>Error: {error}</p>;
-  if (!project) return <p style={{ padding: 24 }}>Loading…</p>;
+  // Once complete, fetch brand.json for the design panel.
+  useEffect(() => {
+    if (project?.status !== "complete" || !project.outputs.brandJson) return;
+    let cancelled = false;
+    fetch(project.outputs.brandJson)
+      .then((r) => r.json())
+      .then((b: LiveBrandJson) => {
+        if (!cancelled) setBrand(b);
+      })
+      .catch(() => {});
+    return () => {
+      cancelled = true;
+    };
+  }, [project?.status, project?.outputs.brandJson]);
 
-  const outputs = Object.entries(project.outputs).filter(
-    ([, v]) => typeof v === "string"
-  ) as [string, string][];
+  if (fetchError) return <p>Error: {fetchError}</p>;
+  if (!project) return <LoadingShell />;
 
   return (
-    <div style={{ padding: 24, fontFamily: "system-ui, sans-serif", maxWidth: 720 }}>
-      <p>
-        <Link href="/">← All projects</Link>
-      </p>
-      <h1>{project.intake.companyName}</h1>
-      <p>
-        <strong>Status:</strong> {project.status}
-        {project.progressStage && (project.status === "running" || project.status === "pending")
-          ? ` — ${project.progressStage}${
-              project.progressPct ? ` (${Math.round(project.progressPct * 100)}%)` : ""
-            }`
-          : ""}
-        {project.error ? ` — ${project.error}` : ""}
-      </p>
-
-      <h2>Intake</h2>
-      <pre style={{ background: "#f4f4f4", padding: 12, overflow: "auto" }}>
-        {JSON.stringify(project.intake, null, 2)}
-      </pre>
-
-      <h2>Outputs</h2>
-      {outputs.length === 0 ? (
-        <p>No outputs yet.</p>
-      ) : (
-        <ul>
-          {outputs.map(([key, url]) => (
-            <li key={key}>
-              <a href={url} target="_blank" rel="noreferrer">
-                {key}
-              </a>
-            </li>
-          ))}
-        </ul>
+    <>
+      <Breadcrumb name={project.intake.companyName} />
+      <Header project={project} />
+      {project.status === "failed" && <FailedPanel project={project} />}
+      {(project.status === "pending" || project.status === "running") && (
+        <RunningPanel project={project} />
       )}
+      {project.status === "complete" && <CompletePanel project={project} brand={brand} />}
+    </>
+  );
+}
+
+/* ---------- layout chrome ---------- */
+
+function Breadcrumb({ name }: { name: string }) {
+  return (
+    <div className="text-xs font-mono mb-6" style={{ color: "var(--color-text-muted)" }}>
+      <Link href="/" className="hover:text-[var(--color-text)]">
+        Projects
+      </Link>
+      <span className="mx-1">/</span>
+      <span>{name}</span>
+    </div>
+  );
+}
+
+function Header({ project }: { project: BrandProject }) {
+  const badgeClass = `badge badge-${project.status}`;
+  const badgeLabel = project.status[0].toUpperCase() + project.status.slice(1);
+  return (
+    <div
+      className="flex flex-wrap items-start justify-between gap-4 mb-10 pb-8 border-b"
+      style={{ borderColor: "var(--color-border)" }}
+    >
+      <div className="min-w-0">
+        <div className="flex items-center gap-3 mb-3">
+          <span className={badgeClass}>{badgeLabel}</span>
+          <span className="font-mono text-xs" style={{ color: "var(--color-text-muted)" }}>
+            ID {project.id.slice(0, 8)} · {fmtDate(project.createdAt)}
+          </span>
+        </div>
+        <h1 className="font-serif leading-[1] mb-2" style={{ fontSize: 72 }}>
+          {project.intake.companyName}
+        </h1>
+        <div className="text-base" style={{ color: "var(--color-text-muted)" }}>
+          {project.intake.industry}
+          {project.intake.targetAudience ? ` · ${project.intake.targetAudience}` : ""}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ---------- states ---------- */
+
+function LoadingShell() {
+  return (
+    <div className="py-16">
+      <span className="sk" style={{ width: "40%", height: 40, marginBottom: 16 }} />
+      <span className="sk" style={{ width: "60%", height: 24 }} />
+    </div>
+  );
+}
+
+function RunningPanel({ project }: { project: BrandProject }) {
+  const pct = Math.round((project.progressPct ?? 0) * 100);
+  return (
+    <>
+      <div className="card p-6 mb-10">
+        <div className="flex items-center gap-3 mb-4">
+          <span className="spinner" style={{ color: "var(--color-status-running)" }} />
+          <div className="font-medium">Building your brand…</div>
+          <div
+            className="ml-auto font-mono text-xs"
+            style={{ color: "var(--color-text-muted)" }}
+          >
+            {pct}%
+          </div>
+        </div>
+        <div
+          className="w-full h-1.5 rounded-full overflow-hidden mb-5"
+          style={{ background: "var(--color-surface-2)" }}
+        >
+          <div
+            style={{
+              width: `${pct}%`,
+              height: "100%",
+              background: "var(--color-status-running)",
+              transition: "width 600ms ease",
+            }}
+          />
+        </div>
+        <div className="text-sm" style={{ color: "var(--color-text-muted)" }}>
+          {project.progressStage ?? "starting"}
+        </div>
+      </div>
+      <div className="kicker mb-3">Preview (generating…)</div>
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-8">
+        {Array.from({ length: 4 }).map((_, i) => (
+          <div key={i} className="card overflow-hidden">
+            <span className="sk" style={{ height: 140, display: "block", borderRadius: 0 }} />
+            <div className="p-4">
+              <span className="sk" style={{ width: "40%", height: 12, marginBottom: 6 }} />
+              <span className="sk" style={{ width: "60%", height: 10 }} />
+            </div>
+          </div>
+        ))}
+      </div>
+    </>
+  );
+}
+
+function FailedPanel({ project }: { project: BrandProject }) {
+  return (
+    <div className="card p-6 md:p-8" style={{ borderColor: "var(--color-status-failed)" }}>
+      <div className="flex items-start gap-3 mb-4">
+        <svg
+          className="mt-0.5 shrink-0"
+          width="20"
+          height="20"
+          viewBox="0 0 20 20"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="1.5"
+          style={{ color: "var(--color-status-failed)" }}
+        >
+          <circle cx="10" cy="10" r="8" />
+          <path d="M10 6v5M10 13.5h.01" />
+        </svg>
+        <div>
+          <h2 className="text-lg font-medium mb-1">The skill didn&apos;t finish</h2>
+          <p className="text-sm" style={{ color: "var(--color-text-muted)" }}>
+            {project.error ?? "Unknown error. Your intake is saved — we can retry without losing anything."}
+          </p>
+        </div>
+      </div>
+      <div className="flex flex-wrap gap-2">
+        <Link href="/new" className="btn btn-primary">
+          Start a new brand
+        </Link>
+      </div>
+    </div>
+  );
+}
+
+function CompletePanel({
+  project,
+  brand,
+}: {
+  project: BrandProject;
+  brand: LiveBrandJson | null;
+}) {
+  return (
+    <>
+      <Positioning brand={brand} />
+      <Palette brand={brand} />
+      <Typography brand={brand} />
+      <Downloads project={project} />
+    </>
+  );
+}
+
+function Positioning({ brand }: { brand: LiveBrandJson | null }) {
+  if (!brand?.positioning && !brand?.tagline) return null;
+  const tone = brand.tone ?? [];
+  return (
+    <div className="mb-12">
+      <div className="kicker mb-3">Positioning</div>
+      <p className="font-serif leading-[1.1] max-w-[24ch]" style={{ fontSize: 48 }}>
+        {brand.positioning ?? brand.tagline}
+      </p>
+      {tone.length > 0 && (
+        <div className="flex flex-wrap gap-2 mt-6">
+          {tone.map((t) => (
+            <span key={t} className="pill pill-selected">
+              {t}
+            </span>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+function Palette({ brand }: { brand: LiveBrandJson | null }) {
+  const swatches = pickPalette(brand?.colors);
+  if (swatches.length === 0) return null;
+  return (
+    <div className="mb-12">
+      <div className="flex items-end justify-between mb-4 flex-wrap gap-2">
+        <div>
+          <div className="kicker mb-1">01 · Palette</div>
+          <h2 className="text-2xl font-medium tracking-tight">Color</h2>
+        </div>
+      </div>
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+        {swatches.map(({ key, hex }) => (
+          <div key={key} className="card overflow-hidden">
+            <div
+              style={{
+                height: 180,
+                background: hex,
+                borderBottom: "1px solid var(--color-border)",
+              }}
+            />
+            <div className="p-4">
+              <div className="flex justify-between items-baseline mb-1">
+                <div className="font-medium capitalize">{key}</div>
+              </div>
+              <div
+                className="font-mono text-xs"
+                style={{ color: "var(--color-text-muted)" }}
+              >
+                {hex.toUpperCase()}
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function Typography({ brand }: { brand: LiveBrandJson | null }) {
+  const headingName = fontName(brand?.typography?.heading);
+  const bodyName = fontName(brand?.typography?.body);
+  if (headingName === "—" && bodyName === "—") return null;
+  return (
+    <div className="mb-12">
+      <div className="flex items-end justify-between mb-4 flex-wrap gap-2">
+        <div>
+          <div className="kicker mb-1">02 · Typography</div>
+          <h2 className="text-2xl font-medium tracking-tight">Type system</h2>
+        </div>
+      </div>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="card p-6">
+          <div className="kicker mb-3">Heading · {headingName}</div>
+          <div
+            className="leading-[1.05] tracking-tight"
+            style={{ fontSize: 48, fontWeight: 600, fontFamily: headingName }}
+          >
+            From intake
+            <br />
+            to income.
+          </div>
+        </div>
+        <div className="card p-6">
+          <div className="kicker mb-3">Body · {bodyName}</div>
+          <p
+            style={{ fontSize: 15, lineHeight: 1.6, maxWidth: "42ch", fontFamily: bodyName }}
+          >
+            Every specimen uses the exact font stack the skill selected, rendered live so
+            you see how it reads. Direction: precise, restrained, quietly confident.
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function Downloads({ project }: { project: BrandProject }) {
+  const items: Array<{ key: string; label: string; meta: string; url?: string }> = [
+    { key: "playbookPdf", label: "Brand Playbook", meta: "PDF · multi-page", url: project.outputs.playbookPdf },
+    { key: "landingHtml", label: "Landing page", meta: "HTML · ready to host", url: project.outputs.landingHtml },
+    { key: "brandJson", label: "Brand JSON", meta: "Machine-readable tokens", url: project.outputs.brandJson },
+    { key: "logoSvg", label: "Logo", meta: "SVG · primary + variants", url: project.outputs.logoSvg },
+    { key: "playbookHtml", label: "Playbook HTML", meta: "Source HTML for the PDF", url: project.outputs.playbookHtml },
+  ].filter((i) => i.url);
+
+  if (items.length === 0) return null;
+
+  return (
+    <div className="mb-12">
+      <div className="kicker mb-3">Downloads</div>
+      <div className="card overflow-hidden">
+        {items.map((it, i) => (
+          <div
+            key={it.key}
+            className={`flex items-center gap-3 px-5 py-3.5 ${i > 0 ? "border-t" : ""}`}
+            style={{ borderColor: "var(--color-border)" }}
+          >
+            <span
+              className="inline-flex items-center justify-center shrink-0"
+              style={{
+                width: 32,
+                height: 32,
+                borderRadius: 4,
+                background: "var(--color-surface-2)",
+                border: "1px solid var(--color-border)",
+              }}
+            >
+              <svg
+                width="14"
+                height="14"
+                viewBox="0 0 14 14"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.5"
+                style={{ color: "var(--color-text-muted)" }}
+              >
+                <path d="M3 1h5l3 3v9H3zM8 1v3h3" />
+              </svg>
+            </span>
+            <div className="flex-1 min-w-0">
+              <div className="text-sm font-medium">{it.label}</div>
+              <div className="text-xs" style={{ color: "var(--color-text-muted)" }}>
+                {it.meta}
+              </div>
+            </div>
+            <a href={it.url} target="_blank" rel="noreferrer" className="btn btn-ghost btn-sm">
+              Open →
+            </a>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }

@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Sign up — IEI Ventures</title>
+
+<!-- SHARED: fonts + tokens + component styles -->
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --color-primary: #1a1f1a;
+    --color-accent: #263e0f;
+    --color-neutral: #6b6f69;
+    --color-surface: #fafaf7;
+    --color-surface-2: #f2f0e9;
+    --color-text: #1a1f1a;
+    --color-text-muted: #6b6f69;
+    --color-border: #e4e2da;
+    --color-border-strong: #1a1f1a;
+    --color-status-pending: #a8a59a;
+    --color-status-running: #b8912e;
+    --color-status-complete: #3e6b2a;
+    --color-status-failed: #9a3a2a;
+    --r-sm: 4px; --r-md: 6px; --r-lg: 10px; --r-full: 999px;
+    --sh-1: 0 1px 0 rgba(26,31,26,.04), 0 1px 2px rgba(26,31,26,.06);
+    --sh-2: 0 2px 4px rgba(26,31,26,.06), 0 4px 12px rgba(26,31,26,.08);
+    --sh-focus: 0 0 0 3px rgba(38,62,15,0.18);
+  }
+  html, body { background: var(--color-surface); color: var(--color-text); }
+  body { font-family: 'Geist', system-ui, sans-serif; font-size: 15px; line-height: 1.5; -webkit-font-smoothing: antialiased; }
+  .font-serif { font-family: 'Instrument Serif', Georgia, serif; font-weight: 400; letter-spacing: -0.01em; }
+  .font-mono { font-family: 'Geist Mono', ui-monospace, monospace; }
+  .kicker { font-family: 'Geist Mono', monospace; font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.14em; color: var(--color-text-muted); }
+
+  .iei-mark { position: relative; display: inline-flex; align-items: center; justify-content: center; border: 1.5px solid var(--color-primary); color: var(--color-primary); font-family: 'Geist Mono', monospace; font-weight: 600; background: transparent; }
+  .iei-mark::before, .iei-mark::after { content: ''; position: absolute; width: 6px; height: 6px; border: 1.5px solid var(--color-accent); background: var(--color-surface); }
+  .iei-mark::before { top: -5px; left: -5px; border-right: none; border-bottom: none; }
+  .iei-mark::after { bottom: -5px; right: -5px; border-left: none; border-top: none; }
+  .iei-mark.size-sm { width: 22px; height: 22px; font-size: 9px; border-width: 1.25px; }
+  .iei-mark.size-sm::before, .iei-mark.size-sm::after { width: 5px; height: 5px; border-width: 1.25px; }
+  .iei-mark.size-md { width: 32px; height: 32px; font-size: 11px; }
+  .iei-mark.size-lg { width: 48px; height: 48px; font-size: 15px; border-width: 2px; }
+  .iei-mark.size-lg::before, .iei-mark.size-lg::after { width: 9px; height: 9px; border-width: 2px; }
+
+  .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; font-family: inherit; font-weight: 500; font-size: 15px; line-height: 1; padding: 10px 16px; border-radius: var(--r-md); border: 1px solid transparent; cursor: pointer; transition: background 120ms, border-color 120ms, color 120ms, box-shadow 120ms; text-decoration: none; white-space: nowrap; }
+  .btn:focus-visible { outline: none; box-shadow: var(--sh-focus); }
+  .btn[disabled], .btn[aria-disabled="true"] { cursor: not-allowed; opacity: 0.5; }
+  .btn-primary { background: var(--color-primary); color: var(--color-surface); }
+  .btn-primary:hover:not([disabled]) { background: #000; }
+  .btn-secondary { background: var(--color-surface); color: var(--color-primary); border-color: var(--color-border-strong); }
+  .btn-secondary:hover:not([disabled]) { background: var(--color-surface-2); }
+  .btn-ghost { background: transparent; color: var(--color-primary); }
+  .btn-ghost:hover:not([disabled]) { background: var(--color-surface-2); }
+  .btn-destructive { background: var(--color-surface); color: var(--color-status-failed); border-color: var(--color-status-failed); }
+  .btn-sm { padding: 6px 10px; font-size: 13px; }
+  .btn-lg { padding: 14px 20px; font-size: 16px; }
+  .btn-icon { padding: 8px; width: 36px; height: 36px; }
+
+  .input, .textarea, .select { width: 100%; font: inherit; font-size: 15px; padding: 10px 12px; background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--r-md); color: var(--color-text); transition: border-color 120ms, box-shadow 120ms; }
+  .input::placeholder, .textarea::placeholder { color: var(--color-text-muted); }
+  .input:focus, .textarea:focus, .select:focus { outline: none; border-color: var(--color-primary); box-shadow: var(--sh-focus); }
+  .input.is-error { border-color: var(--color-status-failed); }
+  .textarea { min-height: 96px; resize: vertical; }
+  .select { appearance: none; background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'><path d='M3 4.5l3 3 3-3' stroke='%231a1f1a' stroke-width='1.2' fill='none' stroke-linecap='round' stroke-linejoin='round'/></svg>"); background-repeat: no-repeat; background-position: right 12px center; padding-right: 36px; }
+  .input-lg { font-size: 18px; padding: 14px 16px; }
+
+  .pill { display: inline-flex; align-items: center; gap: 6px; padding: 5px 12px; border-radius: var(--r-full); font-size: 13px; font-weight: 500; background: var(--color-surface); color: var(--color-text); border: 1px solid var(--color-border); line-height: 1.2; cursor: pointer; transition: all 120ms; }
+  .pill:hover { border-color: var(--color-primary); }
+  .pill.pill-selected { background: var(--color-primary); color: var(--color-surface); border-color: var(--color-primary); }
+
+  .badge { display: inline-flex; align-items: center; gap: 6px; padding: 3px 8px 3px 7px; border-radius: var(--r-full); font-size: 11px; font-family: 'Geist Mono', monospace; font-weight: 500; text-transform: uppercase; letter-spacing: 0.06em; line-height: 1.4; background: var(--color-surface-2); border: 1px solid var(--color-border); }
+  .badge::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+  .badge-pending { color: var(--color-status-pending); }
+  .badge-running { color: var(--color-status-running); }
+  .badge-running::before { animation: pulse 1.6s ease-in-out infinite; }
+  .badge-complete { color: var(--color-status-complete); }
+  .badge-failed { color: var(--color-status-failed); }
+  @keyframes pulse { 0%,100% { opacity: 0.35; } 50% { opacity: 1; } }
+
+  .card { background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--r-lg); }
+  .card-hover:hover { border-color: var(--color-primary); box-shadow: var(--sh-2); }
+
+  .spinner { width: 14px; height: 14px; border: 1.5px solid currentColor; border-top-color: transparent; border-radius: 50%; animation: spin 700ms linear infinite; display: inline-block; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .sk { background: linear-gradient(90deg, var(--color-border) 0%, var(--color-surface-2) 50%, var(--color-border) 100%); background-size: 200% 100%; animation: shimmer 1.4s ease-in-out infinite; border-radius: var(--r-sm); display: block; }
+  @keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+
+  .nav { background: var(--color-surface); border-bottom: 1px solid var(--color-border); }
+  .nav a.active { background: var(--color-surface-2); }
+
+  .kbd { display: inline-flex; align-items: center; justify-content: center; min-width: 18px; height: 18px; padding: 0 5px; border: 1px solid var(--color-border); border-bottom-width: 2px; border-radius: 3px; font-family: 'Geist Mono', monospace; font-size: 10px; color: var(--color-text-muted); background: var(--color-surface); }
+
+  .sidebar-link { display: flex; align-items: center; gap: 10px; padding: 7px 10px; border-radius: 5px; color: var(--color-text-muted); font-size: 14px; text-decoration: none; }
+  .sidebar-link:hover { background: var(--color-surface-2); color: var(--color-text); }
+  .sidebar-link.active { background: var(--color-surface-2); color: var(--color-text); font-weight: 500; }
+
+  [data-state] + [data-state] { margin-top: 40px; border-top: 1px dashed var(--color-border); padding-top: 40px; }
+  .state-label { font-family: 'Geist Mono', monospace; font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.14em; color: var(--color-text-muted); margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
+  .state-label::before { content: ''; width: 24px; height: 1px; background: var(--color-text-muted); }
+</style>
+
+</head>
+<body>
+<script>
+  // Mock data — matches 03-data-contracts.md
+  const MOCK_PROJECTS = [
+    { id:"1a2b3c4d", createdAt:"2026-04-22T14:30:00Z", status:"complete",
+      intake:{ companyName:"Aurelian Labs", industry:"AI / Financial Services", targetAudience:"Capital markets operators",
+        toneOfVoice:"confident, precise, modern", competitors:"Hebbia, Harvey", archetype:"sage", palettePreference:"", notes:"" },
+      outputs:{ brandJson:"/api/brands/1a2b3c4d/files/brand.json", playbookHtml:"/api/brands/1a2b3c4d/files/playbook.html",
+        landingHtml:"/api/brands/1a2b3c4d/files/landing.html", logoSvg:"/api/brands/1a2b3c4d/files/logo.svg" }
+    },
+    { id:"5e6f7g8h", createdAt:"2026-04-21T09:15:00Z", status:"running",
+      intake:{ companyName:"Greenfield Capital", industry:"Private Credit", targetAudience:"Mid-market sponsors",
+        toneOfVoice:"institutional, discreet", competitors:"", archetype:"sage", palettePreference:"", notes:"" },
+      outputs:{}
+    },
+    { id:"9i0j1k2l", createdAt:"2026-04-19T16:40:00Z", status:"failed",
+      intake:{ companyName:"Northwind Supply", industry:"Industrial Logistics", targetAudience:"Operations directors",
+        toneOfVoice:"direct, reliable", competitors:"", archetype:"caregiver", palettePreference:"", notes:"" },
+      outputs:{}, error:"Skill timed out after 120s"
+    },
+    { id:"3m4n5o6p", createdAt:"2026-04-18T11:20:00Z", status:"complete",
+      intake:{ companyName:"Bramble & Sons", industry:"Specialty Coffee Roasters", targetAudience:"Independent cafes",
+        toneOfVoice:"warm, craft, unpretentious", competitors:"", archetype:"creator", palettePreference:"", notes:"" },
+      outputs:{ brandJson:"#", playbookHtml:"#", landingHtml:"#", logoSvg:"#" }
+    },
+    { id:"7q8r9s0t", createdAt:"2026-04-15T08:05:00Z", status:"complete",
+      intake:{ companyName:"Meridian Health", industry:"Primary Care Network", targetAudience:"Adults 45-70",
+        toneOfVoice:"calm, clear, trustworthy", competitors:"", archetype:"caregiver", palettePreference:"", notes:"" },
+      outputs:{ brandJson:"#", playbookHtml:"#", landingHtml:"#", logoSvg:"#" }
+    }
+  ];
+  const MOCK_BRAND_JSON = {
+    name:"Aurelian Labs",
+    tagline:"Brand direction for Aurelian Labs — AI / Financial Services",
+    colors:{ primary:"#1E3A8A", secondary:"#0EA5E9", accent:"#CBD5E1", neutral:"#F9FAFB" },
+    typography:{ heading:"Geist, Inter, sans-serif", body:"Geist, Inter, sans-serif" },
+    tone:["confident","precise","modern"],
+    positioning:"Aurelian Labs serves Capital markets operators in AI / Financial Services."
+  };
+</script>
+<div class="min-h-screen grid grid-cols-1 md:grid-cols-2">
+  <!-- Left — form -->
+  <div class="flex flex-col px-6 md:px-12 lg:px-20 py-8">
+    <a href="/" class="flex items-center gap-2.5"><span class="iei-mark size-md">IEI</span><span class="font-medium tracking-tight">IEI Ventures</span></a>
+    <div class="flex-1 flex items-center justify-center py-10">
+      <div class="w-full max-w-[400px]">
+<section data-state="default">
+  <div class="kicker mb-2">Create an account</div>
+  <h1 class="font-serif leading-[1.05] mb-2" style="font-size: 40px;">Start your first brand in minutes.</h1>
+  <p class="text-sm mb-7" style="color: var(--color-text-muted);">Free to start. No card required for the first project.</p>
+  <form class="flex flex-col gap-4">
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+      <div><label class="text-sm font-medium mb-1.5 block">First name</label><input class="input" placeholder="Hector" autocomplete="given-name" /></div>
+      <div><label class="text-sm font-medium mb-1.5 block">Last name</label><input class="input" placeholder="Barbosa" autocomplete="family-name" /></div>
+    </div>
+    <div><label class="text-sm font-medium mb-1.5 block">Work email</label><input type="email" class="input" placeholder="you@company.com" autocomplete="email" /></div>
+    <div>
+      <label class="text-sm font-medium mb-1.5 block">Password</label>
+      <input type="password" class="input" autocomplete="new-password" />
+      <div class="flex gap-1 mt-2">
+        <span class="flex-1 h-1 rounded-full" style="background: var(--color-status-complete);"></span>
+        <span class="flex-1 h-1 rounded-full" style="background: var(--color-status-complete);"></span>
+        <span class="flex-1 h-1 rounded-full" style="background: var(--color-status-running);"></span>
+        <span class="flex-1 h-1 rounded-full" style="background: var(--color-border);"></span>
+      </div>
+      <div class="text-xs mt-1.5" style="color: var(--color-text-muted);">8+ characters, one number, one symbol.</div>
+    </div>
+    <label class="flex items-start gap-2 text-sm cursor-pointer">
+      <input type="checkbox" class="mt-0.5" />
+      <span style="color: var(--color-text-muted);">I agree to the <a href="#" class="underline" style="color: var(--color-text);">terms</a> and <a href="#" class="underline" style="color: var(--color-text);">privacy policy</a>.</span>
+    </label>
+    <button type="submit" class="btn btn-primary btn-lg mt-2">Create account</button>
+  </form>
+  <div class="flex items-center gap-3 my-6 text-xs font-mono" style="color: var(--color-text-muted);">
+    <div class="flex-1 h-px" style="background: var(--color-border);"></div> OR <div class="flex-1 h-px" style="background: var(--color-border);"></div>
+  </div>
+  <button class="btn btn-secondary btn-lg w-full">
+    <svg width="16" height="16" viewBox="0 0 18 18"><path fill="#4285F4" d="M17.64 9.2c0-.64-.06-1.25-.17-1.84H9v3.48h4.84a4.14 4.14 0 01-1.8 2.72v2.26h2.92c1.7-1.57 2.68-3.88 2.68-6.62z"/><path fill="#34A853" d="M9 18c2.43 0 4.47-.8 5.96-2.18l-2.92-2.26c-.8.54-1.83.86-3.04.86-2.34 0-4.32-1.58-5.03-3.7H.92v2.32A8.99 8.99 0 009 18z"/><path fill="#FBBC05" d="M3.97 10.72A5.41 5.41 0 013.68 9c0-.6.1-1.18.29-1.72V4.96H.92A8.99 8.99 0 000 9c0 1.45.35 2.82.92 4.04l3.05-2.32z"/><path fill="#EA4335" d="M9 3.58c1.32 0 2.5.45 3.44 1.35l2.58-2.58C13.46.89 11.43 0 9 0 5.48 0 2.44 2.02.92 4.96l3.05 2.32C4.68 5.16 6.66 3.58 9 3.58z"/></svg>
+    Continue with Google
+  </button>
+  <p class="mt-7 text-sm text-center" style="color: var(--color-text-muted);">
+    Already have an account? <a href="/login" class="underline" style="color: var(--color-text);">Sign in</a>
+  </p>
+</section>
+
+<section data-state="verify" class="mt-10 pt-10 border-t" style="border-color: var(--color-border);">
+  <div class="state-label">email verification</div>
+  <div class="text-center py-4">
+    <div class="mx-auto mb-5 flex items-center justify-center" style="width: 48px; height: 48px; border-radius: 999px; background: var(--color-surface-2);">
+      <svg width="22" height="22" viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="18" height="13" rx="1"/><path d="M2 6l9 7 9-7"/></svg>
+    </div>
+    <h2 class="font-serif mb-2" style="font-size: 28px;">Check your email.</h2>
+    <p class="text-sm mb-5" style="color: var(--color-text-muted);">We sent a verification link to <b style="color: var(--color-text);">hector@ieiventures.com</b>. It expires in 15 minutes.</p>
+    <button class="btn btn-ghost btn-sm">Resend email</button>
+  </div>
+</section></div>
+    </div>
+    <div class="flex items-center justify-between font-mono text-xs" style="color: var(--color-text-muted);">
+      <span>© 2026 IEI Ventures</span>
+      <div class="flex gap-4"><a href="#" class="hover:text-[var(--color-text)]">Docs</a><a href="#" class="hover:text-[var(--color-text)]">Privacy</a></div>
+    </div>
+  </div>
+  <!-- Right — quote/imagery panel -->
+  <aside class="hidden md:flex flex-col justify-between p-12" style="background: var(--color-primary); color: var(--color-surface);">
+    <div class="kicker" style="color: #9a9f99;">From intake · to identity · to income</div>
+    <div>
+      <p class="font-serif leading-[1.1]" style="font-size: 40px;">A complete brand system — palette, type, logo, landing page, and playbook — in one pass.</p>
+      <div class="mt-6 flex items-center gap-3 text-sm" style="color: #bdbab0;">
+        <span class="inline-block" style="width:28px;height:1px;background:#bdbab0;"></span>
+        Built for agency operators &amp; serious founders.
+      </div>
+    </div>
+    <div class="font-mono text-xs" style="color: #7a7f79;">v0.1 · MVP · Jun 2026</div>
+  </aside>
+</div>
+</body>
+</html>

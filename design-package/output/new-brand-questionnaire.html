@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>New brand — IEI Ventures</title>
+
+<!-- SHARED: fonts + tokens + component styles -->
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --color-primary: #1a1f1a;
+    --color-accent: #263e0f;
+    --color-neutral: #6b6f69;
+    --color-surface: #fafaf7;
+    --color-surface-2: #f2f0e9;
+    --color-text: #1a1f1a;
+    --color-text-muted: #6b6f69;
+    --color-border: #e4e2da;
+    --color-border-strong: #1a1f1a;
+    --color-status-pending: #a8a59a;
+    --color-status-running: #b8912e;
+    --color-status-complete: #3e6b2a;
+    --color-status-failed: #9a3a2a;
+    --r-sm: 4px; --r-md: 6px; --r-lg: 10px; --r-full: 999px;
+    --sh-1: 0 1px 0 rgba(26,31,26,.04), 0 1px 2px rgba(26,31,26,.06);
+    --sh-2: 0 2px 4px rgba(26,31,26,.06), 0 4px 12px rgba(26,31,26,.08);
+    --sh-focus: 0 0 0 3px rgba(38,62,15,0.18);
+  }
+  html, body { background: var(--color-surface); color: var(--color-text); }
+  body { font-family: 'Geist', system-ui, sans-serif; font-size: 15px; line-height: 1.5; -webkit-font-smoothing: antialiased; }
+  .font-serif { font-family: 'Instrument Serif', Georgia, serif; font-weight: 400; letter-spacing: -0.01em; }
+  .font-mono { font-family: 'Geist Mono', ui-monospace, monospace; }
+  .kicker { font-family: 'Geist Mono', monospace; font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.14em; color: var(--color-text-muted); }
+
+  .iei-mark { position: relative; display: inline-flex; align-items: center; justify-content: center; border: 1.5px solid var(--color-primary); color: var(--color-primary); font-family: 'Geist Mono', monospace; font-weight: 600; background: transparent; }
+  .iei-mark::before, .iei-mark::after { content: ''; position: absolute; width: 6px; height: 6px; border: 1.5px solid var(--color-accent); background: var(--color-surface); }
+  .iei-mark::before { top: -5px; left: -5px; border-right: none; border-bottom: none; }
+  .iei-mark::after { bottom: -5px; right: -5px; border-left: none; border-top: none; }
+  .iei-mark.size-sm { width: 22px; height: 22px; font-size: 9px; border-width: 1.25px; }
+  .iei-mark.size-sm::before, .iei-mark.size-sm::after { width: 5px; height: 5px; border-width: 1.25px; }
+  .iei-mark.size-md { width: 32px; height: 32px; font-size: 11px; }
+  .iei-mark.size-lg { width: 48px; height: 48px; font-size: 15px; border-width: 2px; }
+  .iei-mark.size-lg::before, .iei-mark.size-lg::after { width: 9px; height: 9px; border-width: 2px; }
+
+  .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; font-family: inherit; font-weight: 500; font-size: 15px; line-height: 1; padding: 10px 16px; border-radius: var(--r-md); border: 1px solid transparent; cursor: pointer; transition: background 120ms, border-color 120ms, color 120ms, box-shadow 120ms; text-decoration: none; white-space: nowrap; }
+  .btn:focus-visible { outline: none; box-shadow: var(--sh-focus); }
+  .btn[disabled], .btn[aria-disabled="true"] { cursor: not-allowed; opacity: 0.5; }
+  .btn-primary { background: var(--color-primary); color: var(--color-surface); }
+  .btn-primary:hover:not([disabled]) { background: #000; }
+  .btn-secondary { background: var(--color-surface); color: var(--color-primary); border-color: var(--color-border-strong); }
+  .btn-secondary:hover:not([disabled]) { background: var(--color-surface-2); }
+  .btn-ghost { background: transparent; color: var(--color-primary); }
+  .btn-ghost:hover:not([disabled]) { background: var(--color-surface-2); }
+  .btn-destructive { background: var(--color-surface); color: var(--color-status-failed); border-color: var(--color-status-failed); }
+  .btn-sm { padding: 6px 10px; font-size: 13px; }
+  .btn-lg { padding: 14px 20px; font-size: 16px; }
+  .btn-icon { padding: 8px; width: 36px; height: 36px; }
+
+  .input, .textarea, .select { width: 100%; font: inherit; font-size: 15px; padding: 10px 12px; background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--r-md); color: var(--color-text); transition: border-color 120ms, box-shadow 120ms; }
+  .input::placeholder, .textarea::placeholder { color: var(--color-text-muted); }
+  .input:focus, .textarea:focus, .select:focus { outline: none; border-color: var(--color-primary); box-shadow: var(--sh-focus); }
+  .input.is-error { border-color: var(--color-status-failed); }
+  .textarea { min-height: 96px; resize: vertical; }
+  .select { appearance: none; background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'><path d='M3 4.5l3 3 3-3' stroke='%231a1f1a' stroke-width='1.2' fill='none' stroke-linecap='round' stroke-linejoin='round'/></svg>"); background-repeat: no-repeat; background-position: right 12px center; padding-right: 36px; }
+  .input-lg { font-size: 18px; padding: 14px 16px; }
+
+  .pill { display: inline-flex; align-items: center; gap: 6px; padding: 5px 12px; border-radius: var(--r-full); font-size: 13px; font-weight: 500; background: var(--color-surface); color: var(--color-text); border: 1px solid var(--color-border); line-height: 1.2; cursor: pointer; transition: all 120ms; }
+  .pill:hover { border-color: var(--color-primary); }
+  .pill.pill-selected { background: var(--color-primary); color: var(--color-surface); border-color: var(--color-primary); }
+
+  .badge { display: inline-flex; align-items: center; gap: 6px; padding: 3px 8px 3px 7px; border-radius: var(--r-full); font-size: 11px; font-family: 'Geist Mono', monospace; font-weight: 500; text-transform: uppercase; letter-spacing: 0.06em; line-height: 1.4; background: var(--color-surface-2); border: 1px solid var(--color-border); }
+  .badge::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+  .badge-pending { color: var(--color-status-pending); }
+  .badge-running { color: var(--color-status-running); }
+  .badge-running::before { animation: pulse 1.6s ease-in-out infinite; }
+  .badge-complete { color: var(--color-status-complete); }
+  .badge-failed { color: var(--color-status-failed); }
+  @keyframes pulse { 0%,100% { opacity: 0.35; } 50% { opacity: 1; } }
+
+  .card { background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--r-lg); }
+  .card-hover:hover { border-color: var(--color-primary); box-shadow: var(--sh-2); }
+
+  .spinner { width: 14px; height: 14px; border: 1.5px solid currentColor; border-top-color: transparent; border-radius: 50%; animation: spin 700ms linear infinite; display: inline-block; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .sk { background: linear-gradient(90deg, var(--color-border) 0%, var(--color-surface-2) 50%, var(--color-border) 100%); background-size: 200% 100%; animation: shimmer 1.4s ease-in-out infinite; border-radius: var(--r-sm); display: block; }
+  @keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+
+  .nav { background: var(--color-surface); border-bottom: 1px solid var(--color-border); }
+  .nav a.active { background: var(--color-surface-2); }
+
+  .kbd { display: inline-flex; align-items: center; justify-content: center; min-width: 18px; height: 18px; padding: 0 5px; border: 1px solid var(--color-border); border-bottom-width: 2px; border-radius: 3px; font-family: 'Geist Mono', monospace; font-size: 10px; color: var(--color-text-muted); background: var(--color-surface); }
+
+  .sidebar-link { display: flex; align-items: center; gap: 10px; padding: 7px 10px; border-radius: 5px; color: var(--color-text-muted); font-size: 14px; text-decoration: none; }
+  .sidebar-link:hover { background: var(--color-surface-2); color: var(--color-text); }
+  .sidebar-link.active { background: var(--color-surface-2); color: var(--color-text); font-weight: 500; }
+
+  [data-state] + [data-state] { margin-top: 40px; border-top: 1px dashed var(--color-border); padding-top: 40px; }
+  .state-label { font-family: 'Geist Mono', monospace; font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.14em; color: var(--color-text-muted); margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
+  .state-label::before { content: ''; width: 24px; height: 1px; background: var(--color-text-muted); }
+</style>
+
+</head>
+<body>
+<script>
+  // Mock data — matches 03-data-contracts.md
+  const MOCK_PROJECTS = [
+    { id:"1a2b3c4d", createdAt:"2026-04-22T14:30:00Z", status:"complete",
+      intake:{ companyName:"Aurelian Labs", industry:"AI / Financial Services", targetAudience:"Capital markets operators",
+        toneOfVoice:"confident, precise, modern", competitors:"Hebbia, Harvey", archetype:"sage", palettePreference:"", notes:"" },
+      outputs:{ brandJson:"/api/brands/1a2b3c4d/files/brand.json", playbookHtml:"/api/brands/1a2b3c4d/files/playbook.html",
+        landingHtml:"/api/brands/1a2b3c4d/files/landing.html", logoSvg:"/api/brands/1a2b3c4d/files/logo.svg" }
+    },
+    { id:"5e6f7g8h", createdAt:"2026-04-21T09:15:00Z", status:"running",
+      intake:{ companyName:"Greenfield Capital", industry:"Private Credit", targetAudience:"Mid-market sponsors",
+        toneOfVoice:"institutional, discreet", competitors:"", archetype:"sage", palettePreference:"", notes:"" },
+      outputs:{}
+    },
+    { id:"9i0j1k2l", createdAt:"2026-04-19T16:40:00Z", status:"failed",
+      intake:{ companyName:"Northwind Supply", industry:"Industrial Logistics", targetAudience:"Operations directors",
+        toneOfVoice:"direct, reliable", competitors:"", archetype:"caregiver", palettePreference:"", notes:"" },
+      outputs:{}, error:"Skill timed out after 120s"
+    },
+    { id:"3m4n5o6p", createdAt:"2026-04-18T11:20:00Z", status:"complete",
+      intake:{ companyName:"Bramble & Sons", industry:"Specialty Coffee Roasters", targetAudience:"Independent cafes",
+        toneOfVoice:"warm, craft, unpretentious", competitors:"", archetype:"creator", palettePreference:"", notes:"" },
+      outputs:{ brandJson:"#", playbookHtml:"#", landingHtml:"#", logoSvg:"#" }
+    },
+    { id:"7q8r9s0t", createdAt:"2026-04-15T08:05:00Z", status:"complete",
+      intake:{ companyName:"Meridian Health", industry:"Primary Care Network", targetAudience:"Adults 45-70",
+        toneOfVoice:"calm, clear, trustworthy", competitors:"", archetype:"caregiver", palettePreference:"", notes:"" },
+      outputs:{ brandJson:"#", playbookHtml:"#", landingHtml:"#", logoSvg:"#" }
+    }
+  ];
+  const MOCK_BRAND_JSON = {
+    name:"Aurelian Labs",
+    tagline:"Brand direction for Aurelian Labs — AI / Financial Services",
+    colors:{ primary:"#1E3A8A", secondary:"#0EA5E9", accent:"#CBD5E1", neutral:"#F9FAFB" },
+    typography:{ heading:"Geist, Inter, sans-serif", body:"Geist, Inter, sans-serif" },
+    tone:["confident","precise","modern"],
+    positioning:"Aurelian Labs serves Capital markets operators in AI / Financial Services."
+  };
+</script>
+<!-- ========== NEW BRAND · QUESTIONNAIRE · /new ========== -->
+
+<section data-state="step-1">
+  <div class="state-label">step-1 · opening question</div>
+  
+<header class="nav sticky top-0 z-30">
+  <div class="max-w-[1280px] mx-auto flex items-center gap-6 px-5 md:px-6 py-3">
+    <a href="/" class="flex items-center gap-2.5 shrink-0"><span class="iei-mark size-md">IEI</span><span class="font-medium tracking-tight hidden sm:inline">IEI Ventures</span></a>
+    <div class="ml-auto flex items-center gap-2">
+      <a href="/" class="btn btn-ghost btn-sm" style="color: var(--color-text-muted);">Cancel</a>
+      <span class="font-mono text-xs hidden md:inline" style="color: var(--color-text-muted);">Changes saved automatically</span>
+    </div>
+  </div>
+</header>
+  <div class="max-w-[1280px] mx-auto px-5 md:px-6 py-6">
+    <div class="flex items-center justify-between gap-6 mb-1">
+      <div class="flex gap-1.5 text-xs font-mono" style="color: var(--color-text-muted);">
+        <a href="/new" class="px-2 py-1 rounded" style="background: var(--color-surface-2); color: var(--color-text); border: 1px solid var(--color-border);">New brand</a>
+        <a href="/new?mode=existing" class="px-2 py-1 rounded" style="color: var(--color-text-muted);">I have existing assets</a>
+      </div>
+      <div class="text-xs font-mono" style="color: var(--color-text-muted);">Step 1 of 6</div>
+    </div>
+    <div class="mt-4 mb-8">
+<div class="flex items-center gap-0 w-full overflow-x-auto">
+  
+    <div class="flex items-center gap-2.5 shrink-0 text-[var(--color-text)]">
+      <span class="inline-flex items-center justify-center font-mono text-[11px] shrink-0" style="width:22px;height:22px;border-radius:999px;border:1.5px solid var(--color-primary);background:var(--color-surface);color:var(--color-primary);font-weight:600;">1</span>
+      <span class="text-sm whitespace-nowrap">Company</span>
+    </div>
+    <div class="h-px flex-1 min-w-[18px] mx-3" style="background:var(--color-border);"></div>
+  
+    <div class="flex items-center gap-2.5 shrink-0 text-[var(--color-text-muted)]">
+      <span class="inline-flex items-center justify-center font-mono text-[11px] shrink-0" style="width:22px;height:22px;border-radius:999px;border:1.5px solid var(--color-border);background:var(--color-surface);color:var(--color-text-muted);font-weight:400;">2</span>
+      <span class="text-sm whitespace-nowrap">Audience</span>
+    </div>
+    <div class="h-px flex-1 min-w-[18px] mx-3" style="background:var(--color-border);"></div>
+  
+    <div class="flex items-center gap-2.5 shrink-0 text-[var(--color-text-muted)]">
+      <span class="inline-flex items-center justify-center font-mono text-[11px] shrink-0" style="width:22px;height:22px;border-radius:999px;border:1.5px solid var(--color-border);background:var(--color-surface);color:var(--color-text-muted);font-weight:400;">3</span>
+      <span class="text-sm whitespace-nowrap">Tone</span>
+    </div>
+    <div class="h-px flex-1 min-w-[18px] mx-3" style="background:var(--color-border);"></div>
+  
+    <div class="flex items-center gap-2.5 shrink-0 text-[var(--color-text-muted)]">
+      <span class="inline-flex items-center justify-center font-mono text-[11px] shrink-0" style="width:22px;height:22px;border-radius:999px;border:1.5px solid var(--color-border);background:var(--color-surface);color:var(--color-text-muted);font-weight:400;">4</span>
+      <span class="text-sm whitespace-nowrap">Archetype</span>
+    </div>
+    <div class="h-px flex-1 min-w-[18px] mx-3" style="background:var(--color-border);"></div>
+  
+    <div class="flex items-center gap-2.5 shrink-0 text-[var(--color-text-muted)]">
+      <span class="inline-flex items-center justify-center font-mono text-[11px] shrink-0" style="width:22px;height:22px;border-radius:999px;border:1.5px solid var(--color-border);background:var(--color-surface);color:var(--color-text-muted);font-weight:400;">5</span>
+      <span class="text-sm whitespace-nowrap">Palette</span>
+    </div>
+    <div class="h-px flex-1 min-w-[18px] mx-3" style="background:var(--color-border);"></div>
+  
+    <div class="flex items-center gap-2.5 shrink-0 text-[var(--color-text-muted)]">
+      <span class="inline-flex items-center justify-center font-mono text-[11px] shrink-0" style="width:22px;height:22px;border-radius:999px;border:1.5px solid var(--color-border);background:var(--color-surface);color:var(--color-text-muted);font-weight:400;">6</span>
+      <span class="text-sm whitespace-nowrap">Review</span>
+    </div>
+    
+  
+</div></div>
+    
+  <div class="max-w-[620px]">
+    <div class="kicker mb-3">Question 01</div>
+    <h1 class="font-serif leading-[1.05] mb-3" style="font-size: 48px;">Let's start with the basics. What's the company called?</h1>
+    <p class="text-base mb-6" style="color: var(--color-text-muted); max-width: 52ch;">Legal, operating, or working name — whichever you want the brand system built around.</p>
+    <!-- @bind: intake.companyName -->
+    <input class="input input-lg" placeholder="e.g. Aurelian Labs" autofocus />
+    <div class="mt-6 flex items-center gap-2">
+      <button class="btn btn-ghost" disabled>← Back</button>
+      <button class="btn btn-primary ml-auto">Continue <span class="kbd" style="color: inherit; background: rgba(255,255,255,.12); border-color: rgba(255,255,255,.2);">↵</span></button>
+    </div>
+  </div>
+
+  </div>
+</section>
+
+<section data-state="default">
+  <div class="state-label">default · step 3 of 6</div>
+  
+<header class="nav sticky top-0 z-30">
+  <div class="max-w-[1280px] mx-auto flex items-center gap-6 px-5 md:px-6 py-3">
+    <a href="/" class="flex items-center gap-2.5 shrink-0"><span class="iei-mark size-md">IEI</span><span class="font-medium tracking-tight hidden sm:inline">IEI Ventures</span></a>
+    <div class="ml-auto flex items-center gap-2">
+      <a href="/" class="btn btn-ghost btn-sm" style="color: var(--color-text-muted);">Cancel</a>
+      <span class="font-mono text-xs hidden md:inline" style="color: var(--color-text-muted);">Changes saved automatically</span>
+    </div>
+  </div>
+</header>
+  <div class="max-w-[1280px] mx-auto px-5 md:px-6 py-6">
+    <div class="flex items-center justify-between gap-6 mb-1">
+      <div class="flex gap-1.5 text-xs font-mono" style="color: var(--color-text-muted);">
+        <a href="/new" class="px-2 py-1 rounded" style="background: var(--color-surface-2); color: var(--color-text); border: 1px solid var(--color-border);">New brand</a>
+        <a href="/new?mode=existing" class="px-2 py-1 rounded" style="color: var(--color-text-muted);">I have existing assets</a>
+      </div>
+      <div class="text-xs font-mono" style="color: var(--color-text-muted);">Step 3 of 6</div>
+    </div>
+    <div class="mt-4 mb-8">
+<div class="flex items-center gap-0 w-full overflow-x-auto">
+  
+    <div class="flex items-center gap-2.5 shrink-0 text-[var(--color-text)]">
+      <span class="inline-flex items-center justify-center font-mono text-[11px] shrink-0" style="width:22px;height:22px;border-radius:999px;border:1.5px solid var(--color-primary);background:var(--color-primary);color:var(--color-surface);font-weight:400;">✓</span>
+      <span class="text-sm whitespace-nowrap">Company</span>
+    </div>
+    <div class="h-px flex-1 min-w-[18px] mx-3" style="background:var(--color-primary);"></div>
+  
+    <div class="flex items-center gap-2.5 shrink-0 text-[var(--color-text)]">
+      <span class="inline-flex items-center justify-center font-mono text-[11px] shrink-0" style="width:22px;height:22px;border-radius:999px;border:1.5px solid var(--color-primary);background:var(--color-primary);color:var(--color-surface);font-weight:400;">✓</span>
+      <span class="text-sm whitespace-nowrap">Audience</span>
+    </div>
+    <div class="h-px flex-1 min-w-[18px] mx-3" style="background:var(--color-primary);"></div>
+  
+    <div class="flex items-center gap-2.5 shrink-0 text-[var(--color-text)]">
+      <span class="inline-flex items-center justify-center font-mono text-[11px] shrink-0" style="width:22px;height:22px;border-radius:999px;border:1.5px solid var(--color-primary);background:var(--color-surface);color:var(--color-primary);font-weight:600;">3</span>
+      <span class="text-sm whitespace-nowrap">Tone</span>
+    </div>
+    <div class="h-px flex-1 min-w-[18px] mx-3" style="background:var(--color-border);"></div>
+  
+    <div class="flex items-center gap-2.5 shrink-0 text-[var(--color-text-muted)]">
+      <span class="inline-flex items-center justify-center font-mono text-[11px] shrink-0" style="width:22px;height:22px;border-radius:999px;border:1.5px solid var(--color-border);background:var(--color-surface);color:var(--color-text-muted);font-weight:400;">4</span>
+      <span class="text-sm whitespace-nowrap">Archetype</span>
+    </div>
+    <div class="h-px flex-1 min-w-[18px] mx-3" style="background:var(--color-border);"></div>
+  
+    <div class="flex items-center gap-2.5 shrink-0 text-[var(--color-text-muted)]">
+      <span class="inline-flex items-center justify-center font-mono text-[11px] shrink-0" style="width:22px;height:22px;border-radius:999px;border:1.5px solid var(--color-border);background:var(--color-surface);color:var(--color-text-muted);font-weight:400;">5</span>
+      <span class="text-sm whitespace-nowrap">Palette</span>
+    </div>
+    <div class="h-px flex-1 min-w-[18px] mx-3" style="background:var(--color-border);"></div>
+  
+    <div class="flex items-center gap-2.5 shrink-0 text-[var(--color-text-muted)]">
+      <span class="inline-flex items-center justify-center font-mono text-[11px] shrink-0" style="width:22px;height:22px;border-radius:999px;border:1.5px solid var(--color-border);background:var(--color-surface);color:var(--color-text-muted);font-weight:400;">6</span>
+      <span class="text-sm whitespace-nowrap">Review</span>
+    </div>
+    
+  
+</div></div>
+    
+  <div class="grid grid-cols-1 md:grid-cols-[1fr_280px] gap-8 md:gap-12 items-start">
+    <!-- Main dialogue -->
+    <div class="max-w-[620px]">
+      <div class="kicker mb-3">Question 03</div>
+      <h1 class="font-serif leading-[1.05] mb-3" style="font-size: 44px;">How should your brand <em style="font-style: italic;">sound?</em></h1>
+      <p class="text-base mb-6" style="color: var(--color-text-muted); max-width: 52ch;">
+        Pick the words that match the voice you want. We'll use these to tune copy, taglines, and the tone of the landing page. Pick 3–5 that feel right — leave the rest.
+      </p>
+      <!-- @bind: intake.toneOfVoice -->
+      <div class="flex flex-wrap gap-2 mb-6">
+        <button class="pill pill-selected">confident <span aria-hidden="true">×</span></button>
+        <button class="pill pill-selected">precise <span aria-hidden="true">×</span></button>
+        <button class="pill pill-selected">modern <span aria-hidden="true">×</span></button>
+        <button class="pill">institutional</button>
+        <button class="pill">warm</button>
+        <button class="pill">discreet</button>
+        <button class="pill">direct</button>
+        <button class="pill">playful</button>
+        <button class="pill">technical</button>
+        <button class="pill">bold</button>
+        <button class="pill">restrained</button>
+        <button class="pill">unpretentious</button>
+        <button class="pill">visionary</button>
+        <button class="pill">grounded</button>
+      </div>
+      <details class="mb-8">
+        <summary class="kicker cursor-pointer select-none">Add your own ›</summary>
+        <input class="input mt-3" placeholder="Type a word and press Enter" />
+      </details>
+      <div class="flex items-center gap-2">
+        <button class="btn btn-ghost">← Back</button>
+        <button class="btn btn-primary ml-auto">Continue <span class="kbd" style="color: inherit; background: rgba(255,255,255,.12); border-color: rgba(255,255,255,.2);">↵</span></button>
+      </div>
+      <p class="mt-3 text-xs" style="color: var(--color-text-muted);">3 selected. Pick up to 5.</p>
+    </div>
+
+    <!-- Strategist pane (aside) -->
+    <aside class="card p-5 md:sticky md:top-24 hidden md:block">
+      <div class="flex items-center gap-2 mb-3">
+        <span class="iei-mark size-sm">IEI</span>
+        <span class="kicker" style="letter-spacing: 0.1em;">Your strategist</span>
+      </div>
+      <p class="font-serif" style="font-size: 17px; line-height: 1.35;">
+        "Confident and precise will push toward clean geometry and restrained palettes. If you want more warmth, add one emotional word — <em>grounded</em> or <em>unpretentious</em>."
+      </p>
+      <div class="border-t mt-4 pt-4" style="border-color: var(--color-border);">
+        <div class="kicker mb-2">So far</div>
+        <div class="text-sm space-y-1.5">
+          <div class="flex justify-between"><span style="color: var(--color-text-muted);">Company</span><span>Aurelian Labs</span></div>
+          <div class="flex justify-between"><span style="color: var(--color-text-muted);">Industry</span><span>AI / Fin. Svcs</span></div>
+          <div class="flex justify-between"><span style="color: var(--color-text-muted);">Audience</span><span class="truncate ml-2">Capital markets ops</span></div>
+        </div>
+      </div>
+    </aside>
+  </div>
+
+  </div>
+</section>
+
+<section data-state="step-5">
+  <div class="state-label">step-5 · palette suggestions</div>
+  
+<header class="nav sticky top-0 z-30">
+  <div class="max-w-[1280px] mx-auto flex items-center gap-6 px-5 md:px-6 py-3">
+    <a href="/" class="flex items-center gap-2.5 shrink-0"><span class="iei-mark size-md">IEI</span><span class="font-medium tracking-tight hidden sm:inline">IEI Ventures</span></a>
+    <div class="ml-auto flex items-center gap-2">
+      <a href="/" class="btn btn-ghost btn-sm" style="color: var(--color-text-muted);">Cancel</a>
+      <span class="font-mono text-xs hidden md:inline" style="color: var(--color-text-muted);">Changes saved automatically</span>
+    </div>
+  </div>
+</header>
+  <div class="max-w-[1280px] mx-auto px-5 md:px-6 py-6">
+    <div class="flex items-center justify-between gap-6 mb-1">
+      <div class="flex gap-1.5 text-xs font-mono" style="color: var(--color-text-muted);">
+        <a href="/new" class="px-2 py-1 rounded" style="background: var(--color-surface-2); color: var(--color-text); border: 1px solid var(--color-border);">New brand</a>
+        <a href="/new?mode=existing" class="px-2 py-1 rounded" style="color: var(--color-text-muted);">I have existing assets</a>
+      </div>
+      <div class="text-xs font-mono" style="color: var(--color-text-muted);">Step 5 of 6</div>
+    </div>
+    <div class="mt-4 mb-8">
+<div class="flex items-center gap-0 w-full overflow-x-auto">
+  
+    <div class="flex items-center gap-2.5 shrink-0 text-[var(--color-text)]">
+      <span class="inline-flex items-center justify-center font-mono text-[11px] shrink-0" style="width:22px;height:22px;border-radius:999px;border:1.5px solid var(--color-primary);background:var(--color-primary);color:var(--color-surface);font-weight:400;">✓</span>
+      <span class="text-sm whitespace-nowrap">Company</span>
+    </div>
+    <div class="h-px flex-1 min-w-[18px] mx-3" style="background:var(--color-primary);"></div>
+  
+    <div class="flex items-center gap-2.5 shrink-0 text-[var(--color-text)]">
+      <span class="inline-flex items-center justify-center font-mono text-[11px] shrink-0" style="width:22px;height:22px;border-radius:999px;border:1.5px solid var(--color-primary);background:var(--color-primary);color:var(--color-surface);font-weight:400;">✓</span>
+      <span class="text-sm whitespace-nowrap">Audience</span>
+    </div>
+    <div class="h-px flex-1 min-w-[18px] mx-3" style="background:var(--color-primary);"></div>
+  
+    <div class="flex items-center gap-2.5 shrink-0 text-[var(--color-text)]">
+      <span class="inline-flex items-center justify-center font-mono text-[11px] shrink-0" style="width:22px;height:22px;border-radius:999px;border:1.5px solid var(--color-primary);background:var(--color-primary);color:var(--color-surface);font-weight:400;">✓</span>
+      <span class="text-sm whitespace-nowrap">Tone</span>
+    </div>
+    <div class="h-px flex-1 min-w-[18px] mx-3" style="background:var(--color-primary);"></div>
+  
+    <div class="flex items-center gap-2.5 shrink-0 text-[var(--color-text)]">
+      <span class="inline-flex items-center justify-center font-mono text-[11px] shrink-0" style="width:22px;height:22px;border-radius:999px;border:1.5px solid var(--color-primary);background:var(--color-primary);color:var(--color-surface);font-weight:400;">✓</span>
+      <span class="text-sm whitespace-nowrap">Archetype</span>
+    </div>
+    <div class="h-px flex-1 min-w-[18px] mx-3" style="background:var(--color-primary);"></div>
+  
+    <div class="flex items-center gap-2.5 shrink-0 text-[var(--color-text)]">
+      <span class="inline-flex items-center justify-center font-mono text-[11px] shrink-0" style="width:22px;height:22px;border-radius:999px;border:1.5px solid var(--color-primary);background:var(--color-surface);color:var(--color-primary);font-weight:600;">5</span>
+      <span class="text-sm whitespace-nowrap">Palette</span>
+    </div>
+    <div class="h-px flex-1 min-w-[18px] mx-3" style="background:var(--color-border);"></div>
+  
+    <div class="flex items-center gap-2.5 shrink-0 text-[var(--color-text-muted)]">
+      <span class="inline-flex items-center justify-center font-mono text-[11px] shrink-0" style="width:22px;height:22px;border-radius:999px;border:1.5px solid var(--color-border);background:var(--color-surface);color:var(--color-text-muted);font-weight:400;">6</span>
+      <span class="text-sm whitespace-nowrap">Review</span>
+    </div>
+    
+  
+</div></div>
+    
+  <div class="max-w-[820px]">
+    <div class="kicker mb-3">Question 05</div>
+    <h1 class="font-serif leading-[1.05] mb-3" style="font-size: 44px;">Here are four directions your palette could take.</h1>
+    <p class="text-base mb-6" style="color: var(--color-text-muted); max-width: 58ch;">
+      Pulled from your archetype (<b>sage</b>) and industry (<b>AI / Financial Services</b>). Pick one, or ask for different options.
+    </p>
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
+      
+        <label class="card card-hover p-4 cursor-pointer " style="">
+          <div class="flex items-center justify-between mb-3">
+            <div class="font-medium tracking-tight">Inkwell</div>
+            <input type="radio" name="palette"  />
+          </div>
+          <div class="flex gap-1.5 mb-3">
+            <span class="flex-1 rounded" style="height: 48px; background: #0f172a; border: 1px solid rgba(0,0,0,.06);"></span><span class="flex-1 rounded" style="height: 48px; background: #334155; border: 1px solid rgba(0,0,0,.06);"></span><span class="flex-1 rounded" style="height: 48px; background: #cbd5e1; border: 1px solid rgba(0,0,0,.06);"></span><span class="flex-1 rounded" style="height: 48px; background: #f8fafc; border: 1px solid rgba(0,0,0,.06);"></span>
+          </div>
+          <div class="text-xs" style="color: var(--color-text-muted);">Deep ink, restrained, editorial.</div>
+        </label>
+        <label class="card card-hover p-4 cursor-pointer " style="">
+          <div class="flex items-center justify-between mb-3">
+            <div class="font-medium tracking-tight">Vellum</div>
+            <input type="radio" name="palette"  />
+          </div>
+          <div class="flex gap-1.5 mb-3">
+            <span class="flex-1 rounded" style="height: 48px; background: #2a2620; border: 1px solid rgba(0,0,0,.06);"></span><span class="flex-1 rounded" style="height: 48px; background: #5c4a2c; border: 1px solid rgba(0,0,0,.06);"></span><span class="flex-1 rounded" style="height: 48px; background: #d9b87a; border: 1px solid rgba(0,0,0,.06);"></span><span class="flex-1 rounded" style="height: 48px; background: #f6f1e4; border: 1px solid rgba(0,0,0,.06);"></span>
+          </div>
+          <div class="text-xs" style="color: var(--color-text-muted);">Warm paper, muted gold, print-weight.</div>
+        </label>
+        <label class="card card-hover p-4 cursor-pointer " style="">
+          <div class="flex items-center justify-between mb-3">
+            <div class="font-medium tracking-tight">Meridian</div>
+            <input type="radio" name="palette"  />
+          </div>
+          <div class="flex gap-1.5 mb-3">
+            <span class="flex-1 rounded" style="height: 48px; background: #0b3a66; border: 1px solid rgba(0,0,0,.06);"></span><span class="flex-1 rounded" style="height: 48px; background: #1e5b8f; border: 1px solid rgba(0,0,0,.06);"></span><span class="flex-1 rounded" style="height: 48px; background: #59c4e6; border: 1px solid rgba(0,0,0,.06);"></span><span class="flex-1 rounded" style="height: 48px; background: #eef3f6; border: 1px solid rgba(0,0,0,.06);"></span>
+          </div>
+          <div class="text-xs" style="color: var(--color-text-muted);">Institutional navy with a single cyan.</div>
+        </label>
+        <label class="card card-hover p-4 cursor-pointer ring-2" style="border-color: var(--color-primary); box-shadow: var(--sh-focus);">
+          <div class="flex items-center justify-between mb-3">
+            <div class="font-medium tracking-tight">Plenum</div>
+            <input type="radio" name="palette" checked />
+          </div>
+          <div class="flex gap-1.5 mb-3">
+            <span class="flex-1 rounded" style="height: 48px; background: #1a1f1a; border: 1px solid rgba(0,0,0,.06);"></span><span class="flex-1 rounded" style="height: 48px; background: #263e0f; border: 1px solid rgba(0,0,0,.06);"></span><span class="flex-1 rounded" style="height: 48px; background: #a8b098; border: 1px solid rgba(0,0,0,.06);"></span><span class="flex-1 rounded" style="height: 48px; background: #f2f0e9; border: 1px solid rgba(0,0,0,.06);"></span>
+          </div>
+          <div class="text-xs" style="color: var(--color-text-muted);">Moss on paper — sage, calm.</div>
+        </label>
+    </div>
+    <div class="flex items-center flex-wrap gap-2">
+      <button class="btn btn-ghost">← Back</button>
+      <button class="btn btn-secondary">Show me more options</button>
+      <button class="btn btn-primary ml-auto">Use "Plenum" <span class="kbd" style="color: inherit; background: rgba(255,255,255,.12); border-color: rgba(255,255,255,.2);">↵</span></button>
+    </div>
+  </div>
+
+  </div>
+</section>
+
+<section data-state="error">
+  <div class="state-label">error · validation inline</div>
+  
+<header class="nav sticky top-0 z-30">
+  <div class="max-w-[1280px] mx-auto flex items-center gap-6 px-5 md:px-6 py-3">
+    <a href="/" class="flex items-center gap-2.5 shrink-0"><span class="iei-mark size-md">IEI</span><span class="font-medium tracking-tight hidden sm:inline">IEI Ventures</span></a>
+    <div class="ml-auto flex items-center gap-2">
+      <a href="/" class="btn btn-ghost btn-sm" style="color: var(--color-text-muted);">Cancel</a>
+      <span class="font-mono text-xs hidden md:inline" style="color: var(--color-text-muted);">Changes saved automatically</span>
+    </div>
+  </div>
+</header>
+  <div class="max-w-[1280px] mx-auto px-5 md:px-6 py-6">
+    <div class="flex items-center justify-between gap-6 mb-1">
+      <div class="flex gap-1.5 text-xs font-mono" style="color: var(--color-text-muted);">
+        <a href="/new" class="px-2 py-1 rounded" style="background: var(--color-surface-2); color: var(--color-text); border: 1px solid var(--color-border);">New brand</a>
+        <a href="/new?mode=existing" class="px-2 py-1 rounded" style="color: var(--color-text-muted);">I have existing assets</a>
+      </div>
+      <div class="text-xs font-mono" style="color: var(--color-text-muted);">Step 2 of 6</div>
+    </div>
+    <div class="mt-4 mb-8">
+<div class="flex items-center gap-0 w-full overflow-x-auto">
+  
+    <div class="flex items-center gap-2.5 shrink-0 text-[var(--color-text)]">
+      <span class="inline-flex items-center justify-center font-mono text-[11px] shrink-0" style="width:22px;height:22px;border-radius:999px;border:1.5px solid var(--color-primary);background:var(--color-primary);color:var(--color-surface);font-weight:400;">✓</span>
+      <span class="text-sm whitespace-nowrap">Company</span>
+    </div>
+    <div class="h-px flex-1 min-w-[18px] mx-3" style="background:var(--color-primary);"></div>
+  
+    <div class="flex items-center gap-2.5 shrink-0 text-[var(--color-text)]">
+      <span class="inline-flex items-center justify-center font-mono text-[11px] shrink-0" style="width:22px;height:22px;border-radius:999px;border:1.5px solid var(--color-primary);background:var(--color-surface);color:var(--color-primary);font-weight:600;">2</span>
+      <span class="text-sm whitespace-nowrap">Audience</span>
+    </div>
+    <div class="h-px flex-1 min-w-[18px] mx-3" style="background:var(--color-border);"></div>
+  
+    <div class="flex items-center gap-2.5 shrink-0 text-[var(--color-text-muted)]">
+      <span class="inline-flex items-center justify-center font-mono text-[11px] shrink-0" style="width:22px;height:22px;border-radius:999px;border:1.5px solid var(--color-border);background:var(--color-surface);color:var(--color-text-muted);font-weight:400;">3</span>
+      <span class="text-sm whitespace-nowrap">Tone</span>
+    </div>
+    <div class="h-px flex-1 min-w-[18px] mx-3" style="background:var(--color-border);"></div>
+  
+    <div class="flex items-center gap-2.5 shrink-0 text-[var(--color-text-muted)]">
+      <span class="inline-flex items-center justify-center font-mono text-[11px] shrink-0" style="width:22px;height:22px;border-radius:999px;border:1.5px solid var(--color-border);background:var(--color-surface);color:var(--color-text-muted);font-weight:400;">4</span>
+      <span class="text-sm whitespace-nowrap">Archetype</span>
+    </div>
+    <div class="h-px flex-1 min-w-[18px] mx-3" style="background:var(--color-border);"></div>
+  
+    <div class="flex items-center gap-2.5 shrink-0 text-[var(--color-text-muted)]">
+      <span class="inline-flex items-center justify-center font-mono text-[11px] shrink-0" style="width:22px;height:22px;border-radius:999px;border:1.5px solid var(--color-border);background:var(--color-surface);color:var(--color-text-muted);font-weight:400;">5</span>
+      <span class="text-sm whitespace-nowrap">Palette</span>
+    </div>
+    <div class="h-px flex-1 min-w-[18px] mx-3" style="background:var(--color-border);"></div>
+  
+    <div class="flex items-center gap-2.5 shrink-0 text-[var(--color-text-muted)]">
+      <span class="inline-flex items-center justify-center font-mono text-[11px] shrink-0" style="width:22px;height:22px;border-radius:999px;border:1.5px solid var(--color-border);background:var(--color-surface);color:var(--color-text-muted);font-weight:400;">6</span>
+      <span class="text-sm whitespace-nowrap">Review</span>
+    </div>
+    
+  
+</div></div>
+    
+  <div class="max-w-[620px]">
+    <div class="kicker mb-3">Question 02</div>
+    <h1 class="font-serif leading-[1.05] mb-3" style="font-size: 44px;">Who are you building this for?</h1>
+    <p class="text-base mb-6" style="color: var(--color-text-muted); max-width: 52ch;">Describe the person who'll decide to buy or trust you. Be specific — job, context, what they're trying to do.</p>
+    <textarea class="textarea is-error" placeholder="e.g. Operations directors at mid-market logistics companies"></textarea>
+    <div class="flex items-center gap-2 mt-2 text-sm" style="color: var(--color-status-failed);">
+      <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="8" r="6"/><path d="M8 5v4M8 11h.01"/></svg>
+      We need an audience before we can suggest an archetype.
+    </div>
+    <div class="mt-6 flex items-center gap-2">
+      <button class="btn btn-ghost">← Back</button>
+      <button class="btn btn-primary ml-auto" aria-disabled="true">Continue</button>
+    </div>
+  </div>
+
+  </div>
+</section>
+
+<section data-state="submitting">
+  <div class="state-label">submitting · running the skill</div>
+  
+<header class="nav sticky top-0 z-30">
+  <div class="max-w-[1280px] mx-auto flex items-center gap-6 px-5 md:px-6 py-3">
+    <a href="/" class="flex items-center gap-2.5 shrink-0"><span class="iei-mark size-md">IEI</span><span class="font-medium tracking-tight hidden sm:inline">IEI Ventures</span></a>
+    <div class="ml-auto flex items-center gap-2">
+      <a href="/" class="btn btn-ghost btn-sm" style="color: var(--color-text-muted);">Cancel</a>
+      <span class="font-mono text-xs hidden md:inline" style="color: var(--color-text-muted);">Changes saved automatically</span>
+    </div>
+  </div>
+</header>
+  <main class="max-w-[1280px] mx-auto px-5 md:px-6 py-20">
+    <div class="max-w-[540px] mx-auto text-center card p-10">
+      <div class="mx-auto mb-5 flex items-center justify-center" style="width: 48px; height: 48px; border-radius: 999px; background: var(--color-surface-2);">
+        <span class="spinner" style="width:22px;height:22px;border-width:2px; color: var(--color-status-running);"></span>
+      </div>
+      <div class="kicker mb-2">Building your brand</div>
+      <h1 class="font-serif mb-3" style="font-size: 32px; line-height: 1.1;">Running intake through the strategist…</h1>
+      <p class="text-sm mb-6" style="color: var(--color-text-muted);">Typical runs take 60–120 seconds. You'll land on the project panel when it's done — feel free to leave this page open.</p>
+      <ul class="text-left text-sm flex flex-col gap-2">
+        <li class="flex items-center gap-2"><span style="color: var(--color-status-complete);">✓</span> Intake validated · 6 questions collected</li>
+        <li class="flex items-center gap-2"><span style="color: var(--color-status-complete);">✓</span> Archetype mapped — <b>sage</b></li>
+        <li class="flex items-center gap-2"><span class="spinner" style="width:12px;height:12px;color:var(--color-status-running);"></span> Generating palette &amp; type system…</li>
+        <li class="flex items-center gap-2" style="color: var(--color-text-muted);"><span>·</span> Drafting positioning statement</li>
+        <li class="flex items-center gap-2" style="color: var(--color-text-muted);"><span>·</span> Rendering logo variants</li>
+        <li class="flex items-center gap-2" style="color: var(--color-text-muted);"><span>·</span> Building landing page</li>
+      </ul>
+    </div>
+  </main>
+</section>
+</body>
+</html>
