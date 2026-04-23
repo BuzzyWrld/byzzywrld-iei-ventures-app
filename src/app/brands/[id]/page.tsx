@@ -294,6 +294,24 @@ function RunningPanel({ project }: { project: BrandProject }) {
 }
 
 function FailedPanel({ project }: { project: BrandProject }) {
+  const [retrying, setRetrying] = useState(false);
+  const [retryError, setRetryError] = useState<string | null>(null);
+
+  async function retry() {
+    setRetrying(true);
+    setRetryError(null);
+    const res = await fetch(`/api/brands/${project.id}/retry`, { method: "POST" });
+    if (!res.ok) {
+      const body = (await res.json().catch(() => ({}))) as { error?: string };
+      setRetryError(body.error ?? `HTTP ${res.status}`);
+      setRetrying(false);
+      return;
+    }
+    // The brand is now back in 'pending'. Reload the page so the polling
+    // loop picks up the new status.
+    window.location.reload();
+  }
+
   return (
     <div className="card p-6 md:p-8" style={{ borderColor: "var(--color-status-failed)" }}>
       <div className="flex items-start gap-3 mb-4">
@@ -313,15 +331,38 @@ function FailedPanel({ project }: { project: BrandProject }) {
         <div>
           <h2 className="text-lg font-medium mb-1">The skill didn&apos;t finish</h2>
           <p className="text-sm" style={{ color: "var(--color-text-muted)" }}>
-            {project.error ?? "Unknown error. Your intake is saved — we can retry without losing anything."}
+            {project.error ??
+              "Unknown error. Your intake is saved — click Retry to try again without re-entering anything."}
+          </p>
+          <p className="text-sm mt-2" style={{ color: "var(--color-text-muted)" }}>
+            Your intake is saved. No need to fill out the questionnaire again.
           </p>
         </div>
       </div>
       <div className="flex flex-wrap gap-2">
-        <Link href="/new" className="btn btn-primary">
-          Start a new brand
+        <button
+          type="button"
+          className="btn btn-primary"
+          onClick={retry}
+          disabled={retrying}
+        >
+          {retrying ? (
+            <>
+              <span className="spinner" /> Retrying…
+            </>
+          ) : (
+            "Retry with saved intake"
+          )}
+        </button>
+        <Link href="/new" className="btn btn-ghost">
+          Start a different brand
         </Link>
       </div>
+      {retryError && (
+        <p className="mt-3 text-sm" style={{ color: "var(--color-status-failed)" }}>
+          {retryError}
+        </p>
+      )}
     </div>
   );
 }

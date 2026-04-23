@@ -44,6 +44,33 @@ export function enqueueBrandBuild(
   return project;
 }
 
+/**
+ * Retry a failed (or stuck) brand build using its saved intake. Reuses the
+ * same brand ID so the URL and any bookmarks stay valid.
+ */
+export function retryBrandBuild(id: string): BrandProject | null {
+  const existing = getBrand(id);
+  if (!existing) return null;
+  // Wipe previous outputs + error, reset to pending so the UI shows the
+  // running state immediately.
+  updateBrand(id, {
+    status: "pending",
+    progressStage: "starting",
+    progressPct: 0,
+    error: undefined,
+    outputs: {},
+  });
+  // Clean up any stale files from the previous attempt — best-effort.
+  try {
+    fs.rmSync(brandDir(id), { recursive: true, force: true });
+  } catch (err) {
+    console.warn(`[skill] retry: couldn't clear outputs dir:`, err);
+  }
+  const refreshed = getBrand(id)!;
+  void runBrandBuildInBackground(refreshed);
+  return refreshed;
+}
+
 async function runBrandBuildInBackground(project: BrandProject): Promise<void> {
   const { id, intake } = project;
   updateBrand(id, { status: "running", progressStage: "starting", progressPct: 0 });
