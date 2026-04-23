@@ -5,18 +5,16 @@ import { use, useEffect, useState } from "react";
 import type { BrandProject } from "@/lib/types";
 
 // The real skill produces a richer brand.json than our minimal BrandJson
-// type. We read only what we render, optional everywhere.
+// type. Fields are 'unknown' so we coerce safely at render-time — different
+// providers (Claude, DeepSeek, Kimi) structure this differently, and we
+// refuse to crash on any of them.
 type LiveBrandJson = {
-  name?: string;
-  tagline?: string;
-  positioning?: string;
-  tone?: string[];
-  colors?: Record<string, string>;
-  typography?: {
-    heading?: string | { name?: string; weights?: number[]; role?: string };
-    body?: string | { name?: string; weights?: number[]; role?: string };
-    accent?: string | { name?: string; weights?: number[]; role?: string };
-  };
+  name?: unknown;
+  tagline?: unknown;
+  positioning?: unknown;
+  tone?: unknown;
+  colors?: unknown;
+  typography?: unknown;
 };
 
 const MONTHS = [
@@ -28,12 +26,82 @@ function fmtDate(iso: string): string {
   return `${MONTHS[d.getMonth()]} ${d.getUTCDate()}, ${d.getFullYear()}`;
 }
 
-function fontName(
-  v: string | { name?: string } | undefined
-): string {
-  if (!v) return "—";
+/** Coerce any value into a safe display string. Handles strings directly,
+ *  pulls `.family`/`.name` from objects, arrays get joined. Never returns
+ *  an object so React can always render the result. */
+function asText(v: unknown, fallback = "—"): string {
+  if (v == null) return fallback;
   if (typeof v === "string") return v;
-  return v.name ?? "—";
+  if (typeof v === "number" || typeof v === "boolean") return String(v);
+  if (Array.isArray(v)) return v.map((x) => asText(x, "")).filter(Boolean).join(", ") || fallback;
+  if (typeof v === "object") {
+    const o = v as Record<string, unknown>;
+    for (const key of ["family", "name", "value", "label", "text"]) {
+      if (typeof o[key] === "string") return o[key] as string;
+    }
+    return fallback;
+  }
+  return fallback;
+}
+
+function fontName(v: unknown): string {
+  return asText(v, "—");
+}
+
+/** Extract positioning as a paragraph-sized string. Different providers
+ *  structure this differently: sometimes a plain string, sometimes an
+ *  object with essence/mission/vision nested. */
+function extractPositioning(brand: LiveBrandJson | null): string | null {
+  if (!brand) return null;
+  const p = brand.positioning;
+  if (typeof p === "string" && p.trim()) return p;
+  if (p && typeof p === "object") {
+    const o = p as Record<string, unknown>;
+    // Prefer the single best line available.
+    const candidate =
+      (typeof o.statement === "string" && o.statement) ||
+      (typeof o.summary === "string" && o.summary) ||
+      (typeof o.essence === "string" && o.essence) ||
+      (typeof o.mission === "string" && o.mission) ||
+      (typeof o.usp === "string" && o.usp) ||
+      null;
+    if (candidate) return candidate;
+  }
+  // Fall back to tagline if positioning is unusable.
+  const t = brand.tagline;
+  if (typeof t === "string" && t.trim()) return t;
+  return null;
+}
+
+function extractTone(brand: LiveBrandJson | null): string[] {
+  if (!brand?.tone) return [];
+  if (Array.isArray(brand.tone)) {
+    return brand.tone.map((t) => asText(t, "")).filter(Boolean);
+  }
+  if (typeof brand.tone === "string") {
+    return brand.tone.split(",").map((s) => s.trim()).filter(Boolean);
+  }
+  return [];
+}
+
+function extractColors(brand: LiveBrandJson | null): Record<string, string> | null {
+  const c = brand?.colors;
+  if (!c || typeof c !== "object") return null;
+  const out: Record<string, string> = {};
+  for (const [k, v] of Object.entries(c as Record<string, unknown>)) {
+    if (typeof v === "string" && /^#[0-9a-f]{3,8}$/i.test(v)) out[k] = v;
+  }
+  return Object.keys(out).length ? out : null;
+}
+
+function extractTypography(
+  brand: LiveBrandJson | null
+): { heading: string; body: string } {
+  const t = (brand?.typography ?? {}) as Record<string, unknown>;
+  return {
+    heading: fontName(t.heading),
+    body: fontName(t.body),
+  };
 }
 
 /** Pick out swatches to render as the primary palette row.
@@ -268,14 +336,17 @@ function CompletePanel({
 }
 
 function Positioning({ brand }: { brand: LiveBrandJson | null }) {
-  if (!brand?.positioning && !brand?.tagline) return null;
-  const tone = brand.tone ?? [];
+  const text = extractPositioning(brand);
+  const tone = extractTone(brand);
+  if (!text && tone.length === 0) return null;
   return (
     <div className="mb-12">
       <div className="kicker mb-3">Positioning</div>
-      <p className="font-serif leading-[1.1] max-w-[24ch]" style={{ fontSize: 48 }}>
-        {brand.positioning ?? brand.tagline}
-      </p>
+      {text && (
+        <p className="font-serif leading-[1.1] max-w-[24ch]" style={{ fontSize: 48 }}>
+          {text}
+        </p>
+      )}
       {tone.length > 0 && (
         <div className="flex flex-wrap gap-2 mt-6">
           {tone.map((t) => (
@@ -290,7 +361,7 @@ function Positioning({ brand }: { brand: LiveBrandJson | null }) {
 }
 
 function Palette({ brand }: { brand: LiveBrandJson | null }) {
-  const swatches = pickPalette(brand?.colors);
+  const swatches = pickPalette(extractColors(brand) ?? undefined);
   if (swatches.length === 0) return null;
   return (
     <div className="mb-12">
@@ -329,8 +400,7 @@ function Palette({ brand }: { brand: LiveBrandJson | null }) {
 }
 
 function Typography({ brand }: { brand: LiveBrandJson | null }) {
-  const headingName = fontName(brand?.typography?.heading);
-  const bodyName = fontName(brand?.typography?.body);
+  const { heading: headingName, body: bodyName } = extractTypography(brand);
   if (headingName === "—" && bodyName === "—") return null;
   return (
     <div className="mb-12">
