@@ -35,6 +35,12 @@ export function db(): Database.Database {
   if (!cols.includes("progress_pct")) {
     _db.exec(`ALTER TABLE brands ADD COLUMN progress_pct REAL`);
   }
+  if (!cols.includes("tenant_id")) {
+    _db.exec(`ALTER TABLE brands ADD COLUMN tenant_id TEXT NOT NULL DEFAULT 'default'`);
+  }
+  if (!cols.includes("user_id")) {
+    _db.exec(`ALTER TABLE brands ADD COLUMN user_id TEXT`);
+  }
   // Any brand marked 'running' at process start is orphaned from a previous
   // process crash — mark them failed so the UI surfaces the issue.
   _db.prepare(
@@ -52,6 +58,8 @@ type Row = {
   error: string | null;
   progress_stage: string | null;
   progress_pct: number | null;
+  tenant_id: string | null;
+  user_id: string | null;
 };
 
 const rowToProject = (r: Row): BrandProject => ({
@@ -63,13 +71,15 @@ const rowToProject = (r: Row): BrandProject => ({
   error: r.error ?? undefined,
   progressStage: r.progress_stage ?? undefined,
   progressPct: r.progress_pct ?? undefined,
+  tenantId: r.tenant_id ?? "default",
+  userId: r.user_id ?? undefined,
 });
 
 export function createBrand(p: BrandProject): void {
   db()
     .prepare(
-      `INSERT INTO brands (id, created_at, status, intake_json, outputs_json, error, progress_stage, progress_pct)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?)`
+      `INSERT INTO brands (id, created_at, status, intake_json, outputs_json, error, progress_stage, progress_pct, tenant_id, user_id)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
     )
     .run(
       p.id,
@@ -79,7 +89,9 @@ export function createBrand(p: BrandProject): void {
       JSON.stringify(p.outputs),
       p.error ?? null,
       p.progressStage ?? null,
-      p.progressPct ?? null
+      p.progressPct ?? null,
+      p.tenantId,
+      p.userId ?? null
     );
 }
 
@@ -110,9 +122,21 @@ export function getBrand(id: string): BrandProject | null {
   return row ? rowToProject(row) : null;
 }
 
-export function listBrands(): BrandProject[] {
-  const rows = db()
-    .prepare(`SELECT * FROM brands ORDER BY created_at DESC`)
-    .all() as Row[];
+export function listBrands(opts?: { tenantId?: string; userId?: string }): BrandProject[] {
+  const where: string[] = [];
+  const args: string[] = [];
+  if (opts?.tenantId) {
+    where.push("tenant_id = ?");
+    args.push(opts.tenantId);
+  }
+  if (opts?.userId) {
+    where.push("user_id = ?");
+    args.push(opts.userId);
+  }
+  const sql =
+    `SELECT * FROM brands` +
+    (where.length ? ` WHERE ${where.join(" AND ")}` : "") +
+    ` ORDER BY created_at DESC`;
+  const rows = (args.length ? db().prepare(sql).all(...args) : db().prepare(sql).all()) as Row[];
   return rows.map(rowToProject);
 }

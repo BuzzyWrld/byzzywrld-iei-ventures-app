@@ -1,9 +1,13 @@
-import Link from "next/link";
-import { IeiMark } from "@/components/IeiMark";
+"use client";
 
-// Auth is stubbed — same pattern as /login.
+import Link from "next/link";
+import { useActionState } from "react";
+import { IeiMark } from "@/components/IeiMark";
+import { signupAction } from "@/app/actions/auth";
 
 export default function SignupPage() {
+  const [state, formAction, pending] = useActionState(signupAction, null);
+
   return (
     <div className="min-h-screen grid grid-cols-1 md:grid-cols-2">
       <div className="flex flex-col px-6 md:px-12 lg:px-20 py-8">
@@ -18,24 +22,20 @@ export default function SignupPage() {
               Start a workspace.
             </h1>
             <p className="text-sm mb-7" style={{ color: "var(--color-text-muted)" }}>
-              One workspace per agency. Invite the team once you&apos;re in.
+              One account per operator. Invite teammates later.
             </p>
-            <form className="flex flex-col gap-4" action="#">
+            <form action={formAction} className="flex flex-col gap-4">
               <div>
                 <label className="text-sm font-medium mb-1.5 block" htmlFor="name">
                   Full name
                 </label>
-                <input id="name" type="text" className="input" placeholder="Hector Barbosa" />
-              </div>
-              <div>
-                <label className="text-sm font-medium mb-1.5 block" htmlFor="workspace">
-                  Workspace name
-                </label>
                 <input
-                  id="workspace"
+                  id="name"
+                  name="name"
                   type="text"
-                  className="input"
-                  placeholder="e.g. Aurelian Labs"
+                  className={`input ${state?.error ? "is-error" : ""}`}
+                  placeholder="Hector Barbosa"
+                  required
                 />
               </div>
               <div>
@@ -44,25 +44,68 @@ export default function SignupPage() {
                 </label>
                 <input
                   id="email"
+                  name="email"
                   type="email"
-                  className="input"
+                  className={`input ${state?.error ? "is-error" : ""}`}
                   placeholder="you@company.com"
                   autoComplete="email"
+                  required
                 />
               </div>
               <div>
                 <label className="text-sm font-medium mb-1.5 block" htmlFor="pw">
-                  Password
+                  Password{" "}
+                  <span
+                    className="font-mono text-xs"
+                    style={{ color: "var(--color-text-muted)" }}
+                  >
+                    (8+ chars)
+                  </span>
                 </label>
                 <input
                   id="pw"
+                  name="password"
                   type="password"
-                  className="input"
+                  className={`input ${state?.error ? "is-error" : ""}`}
                   autoComplete="new-password"
+                  required
+                  minLength={8}
                 />
               </div>
-              <button type="submit" className="btn btn-primary btn-lg mt-2" disabled>
-                Create account (not wired)
+              {state?.error && (
+                <div
+                  className="p-3 rounded-md text-sm flex items-start gap-2"
+                  style={{
+                    background: "#faf0ee",
+                    border: "1px solid var(--color-status-failed)",
+                    color: "var(--color-status-failed)",
+                  }}
+                >
+                  <svg
+                    width="16"
+                    height="16"
+                    viewBox="0 0 16 16"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="1.5"
+                    style={{ marginTop: 2, flexShrink: 0 }}
+                  >
+                    <circle cx="8" cy="8" r="6" />
+                    <path d="M8 5v4M8 11h.01" />
+                  </svg>
+                  <div>
+                    <strong>Couldn&apos;t create account.</strong> {state.error}.
+                  </div>
+                </div>
+              )}
+              <button type="submit" className="btn btn-primary btn-lg mt-2" disabled={pending}>
+                {pending ? (
+                  <>
+                    <span className="spinner" /> Creating…
+                  </>
+                ) : (
+                  "Create account"
+                )}
               </button>
             </form>
             <p className="mt-7 text-sm text-center" style={{ color: "var(--color-text-muted)" }}>

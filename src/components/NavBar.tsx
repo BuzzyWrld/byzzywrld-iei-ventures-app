@@ -2,7 +2,9 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useEffect, useRef, useState } from "react";
 import { IeiMark } from "./IeiMark";
+import { logoutAction } from "@/app/actions/auth";
 
 const PRIMARY = [
   { href: "/", label: "Projects" },
@@ -12,8 +14,21 @@ const PRIMARY = [
 
 const HIDE_ON = ["/login", "/signup"];
 
-export function NavBar() {
+export function NavBar({ initials = "?", email }: { initials?: string; email?: string }) {
   const pathname = usePathname();
+  const [menuOpen, setMenuOpen] = useState(false);
+  const menuRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    function onClick(e: MouseEvent) {
+      if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
+        setMenuOpen(false);
+      }
+    }
+    if (menuOpen) document.addEventListener("mousedown", onClick);
+    return () => document.removeEventListener("mousedown", onClick);
+  }, [menuOpen]);
+
   if (HIDE_ON.some((p) => pathname.startsWith(p))) return null;
   const isActive = (href: string) =>
     href === "/" ? pathname === "/" : pathname.startsWith(href);
@@ -58,14 +73,57 @@ export function NavBar() {
             </svg>
             New brand
           </Link>
-          <button className="btn btn-ghost btn-icon" aria-label="Account">
-            <span
-              className="inline-flex items-center justify-center w-7 h-7 rounded-full font-mono text-[11px]"
-              style={{ background: "var(--color-surface-2)", border: "1px solid var(--color-border)" }}
+          <div ref={menuRef} className="relative">
+            <button
+              className="btn btn-ghost btn-icon"
+              aria-label="Account"
+              aria-haspopup="true"
+              aria-expanded={menuOpen}
+              onClick={() => setMenuOpen((v) => !v)}
             >
-              HB
-            </span>
-          </button>
+              <span
+                className="inline-flex items-center justify-center w-7 h-7 rounded-full font-mono text-[11px]"
+                style={{ background: "var(--color-surface-2)", border: "1px solid var(--color-border)" }}
+              >
+                {initials}
+              </span>
+            </button>
+            {menuOpen && (
+              <div
+                className="absolute right-0 mt-2 w-56 rounded-md border shadow-lg z-40"
+                style={{
+                  background: "var(--color-surface)",
+                  borderColor: "var(--color-border)",
+                  boxShadow: "var(--sh-2)",
+                }}
+                role="menu"
+              >
+                {email && (
+                  <div
+                    className="px-3 py-2 border-b text-xs"
+                    style={{
+                      color: "var(--color-text-muted)",
+                      borderColor: "var(--color-border)",
+                    }}
+                  >
+                    <div className="kicker mb-0.5">Signed in as</div>
+                    <div className="truncate" style={{ color: "var(--color-text)" }}>
+                      {email}
+                    </div>
+                  </div>
+                )}
+                <form action={logoutAction}>
+                  <button
+                    type="submit"
+                    className="w-full text-left px-3 py-2 text-sm hover:bg-[var(--color-surface-2)]"
+                    role="menuitem"
+                  >
+                    Sign out
+                  </button>
+                </form>
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </header>

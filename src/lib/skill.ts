@@ -15,7 +15,10 @@ export function newBrandId(): string {
  * Fire-and-forget is fine for our single-instance self-hosted setup. A real
  * production multi-instance deploy would want BullMQ or similar.
  */
-export function enqueueBrandBuild(intake: BrandIntake): BrandProject {
+export function enqueueBrandBuild(
+  intake: BrandIntake,
+  opts: { tenantId?: string; userId?: string } = {}
+): BrandProject {
   const id = newBrandId();
   const project: BrandProject = {
     id,
@@ -23,6 +26,8 @@ export function enqueueBrandBuild(intake: BrandIntake): BrandProject {
     status: "pending",
     intake,
     outputs: {},
+    tenantId: opts.tenantId ?? "default",
+    userId: opts.userId,
   };
   createBrand(project);
   void runBrandBuildInBackground(project);

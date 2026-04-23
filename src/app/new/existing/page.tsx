@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useRef, useState } from "react";
 
 type ScrapeResult = {
   url: string;
@@ -13,12 +13,44 @@ type ScrapeResult = {
   fonts: string[];
 };
 
+type AuditResult = {
+  url: string;
+  score: number;
+  summary: string;
+  criteria: { name: string; score: number; note: string }[];
+  gaps: string[];
+};
+
+type StoredUpload = {
+  sessionId: string;
+  filename: string;
+  size: number;
+  mime: string;
+  kind: "logo" | "brand-guide" | "other";
+  url: string;
+};
+
+function formatBytes(n: number): string {
+  if (n < 1024) return `${n} B`;
+  if (n < 1024 * 1024) return `${(n / 1024).toFixed(1)} KB`;
+  return `${(n / 1024 / 1024).toFixed(1)} MB`;
+}
+
 export default function ExistingBrandPage() {
   const router = useRouter();
   const [url, setUrl] = useState("");
   const [scraping, setScraping] = useState(false);
   const [result, setResult] = useState<ScrapeResult | null>(null);
+  const [audit, setAudit] = useState<AuditResult | null>(null);
+  const [auditLoading, setAuditLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  // Uploads
+  const [uploads, setUploads] = useState<StoredUpload[]>([]);
+  const [sessionId, setSessionId] = useState<string | null>(null);
+  const [uploading, setUploading] = useState(false);
+  const [dragOver, setDragOver] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   // Gap-fill fields
   const [companyName, setCompanyName] = useState("");
@@ -46,6 +78,45 @@ export default function ExistingBrandPage() {
     setResult(result);
     if (result.title) setCompanyName(result.title.split(/[·|—\-]/)[0].trim());
     setScraping(false);
+
+    // Kick off audit in background — doesn't block the intake flow.
+    setAuditLoading(true);
+    fetch("/api/audit", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ url: normalized }),
+    })
+      .then(async (r) => {
+        if (!r.ok) return;
+        const body = (await r.json()) as { result: AuditResult };
+        setAudit(body.result);
+      })
+      .catch(() => {})
+      .finally(() => setAuditLoading(false));
+  }
+
+  async function uploadFiles(list: FileList | File[]) {
+    if (!list || (list as FileList).length === 0) return;
+    setUploading(true);
+    setError(null);
+    const form = new FormData();
+    if (sessionId) form.set("sessionId", sessionId);
+    for (const file of Array.from(list)) form.append("files", file);
+    const res = await fetch("/api/uploads", { method: "POST", body: form });
+    if (!res.ok) {
+      const body = (await res.json().catch(() => ({}))) as { error?: string };
+      setError(body.error ?? `HTTP ${res.status}`);
+      setUploading(false);
+      return;
+    }
+    const data = (await res.json()) as { sessionId: string; all: StoredUpload[] };
+    setSessionId(data.sessionId);
+    setUploads(data.all);
+    setUploading(false);
+  }
+
+  function removeUpload(filename: string) {
+    setUploads((list) => list.filter((u) => u.filename !== filename));
   }
 
   async function submit() {
@@ -69,6 +140,10 @@ export default function ExistingBrandPage() {
           result.hero.h1 && `Hero H1: ${result.hero.h1}`,
           result.hero.subtitle && `Hero subtitle: ${result.hero.subtitle}`,
           result.fonts.length && `Detected fonts: ${result.fonts.join(", ")}`,
+          uploads.length &&
+            `Client uploads (session ${sessionId}):\n${uploads
+              .map((u) => `  - ${u.kind}: ${u.filename} (${formatBytes(u.size)})`)
+              .join("\n")}`,
         ].filter(Boolean).join("\n"),
       }),
     });
@@ -148,21 +223,25 @@ export default function ExistingBrandPage() {
                 </div>
               </div>
 
-              {/* File upload UI is visual only for now — backend wiring is future work. */}
               <div>
-                <label className="text-sm font-medium mb-1.5 block">
-                  Brand assets{" "}
-                  <span className="font-mono text-xs" style={{ color: "var(--color-text-muted)" }}>
-                    (coming soon)
-                  </span>
-                </label>
+                <label className="text-sm font-medium mb-1.5 block">Brand assets</label>
                 <div
-                  className="p-8 text-center"
+                  className="p-8 text-center transition cursor-pointer"
+                  onClick={() => fileInputRef.current?.click()}
+                  onDragOver={(e) => {
+                    e.preventDefault();
+                    setDragOver(true);
+                  }}
+                  onDragLeave={() => setDragOver(false)}
+                  onDrop={(e) => {
+                    e.preventDefault();
+                    setDragOver(false);
+                    if (e.dataTransfer.files?.length) void uploadFiles(e.dataTransfer.files);
+                  }}
                   style={{
-                    border: "1.5px dashed var(--color-border)",
+                    border: `1.5px dashed ${dragOver ? "var(--color-primary)" : "var(--color-border)"}`,
                     borderRadius: "var(--r-lg)",
-                    background: "var(--color-surface)",
-                    opacity: 0.55,
+                    background: dragOver ? "var(--color-surface-2)" : "var(--color-surface)",
                   }}
                 >
                   <svg
@@ -179,11 +258,88 @@ export default function ExistingBrandPage() {
                   >
                     <path d="M12 3v14M6 9l6-6 6 6M4 21h16" />
                   </svg>
-                  <div className="font-medium">Logo, brand guide, swatch files</div>
-                  <div className="text-sm mt-1" style={{ color: "var(--color-text-muted)" }}>
-                    SVG, PNG, PDF · drag-and-drop coming in the next build
+                  <div className="font-medium">
+                    {uploading ? "Uploading…" : "Drop logo, brand guide, or swatch files"}
                   </div>
+                  <div className="text-sm mt-1" style={{ color: "var(--color-text-muted)" }}>
+                    SVG, PNG, PDF · up to 20 MB each
+                  </div>
+                  <input
+                    ref={fileInputRef}
+                    type="file"
+                    multiple
+                    accept="image/svg+xml,image/png,image/jpeg,image/webp,application/pdf"
+                    className="hidden"
+                    onChange={(e) => {
+                      if (e.target.files?.length) void uploadFiles(e.target.files);
+                      e.target.value = "";
+                    }}
+                  />
                 </div>
+                {uploads.length > 0 && (
+                  <ul
+                    className="mt-3 card overflow-hidden"
+                    style={{ listStyle: "none", padding: 0, margin: 0 }}
+                  >
+                    {uploads.map((u, i) => (
+                      <li
+                        key={u.filename}
+                        className={`flex items-center gap-3 px-4 py-2.5 ${i > 0 ? "border-t" : ""}`}
+                        style={{ borderColor: "var(--color-border)" }}
+                      >
+                        <span
+                          className="inline-flex items-center justify-center shrink-0"
+                          style={{
+                            width: 28,
+                            height: 28,
+                            borderRadius: 4,
+                            background: "var(--color-surface-2)",
+                            border: "1px solid var(--color-border)",
+                          }}
+                        >
+                          <svg
+                            width="12"
+                            height="12"
+                            viewBox="0 0 14 14"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="1.5"
+                            style={{ color: "var(--color-text-muted)" }}
+                          >
+                            <path d="M3 1h5l3 3v9H3zM8 1v3h3" />
+                          </svg>
+                        </span>
+                        <div className="flex-1 min-w-0">
+                          <div className="text-sm font-medium truncate">{u.filename}</div>
+                          <div
+                            className="text-xs"
+                            style={{ color: "var(--color-text-muted)" }}
+                          >
+                            {u.kind} · {formatBytes(u.size)}
+                          </div>
+                        </div>
+                        <button
+                          type="button"
+                          className="btn btn-ghost btn-icon"
+                          aria-label="Remove from list"
+                          onClick={() => removeUpload(u.filename)}
+                        >
+                          <svg
+                            width="12"
+                            height="12"
+                            viewBox="0 0 14 14"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="1.5"
+                            strokeLinecap="round"
+                          >
+                            <path d="M3 3l8 8M11 3L3 11" />
+                          </svg>
+                        </button>
+                      </li>
+                    ))}
+                  </ul>
+                )}
               </div>
 
               <div className="flex items-center gap-2 pt-2">
@@ -214,6 +370,8 @@ export default function ExistingBrandPage() {
           ) : (
             <ParsedResult
               result={result}
+              audit={audit}
+              auditLoading={auditLoading}
               companyName={companyName}
               industry={industry}
               targetAudience={targetAudience}
@@ -222,7 +380,10 @@ export default function ExistingBrandPage() {
               onCompany={setCompanyName}
               onIndustry={setIndustry}
               onAudience={setTargetAudience}
-              onBack={() => setResult(null)}
+              onBack={() => {
+                setResult(null);
+                setAudit(null);
+              }}
               onSubmit={submit}
             />
           )}
@@ -261,8 +422,92 @@ export default function ExistingBrandPage() {
   );
 }
 
+function AuditCard({ audit, loading }: { audit: AuditResult | null; loading: boolean }) {
+  if (!loading && !audit) return null;
+  const scoreColor = audit
+    ? audit.score >= 80
+      ? "var(--color-status-complete)"
+      : audit.score >= 55
+      ? "var(--color-status-running)"
+      : "var(--color-status-failed)"
+    : "var(--color-text-muted)";
+
+  return (
+    <div className="card p-5">
+      <div className="flex items-start justify-between gap-4 mb-3">
+        <div>
+          <div className="kicker mb-1">Brand audit</div>
+          <div className="font-medium">
+            {loading ? "Scoring…" : audit?.summary ?? ""}
+          </div>
+        </div>
+        {loading ? (
+          <span className="spinner" style={{ color: "var(--color-text-muted)" }} />
+        ) : (
+          <div className="flex items-baseline gap-1.5 shrink-0">
+            <span className="text-3xl font-medium" style={{ color: scoreColor }}>
+              {audit?.score ?? 0}
+            </span>
+            <span className="font-mono text-xs" style={{ color: "var(--color-text-muted)" }}>
+              / 100
+            </span>
+          </div>
+        )}
+      </div>
+      {audit && (
+        <>
+          <div
+            className="w-full h-1.5 rounded-full mb-4"
+            style={{ background: "var(--color-surface-2)" }}
+          >
+            <div
+              style={{
+                width: `${audit.score}%`,
+                height: "100%",
+                background: scoreColor,
+                borderRadius: 999,
+                transition: "width 600ms ease",
+              }}
+            />
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-1.5 mb-4 text-sm">
+            {audit.criteria.map((c) => (
+              <div key={c.name} className="flex items-baseline gap-2">
+                <span style={{ color: "var(--color-text-muted)" }}>{c.name}</span>
+                <span className="font-mono text-xs ml-auto shrink-0">
+                  {c.score}/10
+                </span>
+              </div>
+            ))}
+          </div>
+          {audit.gaps.length > 0 && (
+            <details>
+              <summary
+                className="kicker cursor-pointer select-none"
+                style={{ color: "var(--color-text-muted)" }}
+              >
+                {audit.gaps.length} gaps to address ›
+              </summary>
+              <ul className="mt-3 text-sm space-y-1.5 pl-1">
+                {audit.gaps.map((g, i) => (
+                  <li key={i} className="flex gap-2">
+                    <span style={{ color: "var(--color-text-muted)" }}>—</span>
+                    <span>{g}</span>
+                  </li>
+                ))}
+              </ul>
+            </details>
+          )}
+        </>
+      )}
+    </div>
+  );
+}
+
 function ParsedResult({
   result,
+  audit,
+  auditLoading,
   companyName,
   industry,
   targetAudience,
@@ -275,6 +520,8 @@ function ParsedResult({
   onSubmit,
 }: {
   result: ScrapeResult;
+  audit: AuditResult | null;
+  auditLoading: boolean;
   companyName: string;
   industry: string;
   targetAudience: string;
@@ -288,6 +535,7 @@ function ParsedResult({
 }) {
   return (
     <div className="flex flex-col gap-5">
+      <AuditCard audit={audit} loading={auditLoading} />
       <div className="card p-5">
         <div className="kicker mb-3">Detected from {result.url}</div>
         {result.hero.h1 && (

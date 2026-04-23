@@ -39,4 +39,6 @@ export type BrandProject = {
   error?: string;
   progressStage?: string;
   progressPct?: number;
+  tenantId: string;
+  userId?: string;
 };

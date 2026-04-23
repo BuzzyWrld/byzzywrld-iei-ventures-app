@@ -2,6 +2,9 @@ import Link from "next/link";
 import { listBrands } from "@/lib/db";
 import type { BrandProject } from "@/lib/types";
 import { IeiMark } from "@/components/IeiMark";
+import { currentTenant } from "@/lib/current-tenant";
+import { currentUser } from "@/lib/auth";
+import { redirect } from "next/navigation";
 
 export const dynamic = "force-dynamic";
 
@@ -25,8 +28,11 @@ function outputCount(p: BrandProject): string {
   return n > 0 ? `${n} files` : "—";
 }
 
-export default function Home() {
-  const projects = listBrands();
+export default async function Home() {
+  const user = await currentUser();
+  if (!user) redirect("/login");
+  const tenant = await currentTenant();
+  const projects = listBrands({ tenantId: tenant.id, userId: user.id });
   const counts = {
     total: projects.length,
     running: projects.filter((p) => p.status === "running" || p.status === "pending").length,
@@ -40,7 +46,7 @@ export default function Home() {
     <>
       <div className="flex flex-wrap items-end justify-between gap-4 mb-6">
         <div>
-          <div className="kicker mb-1">Workspace</div>
+          <div className="kicker mb-1">Workspace · {tenant.displayName}</div>
           <h1 className="text-[28px] md:text-[32px] font-medium tracking-tight leading-tight">
             Projects
           </h1>
