@@ -107,6 +107,8 @@ function buildUserPrompt(intake: BrandIntake): string {
     "```json",
     JSON.stringify(intake, null, 2),
     "```",
+    "",
+    "CRITICAL: build around the user's `productDescription` verbatim. Do not invent products, offerings, or use cases beyond what's described there. If their description is short, stay close to its spirit — don't extrapolate a whole portfolio from two sentences.",
   ]
     .filter(Boolean)
     .join("\n");

@@ -5,9 +5,10 @@ import Link from "next/link";
 import { useMemo, useState } from "react";
 import type { BrandIntake } from "@/lib/types";
 
-type StepKey = "company" | "audience" | "tone" | "archetype" | "palette" | "review";
+type StepKey = "company" | "product" | "audience" | "tone" | "archetype" | "palette" | "review";
 const STEPS: { key: StepKey; label: string }[] = [
   { key: "company", label: "Company" },
+  { key: "product", label: "Product" },
   { key: "audience", label: "Audience" },
   { key: "tone", label: "Tone" },
   { key: "archetype", label: "Archetype" },
@@ -45,6 +46,7 @@ const PALETTES = [
 
 const EMPTY: BrandIntake = {
   companyName: "",
+  productDescription: "",
   industry: "",
   targetAudience: "",
   toneOfVoice: "",
@@ -67,6 +69,7 @@ export default function NewBrandPage() {
   const canContinue = useMemo(() => {
     switch (step.key) {
       case "company":   return intake.companyName.trim().length > 0;
+      case "product":   return intake.productDescription.trim().length >= 20;
       case "audience":  return intake.industry.trim().length > 0 && intake.targetAudience.trim().length > 0;
       case "tone":      return intake.toneOfVoice.split(",").map((s) => s.trim()).filter(Boolean).length >= 1;
       case "archetype": return intake.archetype.trim().length > 0;
@@ -144,6 +147,9 @@ export default function NewBrandPage() {
 
         {step.key === "company" && (
           <CompanyStep intake={intake} onChange={set} onSubmit={next} />
+        )}
+        {step.key === "product" && (
+          <ProductStep intake={intake} onChange={set} />
         )}
         {step.key === "audience" && (
           <AudienceStep intake={intake} onChange={set} onSubmit={next} />
@@ -290,6 +296,42 @@ function CompanyStep({
         }}
         autoFocus
       />
+    </>
+  );
+}
+
+function ProductStep({
+  intake,
+  onChange,
+}: {
+  intake: BrandIntake;
+  onChange: (p: Partial<BrandIntake>) => void;
+}) {
+  const len = intake.productDescription.trim().length;
+  return (
+    <>
+      <h1 className="font-serif leading-[1.05] mb-3" style={{ fontSize: 44 }}>
+        What does {intake.companyName || "this business"} actually do?
+      </h1>
+      <p className="text-base mb-6" style={{ color: "var(--color-text-muted)", maxWidth: "54ch" }}>
+        In 2–3 sentences — the product, service, or offering. Be specific. The more concrete you are here, the less the AI has to guess.
+      </p>
+      <textarea
+        className="textarea"
+        rows={5}
+        placeholder={
+          "e.g. We make clean-label electrolyte supplements for people recovering from nights out. Single-serve sachets, fruit flavors, available DTC."
+        }
+        value={intake.productDescription}
+        onChange={(e) => onChange({ productDescription: e.target.value })}
+        autoFocus
+        style={{ fontSize: 16 }}
+      />
+      <p className="mt-3 text-xs" style={{ color: "var(--color-text-muted)" }}>
+        {len < 20
+          ? `${20 - len} more characters needed — keep going.`
+          : `${len} characters. Good detail.`}
+      </p>
     </>
   );
 }
@@ -507,6 +549,7 @@ function ReviewStep({
       <div className="card p-5 mb-6">
         <div className="grid grid-cols-1 sm:grid-cols-[160px_1fr] gap-y-3 gap-x-6 text-sm">
           <ReviewRow label="Company" value={intake.companyName} />
+          <ReviewRow label="Product" value={intake.productDescription} />
           <ReviewRow label="Industry" value={intake.industry} />
           <ReviewRow label="Audience" value={intake.targetAudience} />
           <ReviewRow label="Tone" value={intake.toneOfVoice || "—"} />

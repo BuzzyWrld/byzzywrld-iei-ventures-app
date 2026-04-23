@@ -128,6 +128,10 @@ export default function ExistingBrandPage() {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         companyName,
+        productDescription:
+          result.description ||
+          result.hero.subtitle ||
+          `Existing brand at ${result.url}. Scraped context in notes.`,
         industry,
         targetAudience,
         toneOfVoice: "confident, clear",

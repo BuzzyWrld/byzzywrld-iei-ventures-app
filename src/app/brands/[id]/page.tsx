@@ -325,13 +325,39 @@ function CompletePanel({
   project: BrandProject;
   brand: LiveBrandJson | null;
 }) {
+  // Imported-brand flow puts 'Scraped from' at the top of intake.notes.
+  // Those users arrived WITH an existing brand kit — they want to see the
+  // AI-harmonized palette/typography first, then explore alternate logos.
+  // Scratch users are creating from nothing — the logo is the payoff moment.
+  const isImported =
+    typeof project.intake.notes === "string" &&
+    project.intake.notes.startsWith("Scraped from");
+
+  if (isImported) {
+    return (
+      <>
+        <Positioning brand={brand} />
+        <Palette brand={brand} />
+        <PaletteExpansion project={project} />
+        <Typography brand={brand} />
+        <LogoOptions project={project} />
+        <LandingOptions project={project} />
+        <SocialKit project={project} />
+        <PitchOnePager project={project} />
+        <EmailKit project={project} />
+        <Downloads project={project} />
+      </>
+    );
+  }
+
+  // Scratch flow: logos first — that's the moment that sells the product.
   return (
     <>
       <Positioning brand={brand} />
-      <Palette brand={brand} />
-      <PaletteExpansion project={project} />
-      <Typography brand={brand} />
       <LogoOptions project={project} />
+      <Palette brand={brand} />
+      <Typography brand={brand} />
+      <PaletteExpansion project={project} />
       <LandingOptions project={project} />
       <SocialKit project={project} />
       <PitchOnePager project={project} />

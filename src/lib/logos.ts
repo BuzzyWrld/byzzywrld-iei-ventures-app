@@ -41,59 +41,60 @@ function fontOf(
   return v.family ?? v.name ?? "Geist, Inter, sans-serif";
 }
 
-const SYSTEM_PROMPT = `You are a senior brand designer specializing in logo systems. You produce production-ready SVG logos by hand, following the design principles below.
+const SYSTEM_PROMPT = `You are a senior brand designer producing production-ready SVG logos by hand.
 
-DESIGN PRINCIPLES (from logo-theory.md):
-- Simplicity: must read at 16px.
-- Single strong idea per mark — no visual noise.
-- Geometric anchoring: every shape built on circle, square, triangle, or golden ratio.
-- Weight balance: blur-test centered.
+DESIGN PRINCIPLES:
+- Simplicity: must read at 16px. Single strong idea per mark.
+- Geometric anchoring: shapes built from circles, squares, triangles, or golden ratios.
 - Max 2 typefaces, max 3 colors per primary version.
-- No emoji, no illustration, no stock imagery.
-- Must work black-on-white as a fallback.
-- Typography-led unless otherwise specified.
+- No emoji, no illustration, no stock imagery, no decorative flourishes.
 
-OUTPUT:
-Return ONLY valid JSON, no markdown fences, no prose:
+CRITICAL CONTENT RULES:
+- The ONLY text in the logo is the brand name (or its initials for monograms).
+- NEVER add taglines, subtitles, descriptors like "CO.", "STUDIO", "LABS", the industry, or category text.
+- NEVER include the tagline as SVG text even if it's mentioned in the brief.
+- A logo is a mark, not a business card.
+
+DISTINCTNESS RULE (non-negotiable):
+The 3 variants must be visually and conceptually distinct. NOT 3 wordmarks. NOT 3 monograms.
+  1. WORDMARK   — pure typography, brand name set beautifully, optional 1-color accent detail (a dot, a rule, a single modified letter). No container, no separate mark.
+  2. MONOGRAM   — brand initials inside a bordered container (square, circle, or hexagon). No wordmark beside it in this variant.
+  3. MARK+LOCKUP — abstract geometric mark (built from 1–2 primitives) paired with the full brand name set beside it.
+
+OUTPUT (JSON only, no fences, no prose):
 {
   "variants": [
     {
-      "key": "wordmark"   | "monogram" | "mark" | "emblem" | "combination",
-      "title": "<2-3 word name>",
-      "rationale": "<one-sentence why this fits the brand>",
-      "svg": "<self-contained SVG with xmlns + viewBox + no external resources>"
+      "key": "wordmark" | "monogram" | "mark-lockup",
+      "title": "<2-3 word name for this direction>",
+      "rationale": "<one-sentence why this approach fits the brand's tone>",
+      "svg": "<self-contained SVG>"
     }
   ]
 }
 
-SVG constraints:
+SVG TECH:
 - xmlns="http://www.w3.org/2000/svg"
-- viewBox="0 0 400 160" (landscape lockup) OR "0 0 200 200" (square mark)
-- Use the brand's primary, accent, and neutral colors (hex) from the brief
-- Use the brand's heading font family for any typography (inline font-family attribute)
-- No <image>, no <foreignObject>, no external fonts, no data: URIs
-- Should render identically in any browser/editor with just the SVG source`;
+- viewBox="0 0 400 160" for wordmark & mark-lockup, "0 0 200 200" for monogram
+- Use brand primary + accent colors via inline fill
+- Inline font-family using the brand's heading font
+- No <image>, no <foreignObject>, no external resources, no data: URIs`;
 
 function buildUserPrompt(brand: BrandForLogos, count: number): string {
   const heading = fontOf(brand.typography?.heading);
   const c = brand.colors ?? {};
   return [
-    `Design ${count} DISTINCT logo directions for the following brand. Each must use a different conceptual approach — never produce ${count} wordmarks or ${count} similar marks.`,
+    `Design ${count} DISTINCT logo directions for the brand below. Follow the 3 approaches in order: wordmark, monogram, mark-lockup.`,
     "",
-    "Suggested direction spread:",
-    `  1. wordmark      — typography-led, the brand name set beautifully with subtle detail`,
-    `  2. monogram      — initials in a bordered container / seal / badge`,
-    `  3. geometric mark — abstract mark built from 1-2 primitives, paired with small typography`,
+    "REMINDER: the ONLY text allowed anywhere in the logo is the brand name (or its initials). No tagline, no industry, no subtitle, no descriptor.",
     "",
     "Brand:",
     `  Name: ${brand.name}`,
-    brand.tagline ? `  Tagline: ${brand.tagline}` : "",
-    brand.positioning ? `  Positioning: ${brand.positioning.slice(0, 240)}` : "",
     brand.tone?.length ? `  Tone: ${brand.tone.join(", ")}` : "",
     `  Heading font: ${heading}`,
-    `  Colors: primary=${c.primary ?? "#111"}, secondary=${c.secondary ?? "#555"}, accent=${c.accent ?? "#c00"}, neutral=${c.neutral ?? "#fff"}`,
+    `  Colors: primary=${c.primary ?? "#111"}, accent=${c.accent ?? "#c00"}, neutral=${c.neutral ?? "#fff"}`,
     "",
-    "Return exactly this many variants. JSON only.",
+    "Return exactly 3 variants. JSON only.",
   ]
     .filter(Boolean)
     .join("\n");

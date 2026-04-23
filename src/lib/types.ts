@@ -2,6 +2,7 @@ import { z } from "zod";
 
 export const BrandIntakeSchema = z.object({
   companyName: z.string().min(1),
+  productDescription: z.string().min(1),
   industry: z.string().min(1),
   targetAudience: z.string().min(1),
   toneOfVoice: z.string().min(1),
