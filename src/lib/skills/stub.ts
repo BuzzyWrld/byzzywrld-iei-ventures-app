@@ -4,8 +4,8 @@
  */
 import fs from "node:fs";
 import path from "node:path";
-import { PDFDocument, StandardFonts, rgb } from "pdf-lib";
 import type { BrandIntake, BrandJson } from "@/lib/types";
+import { renderPdfFromHtml } from "@/lib/pdf";
 import type {
   BrandPlaybookSkill,
   SkillManifest,
@@ -34,23 +34,87 @@ function synthesizeBrand(intake: BrandIntake): BrandJson {
 }
 
 function renderPlaybookHtml(b: BrandJson, intake: BrandIntake): string {
-  return `<!doctype html><html><head><meta charset="utf-8"/><title>${b.name} — Brand Playbook</title></head>
-<body style="font-family:${b.typography.body};margin:0;background:${b.colors.neutral}">
-<div style="max-width:820px;margin:0 auto;padding:64px 48px">
-  <h1 style="font-size:48px;margin:0 0 8px;color:${b.colors.primary}">${b.name}</h1>
-  <div style="color:#555;font-size:18px">${b.tagline}</div>
-  <h2 style="margin-top:48px;color:${b.colors.primary}">Positioning</h2><p>${b.positioning}</p>
-  <h2 style="color:${b.colors.primary}">Colors</h2>
-  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px">
-    ${[b.colors.primary, b.colors.secondary, b.colors.accent, b.colors.neutral]
-      .map((c) => `<div style="aspect-ratio:1;border-radius:12px;background:${c};padding:12px;color:#fff;font-family:monospace;font-size:13px;display:flex;align-items:flex-end">${c}</div>`)
+  // Multi-page structure per SKILL.md Step 3: 850×1100px .page divs.
+  // Real skill produces 18–28 pages; stub emits 3 so the pipeline is exercised.
+  const page = (content: string) =>
+    `<div class="page">${content}</div>`;
+  const swatches = [b.colors.primary, b.colors.secondary, b.colors.accent, b.colors.neutral];
+  return `<!doctype html><html><head><meta charset="utf-8"/><title>${b.name} — Brand Playbook</title>
+<style>
+  :root {
+    --primary: ${b.colors.primary};
+    --secondary: ${b.colors.secondary};
+    --accent: ${b.colors.accent};
+    --neutral: ${b.colors.neutral};
+    --font-body: ${b.typography.body};
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: var(--font-body); color: #0b0b0b; background: #eee; }
+  .page { width: 850px; height: 1100px; background: var(--neutral); padding: 64px 56px; page-break-after: always; position: relative; overflow: hidden; }
+  .page + .page { margin-top: 24px; }
+  .eyebrow { font-size: 11px; letter-spacing: 0.3em; text-transform: uppercase; color: var(--primary); opacity: 0.7; }
+  h1.display { font-size: 72px; margin: 16px 0 12px; color: var(--primary); letter-spacing: -0.02em; line-height: 1.0; }
+  h2 { font-size: 28px; margin: 32px 0 12px; color: var(--primary); letter-spacing: -0.01em; }
+  .tagline { font-size: 20px; color: #555; max-width: 520px; }
+  .swatches { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-top: 12px; }
+  .sw { aspect-ratio: 3/4; border-radius: 14px; padding: 16px; color: #fff; font-family: monospace; font-size: 12px; display: flex; align-items: flex-end; }
+  .sw.light { color: #111; border: 1px solid #e5e7eb; }
+  .pill { display: inline-block; padding: 7px 14px; border-radius: 999px; background: #fff; border: 1px solid #e5e7eb; margin: 6px 6px 0 0; font-size: 14px; }
+  .kv { display: grid; grid-template-columns: 180px 1fr; gap: 14px 20px; margin-top: 12px; }
+  .kv dt { color: #666; font-size: 13px; }
+  .kv dd { margin: 0; font-size: 15px; }
+  .footer { position: absolute; bottom: 28px; left: 56px; right: 56px; display: flex; justify-content: space-between; color: #aaa; font-size: 11px; }
+</style></head>
+<body>
+
+${page(`
+  <div class="eyebrow">Brand Playbook · v1.0 · 2026</div>
+  <h1 class="display">${b.name}</h1>
+  <div class="tagline">${b.tagline}</div>
+  <div class="footer"><span>Confidential</span><span>Page 1</span></div>
+`)}
+
+${page(`
+  <div class="eyebrow">01 · Positioning</div>
+  <h2>Positioning</h2>
+  <p style="font-size:17px;line-height:1.6;max-width:640px">${b.positioning}</p>
+
+  <h2 style="margin-top:56px">Tone of Voice</h2>
+  <div>${b.tone.map((t) => `<span class="pill">${t}</span>`).join("")}</div>
+
+  <h2 style="margin-top:56px">Intake Summary</h2>
+  <dl class="kv">
+    <dt>Industry</dt><dd>${intake.industry}</dd>
+    <dt>Target Audience</dt><dd>${intake.targetAudience}</dd>
+    <dt>Competitors</dt><dd>${intake.competitors || "—"}</dd>
+    <dt>Archetype</dt><dd>${intake.archetype || "—"}</dd>
+    <dt>Notes</dt><dd>${intake.notes || "—"}</dd>
+  </dl>
+  <div class="footer"><span>${b.name}</span><span>Page 2</span></div>
+`)}
+
+${page(`
+  <div class="eyebrow">02 · Brand Kit</div>
+  <h2>Color System</h2>
+  <div class="swatches">
+    ${swatches
+      .map((c, i) => {
+        const labels = ["Primary", "Secondary", "Accent", "Neutral"];
+        const light = i === 3;
+        return `<div class="sw ${light ? "light" : ""}" style="background:${c}"><div><div style="opacity:.8">${labels[i]}</div>${c}</div></div>`;
+      })
       .join("")}
   </div>
-  <h2 style="color:${b.colors.primary}">Tone</h2>
-  <div>${b.tone.map((t) => `<span style="display:inline-block;padding:6px 12px;border-radius:999px;background:#fff;border:1px solid #e5e7eb;margin:4px 6px 0 0">${t}</span>`).join("")}</div>
-  <h2 style="color:${b.colors.primary}">Intake</h2>
-  <pre style="background:#fff;padding:16px;border-radius:8px">${JSON.stringify(intake, null, 2)}</pre>
-</div></body></html>`;
+
+  <h2 style="margin-top:48px">Typography</h2>
+  <dl class="kv">
+    <dt>Heading</dt><dd style="font-family:${b.typography.heading};font-size:28px">${b.typography.heading}</dd>
+    <dt>Body</dt><dd style="font-family:${b.typography.body};font-size:16px">${b.typography.body}</dd>
+  </dl>
+  <div class="footer"><span>${b.name}</span><span>Page 3</span></div>
+`)}
+
+</body></html>`;
 }
 
 function renderLandingHtml(b: BrandJson): string {
@@ -78,49 +142,8 @@ function renderLogoSvg(b: BrandJson): string {
 </svg>`;
 }
 
-async function renderPlaybookPdf(b: BrandJson, intake: BrandIntake): Promise<Uint8Array> {
-  const doc = await PDFDocument.create();
-  const page = doc.addPage([612, 792]);
-  const font = await doc.embedFont(StandardFonts.HelveticaBold);
-  const body = await doc.embedFont(StandardFonts.Helvetica);
-
-  const hex = (h: string) => {
-    const m = h.replace("#", "");
-    return rgb(
-      parseInt(m.slice(0, 2), 16) / 255,
-      parseInt(m.slice(2, 4), 16) / 255,
-      parseInt(m.slice(4, 6), 16) / 255
-    );
-  };
-
-  page.drawRectangle({ x: 0, y: 732, width: 612, height: 60, color: hex(b.colors.primary) });
-  page.drawText(b.name, { x: 48, y: 752, size: 28, font, color: rgb(1, 1, 1) });
-  page.drawText(b.tagline, { x: 48, y: 700, size: 12, font: body, color: hex("#555555") });
-  page.drawText("Positioning", { x: 48, y: 660, size: 16, font, color: hex(b.colors.primary) });
-  page.drawText(b.positioning, { x: 48, y: 640, size: 11, font: body, color: rgb(0.1, 0.1, 0.1), maxWidth: 516 });
-  page.drawText("Colors", { x: 48, y: 580, size: 16, font, color: hex(b.colors.primary) });
-
-  const swatches = [b.colors.primary, b.colors.secondary, b.colors.accent, b.colors.neutral];
-  swatches.forEach((c, i) => {
-    page.drawRectangle({ x: 48 + i * 120, y: 490, width: 100, height: 70, color: hex(c) });
-    page.drawText(c, { x: 48 + i * 120, y: 470, size: 9, font: body, color: rgb(0.3, 0.3, 0.3) });
-  });
-
-  page.drawText("Tone of Voice", { x: 48, y: 430, size: 16, font, color: hex(b.colors.primary) });
-  page.drawText(b.tone.join(" · "), { x: 48, y: 410, size: 11, font: body, color: rgb(0.1, 0.1, 0.1) });
-
-  page.drawText("Industry", { x: 48, y: 360, size: 11, font, color: hex("#666666") });
-  page.drawText(intake.industry, { x: 48, y: 344, size: 11, font: body, color: rgb(0.1, 0.1, 0.1) });
-  page.drawText("Target Audience", { x: 48, y: 320, size: 11, font, color: hex("#666666") });
-  page.drawText(intake.targetAudience, { x: 48, y: 304, size: 11, font: body, color: rgb(0.1, 0.1, 0.1) });
-
-  page.drawText(
-    "STUB — replaced by Buzz's Playwright+PIL pipeline (brief slide 05)",
-    { x: 48, y: 40, size: 9, font: body, color: hex("#9ca3af") }
-  );
-
-  return await doc.save();
-}
+// PDF rendering moved to @/lib/pdf (screenshot-based Playwright pipeline
+// per brief slide 05). Both stub and agent-sdk adapters use the same pipeline.
 
 export const stubSkill: BrandPlaybookSkill = {
   id: "stub@0.1",
@@ -144,8 +167,10 @@ export const stubSkill: BrandPlaybookSkill = {
     fs.writeFileSync(path.join(outputDir, "logo.svg"), renderLogoSvg(brand));
 
     onProgress?.("rendering pdf", 0.9);
-    const pdfBytes = await renderPlaybookPdf(brand, intake);
-    fs.writeFileSync(path.join(outputDir, "playbook.pdf"), pdfBytes);
+    await renderPdfFromHtml(
+      path.join(outputDir, "playbook.html"),
+      path.join(outputDir, "playbook.pdf")
+    );
 
     onProgress?.("complete", 1);
     return {
