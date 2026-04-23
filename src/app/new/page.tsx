@@ -295,7 +295,7 @@ function CompanyStep({
   return (
     <>
       <h1 className="font-serif leading-[1.05] mb-3" style={{ fontSize: 48 }}>
-        Let&apos;s start with the basics. What&apos;s the company called?
+        What&apos;s the company called?
       </h1>
       <p className="text-base mb-6" style={{ color: "var(--color-text-muted)", maxWidth: "52ch" }}>
         Legal, operating, or working name — whichever you want the brand system built around.
@@ -552,11 +552,29 @@ function LogoStep({
   intake: BrandIntake;
   onChange: (p: Partial<BrandIntake>) => void;
 }) {
-  const mode: "create" | "upload" = intake.uploadedLogoPath ? "upload" : "create";
+  // Track the chosen mode explicitly — having an uploadedLogoPath implies
+  // upload-mode, but the user can be in upload-mode BEFORE they've actually
+  // picked a file (otherwise the chicken-and-egg: we need the hidden input
+  // to exist to trigger the file picker, but we were only rendering it
+  // after the state flip).
+  const [mode, setMode] = useState<"create" | "upload">(
+    intake.uploadedLogoPath ? "upload" : "create"
+  );
   const [uploading, setUploading] = useState(false);
   const [dragOver, setDragOver] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const fileRef = useRef<HTMLInputElement>(null);
+
+  function pickCreate() {
+    setMode("create");
+    onChange({ uploadedLogoPath: "" });
+  }
+  function pickUpload() {
+    setMode("upload");
+    // Trigger file picker on next tick so the input has definitely mounted
+    // (it's now always rendered, but we defer for safety across StrictMode).
+    setTimeout(() => fileRef.current?.click(), 0);
+  }
 
   async function uploadLogo(file: File) {
     setUploading(true);
@@ -591,7 +609,7 @@ function LogoStep({
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
         <button
           type="button"
-          onClick={() => onChange({ uploadedLogoPath: "" })}
+          onClick={pickCreate}
           className={`card card-hover p-5 text-left ${mode === "create" ? "ring-2" : ""}`}
           style={
             mode === "create"
@@ -606,7 +624,7 @@ function LogoStep({
         </button>
         <button
           type="button"
-          onClick={() => fileRef.current?.click()}
+          onClick={pickUpload}
           className={`card card-hover p-5 text-left ${mode === "upload" ? "ring-2" : ""}`}
           style={
             mode === "upload"
@@ -620,6 +638,19 @@ function LogoStep({
           </div>
         </button>
       </div>
+
+      {/* File input is ALWAYS rendered (hidden) so the ref is always valid
+          regardless of current mode. Visible dropzone below toggles on mode. */}
+      <input
+        ref={fileRef}
+        type="file"
+        accept="image/svg+xml,image/png,image/jpeg,image/webp"
+        className="hidden"
+        onChange={(e) => {
+          if (e.target.files?.[0]) void uploadLogo(e.target.files[0]);
+          e.target.value = "";
+        }}
+      />
 
       {mode === "upload" && (
         <div
@@ -652,30 +683,20 @@ function LogoStep({
               <div className="text-left">
                 <div className="font-medium text-sm">Logo uploaded</div>
                 <div className="text-xs" style={{ color: "var(--color-text-muted)" }}>
-                  Click the card again to replace.
+                  Click to replace.
                 </div>
               </div>
             </div>
           ) : (
             <div>
               <div className="font-medium">
-                {uploading ? "Uploading…" : "Drop your logo here"}
+                {uploading ? "Uploading…" : "Drop your logo here or click to browse"}
               </div>
               <div className="text-sm mt-1" style={{ color: "var(--color-text-muted)" }}>
                 SVG, PNG, JPG · up to 20 MB
               </div>
             </div>
           )}
-          <input
-            ref={fileRef}
-            type="file"
-            accept="image/svg+xml,image/png,image/jpeg,image/webp"
-            className="hidden"
-            onChange={(e) => {
-              if (e.target.files?.[0]) void uploadLogo(e.target.files[0]);
-              e.target.value = "";
-            }}
-          />
         </div>
       )}
       {error && (

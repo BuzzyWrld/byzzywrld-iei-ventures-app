@@ -36,7 +36,9 @@
     ".next/dev/types/**/*.ts",
     "**/*.mts",
     "/Users/henriquebarbosa/.cache/iei-ventures-next/types/**/*.ts",
-    "/Users/henriquebarbosa/.cache/iei-ventures-next/dev/types/**/*.ts"
+    "/Users/henriquebarbosa/.cache/iei-ventures-next/dev/types/**/*.ts",
+    ".next.nosync/types/**/*.ts",
+    ".next.nosync/dev/types/**/*.ts"
   ],
   "exclude": [
     "node_modules"
