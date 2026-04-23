@@ -330,8 +330,57 @@ function CompletePanel({
       <Positioning brand={brand} />
       <Palette brand={brand} />
       <Typography brand={brand} />
+      <LogoOptions project={project} />
       <Downloads project={project} />
     </>
+  );
+}
+
+function LogoOptions({ project }: { project: BrandProject }) {
+  const variants = project.outputs.logoVariants ?? [];
+  if (variants.length === 0) return null;
+  return (
+    <div className="mb-12">
+      <div className="flex items-end justify-between mb-4 flex-wrap gap-2">
+        <div>
+          <div className="kicker mb-1">03 · Logo options</div>
+          <h2 className="text-2xl font-medium tracking-tight">Three directions</h2>
+        </div>
+      </div>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        {variants.map((v) => (
+          <div key={v.key} className="card overflow-hidden flex flex-col">
+            <div
+              className="flex items-center justify-center p-8"
+              style={{ minHeight: 160, background: "var(--color-surface-2)" }}
+            >
+              <object
+                data={v.url}
+                type="image/svg+xml"
+                aria-label={v.title}
+                style={{ maxWidth: "100%", maxHeight: 120, pointerEvents: "none" }}
+              />
+            </div>
+            <div className="p-4 border-t" style={{ borderColor: "var(--color-border)" }}>
+              <div className="flex items-baseline justify-between gap-2 mb-1">
+                <div className="font-medium tracking-tight">{v.title}</div>
+                <a
+                  href={v.url}
+                  download
+                  className="font-mono text-[11px] hover:underline"
+                  style={{ color: "var(--color-text-muted)" }}
+                >
+                  Download
+                </a>
+              </div>
+              <div className="text-xs" style={{ color: "var(--color-text-muted)" }}>
+                {v.rationale}
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
   );
 }
 

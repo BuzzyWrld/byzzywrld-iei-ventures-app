@@ -1,8 +1,11 @@
 import { randomUUID } from "node:crypto";
+import fs from "node:fs";
+import path from "node:path";
 import { createBrand, getBrand, updateBrand } from "./db";
 import { skill } from "./skills";
 import { brandDir } from "./storage";
-import type { BrandIntake, BrandProject } from "./types";
+import { generateLogoVariants } from "./logos";
+import type { BrandIntake, BrandProject, LogoVariantRef } from "./types";
 
 export function newBrandId(): string {
   return randomUUID();
@@ -48,6 +51,25 @@ async function runBrandBuildInBackground(project: BrandProject): Promise<void> {
     });
     const fileUrl = (name?: string) =>
       name ? `/api/brands/${id}/files/${encodeURIComponent(name)}` : undefined;
+
+    // Dedicated logo-variants pass — runs regardless of main adapter.
+    // Best-effort; empty array on failure, doesn't fail the whole build.
+    let logoVariants: LogoVariantRef[] = [];
+    try {
+      updateBrand(id, { progressStage: "generating logo options", progressPct: 0.92 });
+      const brandJsonPath = path.join(outDir, manifest.brandJson);
+      const brand = JSON.parse(fs.readFileSync(brandJsonPath, "utf8"));
+      const variants = await generateLogoVariants(brand, outDir, 3);
+      logoVariants = variants.map((v) => ({
+        key: v.key,
+        title: v.title,
+        rationale: v.rationale,
+        url: `/api/brands/${id}/files/${encodeURIComponent(v.filename)}`,
+      }));
+    } catch (err) {
+      console.warn(`[skill] logo variants failed:`, err instanceof Error ? err.message : err);
+    }
+
     updateBrand(id, {
       status: "complete",
       progressStage: "complete",
@@ -58,6 +80,7 @@ async function runBrandBuildInBackground(project: BrandProject): Promise<void> {
         playbookPdf: fileUrl(manifest.playbookPdf),
         landingHtml: fileUrl(manifest.landingHtml),
         logoSvg: fileUrl(manifest.logoSvg),
+        logoVariants: logoVariants.length ? logoVariants : undefined,
       },
     });
   } catch (err) {

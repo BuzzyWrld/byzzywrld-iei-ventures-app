@@ -21,12 +21,20 @@ export type BrandJson = {
   positioning: string;
 };
 
+export type LogoVariantRef = {
+  key: string;
+  title: string;
+  rationale: string;
+  url: string;
+};
+
 export type BrandOutputs = {
   brandJson?: string;
   playbookHtml?: string;
   playbookPdf?: string;
   landingHtml?: string;
   logoSvg?: string;
+  logoVariants?: LogoVariantRef[];
   landingLiveUrl?: string;
 };
 
