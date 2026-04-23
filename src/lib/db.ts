@@ -20,9 +20,26 @@ export function db(): Database.Database {
       status TEXT NOT NULL,
       intake_json TEXT NOT NULL,
       outputs_json TEXT NOT NULL DEFAULT '{}',
-      error TEXT
+      error TEXT,
+      progress_stage TEXT,
+      progress_pct REAL
     );
   `);
+  // Idempotent migrations for columns added after initial schema.
+  const cols = (_db.prepare(`PRAGMA table_info(brands)`).all() as { name: string }[]).map(
+    (c) => c.name
+  );
+  if (!cols.includes("progress_stage")) {
+    _db.exec(`ALTER TABLE brands ADD COLUMN progress_stage TEXT`);
+  }
+  if (!cols.includes("progress_pct")) {
+    _db.exec(`ALTER TABLE brands ADD COLUMN progress_pct REAL`);
+  }
+  // Any brand marked 'running' at process start is orphaned from a previous
+  // process crash — mark them failed so the UI surfaces the issue.
+  _db.prepare(
+    `UPDATE brands SET status = 'failed', error = 'server restarted while job was running' WHERE status = 'running'`
+  ).run();
   return _db;
 }
 
@@ -33,6 +50,8 @@ type Row = {
   intake_json: string;
   outputs_json: string;
   error: string | null;
+  progress_stage: string | null;
+  progress_pct: number | null;
 };
 
 const rowToProject = (r: Row): BrandProject => ({
@@ -42,13 +61,15 @@ const rowToProject = (r: Row): BrandProject => ({
   intake: JSON.parse(r.intake_json),
   outputs: JSON.parse(r.outputs_json || "{}"),
   error: r.error ?? undefined,
+  progressStage: r.progress_stage ?? undefined,
+  progressPct: r.progress_pct ?? undefined,
 });
 
 export function createBrand(p: BrandProject): void {
   db()
     .prepare(
-      `INSERT INTO brands (id, created_at, status, intake_json, outputs_json, error)
-       VALUES (?, ?, ?, ?, ?, ?)`
+      `INSERT INTO brands (id, created_at, status, intake_json, outputs_json, error, progress_stage, progress_pct)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?)`
     )
     .run(
       p.id,
@@ -56,7 +77,9 @@ export function createBrand(p: BrandProject): void {
       p.status,
       JSON.stringify(p.intake),
       JSON.stringify(p.outputs),
-      p.error ?? null
+      p.error ?? null,
+      p.progressStage ?? null,
+      p.progressPct ?? null
     );
 }
 
@@ -66,9 +89,18 @@ export function updateBrand(id: string, patch: Partial<BrandProject>): void {
   const next = { ...current, ...patch };
   db()
     .prepare(
-      `UPDATE brands SET status = ?, outputs_json = ?, error = ? WHERE id = ?`
+      `UPDATE brands
+       SET status = ?, outputs_json = ?, error = ?, progress_stage = ?, progress_pct = ?
+       WHERE id = ?`
     )
-    .run(next.status, JSON.stringify(next.outputs), next.error ?? null, id);
+    .run(
+      next.status,
+      JSON.stringify(next.outputs),
+      next.error ?? null,
+      next.progressStage ?? null,
+      next.progressPct ?? null,
+      id
+    );
 }
 
 export function getBrand(id: string): BrandProject | null {

@@ -1,6 +1,6 @@
 import { NextRequest } from "next/server";
 import { BrandIntakeSchema } from "@/lib/types";
-import { triggerBrandBuild } from "@/lib/skill";
+import { enqueueBrandBuild } from "@/lib/skill";
 import { listBrands } from "@/lib/db";
 
 export async function GET() {
@@ -16,6 +16,8 @@ export async function POST(request: NextRequest) {
       { status: 400 }
     );
   }
-  const project = await triggerBrandBuild(parsed.data);
-  return Response.json({ project }, { status: 201 });
+  const project = enqueueBrandBuild(parsed.data);
+  // 202 Accepted — job accepted, running in background. Client polls
+  // GET /api/brands/:id to track progress.
+  return Response.json({ project }, { status: 202 });
 }

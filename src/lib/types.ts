@@ -21,17 +21,22 @@ export type BrandJson = {
   positioning: string;
 };
 
+export type BrandOutputs = {
+  brandJson?: string;
+  playbookHtml?: string;
+  playbookPdf?: string;
+  landingHtml?: string;
+  logoSvg?: string;
+  landingLiveUrl?: string;
+};
+
 export type BrandProject = {
   id: string;
   createdAt: string;
   status: "pending" | "running" | "complete" | "failed";
   intake: BrandIntake;
-  outputs: {
-    brandJson?: string;
-    playbookHtml?: string;
-    playbookPdf?: string;
-    landingHtml?: string;
-    logoSvg?: string;
-  };
+  outputs: BrandOutputs;
   error?: string;
+  progressStage?: string;
+  progressPct?: number;
 };

@@ -1,17 +1,48 @@
+"use client";
+
 import Link from "next/link";
-import { notFound } from "next/navigation";
-import { getBrand } from "@/lib/db";
+import { use, useEffect, useState } from "react";
+import type { BrandProject } from "@/lib/types";
 
-export const dynamic = "force-dynamic";
-
-export default async function BrandProjectPage({
+export default function BrandProjectPage({
   params,
 }: {
   params: Promise<{ id: string }>;
 }) {
-  const { id } = await params;
-  const project = getBrand(id);
-  if (!project) notFound();
+  const { id } = use(params);
+  const [project, setProject] = useState<BrandProject | null>(null);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    let cancelled = false;
+    let timer: ReturnType<typeof setTimeout> | null = null;
+
+    async function tick() {
+      try {
+        const res = await fetch(`/api/brands/${id}`);
+        if (!res.ok) {
+          setError(`HTTP ${res.status}`);
+          return;
+        }
+        const { project } = (await res.json()) as { project: BrandProject };
+        if (cancelled) return;
+        setProject(project);
+        if (project.status === "pending" || project.status === "running") {
+          timer = setTimeout(tick, 1500);
+        }
+      } catch (err) {
+        if (!cancelled) setError(err instanceof Error ? err.message : String(err));
+      }
+    }
+    tick();
+    return () => {
+      cancelled = true;
+      if (timer) clearTimeout(timer);
+    };
+  }, [id]);
+
+  if (error) return <p style={{ padding: 24 }}>Error: {error}</p>;
+  if (!project) return <p style={{ padding: 24 }}>Loading…</p>;
 
   const outputs = Object.entries(project.outputs).filter(
     ([, v]) => typeof v === "string"
@@ -25,6 +56,11 @@ export default async function BrandProjectPage({
       <h1>{project.intake.companyName}</h1>
       <p>
         <strong>Status:</strong> {project.status}
+        {project.progressStage && (project.status === "running" || project.status === "pending")
+          ? ` — ${project.progressStage}${
+              project.progressPct ? ` (${Math.round(project.progressPct * 100)}%)` : ""
+            }`
+          : ""}
         {project.error ? ` — ${project.error}` : ""}
       </p>
 
