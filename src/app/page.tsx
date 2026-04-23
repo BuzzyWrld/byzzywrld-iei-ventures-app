@@ -33,18 +33,12 @@ export default async function Home() {
   if (!user) redirect("/login");
   const tenant = await currentTenant();
   const projects = listBrands({ tenantId: tenant.id, userId: user.id });
-  const counts = {
-    total: projects.length,
-    running: projects.filter((p) => p.status === "running" || p.status === "pending").length,
-    complete: projects.filter((p) => p.status === "complete").length,
-    failed: projects.filter((p) => p.status === "failed").length,
-  };
 
   if (projects.length === 0) return <EmptyState />;
 
   return (
     <>
-      <div className="flex flex-wrap items-end justify-between gap-4 mb-6">
+      <div className="flex flex-wrap items-end justify-between gap-4 mb-8">
         <div>
           <div className="kicker mb-1">Workspace · {tenant.displayName}</div>
           <h1 className="text-[28px] md:text-[32px] font-medium tracking-tight leading-tight">
@@ -56,13 +50,6 @@ export default async function Home() {
             New brand
           </Link>
         </div>
-      </div>
-
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
-        <Stat label="Total" value={counts.total} />
-        <Stat label="Running" value={counts.running} colorVar="--color-status-running" />
-        <Stat label="Complete" value={counts.complete} colorVar="--color-status-complete" />
-        <Stat label="Failed" value={counts.failed} colorVar="--color-status-failed" />
       </div>
 
       {/* Desktop table */}
@@ -92,20 +79,6 @@ export default async function Home() {
         ))}
       </div>
     </>
-  );
-}
-
-function Stat({ label, value, colorVar }: { label: string; value: number; colorVar?: string }) {
-  return (
-    <div className="card p-4">
-      <div className="kicker mb-1">{label}</div>
-      <div
-        className="text-2xl font-medium"
-        style={colorVar ? { color: `var(${colorVar})` } : undefined}
-      >
-        {value}
-      </div>
-    </div>
   );
 }
 
