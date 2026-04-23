@@ -71,6 +71,9 @@ export type BrandOutputs = {
   landingHtml?: string;
   logoSvg?: string;
   logoVariants?: LogoVariantRef[];
+  /** Which of the `logoVariants[].key`s the user picked as primary.
+   *  Auto-set to the uploaded path's key when user uploaded their own. */
+  primaryLogoKey?: string;
   landingVariants?: LandingVariantRef[];
   paletteExpansion?: PaletteExpansionRef;
   socialKit?: SocialAssetRef[];

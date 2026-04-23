@@ -520,6 +520,18 @@ function CompletePanel({
   project: BrandProject;
   brand: LiveBrandJson | null;
 }) {
+  const variants = project.outputs.logoVariants ?? [];
+  const primaryPicked = Boolean(project.outputs.primaryLogoKey);
+  const needsLogoPick = variants.length > 0 && !primaryPicked;
+
+  // Gate the rest of the brand kit behind the logo pick. The user sees
+  // three large logo options, picks one, and only then does the rest of
+  // the brand (palette, typography, landing pages, etc.) reveal. This
+  // matches the intent: the logo is the lead decision.
+  if (needsLogoPick) {
+    return <LogoPickerGate project={project} />;
+  }
+
   // Imported-brand flow puts 'Scraped from' at the top of intake.notes.
   // Those users arrived WITH an existing brand kit — they want to see the
   // AI-harmonized palette/typography first, then explore alternate logos.
@@ -878,49 +890,217 @@ function EmailKit({ project }: { project: BrandProject }) {
   );
 }
 
+function LogoPickerGate({ project }: { project: BrandProject }) {
+  const variants = project.outputs.logoVariants ?? [];
+  const [picking, setPicking] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
+
+  async function pick(key: string) {
+    setPicking(key);
+    setError(null);
+    const res = await fetch(`/api/brands/${project.id}/primary-logo`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ key }),
+    });
+    if (!res.ok) {
+      const body = (await res.json().catch(() => ({}))) as { error?: string };
+      setError(body.error ?? `HTTP ${res.status}`);
+      setPicking(null);
+      return;
+    }
+    // Reload so the rest of the brand kit reveals.
+    window.location.reload();
+  }
+
+  return (
+    <div className="mb-12">
+      <div className="kicker mb-3">Pick your logo to continue</div>
+      <h2
+        className="font-serif mb-3"
+        style={{ fontSize: 32, lineHeight: 1.15 }}
+      >
+        Three directions. Pick one and we&apos;ll build the rest of your brand around it.
+      </h2>
+      <p className="text-sm mb-8" style={{ color: "var(--color-text-muted)", maxWidth: "56ch" }}>
+        Each uses a different conceptual approach. You can always download the alternatives later.
+      </p>
+
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+        {variants.map((v) => {
+          const isPicking = picking === v.key;
+          const otherPicking = picking !== null && picking !== v.key;
+          return (
+            <div
+              key={v.key}
+              className="card overflow-hidden flex flex-col"
+              style={otherPicking ? { opacity: 0.5 } : undefined}
+            >
+              <div
+                className="flex items-center justify-center p-10"
+                style={{ minHeight: 220, background: "var(--color-surface-2)" }}
+              >
+                <object
+                  data={v.url}
+                  type="image/svg+xml"
+                  aria-label={v.title}
+                  style={{ maxWidth: "100%", maxHeight: 180, pointerEvents: "none" }}
+                />
+              </div>
+              <div
+                className="p-5 border-t flex flex-col flex-1"
+                style={{ borderColor: "var(--color-border)" }}
+              >
+                <div className="font-medium tracking-tight mb-1">{v.title}</div>
+                <div
+                  className="text-xs mb-4 flex-1"
+                  style={{ color: "var(--color-text-muted)" }}
+                >
+                  {v.rationale}
+                </div>
+                <button
+                  type="button"
+                  className="btn btn-primary btn-sm"
+                  onClick={() => pick(v.key)}
+                  disabled={picking !== null}
+                >
+                  {isPicking ? (
+                    <>
+                      <span className="spinner" /> Picking…
+                    </>
+                  ) : (
+                    "Use this logo"
+                  )}
+                </button>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+      {error && (
+        <p className="text-sm" style={{ color: "var(--color-status-failed)" }}>
+          {error}
+        </p>
+      )}
+    </div>
+  );
+}
+
 function LogoOptions({ project }: { project: BrandProject }) {
   const variants = project.outputs.logoVariants ?? [];
   if (variants.length === 0) return null;
+  const primaryKey = project.outputs.primaryLogoKey;
+  const primary = variants.find((v) => v.key === primaryKey);
+  const others = variants.filter((v) => v.key !== primaryKey);
+
   return (
     <div className="mb-12">
       <div className="flex items-end justify-between mb-4 flex-wrap gap-2">
         <div>
-          <div className="kicker mb-1">04 · Logo options</div>
-          <h2 className="text-2xl font-medium tracking-tight">Three directions</h2>
+          <div className="kicker mb-1">04 · Your logo</div>
+          <h2 className="text-2xl font-medium tracking-tight">
+            {primary ? primary.title : "Three directions"}
+          </h2>
         </div>
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        {variants.map((v) => (
-          <div key={v.key} className="card overflow-hidden flex flex-col">
-            <div
-              className="flex items-center justify-center p-8"
-              style={{ minHeight: 160, background: "var(--color-surface-2)" }}
-            >
-              <object
-                data={v.url}
-                type="image/svg+xml"
-                aria-label={v.title}
-                style={{ maxWidth: "100%", maxHeight: 120, pointerEvents: "none" }}
-              />
-            </div>
-            <div className="p-4 border-t" style={{ borderColor: "var(--color-border)" }}>
-              <div className="flex items-baseline justify-between gap-2 mb-1">
-                <div className="font-medium tracking-tight">{v.title}</div>
-                <a
-                  href={v.url}
-                  download
-                  className="font-mono text-[11px] hover:underline"
-                  style={{ color: "var(--color-text-muted)" }}
-                >
-                  Download
-                </a>
-              </div>
-              <div className="text-xs" style={{ color: "var(--color-text-muted)" }}>
-                {v.rationale}
-              </div>
-            </div>
+
+      {/* Primary logo — large feature card */}
+      {primary && (
+        <div className="card overflow-hidden mb-6">
+          <div
+            className="flex items-center justify-center p-12"
+            style={{ minHeight: 260, background: "var(--color-surface-2)" }}
+          >
+            <object
+              data={primary.url}
+              type="image/svg+xml"
+              aria-label={primary.title}
+              style={{ maxWidth: "100%", maxHeight: 180, pointerEvents: "none" }}
+            />
           </div>
-        ))}
+          <div className="p-5 border-t flex items-start justify-between gap-4 flex-wrap" style={{ borderColor: "var(--color-border)" }}>
+            <div>
+              <div className="font-medium tracking-tight mb-1">{primary.title}</div>
+              <div className="text-xs" style={{ color: "var(--color-text-muted)", maxWidth: "60ch" }}>
+                {primary.rationale}
+              </div>
+            </div>
+            <a href={primary.url} download className="btn btn-secondary btn-sm shrink-0">
+              Download SVG
+            </a>
+          </div>
+        </div>
+      )}
+
+      {others.length > 0 && (
+        <>
+          <div className="kicker mb-3">Alternatives</div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {others.map((v) => (
+              <AlternativeLogoCard key={v.key} project={project} variant={v} />
+            ))}
+          </div>
+        </>
+      )}
+    </div>
+  );
+}
+
+function AlternativeLogoCard({
+  project,
+  variant,
+}: {
+  project: BrandProject;
+  variant: { key: string; title: string; rationale: string; url: string };
+}) {
+  const [switching, setSwitching] = useState(false);
+  async function switchTo() {
+    setSwitching(true);
+    const res = await fetch(`/api/brands/${project.id}/primary-logo`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ key: variant.key }),
+    });
+    if (res.ok) window.location.reload();
+    else setSwitching(false);
+  }
+  return (
+    <div className="card overflow-hidden flex flex-col">
+      <div
+        className="flex items-center justify-center p-6"
+        style={{ minHeight: 140, background: "var(--color-surface-2)" }}
+      >
+        <object
+          data={variant.url}
+          type="image/svg+xml"
+          aria-label={variant.title}
+          style={{ maxWidth: "100%", maxHeight: 100, pointerEvents: "none" }}
+        />
+      </div>
+      <div className="p-4 border-t" style={{ borderColor: "var(--color-border)" }}>
+        <div className="font-medium tracking-tight text-sm mb-1">{variant.title}</div>
+        <div className="text-xs mb-3" style={{ color: "var(--color-text-muted)" }}>
+          {variant.rationale}
+        </div>
+        <div className="flex items-center gap-3">
+          <button
+            type="button"
+            onClick={switchTo}
+            disabled={switching}
+            className="font-mono text-[11px] hover:underline"
+            style={{ color: "var(--color-primary)" }}
+          >
+            {switching ? "Switching…" : "Use this instead"}
+          </button>
+          <a
+            href={variant.url}
+            download
+            className="font-mono text-[11px] hover:underline ml-auto"
+            style={{ color: "var(--color-text-muted)" }}
+          >
+            Download
+          </a>
+        </div>
       </div>
     </div>
   );

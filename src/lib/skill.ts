@@ -110,11 +110,15 @@ async function runBrandBuildInBackground(project: BrandProject): Promise<void> {
     }
 
     // If the user uploaded their own logo, copy it and mark the logo stage done.
+    // Setting primaryLogoKey='user-uploaded' skips the picker gate on the UI.
     let userUploadedLogoUrl: string | undefined;
     if (intake.uploadedLogoPath) {
       try {
         userUploadedLogoUrl = await copyUploadedLogo(intake.uploadedLogoPath, outDir, id);
-        mergeOutputs({ logoSvg: userUploadedLogoUrl });
+        mergeOutputs({
+          logoSvg: userUploadedLogoUrl,
+          primaryLogoKey: "user-uploaded",
+        });
       } catch (err) {
         console.warn(`[skill] couldn't copy uploaded logo:`, err);
       }
