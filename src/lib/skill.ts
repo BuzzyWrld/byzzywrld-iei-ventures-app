@@ -12,13 +12,8 @@ import { generatePitchOnePager } from "./variants/pitch";
 import { generateEmailKit } from "./variants/email";
 import type {
   BrandIntake,
+  BrandOutputs,
   BrandProject,
-  EmailKitRef,
-  LandingVariantRef,
-  LogoVariantRef,
-  PaletteExpansionRef,
-  PitchOnePagerRef,
-  SocialAssetRef,
 } from "./types";
 
 export function newBrandId(): string {
@@ -75,6 +70,18 @@ async function runBrandBuildInBackground(project: BrandProject): Promise<void> {
   const { id, intake } = project;
   updateBrand(id, { status: "running", progressStage: "starting", progressPct: 0 });
 
+  const fileUrl = (name?: string) =>
+    name ? `/api/brands/${id}/files/${encodeURIComponent(name)}` : undefined;
+  const assetUrl = (rel: string) =>
+    `/api/brands/${id}/files/${rel.split("/").map(encodeURIComponent).join("/")}`;
+
+  // Merge helper: reads current outputs and applies a patch. The UI polls
+  // after each merge, so sections light up with green checkmarks as they land.
+  const mergeOutputs = (patch: Partial<BrandOutputs>) => {
+    const current = getBrand(id)?.outputs ?? {};
+    updateBrand(id, { outputs: { ...current, ...patch } });
+  };
+
   try {
     const outDir = brandDir(id);
     const manifest = await skill().run(intake, {
@@ -83,12 +90,18 @@ async function runBrandBuildInBackground(project: BrandProject): Promise<void> {
         updateBrand(id, { progressStage: stage, progressPct: pct });
       },
     });
-    const fileUrl = (name?: string) =>
-      name ? `/api/brands/${id}/files/${encodeURIComponent(name)}` : undefined;
-    const assetUrl = (rel: string) =>
-      `/api/brands/${id}/files/${rel.split("/").map(encodeURIComponent).join("/")}`;
 
-    // Load the brand.json so the variant generators can work from real data.
+    // Save the main skill outputs IMMEDIATELY so the Brand foundation card
+    // flips to green the moment the main skill finishes.
+    mergeOutputs({
+      brandJson: fileUrl(manifest.brandJson),
+      playbookHtml: fileUrl(manifest.playbookHtml),
+      playbookPdf: fileUrl(manifest.playbookPdf),
+      landingHtml: fileUrl(manifest.landingHtml),
+      logoSvg: fileUrl(manifest.logoSvg),
+    });
+
+    // Load brand.json for the variant generators.
     let brand: Record<string, unknown> = {};
     try {
       brand = JSON.parse(fs.readFileSync(path.join(outDir, manifest.brandJson), "utf8"));
@@ -96,120 +109,137 @@ async function runBrandBuildInBackground(project: BrandProject): Promise<void> {
       console.warn(`[skill] couldn't read brand.json for variants:`, err);
     }
 
-    // If the user uploaded their own logo, copy it into the brand outputs
-    // and skip the variant generation — we respect their choice.
+    // If the user uploaded their own logo, copy it and mark the logo stage done.
     let userUploadedLogoUrl: string | undefined;
     if (intake.uploadedLogoPath) {
       try {
         userUploadedLogoUrl = await copyUploadedLogo(intake.uploadedLogoPath, outDir, id);
+        mergeOutputs({ logoSvg: userUploadedLogoUrl });
       } catch (err) {
         console.warn(`[skill] couldn't copy uploaded logo:`, err);
       }
     }
 
-    // Fire all 6 variant generators in parallel. Each is best-effort —
-    // failure of any one doesn't block the others or fail the build.
-    // Logo variants are skipped when the user provided their own.
+    // Fire all 6 variant generators in parallel. Each wrapped promise
+    // merges its output into the DB AS SOON AS IT COMPLETES — so the UI
+    // sees stages flip to complete one-by-one, not all at the end.
     updateBrand(id, { progressStage: "generating brand extras", progressPct: 0.92 });
-    const [
-      logoResult,
-      landingResult,
-      paletteResult,
-      socialResult,
-      pitchResult,
-      emailResult,
-    ] = await Promise.allSettled([
-      userUploadedLogoUrl
-        ? Promise.resolve([])
-        : generateLogoVariants(brand as never, outDir, 3),
-      generateLandingVariants(brand as never, outDir, 3),
-      generatePaletteExpansion(brand as never, outDir),
-      generateSocialKit(brand as never, outDir),
-      generatePitchOnePager(brand as never, outDir),
-      generateEmailKit(brand as never, outDir),
-    ]);
 
-    const logoVariants: LogoVariantRef[] =
-      logoResult.status === "fulfilled"
-        ? logoResult.value.map((v) => ({
-            key: v.key,
-            title: v.title,
-            rationale: v.rationale,
-            url: assetUrl(v.filename),
-          }))
-        : [];
+    const tasks: Array<Promise<void>> = [
+      // Logos (skipped if user uploaded)
+      (async () => {
+        if (userUploadedLogoUrl) return;
+        try {
+          const variants = await generateLogoVariants(brand as never, outDir, 3);
+          mergeOutputs({
+            logoVariants: variants.length
+              ? variants.map((v) => ({
+                  key: v.key,
+                  title: v.title,
+                  rationale: v.rationale,
+                  url: assetUrl(v.filename),
+                }))
+              : undefined,
+          });
+        } catch (err) {
+          console.warn(`[skill] logos failed:`, err);
+        }
+      })(),
+      // Landing variants
+      (async () => {
+        try {
+          const variants = await generateLandingVariants(brand as never, outDir, 3);
+          mergeOutputs({
+            landingVariants: variants.length
+              ? variants.map((v) => ({
+                  key: v.key,
+                  title: v.title,
+                  rationale: v.rationale,
+                  url: assetUrl(v.filename),
+                }))
+              : undefined,
+          });
+        } catch (err) {
+          console.warn(`[skill] landing variants failed:`, err);
+        }
+      })(),
+      // Palette expansion
+      (async () => {
+        try {
+          const p = await generatePaletteExpansion(brand as never, outDir);
+          if (p) {
+            mergeOutputs({
+              paletteExpansion: {
+                url: assetUrl(p.filename),
+                light: p.light,
+                dark: p.dark,
+                semantic: p.semantic,
+              },
+            });
+          }
+        } catch (err) {
+          console.warn(`[skill] palette expansion failed:`, err);
+        }
+      })(),
+      // Social kit
+      (async () => {
+        try {
+          const assets = await generateSocialKit(brand as never, outDir);
+          mergeOutputs({
+            socialKit: assets.length
+              ? assets.map((a) => ({
+                  key: a.key,
+                  title: a.title,
+                  platform: a.platform,
+                  size: a.size,
+                  url: assetUrl(a.filename),
+                }))
+              : undefined,
+          });
+        } catch (err) {
+          console.warn(`[skill] social kit failed:`, err);
+        }
+      })(),
+      // Pitch one-pager
+      (async () => {
+        try {
+          const p = await generatePitchOnePager(brand as never, outDir);
+          if (p) {
+            mergeOutputs({
+              pitchOnePager: {
+                htmlUrl: assetUrl(p.htmlFilename),
+                pdfUrl: p.pdfFilename ? assetUrl(p.pdfFilename) : undefined,
+              },
+            });
+          }
+        } catch (err) {
+          console.warn(`[skill] pitch one-pager failed:`, err);
+        }
+      })(),
+      // Email kit
+      (async () => {
+        try {
+          const e = await generateEmailKit(brand as never, outDir);
+          if (e) {
+            mergeOutputs({
+              emailKit: {
+                headerUrl: e.headerFilename ? assetUrl(e.headerFilename) : undefined,
+                signatureUrl: e.signatureFilename ? assetUrl(e.signatureFilename) : undefined,
+              },
+            });
+          }
+        } catch (err) {
+          console.warn(`[skill] email kit failed:`, err);
+        }
+      })(),
+    ];
 
-    const landingVariants: LandingVariantRef[] =
-      landingResult.status === "fulfilled"
-        ? landingResult.value.map((v) => ({
-            key: v.key,
-            title: v.title,
-            rationale: v.rationale,
-            url: assetUrl(v.filename),
-          }))
-        : [];
-
-    let paletteExpansion: PaletteExpansionRef | undefined;
-    if (paletteResult.status === "fulfilled" && paletteResult.value) {
-      const p = paletteResult.value;
-      paletteExpansion = {
-        url: assetUrl(p.filename),
-        light: p.light,
-        dark: p.dark,
-        semantic: p.semantic,
-      };
-    }
-
-    const socialKit: SocialAssetRef[] =
-      socialResult.status === "fulfilled"
-        ? socialResult.value.map((a) => ({
-            key: a.key,
-            title: a.title,
-            platform: a.platform,
-            size: a.size,
-            url: assetUrl(a.filename),
-          }))
-        : [];
-
-    let pitchOnePager: PitchOnePagerRef | undefined;
-    if (pitchResult.status === "fulfilled" && pitchResult.value) {
-      pitchOnePager = {
-        htmlUrl: assetUrl(pitchResult.value.htmlFilename),
-        pdfUrl: pitchResult.value.pdfFilename
-          ? assetUrl(pitchResult.value.pdfFilename)
-          : undefined,
-      };
-    }
-
-    let emailKit: EmailKitRef | undefined;
-    if (emailResult.status === "fulfilled" && emailResult.value) {
-      emailKit = {
-        headerUrl: emailResult.value.headerFilename
-          ? assetUrl(emailResult.value.headerFilename)
-          : undefined,
-        signatureUrl: emailResult.value.signatureFilename
-          ? assetUrl(emailResult.value.signatureFilename)
-          : undefined,
-      };
-    }
+    await Promise.allSettled(tasks);
 
     updateBrand(id, {
       status: "complete",
       progressStage: "complete",
       progressPct: 1,
-      outputs: {
-        brandJson: fileUrl(manifest.brandJson),
-        playbookHtml: fileUrl(manifest.playbookHtml),
-        playbookPdf: fileUrl(manifest.playbookPdf),
-        landingHtml: fileUrl(manifest.landingHtml),
-        logoSvg: userUploadedLogoUrl ?? fileUrl(manifest.logoSvg),
-        logoVariants: logoVariants.length ? logoVariants : undefined,
-        landingVariants: landingVariants.length ? landingVariants : undefined,
-        paletteExpansion,
-        socialKit: socialKit.length ? socialKit : undefined,
-        pitchOnePager,
-        emailKit,
-      },
     });
   } catch (err) {
     updateBrand(id, {

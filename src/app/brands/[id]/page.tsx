@@ -247,6 +247,7 @@ function LoadingShell() {
 
 function RunningPanel({ project }: { project: BrandProject }) {
   const pct = Math.round((project.progressPct ?? 0) * 100);
+  const stages = computeStages(project);
   return (
     <>
       <div className="card p-6 mb-10">
@@ -261,7 +262,7 @@ function RunningPanel({ project }: { project: BrandProject }) {
           </div>
         </div>
         <div
-          className="w-full h-1.5 rounded-full overflow-hidden mb-5"
+          className="w-full h-1.5 rounded-full overflow-hidden mb-4"
           style={{ background: "var(--color-surface-2)" }}
         >
           <div
@@ -273,23 +274,168 @@ function RunningPanel({ project }: { project: BrandProject }) {
             }}
           />
         </div>
-        <div className="text-sm" style={{ color: "var(--color-text-muted)" }}>
-          {project.progressStage ?? "starting"}
+        <div className="flex items-baseline justify-between gap-2">
+          <div className="text-sm" style={{ color: "var(--color-text-muted)" }}>
+            {project.progressStage ?? "starting"}
+          </div>
+          <div
+            className="font-mono text-xs shrink-0"
+            style={{ color: "var(--color-text-muted)" }}
+          >
+            Usually takes 2–3 minutes
+          </div>
         </div>
       </div>
-      <div className="kicker mb-3">Preview (generating…)</div>
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-8">
-        {Array.from({ length: 4 }).map((_, i) => (
-          <div key={i} className="card overflow-hidden">
-            <span className="sk" style={{ height: 140, display: "block", borderRadius: 0 }} />
-            <div className="p-4">
-              <span className="sk" style={{ width: "40%", height: 12, marginBottom: 6 }} />
-              <span className="sk" style={{ width: "60%", height: 10 }} />
-            </div>
-          </div>
+
+      <div className="kicker mb-3">Generating</div>
+      <div className="grid grid-cols-2 md:grid-cols-3 gap-3 mb-8">
+        {stages.map((s) => (
+          <StageCard key={s.key} stage={s} />
         ))}
       </div>
     </>
+  );
+}
+
+type StageState = "pending" | "running" | "complete";
+type Stage = {
+  key: string;
+  title: string;
+  blurb: string;
+  state: StageState;
+};
+
+function computeStages(project: BrandProject): Stage[] {
+  const o = project.outputs;
+  const projectRunning = project.status === "running" || project.status === "pending";
+  const brandFoundationDone = Boolean(o.brandJson);
+  const userUploadedLogo = Boolean(project.intake.uploadedLogoPath);
+  const logosDone = userUploadedLogo
+    ? Boolean(o.logoSvg)
+    : Boolean(o.logoVariants && o.logoVariants.length > 0);
+
+  function stateOf(done: boolean, runsAfterFoundation = true): StageState {
+    if (done) return "complete";
+    // If it's a "fires after foundation" stage and the foundation isn't done
+    // yet, it's still pending (not yet started).
+    if (runsAfterFoundation && !brandFoundationDone) return "pending";
+    return projectRunning ? "running" : "pending";
+  }
+
+  return [
+    {
+      key: "foundation",
+      title: "Brand foundation",
+      blurb: "Positioning, tone, typography",
+      state: stateOf(brandFoundationDone, false),
+    },
+    {
+      key: "logos",
+      title: userUploadedLogo ? "Your logo" : "Logos",
+      blurb: userUploadedLogo ? "Copying into brand kit" : "3 distinct directions",
+      state: stateOf(logosDone),
+    },
+    {
+      key: "palette",
+      title: "Color system",
+      blurb: "Tints, shades, semantic tokens",
+      state: stateOf(Boolean(o.paletteExpansion)),
+    },
+    {
+      key: "landing",
+      title: "Landing pages",
+      blurb: "3 layout directions",
+      state: stateOf(Boolean(o.landingVariants && o.landingVariants.length > 0)),
+    },
+    {
+      key: "social",
+      title: "Social kit",
+      blurb: "Post, covers, avatar",
+      state: stateOf(Boolean(o.socialKit && o.socialKit.length > 0)),
+    },
+    {
+      key: "pitch-email",
+      title: "Pitch & email",
+      blurb: "One-pager + signature",
+      state: stateOf(Boolean(o.pitchOnePager || o.emailKit)),
+    },
+  ];
+}
+
+function StageCard({ stage }: { stage: Stage }) {
+  const { state } = stage;
+  const border =
+    state === "complete"
+      ? "var(--color-status-complete)"
+      : state === "running"
+      ? "var(--color-status-running)"
+      : "var(--color-border)";
+  const titleColor =
+    state === "pending" ? "var(--color-text-muted)" : "var(--color-text)";
+  return (
+    <div
+      className="card p-4 flex items-start gap-3 transition"
+      style={{ borderColor: border }}
+    >
+      <StageIcon state={state} />
+      <div className="min-w-0 flex-1">
+        <div
+          className="font-medium tracking-tight text-sm"
+          style={{ color: titleColor }}
+        >
+          {stage.title}
+        </div>
+        <div className="text-xs mt-0.5" style={{ color: "var(--color-text-muted)" }}>
+          {state === "complete"
+            ? "Done"
+            : state === "running"
+            ? "Working…"
+            : stage.blurb}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function StageIcon({ state }: { state: StageState }) {
+  const size = 22;
+  if (state === "complete") {
+    return (
+      <span
+        className="inline-flex items-center justify-center shrink-0 rounded-full"
+        style={{
+          width: size,
+          height: size,
+          background: "var(--color-status-complete)",
+          color: "#fff",
+        }}
+      >
+        <svg width="12" height="12" viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M3 7.5l3 3L11 4.5" />
+        </svg>
+      </span>
+    );
+  }
+  if (state === "running") {
+    return (
+      <span
+        className="inline-flex items-center justify-center shrink-0"
+        style={{ width: size, height: size, color: "var(--color-status-running)" }}
+      >
+        <span className="spinner" style={{ width: 14, height: 14 }} />
+      </span>
+    );
+  }
+  return (
+    <span
+      className="inline-flex items-center justify-center shrink-0 rounded-full"
+      style={{
+        width: size,
+        height: size,
+        border: "1.5px solid var(--color-border)",
+        background: "var(--color-surface)",
+      }}
+    />
   );
 }
 
