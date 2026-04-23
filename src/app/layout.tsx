@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono, Instrument_Serif } from "next/font/google";
-import { NavBar } from "@/components/NavBar";
-import { Footer } from "@/components/Footer";
+import { ShellFrame } from "@/components/ShellFrame";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -37,11 +36,7 @@ export default function RootLayout({
       className={`${geistSans.variable} ${geistMono.variable} ${instrumentSerif.variable}`}
     >
       <body className="min-h-screen flex flex-col">
-        <NavBar />
-        <main className="flex-1 max-w-[1280px] w-full mx-auto px-5 md:px-6 py-10">
-          {children}
-        </main>
-        <Footer />
+        <ShellFrame>{children}</ShellFrame>
       </body>
     </html>
   );

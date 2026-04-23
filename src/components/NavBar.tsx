@@ -10,8 +10,11 @@ const PRIMARY = [
   { href: "/docs", label: "Docs" },
 ];
 
+const HIDE_ON = ["/login", "/signup"];
+
 export function NavBar() {
   const pathname = usePathname();
+  if (HIDE_ON.some((p) => pathname.startsWith(p))) return null;
   const isActive = (href: string) =>
     href === "/" ? pathname === "/" : pathname.startsWith(href);
 
