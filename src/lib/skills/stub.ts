@@ -152,13 +152,44 @@ function renderLandingHtml(b: BrandJson): string {
 }
 
 function renderLogoSvg(b: BrandJson): string {
-  const initials =
-    b.name.split(/\s+/).map((w) => w[0]).filter(Boolean).slice(0, 2).join("").toUpperCase() ||
-    "IV";
-  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
-  <rect width="200" height="200" rx="32" fill="${b.colors.primary}"/>
-  <text x="100" y="118" text-anchor="middle" font-family="Geist, Inter, sans-serif" font-weight="700" font-size="72" fill="${b.colors.accent}">${initials}</text>
+  // Typography-led wordmark using the brand's own heading font stack +
+  // accent-colored period punctuation, like a publishing imprint. Scales
+  // cleanly via viewBox so it works at every size.
+  const font = b.typography.heading;
+  const name = b.name.trim();
+  // Rough text-width estimate: 0.55em per char at the chosen size.
+  const fontSize = 96;
+  const charWidth = fontSize * 0.55;
+  const textWidth = Math.max(240, name.length * charWidth + 40);
+  const dotR = fontSize * 0.09;
+  const dotX = textWidth + dotR * 2;
+  const totalWidth = dotX + dotR * 3;
+  const padX = 40;
+  const padY = 30;
+  const width = totalWidth + padX * 2;
+  const height = fontSize + padY * 2;
+  const baseline = padY + fontSize * 0.85;
+  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${width} ${height}" width="${width}" height="${height}">
+  <text
+    x="${padX}"
+    y="${baseline}"
+    font-family="${font}"
+    font-weight="500"
+    font-size="${fontSize}"
+    letter-spacing="-0.02em"
+    fill="${b.colors.primary}"
+  >${escapeXml(name)}</text>
+  <circle cx="${padX + dotX}" cy="${baseline}" r="${dotR}" fill="${b.colors.accent}"/>
 </svg>`;
+}
+
+function escapeXml(s: string): string {
+  return s
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&apos;");
 }
 
 // PDF rendering moved to @/lib/pdf (screenshot-based Playwright pipeline

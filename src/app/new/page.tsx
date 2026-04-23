@@ -29,10 +29,18 @@ const ARCHETYPES = [
 ];
 
 const PALETTES = [
-  { key: "inkwell",  title: "Inkwell",  blurb: "Deep ink, restrained, editorial.",       swatches: ["#0f172a", "#334155", "#cbd5e1", "#f8fafc"] },
-  { key: "vellum",   title: "Vellum",   blurb: "Warm paper, muted gold, print-weight.", swatches: ["#2a2620", "#5c4a2c", "#d9b87a", "#f6f1e4"] },
-  { key: "meridian", title: "Meridian", blurb: "Institutional navy with a single cyan.", swatches: ["#0b3a66", "#1e5b8f", "#59c4e6", "#eef3f6"] },
-  { key: "plenum",   title: "Plenum",   blurb: "Moss on paper — sage, calm.",           swatches: ["#1a1f1a", "#263e0f", "#a8b098", "#f2f0e9"] },
+  { key: "inkwell",   title: "Inkwell",   blurb: "Deep ink, restrained, editorial.",        swatches: ["#0f172a", "#334155", "#cbd5e1", "#f8fafc"] },
+  { key: "vellum",    title: "Vellum",    blurb: "Warm paper, muted gold, print-weight.",   swatches: ["#2a2620", "#5c4a2c", "#d9b87a", "#f6f1e4"] },
+  { key: "meridian",  title: "Meridian",  blurb: "Institutional navy with a single cyan.",  swatches: ["#0b3a66", "#1e5b8f", "#59c4e6", "#eef3f6"] },
+  { key: "plenum",    title: "Plenum",    blurb: "Moss on paper — sage, calm.",             swatches: ["#1a1f1a", "#263e0f", "#a8b098", "#f2f0e9"] },
+  { key: "graphite",  title: "Graphite",  blurb: "Near-black + electric cyan. Tech edge.",   swatches: ["#0a0a0a", "#06b6d4", "#94a3b8", "#f5f5f5"] },
+  { key: "rust",      title: "Rust",      blurb: "Burnt sienna, cream, charcoal. Warm craft.", swatches: ["#9a3412", "#1f2937", "#fcd34d", "#fffbeb"] },
+  { key: "oxblood",   title: "Oxblood",   blurb: "Dark red, champagne, onyx. Luxury.",       swatches: ["#7f1d1d", "#ca8a04", "#18181b", "#f5f5f4"] },
+  { key: "clinic",    title: "Clinic",    blurb: "Single blue on cool whites. Healthcare-clean.", swatches: ["#0369a1", "#7dd3fc", "#e2e8f0", "#ffffff"] },
+  { key: "dune",      title: "Dune",      blurb: "Sandstone, terracotta, bone. Desert warm.", swatches: ["#78350f", "#d97706", "#fde68a", "#fef3c7"] },
+  { key: "cobalt",    title: "Cobalt",    blurb: "Deep cobalt, amber, ivory. Bold + modern.", swatches: ["#1e3a8a", "#f59e0b", "#fef3c7", "#ffffff"] },
+  { key: "forest",    title: "Forest",    blurb: "Pine, moss, bark, cream. Heritage outdoors.", swatches: ["#14532d", "#365314", "#84cc16", "#fafaf5"] },
+  { key: "orchid",    title: "Orchid",    blurb: "Plum, rose, ivory. Feminine + refined.",    swatches: ["#581c87", "#db2777", "#fbcfe8", "#fdf2f8"] },
 ];
 
 const EMPTY: BrandIntake = {
@@ -433,7 +441,7 @@ function PaletteStep({
       <p className="text-base mb-6" style={{ color: "var(--color-text-muted)", maxWidth: "58ch" }}>
         Pulled from your archetype{intake.archetype ? ` (${intake.archetype})` : ""} and industry. Pick one, or skip.
       </p>
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         {PALETTES.map((p) => {
           const on = intake.palettePreference === p.title;
           return (
