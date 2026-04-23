@@ -1,5 +1,5 @@
 /**
- * Edge middleware — does two things:
+ * Edge proxy (Next 16 — was `middleware.ts` pre-16). Two responsibilities:
  *
  * 1. Tenant resolution: pulls the tenant slug from host (subdomain or custom
  *    domain) or ?tenant= query, forwards as x-iei-tenant so RSC / API can
@@ -7,7 +7,7 @@
  *
  * 2. Auth route protection: redirects unauthenticated users away from the
  *    app (/ /new /brands) to /login. Session check is cookie-only — the
- *    actual user lookup happens in auth.ts with DB access, which middleware
+ *    actual user lookup happens in auth.ts with DB access, which the proxy
  *    can't reach. We only check cookie presence here.
  */
 import { NextResponse, type NextRequest } from "next/server";
@@ -21,7 +21,7 @@ function isProtected(pathname: string): boolean {
   return PROTECTED_PREFIXES.some((p) => pathname === p || pathname.startsWith(`${p}/`));
 }
 
-export function middleware(request: NextRequest) {
+export function proxy(request: NextRequest) {
   const requestHeaders = new Headers(request.headers);
 
   /* ---- tenant resolution ---- */
