@@ -8,10 +8,15 @@ if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR, { recursive: true });
 
 const DB_PATH = path.join(DATA_DIR, "iei.db");
 
-let _db: Database.Database | null = null;
+// Cache the DB instance on globalThis so Next dev-mode HMR doesn't open a
+// new connection every time db.ts gets re-evaluated. In a real process
+// restart globalThis is fresh; during hot reload it persists.
+const _g = globalThis as { __iei_db?: Database.Database };
+
 export function db(): Database.Database {
-  if (_db) return _db;
-  _db = new Database(DB_PATH);
+  if (_g.__iei_db) return _g.__iei_db;
+  const _db = new Database(DB_PATH);
+  _g.__iei_db = _db;
   _db.pragma("journal_mode = WAL");
   _db.exec(`
     CREATE TABLE IF NOT EXISTS brands (
@@ -41,11 +46,20 @@ export function db(): Database.Database {
   if (!cols.includes("user_id")) {
     _db.exec(`ALTER TABLE brands ADD COLUMN user_id TEXT`);
   }
-  // Any brand marked 'running' at process start is orphaned from a previous
-  // process crash — mark them failed so the UI surfaces the issue.
-  _db.prepare(
-    `UPDATE brands SET status = 'failed', error = 'server restarted while job was running' WHERE status = 'running'`
-  ).run();
+  // Mark orphaned 'running' jobs (from a previous crashed process) as failed.
+  //
+  // IMPORTANT: this must run ONCE per actual Node.js process, not once per
+  // module evaluation. Next.js dev-mode HMR re-evaluates server modules when
+  // source changes, which would otherwise re-run this cleanup and clobber
+  // any brand currently mid-build. Storing the flag on globalThis survives
+  // module reload but resets on real process restart — exactly what we want.
+  const g = globalThis as { __iei_cleanup_done?: boolean };
+  if (!g.__iei_cleanup_done) {
+    g.__iei_cleanup_done = true;
+    _db.prepare(
+      `UPDATE brands SET status = 'failed', error = 'server restarted while job was running' WHERE status = 'running'`
+    ).run();
+  }
   return _db;
 }
 
