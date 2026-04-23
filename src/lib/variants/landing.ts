@@ -21,6 +21,8 @@ export type LandingVariant = {
 
 const SYSTEM = `You design marketing landing pages as self-contained HTML. Each page uses inline CSS and optional Google Fonts <link> in <head>. No external JS, no images (use CSS shapes/gradients for visuals), no <img> tags, no data: URIs. Pages must be production-quality: real copy, real structure, responsive layout.
 
+ABSOLUTELY NO EMOJIS. No 🔗 ⚡ 📊 🧠 ✨ 🎯 🛡️ 📱 or any other emoji character anywhere on the page — not as feature-card icons, not in headings, not inline. Use CSS-drawn geometric shapes (circles, squares, arrows, bars, brackets) or no icon at all. Emojis are the #1 tell of AI-generated design.
+
 OUTPUT:
 Return ONLY valid JSON, no prose, no markdown fences:
 {

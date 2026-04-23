@@ -48,7 +48,8 @@ SVG rules:
 - Typography uses the brand's heading font via inline font-family
 - No <image>, no data: URIs, no external refs
 - Design should feel like a cohesive system — same accent detail language across all 4 assets
-- Avoid generic geometric abstraction; tie visuals to the brand's tone`;
+- Avoid generic geometric abstraction; tie visuals to the brand's tone
+- ABSOLUTELY NO EMOJIS. No emoji characters anywhere in the SVG text. Use only the brand's own typography + shapes drawn with SVG primitives (rect, circle, path).`;
 
 function buildUser(brand: BrandForVariants): string {
   return [

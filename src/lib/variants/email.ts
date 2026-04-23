@@ -32,7 +32,9 @@ Required:
     - Accent-colored vertical divider on the left
     - Tagline muted beneath the wordmark
 
-Both assets use brand colors + heading font.`;
+Both assets use brand colors + heading font.
+
+ABSOLUTELY NO EMOJIS anywhere in the SVG or signature HTML. Typography + shapes only.`;
 
 function buildUser(brand: BrandForVariants): string {
   return [

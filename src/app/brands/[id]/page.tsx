@@ -934,7 +934,10 @@ function Positioning({ brand }: { brand: LiveBrandJson | null }) {
     <div className="mb-12">
       <div className="kicker mb-3">Positioning</div>
       {text && (
-        <p className="font-serif leading-[1.1] max-w-[24ch]" style={{ fontSize: 48 }}>
+        <p
+          className="font-serif leading-[1.25]"
+          style={{ fontSize: 28, maxWidth: "none" }}
+        >
           {text}
         </p>
       )}

@@ -37,7 +37,8 @@ Constraints:
 - Inline <style> only; optional Google Fonts <link> in <head>
 - Use brand colors + heading font
 - No <img>, no data: URIs, no scripts
-- Dense but not cramped — real copy, not placeholder`;
+- Dense but not cramped — real copy, not placeholder
+- ABSOLUTELY NO EMOJIS anywhere in the HTML. No bullet-point emojis, no feature icons. Use plain typography, CSS-drawn shapes, or the accent color for emphasis.`;
 
 function buildUser(brand: BrandForVariants): string {
   return [

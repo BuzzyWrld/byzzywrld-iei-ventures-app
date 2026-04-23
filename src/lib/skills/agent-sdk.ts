@@ -44,6 +44,7 @@ async function loadSkillSystemPrompt(): Promise<string> {
     "3. The `presentation-pdf` skill referenced in SKILL.md Step 5 is NOT available here. SKIP that step. Just write structured playbook.html with 850×1100px .page divs — the host renders it to PDF afterward.",
     "4. Reference files (worksheets, color-theory, logo-theory, social-sizes) are inlined below. Do not Read them.",
     "5. Do not ask clarifying questions. Use the Pure Creation mode if information is missing.",
+    "6. ABSOLUTELY NO EMOJIS ANYWHERE in landing.html, playbook.html, logo.svg, or brand.json. No 🔗 ⚡ 📊 🧠 ✨ 🎯 🛡️ 📱 or any emoji character. Use CSS-drawn shapes (rect/circle/path/border) or typography only for icons/accents. Emojis are the #1 tell of AI-generated design.",
     "",
     "---",
     "",

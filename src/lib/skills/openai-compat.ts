@@ -58,6 +58,7 @@ async function loadSystemPrompt(): Promise<string> {
     "5. Do not ask clarifying questions. Use Pure Creation mode if information is missing.",
     "6. OUTPUT TOKEN LIMIT: a single tool call can't return more than ~8000 tokens. For playbook.html (which is typically 20-40KB), you MUST split it across multiple tool calls: Write the first chunk (e.g. <!doctype html> + <head> + first 2-3 .page divs), then Append subsequent chunks with the remaining pages, ending with </body></html>. Never try to fit the whole playbook in one Write — it will truncate mid-file and fail.",
     "7. When all 4 files are complete, reply with a short confirmation and STOP.",
+    "8. ABSOLUTELY NO EMOJIS ANYWHERE in landing.html, playbook.html, logo.svg, or brand.json. No 🔗 ⚡ 📊 🧠 ✨ 🎯 🛡️ 📱 or any emoji character. Use CSS-drawn shapes (rect/circle/path/border) or typography only for icons/accents. Emojis are the #1 tell of AI-generated design and this brand cannot look AI-generated.",
     "",
     "---",
     "",
