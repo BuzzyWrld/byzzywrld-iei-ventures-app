@@ -69,8 +69,20 @@ async function runBrandBuildInBackground(project: BrandProject): Promise<void> {
       console.warn(`[skill] couldn't read brand.json for variants:`, err);
     }
 
+    // If the user uploaded their own logo, copy it into the brand outputs
+    // and skip the variant generation — we respect their choice.
+    let userUploadedLogoUrl: string | undefined;
+    if (intake.uploadedLogoPath) {
+      try {
+        userUploadedLogoUrl = await copyUploadedLogo(intake.uploadedLogoPath, outDir, id);
+      } catch (err) {
+        console.warn(`[skill] couldn't copy uploaded logo:`, err);
+      }
+    }
+
     // Fire all 6 variant generators in parallel. Each is best-effort —
     // failure of any one doesn't block the others or fail the build.
+    // Logo variants are skipped when the user provided their own.
     updateBrand(id, { progressStage: "generating brand extras", progressPct: 0.92 });
     const [
       logoResult,
@@ -80,7 +92,9 @@ async function runBrandBuildInBackground(project: BrandProject): Promise<void> {
       pitchResult,
       emailResult,
     ] = await Promise.allSettled([
-      generateLogoVariants(brand as never, outDir, 3),
+      userUploadedLogoUrl
+        ? Promise.resolve([])
+        : generateLogoVariants(brand as never, outDir, 3),
       generateLandingVariants(brand as never, outDir, 3),
       generatePaletteExpansion(brand as never, outDir),
       generateSocialKit(brand as never, outDir),
@@ -161,7 +175,7 @@ async function runBrandBuildInBackground(project: BrandProject): Promise<void> {
         playbookHtml: fileUrl(manifest.playbookHtml),
         playbookPdf: fileUrl(manifest.playbookPdf),
         landingHtml: fileUrl(manifest.landingHtml),
-        logoSvg: fileUrl(manifest.logoSvg),
+        logoSvg: userUploadedLogoUrl ?? fileUrl(manifest.logoSvg),
         logoVariants: logoVariants.length ? logoVariants : undefined,
         landingVariants: landingVariants.length ? landingVariants : undefined,
         paletteExpansion,
@@ -176,6 +190,36 @@ async function runBrandBuildInBackground(project: BrandProject): Promise<void> {
       error: err instanceof Error ? err.message : String(err),
     });
   }
+}
+
+/**
+ * Copy a file the user uploaded (via /api/uploads) into the brand's output
+ * directory as the primary logo, preserving extension. Returns the URL the
+ * project panel should use to display it.
+ */
+async function copyUploadedLogo(
+  uploadedPath: string,
+  brandOutDir: string,
+  brandId: string
+): Promise<string> {
+  // uploadedPath looks like "/api/uploads/<sessionId>/<filename>"
+  const match = uploadedPath.match(/^\/api\/uploads\/([^/]+)\/(.+)$/);
+  if (!match) throw new Error(`unrecognized upload path: ${uploadedPath}`);
+  const [, sessionId, rawName] = match;
+  const filename = decodeURIComponent(rawName);
+  const src = path.join(
+    process.cwd(),
+    "data",
+    "uploads",
+    sessionId,
+    filename
+  );
+  const ext = path.extname(filename).toLowerCase() || ".svg";
+  const destName = `logo${ext}`;
+  const dest = path.join(brandOutDir, destName);
+  const buf = fs.readFileSync(src);
+  fs.writeFileSync(dest, buf);
+  return `/api/brands/${brandId}/files/${encodeURIComponent(destName)}`;
 }
 
 export { getBrand };

@@ -2,10 +2,18 @@
 
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { useMemo, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import type { BrandIntake } from "@/lib/types";
 
-type StepKey = "company" | "product" | "audience" | "tone" | "archetype" | "palette" | "review";
+type StepKey =
+  | "company"
+  | "product"
+  | "audience"
+  | "tone"
+  | "archetype"
+  | "palette"
+  | "logo"
+  | "review";
 const STEPS: { key: StepKey; label: string }[] = [
   { key: "company", label: "Company" },
   { key: "product", label: "Product" },
@@ -13,6 +21,7 @@ const STEPS: { key: StepKey; label: string }[] = [
   { key: "tone", label: "Tone" },
   { key: "archetype", label: "Archetype" },
   { key: "palette", label: "Palette" },
+  { key: "logo", label: "Logo" },
   { key: "review", label: "Review" },
 ];
 
@@ -54,6 +63,7 @@ const EMPTY: BrandIntake = {
   archetype: "",
   palettePreference: "",
   notes: "",
+  uploadedLogoPath: "",
 };
 
 export default function NewBrandPage() {
@@ -74,6 +84,7 @@ export default function NewBrandPage() {
       case "tone":      return intake.toneOfVoice.split(",").map((s) => s.trim()).filter(Boolean).length >= 1;
       case "archetype": return intake.archetype.trim().length > 0;
       case "palette":   return intake.palettePreference.trim().length > 0;
+      case "logo":      return true;  // optional; default = create
       case "review":    return true;
     }
   }, [step, intake]);
@@ -162,6 +173,9 @@ export default function NewBrandPage() {
         )}
         {step.key === "palette" && (
           <PaletteStep intake={intake} onChange={set} />
+        )}
+        {step.key === "logo" && (
+          <LogoStep intake={intake} onChange={set} />
         )}
         {step.key === "review" && (
           <ReviewStep intake={intake} onChange={set} />
@@ -531,6 +545,148 @@ function PaletteStep({
   );
 }
 
+function LogoStep({
+  intake,
+  onChange,
+}: {
+  intake: BrandIntake;
+  onChange: (p: Partial<BrandIntake>) => void;
+}) {
+  const mode: "create" | "upload" = intake.uploadedLogoPath ? "upload" : "create";
+  const [uploading, setUploading] = useState(false);
+  const [dragOver, setDragOver] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const fileRef = useRef<HTMLInputElement>(null);
+
+  async function uploadLogo(file: File) {
+    setUploading(true);
+    setError(null);
+    const form = new FormData();
+    form.append("files", file);
+    const res = await fetch("/api/uploads", { method: "POST", body: form });
+    if (!res.ok) {
+      const body = (await res.json().catch(() => ({}))) as { error?: string };
+      setError(body.error ?? `HTTP ${res.status}`);
+      setUploading(false);
+      return;
+    }
+    const data = (await res.json()) as {
+      sessionId: string;
+      uploaded: { filename: string; url: string }[];
+    };
+    const first = data.uploaded[0];
+    if (first) onChange({ uploadedLogoPath: first.url });
+    setUploading(false);
+  }
+
+  return (
+    <>
+      <h1 className="font-serif leading-[1.05] mb-3" style={{ fontSize: 44 }}>
+        What about the logo?
+      </h1>
+      <p className="text-base mb-6" style={{ color: "var(--color-text-muted)", maxWidth: "54ch" }}>
+        We can design 3 distinct options for you to pick from — or if you already have one you love, upload it and we&apos;ll build the rest of the brand around it.
+      </p>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+        <button
+          type="button"
+          onClick={() => onChange({ uploadedLogoPath: "" })}
+          className={`card card-hover p-5 text-left ${mode === "create" ? "ring-2" : ""}`}
+          style={
+            mode === "create"
+              ? { borderColor: "var(--color-primary)", boxShadow: "var(--sh-focus)" }
+              : undefined
+          }
+        >
+          <div className="font-medium tracking-tight mb-1">Create 3 options for me</div>
+          <div className="text-xs" style={{ color: "var(--color-text-muted)" }}>
+            Wordmark, monogram, and a geometric mark. Pick your favorite after.
+          </div>
+        </button>
+        <button
+          type="button"
+          onClick={() => fileRef.current?.click()}
+          className={`card card-hover p-5 text-left ${mode === "upload" ? "ring-2" : ""}`}
+          style={
+            mode === "upload"
+              ? { borderColor: "var(--color-primary)", boxShadow: "var(--sh-focus)" }
+              : undefined
+          }
+        >
+          <div className="font-medium tracking-tight mb-1">I already have one</div>
+          <div className="text-xs" style={{ color: "var(--color-text-muted)" }}>
+            Upload SVG or PNG. We&apos;ll build the rest of the brand system around it.
+          </div>
+        </button>
+      </div>
+
+      {mode === "upload" && (
+        <div
+          className="p-6 text-center transition cursor-pointer"
+          onClick={() => fileRef.current?.click()}
+          onDragOver={(e) => {
+            e.preventDefault();
+            setDragOver(true);
+          }}
+          onDragLeave={() => setDragOver(false)}
+          onDrop={(e) => {
+            e.preventDefault();
+            setDragOver(false);
+            if (e.dataTransfer.files?.length) void uploadLogo(e.dataTransfer.files[0]);
+          }}
+          style={{
+            border: `1.5px dashed ${dragOver ? "var(--color-primary)" : "var(--color-border)"}`,
+            borderRadius: "var(--r-lg)",
+            background: dragOver ? "var(--color-surface-2)" : "var(--color-surface)",
+          }}
+        >
+          {intake.uploadedLogoPath ? (
+            <div className="flex items-center justify-center gap-4">
+              <object
+                data={intake.uploadedLogoPath}
+                type="image/svg+xml"
+                aria-label="Uploaded logo"
+                style={{ maxHeight: 80, maxWidth: 240, pointerEvents: "none" }}
+              />
+              <div className="text-left">
+                <div className="font-medium text-sm">Logo uploaded</div>
+                <div className="text-xs" style={{ color: "var(--color-text-muted)" }}>
+                  Click the card again to replace.
+                </div>
+              </div>
+            </div>
+          ) : (
+            <div>
+              <div className="font-medium">
+                {uploading ? "Uploading…" : "Drop your logo here"}
+              </div>
+              <div className="text-sm mt-1" style={{ color: "var(--color-text-muted)" }}>
+                SVG, PNG, JPG · up to 20 MB
+              </div>
+            </div>
+          )}
+          <input
+            ref={fileRef}
+            type="file"
+            accept="image/svg+xml,image/png,image/jpeg,image/webp"
+            className="hidden"
+            onChange={(e) => {
+              if (e.target.files?.[0]) void uploadLogo(e.target.files[0]);
+              e.target.value = "";
+            }}
+          />
+        </div>
+      )}
+      {error && (
+        <p className="mt-3 text-sm" style={{ color: "var(--color-status-failed)" }}>
+          {error}
+        </p>
+      )}
+    </>
+  );
+}
+
 function ReviewStep({
   intake,
   onChange,
@@ -555,6 +711,10 @@ function ReviewStep({
           <ReviewRow label="Tone" value={intake.toneOfVoice || "—"} />
           <ReviewRow label="Archetype" value={intake.archetype || "—"} />
           <ReviewRow label="Palette" value={intake.palettePreference || "—"} />
+          <ReviewRow
+            label="Logo"
+            value={intake.uploadedLogoPath ? "Uploaded by you" : "Generate 3 options"}
+          />
         </div>
       </div>
       <label className="block mb-4">

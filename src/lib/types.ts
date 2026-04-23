@@ -10,6 +10,9 @@ export const BrandIntakeSchema = z.object({
   archetype: z.string().optional().default(""),
   palettePreference: z.string().optional().default(""),
   notes: z.string().optional().default(""),
+  /** If set, user uploaded their own logo and we should skip variant generation.
+   *  Format: "/api/uploads/<sessionId>/<filename>" */
+  uploadedLogoPath: z.string().optional().default(""),
 });
 export type BrandIntake = z.infer<typeof BrandIntakeSchema>;
 
