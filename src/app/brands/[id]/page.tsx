@@ -119,7 +119,6 @@ export default function BrandProjectPage({
 
   return (
     <>
-      <Breadcrumb name={project.intake.companyName} />
       <Header project={project} />
       {project.status === "failed" && <FailedPanel project={project} />}
       {(project.status === "pending" || project.status === "running") && (
@@ -131,18 +130,6 @@ export default function BrandProjectPage({
 }
 
 /* ---------- layout chrome ---------- */
-
-function Breadcrumb({ name }: { name: string }) {
-  return (
-    <div className="text-xs font-mono mb-6" style={{ color: "var(--color-text-muted)" }}>
-      <Link href="/" className="hover:text-[var(--color-text)]">
-        Projects
-      </Link>
-      <span className="mx-1">/</span>
-      <span>{name}</span>
-    </div>
-  );
-}
 
 function Header({ project }: { project: BrandProject }) {
   const badgeClass = `badge badge-${project.status}`;

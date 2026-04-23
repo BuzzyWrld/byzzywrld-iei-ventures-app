@@ -34,7 +34,12 @@ export default async function Home() {
   const tenant = await currentTenant();
   const projects = listBrands({ tenantId: tenant.id, userId: user.id });
 
+  // Most users have one brand — their business. The dashboard's main value
+  // is their brand, not a list containing it. Jump them straight in.
+  // Only show the list view when there are genuinely multiple projects
+  // (agency / portfolio user).
   if (projects.length === 0) return <EmptyState />;
+  if (projects.length === 1) redirect(`/brands/${projects[0].id}`);
 
   return (
     <>

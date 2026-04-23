@@ -6,9 +6,8 @@ import { useEffect, useRef, useState } from "react";
 import { IeiMark } from "./IeiMark";
 import { logoutAction } from "@/app/actions/auth";
 
-const PRIMARY = [
-  { href: "/", label: "Projects" },
-];
+// Primary nav intentionally empty — the logo links home, and the workspace
+// is normally the user's brand (or list view if they have multiple).
 
 const HIDE_ON = ["/login", "/signup"];
 
@@ -28,8 +27,6 @@ export function NavBar({ initials = "?", email }: { initials?: string; email?: s
   }, [menuOpen]);
 
   if (HIDE_ON.some((p) => pathname.startsWith(p))) return null;
-  const isActive = (href: string) =>
-    href === "/" ? pathname === "/" : pathname.startsWith(href);
 
   return (
     <header className="nav sticky top-0 z-30" role="banner">
@@ -42,19 +39,6 @@ export function NavBar({ initials = "?", email }: { initials?: string; email?: s
           <IeiMark size="md" />
           <span className="font-medium tracking-tight hidden sm:inline">IEI Ventures</span>
         </Link>
-
-        <nav className="hidden md:flex items-center gap-1 text-sm" aria-label="Primary">
-          {PRIMARY.map((item) => (
-            <Link
-              key={item.href}
-              href={item.href}
-              className={`px-3 py-1.5 rounded ${isActive(item.href) ? "active" : ""}`}
-              style={isActive(item.href) ? undefined : { color: "var(--color-text-muted)" }}
-            >
-              {item.label}
-            </Link>
-          ))}
-        </nav>
 
         <div className="ml-auto flex items-center gap-2">
           <button className="btn btn-ghost btn-sm hidden md:inline-flex" aria-label="Search">
