@@ -2,6 +2,7 @@ import Link from "next/link";
 import { listBrands } from "@/lib/db";
 import type { BrandProject } from "@/lib/types";
 import { IeiMark } from "@/components/IeiMark";
+import { DeleteBrandButton } from "@/components/DeleteBrandButton";
 import { currentTenant } from "@/lib/current-tenant";
 import { currentUser } from "@/lib/auth";
 import { redirect } from "next/navigation";
@@ -51,6 +52,9 @@ export default async function Home() {
           </h1>
         </div>
         <div className="flex items-center gap-2">
+          <Link href="/new/existing" className="btn btn-secondary">
+            Import existing
+          </Link>
           <Link href="/new" className="btn btn-primary">
             New brand
           </Link>
@@ -138,13 +142,16 @@ function TableRow({ project: p }: { project: BrandProject }) {
         {outputCount(p)}
       </td>
       <td className="py-3 pl-3 pr-5 text-right">
-        <Link
-          href={`/brands/${p.id}`}
-          className="font-mono text-xs"
-          style={{ color: "var(--color-text-muted)" }}
-        >
-          Open →
-        </Link>
+        <div className="inline-flex items-center gap-1">
+          <Link
+            href={`/brands/${p.id}`}
+            className="font-mono text-xs mr-2"
+            style={{ color: "var(--color-text-muted)" }}
+          >
+            Open →
+          </Link>
+          <DeleteBrandButton brandId={p.id} brandName={p.intake.companyName} />
+        </div>
       </td>
     </tr>
   );
@@ -152,23 +159,30 @@ function TableRow({ project: p }: { project: BrandProject }) {
 
 function MobileCard({ project: p }: { project: BrandProject }) {
   return (
-    <Link href={`/brands/${p.id}`} className="card card-hover p-4 block">
-      <div className="flex items-start justify-between gap-3 mb-3">
-        <IeiMark size="md" label={initial(p.intake.companyName)} style={{ background: "var(--color-surface-2)" }} />
-        <StatusBadge status={p.status} />
+    <div className="card card-hover relative">
+      <Link href={`/brands/${p.id}`} className="p-4 block">
+        <div className="flex items-start justify-between gap-3 mb-3">
+          <IeiMark size="md" label={initial(p.intake.companyName)} style={{ background: "var(--color-surface-2)" }} />
+          <div className="flex items-center gap-2">
+            <StatusBadge status={p.status} />
+          </div>
+        </div>
+        <div className="font-medium tracking-tight">{p.intake.companyName}</div>
+        <div className="text-xs" style={{ color: "var(--color-text-muted)" }}>
+          {p.intake.industry}
+        </div>
+        <div
+          className="mt-3 font-mono text-[11px] flex justify-between"
+          style={{ color: "var(--color-text-muted)" }}
+        >
+          <span>{formatShortDate(p.createdAt)}</span>
+          <span>{outputCount(p)}</span>
+        </div>
+      </Link>
+      <div className="absolute top-3 right-3">
+        <DeleteBrandButton brandId={p.id} brandName={p.intake.companyName} />
       </div>
-      <div className="font-medium tracking-tight">{p.intake.companyName}</div>
-      <div className="text-xs" style={{ color: "var(--color-text-muted)" }}>
-        {p.intake.industry}
-      </div>
-      <div
-        className="mt-3 font-mono text-[11px] flex justify-between"
-        style={{ color: "var(--color-text-muted)" }}
-      >
-        <span>{formatShortDate(p.createdAt)}</span>
-        <span>{outputCount(p)}</span>
-      </div>
-    </Link>
+    </div>
   );
 }
 
@@ -185,9 +199,17 @@ function EmptyState() {
       <p className="text-sm mb-8" style={{ color: "var(--color-text-muted)" }}>
         Start a brand build — the intake takes a few minutes.
       </p>
-      <Link href="/new" className="btn btn-primary btn-lg">
-        Start a brand build
-      </Link>
+      <div className="flex items-center justify-center gap-3 flex-wrap">
+        <Link href="/new" className="btn btn-primary btn-lg">
+          Start from scratch
+        </Link>
+        <Link href="/new/existing" className="btn btn-secondary btn-lg">
+          Import existing brand
+        </Link>
+      </div>
+      <p className="text-xs mt-5" style={{ color: "var(--color-text-muted)" }}>
+        Have a logo, website, or brand guide already? Import and we&apos;ll build around it.
+      </p>
     </div>
   );
 }

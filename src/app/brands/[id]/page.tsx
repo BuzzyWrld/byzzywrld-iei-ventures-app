@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { use, useEffect, useState } from "react";
 import type { BrandProject } from "@/lib/types";
+import { DeleteBrandButton } from "@/components/DeleteBrandButton";
 
 // The real skill produces a richer brand.json than our minimal BrandJson
 // type. Fields are 'unknown' so we coerce safely at render-time — different
@@ -221,6 +222,13 @@ function Header({ project }: { project: BrandProject }) {
           {project.intake.industry}
           {project.intake.targetAudience ? ` · ${project.intake.targetAudience}` : ""}
         </div>
+      </div>
+      <div className="flex items-center gap-2 shrink-0">
+        <DeleteBrandButton
+          brandId={project.id}
+          brandName={project.intake.companyName}
+          variant="text"
+        />
       </div>
     </div>
   );

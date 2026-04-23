@@ -122,6 +122,10 @@ export function getBrand(id: string): BrandProject | null {
   return row ? rowToProject(row) : null;
 }
 
+export function deleteBrand(id: string): void {
+  db().prepare(`DELETE FROM brands WHERE id = ?`).run(id);
+}
+
 export function listBrands(opts?: { tenantId?: string; userId?: string }): BrandProject[] {
   const where: string[] = [];
   const args: string[] = [];
