@@ -20,9 +20,28 @@ const PALETTE_BY_ARCHETYPE: Record<string, BrandJson["colors"]> = {
   default: { primary: "#111827", secondary: "#2563EB", accent: "#F97316", neutral: "#F3F4F6" },
 };
 
+function extractHexColors(s: string): string[] {
+  // Case-insensitive match for 3/6/8-digit hex colors.
+  const matches = s.match(/#(?:[0-9a-f]{3}|[0-9a-f]{6}|[0-9a-f]{8})\b/gi);
+  return matches ? matches.map((h) => h.toLowerCase()) : [];
+}
+
 function synthesizeBrand(intake: BrandIntake): BrandJson {
-  const key = (intake.archetype || "").toLowerCase() as keyof typeof PALETTE_BY_ARCHETYPE;
-  const colors = PALETTE_BY_ARCHETYPE[key] ?? PALETTE_BY_ARCHETYPE.default;
+  // 1. If the palette pick carries explicit hex codes, honor them exactly.
+  // 2. Otherwise fall back to the archetype baseline.
+  const picked = extractHexColors(intake.palettePreference);
+  const colors: BrandJson["colors"] =
+    picked.length >= 4
+      ? {
+          primary: picked[0],
+          secondary: picked[1],
+          accent: picked[2],
+          neutral: picked[3],
+        }
+      : PALETTE_BY_ARCHETYPE[
+          (intake.archetype || "").toLowerCase() as keyof typeof PALETTE_BY_ARCHETYPE
+        ] ?? PALETTE_BY_ARCHETYPE.default;
+
   return {
     name: intake.companyName,
     tagline: `Brand direction for ${intake.companyName} — ${intake.industry}`,

@@ -53,6 +53,16 @@ async function loadSkillSystemPrompt(): Promise<string> {
 }
 
 function buildUserPrompt(intake: BrandIntake, outputDir: string): string {
+  // If the user picked a palette from our 4-option step, palettePreference
+  // carries hex codes like "Plenum — #1a1f1a, #263e0f, #a8b098, #f2f0e9".
+  // When that's the case, instruct Claude to honor the pick exactly. This
+  // overrides SKILL.md's "audience > aesthetic preference" rule for the
+  // specific case where the user made an explicit deliberate choice.
+  const hexMatches = intake.palettePreference.match(
+    /#(?:[0-9a-f]{3}|[0-9a-f]{6}|[0-9a-f]{8})/gi
+  );
+  const userPickedPalette = (hexMatches?.length ?? 0) >= 4;
+
   return [
     `Build a complete brand playbook NOW using the Write tool. The working directory is already set to:`,
     `  ${outputDir}`,
@@ -63,13 +73,18 @@ function buildUserPrompt(intake: BrandIntake, outputDir: string): string {
     "  landing.html   — single-page landing site populated with brand data",
     "  logo.svg       — primary logo mark as SVG",
     "",
+    userPickedPalette
+      ? "PALETTE OVERRIDE: the user has explicitly chosen a palette. The hex codes below are non-negotiable — use them as primary/secondary/accent/neutral in that order, even if audience/industry analysis would suggest otherwise. This overrides SKILL.md's 'audience > aesthetic preference' hierarchy rule."
+      : "",
     "Intake:",
     "```json",
     JSON.stringify(intake, null, 2),
     "```",
     "",
     "Start by calling the Write tool. Do not output any text before the first tool call.",
-  ].join("\n");
+  ]
+    .filter(Boolean)
+    .join("\n");
 }
 
 type SdkMessage = {

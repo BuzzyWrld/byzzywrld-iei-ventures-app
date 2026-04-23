@@ -77,10 +77,17 @@ export default function NewBrandPage() {
   async function submit() {
     setSubmitting(true);
     setError(null);
+    // Expand the palette pick into a hex-carrying string so the skill knows
+    // the exact colors the user chose (just the name isn't enough — the skill
+    // has no idea what "Plenum" looks like).
+    const picked = PALETTES.find((p) => p.title === intake.palettePreference);
+    const intakeWithHexes = picked
+      ? { ...intake, palettePreference: `${picked.title} — ${picked.swatches.join(", ")}` }
+      : intake;
     const res = await fetch("/api/brands", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(intake),
+      body: JSON.stringify(intakeWithHexes),
     });
     if (!res.ok) {
       const body = (await res.json().catch(() => ({}))) as { error?: string };
