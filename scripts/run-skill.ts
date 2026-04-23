@@ -9,6 +9,20 @@
  */
 import fs from "node:fs";
 import path from "node:path";
+
+// Load .env.local for this standalone CLI (Next.js does this automatically,
+// but we're running outside Next). Quiet failure if missing — stub adapter
+// needs no env vars.
+const envPath = path.join(process.cwd(), ".env.local");
+if (fs.existsSync(envPath)) {
+  for (const line of fs.readFileSync(envPath, "utf8").split("\n")) {
+    const m = line.match(/^\s*([A-Z0-9_]+)=(.*)$/);
+    if (m && !process.env[m[1]]) {
+      process.env[m[1]] = m[2].replace(/^["']|["']$/g, "").trim();
+    }
+  }
+}
+
 import { skill } from "../src/lib/skills";
 import { BrandIntakeSchema } from "../src/lib/types";
 

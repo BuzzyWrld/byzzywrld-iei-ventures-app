@@ -7,18 +7,12 @@
  *   2. Set env:
  *        ANTHROPIC_API_KEY=sk-ant-...
  *        SKILL_ADAPTER=agent-sdk
- *        CLAUDE_MODEL=claude-haiku-4-5  (or claude-sonnet-4-6 for premium)
- *
- * Pipeline:
- *   a) Load skills/brand-playbook/SKILL.md + references/*.md as system context
- *   b) Give Claude the Write/Read/Bash tools with cwd = outputDir
- *   c) Prompt with the intake JSON — Claude writes brand.json, playbook.html,
- *      landing.html, logo.svg into outputDir following the skill procedure
- *   d) We post-process: Playwright screenshot pipeline → playbook.pdf
- *      (the presentation-pdf skill referenced in SKILL.md is claude.ai-only)
+ *        CLAUDE_MODEL=haiku  (or sonnet / opus / full ID like claude-sonnet-4-6)
  */
 import fs from "node:fs/promises";
+import os from "node:os";
 import path from "node:path";
+import { randomUUID } from "node:crypto";
 import type { BrandIntake } from "@/lib/types";
 import { renderPdfFromHtml } from "@/lib/pdf";
 import { BrandPlaybookSkill, SkillError, SkillManifest, SkillRunContext } from "./contract";
@@ -31,20 +25,28 @@ const REFERENCE_FILES = [
   "references/social-sizes.md",
 ];
 
+const VERBOSE = process.env.SKILL_DEBUG === "1";
+
 async function loadSkillSystemPrompt(): Promise<string> {
   const skillMd = await fs.readFile(path.join(SKILL_ROOT, "SKILL.md"), "utf8");
   const refs = await Promise.all(
     REFERENCE_FILES.map(async (rel) => {
       const content = await fs.readFile(path.join(SKILL_ROOT, rel), "utf8");
-      return `# REFERENCE: ${rel}\n\n${content}`;
+      return `## REFERENCE: ${rel}\n\n${content}`;
     })
   );
   return [
     "You are executing the brand-playbook skill. Below are the full SKILL.md procedure and all reference files. Follow the procedure exactly.",
-    "IMPORTANT: When the skill says to load references/*.md, the content is already included below — do not try to Read those paths.",
-    "IMPORTANT: The `presentation-pdf` skill referenced in SKILL.md is NOT available here. Skip that step — just write the structured HTML with 850x1100px .page divs and the host will render it to PDF separately.",
-    "IMPORTANT: Write all output files to the current working directory (the host will tell you where via the prompt). Use the Write tool. Required outputs: brand.json, playbook.html, landing.html, logo.svg.",
+    "",
+    "CRITICAL RULES:",
+    "1. Write ALL output files using the Write tool into the current working directory. Do not ask permission.",
+    "2. Required files (exact names): brand.json, playbook.html, landing.html, logo.svg.",
+    "3. The `presentation-pdf` skill referenced in SKILL.md Step 5 is NOT available here. SKIP that step. Just write structured playbook.html with 850×1100px .page divs — the host renders it to PDF afterward.",
+    "4. Reference files (worksheets, color-theory, logo-theory, social-sizes) are inlined below. Do not Read them.",
+    "5. Do not ask clarifying questions. Use the Pure Creation mode if information is missing.",
+    "",
     "---",
+    "",
     skillMd,
     ...refs,
   ].join("\n\n");
@@ -52,42 +54,48 @@ async function loadSkillSystemPrompt(): Promise<string> {
 
 function buildUserPrompt(intake: BrandIntake, outputDir: string): string {
   return [
-    `Build a complete brand playbook for the following intake. Write all deliverables to ${outputDir}.`,
+    `Build a complete brand playbook NOW using the Write tool. The working directory is already set to:`,
+    `  ${outputDir}`,
     "",
-    "REQUIRED OUTPUTS (exact filenames):",
-    "  brand.json     — JSON object matching the BrandJson shape",
-    "  playbook.html  — multi-page HTML using 850x1100px .page divs (brand playbook)",
+    "Write these four files (paths are relative to cwd):",
+    "  brand.json     — JSON matching { name, tagline, colors: { primary, secondary, accent, neutral }, typography: { heading, body }, tone: string[], positioning }",
+    "  playbook.html  — multi-page HTML with 850×1100px .page divs (per SKILL Step 3)",
     "  landing.html   — single-page landing site populated with brand data",
     "  logo.svg       — primary logo mark as SVG",
     "",
-    "BrandJson shape:",
-    '  { name, tagline, colors: { primary, secondary, accent, neutral }, typography: { heading, body }, tone: string[], positioning }',
-    "",
-    "INTAKE:",
+    "Intake:",
     "```json",
     JSON.stringify(intake, null, 2),
     "```",
+    "",
+    "Start by calling the Write tool. Do not output any text before the first tool call.",
   ].join("\n");
 }
+
+type SdkMessage = {
+  type: string;
+  subtype?: string;
+  message?: { content?: Array<{ type: string; name?: string; input?: unknown; text?: string }> };
+  result?: string;
+  is_error?: boolean;
+  total_cost_usd?: number;
+  num_turns?: number;
+  duration_ms?: number;
+  errors?: string[];
+  permission_denials?: Array<{ tool_name: string; tool_input: unknown }>;
+  error?: string;
+  stop_reason?: string | null;
+};
 
 type AgentSdkDeps = {
   query: (args: {
     prompt: string;
-    options: {
-      systemPrompt: string;
-      allowedTools: string[];
-      permissionMode: "acceptEdits" | "default";
-      cwd: string;
-      model?: string;
-    };
-  }) => AsyncIterable<{ type?: string; text?: string; [k: string]: unknown }>;
+    options: Record<string, unknown>;
+  }) => AsyncIterable<SdkMessage>;
 };
 
 async function loadAgentSdk(): Promise<AgentSdkDeps> {
   try {
-    // Lazy import so the adapter file compiles even when the SDK isn't installed.
-    // The string-concat hides the import from the TS static resolver; this is
-    // intentional — install the SDK before switching SKILL_ADAPTER to agent-sdk.
     const moduleName = "@anthropic-ai/claude-agent-sdk";
     const mod = (await import(/* @vite-ignore */ moduleName)) as unknown as AgentSdkDeps;
     return mod;
@@ -110,31 +118,120 @@ export const agentSdkSkill: BrandPlaybookSkill = {
 
     await fs.mkdir(outputDir, { recursive: true });
 
+    // Claude sometimes mistypes non-ASCII path characters (e.g. curly quotes in
+    // folder names) and writes files to an adjacent wrong path. To eliminate
+    // this, we run the skill in an ASCII-only temp dir and move files afterward.
+    const workDir = path.join(os.tmpdir(), `iei-skill-${randomUUID().slice(0, 8)}`);
+    await fs.mkdir(workDir, { recursive: true });
+
     onProgress?.("loading skill + references", 0.05);
     const systemPrompt = await loadSkillSystemPrompt();
+    if (VERBOSE) console.log(`[agent-sdk] system prompt length: ${systemPrompt.length} chars`);
 
     onProgress?.("invoking agent sdk", 0.1);
     const { query } = await loadAgentSdk();
 
-    const model = process.env.CLAUDE_MODEL ?? "claude-haiku-4-5";
-    const userPrompt = buildUserPrompt(intake, outputDir);
+    const model = process.env.CLAUDE_MODEL ?? "haiku";
+    const userPrompt = buildUserPrompt(intake, workDir);
 
-    let turn = 0;
-    for await (const msg of query({
+    if (VERBOSE) console.log(`[agent-sdk] model=${model} workDir=${workDir}`);
+
+    const stream = query({
       prompt: userPrompt,
       options: {
         systemPrompt,
-        allowedTools: ["Write", "Read", "Bash"],
-        permissionMode: "acceptEdits",
-        cwd: outputDir,
         model,
+        cwd: workDir,
+        permissionMode: "bypassPermissions",
+        dangerouslySkipPermissions: true,
+        allowedTools: ["Write", "Read", "Edit", "Bash"],
       },
-    })) {
-      turn++;
-      if (msg.text) {
-        onProgress?.(msg.text.slice(0, 80), Math.min(0.1 + turn * 0.02, 0.85));
+    });
+
+    let assistantTurns = 0;
+    let toolCalls = 0;
+    let result: SdkMessage | null = null;
+
+    for await (const msg of stream) {
+      if (VERBOSE) console.log(`[agent-sdk] ${msg.type}${msg.subtype ? `/${msg.subtype}` : ""}`);
+
+      if (msg.type === "assistant") {
+        assistantTurns++;
+        for (const block of msg.message?.content ?? []) {
+          if (block.type === "tool_use") {
+            toolCalls++;
+            onProgress?.(
+              `tool: ${block.name}`,
+              Math.min(0.1 + toolCalls * 0.08, 0.85)
+            );
+            if (VERBOSE) {
+              const input = block.input as { file_path?: string; command?: string } | undefined;
+              const detail = input?.file_path ?? input?.command?.slice(0, 60) ?? "";
+              console.log(`[agent-sdk]   → tool_use: ${block.name} ${detail}`);
+            }
+          } else if (block.type === "tool_result" && VERBOSE) {
+            const r = block as unknown as { content?: string; is_error?: boolean };
+            console.log(`[agent-sdk]   ← tool_result${r.is_error ? " ERROR" : ""}: ${String(r.content ?? "").slice(0, 120)}`);
+          } else if (block.type === "text" && block.text) {
+            onProgress?.(block.text.slice(0, 80), Math.min(0.1 + assistantTurns * 0.03, 0.85));
+          }
+        }
+      } else if (msg.type === "user" && VERBOSE) {
+        for (const block of msg.message?.content ?? []) {
+          if (block.type === "tool_result") {
+            const r = block as unknown as { content?: unknown; is_error?: boolean };
+            const content =
+              typeof r.content === "string"
+                ? r.content
+                : Array.isArray(r.content)
+                ? (r.content as Array<{ text?: string }>).map((c) => c.text ?? "").join(" ")
+                : JSON.stringify(r.content);
+            console.log(
+              `[agent-sdk]   ← tool_result${r.is_error ? " ERROR" : ""}: ${content.slice(0, 200)}`
+            );
+          }
+        }
+      } else if (msg.type === "result") {
+        result = msg;
       }
     }
+
+    if (VERBOSE && result) {
+      console.log(
+        `[agent-sdk] result: subtype=${result.subtype} turns=${result.num_turns} cost=$${result.total_cost_usd?.toFixed(3)} duration=${result.duration_ms}ms`
+      );
+      if (result.permission_denials?.length) {
+        console.log(`[agent-sdk] permission_denials:`, result.permission_denials);
+      }
+      if (result.errors?.length) {
+        console.log(`[agent-sdk] errors:`, result.errors);
+      }
+    }
+
+    if (result?.is_error || result?.subtype !== "success") {
+      const hint = result?.errors?.join("; ") ?? result?.result ?? result?.error;
+      throw new SkillError(
+        `skill run failed (${result?.subtype ?? "unknown"}): ${hint ?? "no details"}`,
+        "RUN_FAILED"
+      );
+    }
+
+    // Move files from the ASCII workDir to the real outputDir.
+    onProgress?.("collecting outputs", 0.88);
+    const produced = await fs.readdir(workDir);
+    if (VERBOSE) console.log(`[agent-sdk] workDir produced: [${produced.join(", ")}]`);
+    for (const name of produced) {
+      await fs.rename(path.join(workDir, name), path.join(outputDir, name)).catch(async (err) => {
+        // Cross-device rename fails — fall back to copy+delete.
+        if ((err as NodeJS.ErrnoException).code === "EXDEV") {
+          await fs.copyFile(path.join(workDir, name), path.join(outputDir, name));
+          await fs.unlink(path.join(workDir, name));
+        } else {
+          throw err;
+        }
+      });
+    }
+    await fs.rm(workDir, { recursive: true, force: true });
 
     // Skill writes structured HTML; we own the screenshot → PDF step.
     onProgress?.("rendering pdf", 0.9);
@@ -143,8 +240,9 @@ export const agentSdkSkill: BrandPlaybookSkill = {
     try {
       await fs.access(playbookHtml);
     } catch {
+      const contents = await fs.readdir(outputDir).catch(() => []);
       throw new SkillError(
-        "skill did not produce playbook.html",
+        `skill did not produce playbook.html. contents=[${contents.join(", ")}] assistantTurns=${assistantTurns} toolCalls=${toolCalls}`,
         "MISSING_OUTPUT"
       );
     }

@@ -9,6 +9,7 @@
     "skill": "tsx scripts/run-skill.ts"
   },
   "dependencies": {
+    "@anthropic-ai/claude-agent-sdk": "^0.2.118",
     "better-sqlite3": "^12.9.0",
     "next": "16.2.4",
     "pdf-lib": "^1.17.1",
