@@ -117,18 +117,10 @@ export default function SignupPage() {
           </div>
         </div>
         <div
-          className="flex items-center justify-between font-mono text-xs"
+          className="font-mono text-xs"
           style={{ color: "var(--color-text-muted)" }}
         >
-          <span>© 2026 IEI Ventures</span>
-          <div className="flex gap-4">
-            <Link href="/docs" className="hover:text-[var(--color-text)]">
-              Docs
-            </Link>
-            <Link href="/privacy" className="hover:text-[var(--color-text)]">
-              Privacy
-            </Link>
-          </div>
+          © 2026 IEI Ventures
         </div>
       </div>
       <aside

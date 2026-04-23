@@ -16,18 +16,12 @@ export function Footer() {
           style={{ color: "var(--color-text-muted)" }}
           aria-label="Footer"
         >
-          <Link href="/docs" className="hover:text-[var(--color-text)]">
-            Docs
-          </Link>
-          <a href="https://github.com/hbarbosa25/IEI-Ventures" className="hover:text-[var(--color-text)]">
+          <a
+            href="https://github.com/hbarbosa25/IEI-Ventures"
+            className="hover:text-[var(--color-text)]"
+          >
             GitHub
           </a>
-          <Link href="/contact" className="hover:text-[var(--color-text)]">
-            Contact
-          </Link>
-          <Link href="/privacy" className="hover:text-[var(--color-text)]">
-            Privacy
-          </Link>
         </nav>
       </div>
     </footer>

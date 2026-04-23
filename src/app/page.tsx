@@ -202,10 +202,10 @@ function EmptyState() {
         className="font-serif mt-8 mb-3"
         style={{ fontSize: 40, lineHeight: 1.05 }}
       >
-        A serious tool, quietly presented.
+        No projects yet.
       </h1>
       <p className="text-sm mb-8" style={{ color: "var(--color-text-muted)" }}>
-        No projects yet. Start one — the intake takes a couple of minutes.
+        Start a brand build — the intake takes a few minutes.
       </p>
       <Link href="/new" className="btn btn-primary btn-lg">
         Start a brand build

@@ -100,18 +100,10 @@ export default function LoginPage() {
           </div>
         </div>
         <div
-          className="flex items-center justify-between font-mono text-xs"
+          className="font-mono text-xs"
           style={{ color: "var(--color-text-muted)" }}
         >
-          <span>© 2026 IEI Ventures</span>
-          <div className="flex gap-4">
-            <Link href="/docs" className="hover:text-[var(--color-text)]">
-              Docs
-            </Link>
-            <Link href="/privacy" className="hover:text-[var(--color-text)]">
-              Privacy
-            </Link>
-          </div>
+          © 2026 IEI Ventures
         </div>
       </div>
       <aside
@@ -121,12 +113,6 @@ export default function LoginPage() {
         <div className="kicker" style={{ color: "#9a9f99" }}>
           From intake · to identity · to income
         </div>
-        <blockquote
-          className="font-serif leading-[1.15]"
-          style={{ fontSize: 36, maxWidth: "22ch" }}
-        >
-          &ldquo;A serious tool, quietly presented.&rdquo;
-        </blockquote>
         <div
           className="font-mono text-xs"
           style={{ color: "#9a9f99", letterSpacing: "0.14em", textTransform: "uppercase" }}

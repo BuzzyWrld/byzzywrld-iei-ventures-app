@@ -8,8 +8,6 @@ import { logoutAction } from "@/app/actions/auth";
 
 const PRIMARY = [
   { href: "/", label: "Projects" },
-  { href: "/templates", label: "Templates" },
-  { href: "/docs", label: "Docs" },
 ];
 
 const HIDE_ON = ["/login", "/signup"];
