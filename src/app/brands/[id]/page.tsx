@@ -4,6 +4,7 @@ import Link from "next/link";
 import { use, useEffect, useState } from "react";
 import type { BrandProject } from "@/lib/types";
 import { DeleteBrandButton } from "@/components/DeleteBrandButton";
+import { SendToCanvaButton } from "@/components/SendToCanvaButton";
 
 // The real skill produces a richer brand.json than our minimal BrandJson
 // type. Fields are 'unknown' so we coerce safely at render-time — different
@@ -1039,16 +1040,22 @@ function LogoOptions({ project }: { project: BrandProject }) {
               style={{ maxWidth: "100%", maxHeight: 180, pointerEvents: "none" }}
             />
           </div>
-          <div className="p-5 border-t flex items-start justify-between gap-4 flex-wrap" style={{ borderColor: "var(--color-border)" }}>
+          <div
+            className="p-5 border-t flex items-start justify-between gap-4 flex-wrap"
+            style={{ borderColor: "var(--color-border)" }}
+          >
             <div>
               <div className="font-medium tracking-tight mb-1">{primary.title}</div>
               <div className="text-xs" style={{ color: "var(--color-text-muted)", maxWidth: "60ch" }}>
                 {primary.rationale}
               </div>
             </div>
-            <a href={primary.url} download className="btn btn-secondary btn-sm shrink-0">
-              Download SVG
-            </a>
+            <div className="flex items-center gap-2 shrink-0">
+              <SendToCanvaButton logoUrl={primary.url} />
+              <a href={primary.url} download className="btn btn-secondary btn-sm">
+                Download SVG
+              </a>
+            </div>
           </div>
         </div>
       )}

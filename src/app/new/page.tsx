@@ -328,7 +328,7 @@ function ProductStep({
         What does {intake.companyName || "this business"} actually do?
       </h1>
       <p className="text-base mb-6" style={{ color: "var(--color-text-muted)", maxWidth: "54ch" }}>
-        In 2–3 sentences — the product, service, or offering. Be specific. The more concrete you are here, the less the AI has to guess.
+        In 2–3 sentences — the product, service, or offering. Be specific. The more concrete and detailed you are here, the better.
       </p>
       <textarea
         className="textarea"
