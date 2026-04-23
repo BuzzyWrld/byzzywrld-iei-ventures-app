@@ -28,6 +28,38 @@ export type LogoVariantRef = {
   url: string;
 };
 
+export type LandingVariantRef = {
+  key: string;
+  title: string;
+  rationale: string;
+  url: string;
+};
+
+export type SocialAssetRef = {
+  key: string;
+  title: string;
+  platform: string;
+  size: string;
+  url: string;
+};
+
+export type PaletteExpansionRef = {
+  url: string;
+  light: Record<string, string>;
+  dark: Record<string, string>;
+  semantic: Record<string, string>;
+};
+
+export type PitchOnePagerRef = {
+  htmlUrl: string;
+  pdfUrl?: string;
+};
+
+export type EmailKitRef = {
+  headerUrl?: string;
+  signatureUrl?: string;
+};
+
 export type BrandOutputs = {
   brandJson?: string;
   playbookHtml?: string;
@@ -35,6 +67,11 @@ export type BrandOutputs = {
   landingHtml?: string;
   logoSvg?: string;
   logoVariants?: LogoVariantRef[];
+  landingVariants?: LandingVariantRef[];
+  paletteExpansion?: PaletteExpansionRef;
+  socialKit?: SocialAssetRef[];
+  pitchOnePager?: PitchOnePagerRef;
+  emailKit?: EmailKitRef;
   landingLiveUrl?: string;
 };
 

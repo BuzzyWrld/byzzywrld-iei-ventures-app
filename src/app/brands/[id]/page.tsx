@@ -329,10 +329,331 @@ function CompletePanel({
     <>
       <Positioning brand={brand} />
       <Palette brand={brand} />
+      <PaletteExpansion project={project} />
       <Typography brand={brand} />
       <LogoOptions project={project} />
+      <LandingOptions project={project} />
+      <SocialKit project={project} />
+      <PitchOnePager project={project} />
+      <EmailKit project={project} />
       <Downloads project={project} />
     </>
+  );
+}
+
+function PaletteExpansion({ project }: { project: BrandProject }) {
+  const pal = project.outputs.paletteExpansion;
+  if (!pal) return null;
+  const lightKeys = Object.keys(pal.light);
+  const semanticKeys = Object.keys(pal.semantic);
+  return (
+    <div className="mb-12">
+      <div className="flex items-end justify-between mb-4 flex-wrap gap-2">
+        <div>
+          <div className="kicker mb-1">02 · Expanded palette</div>
+          <h2 className="text-2xl font-medium tracking-tight">Full design system colors</h2>
+        </div>
+        <a href={pal.url} download className="btn btn-ghost btn-sm">
+          Download JSON
+        </a>
+      </div>
+      {lightKeys.length > 0 && (
+        <>
+          <div className="kicker mb-2">Light</div>
+          <div
+            className="flex flex-wrap gap-1 mb-6"
+            style={{ maxWidth: "100%" }}
+          >
+            {lightKeys.map((k) => (
+              <SwatchChip key={k} label={k} hex={pal.light[k]} />
+            ))}
+          </div>
+        </>
+      )}
+      {semanticKeys.length > 0 && (
+        <>
+          <div className="kicker mb-2">Semantic</div>
+          <div className="flex flex-wrap gap-1">
+            {semanticKeys.map((k) => (
+              <SwatchChip key={k} label={k} hex={pal.semantic[k]} />
+            ))}
+          </div>
+        </>
+      )}
+    </div>
+  );
+}
+
+function SwatchChip({ label, hex }: { label: string; hex: string }) {
+  const textOnHex = isHexDark(hex) ? "#fff" : "#111";
+  return (
+    <div
+      title={`${label} · ${hex}`}
+      className="flex items-center gap-1.5 rounded font-mono"
+      style={{
+        padding: "4px 8px",
+        fontSize: 10,
+        background: hex,
+        color: textOnHex,
+        border: "1px solid rgba(0,0,0,.08)",
+      }}
+    >
+      <span>{label}</span>
+      <span style={{ opacity: 0.7 }}>{hex}</span>
+    </div>
+  );
+}
+
+function isHexDark(hex: string): boolean {
+  const m = hex.replace("#", "").slice(0, 6);
+  if (m.length < 6) return false;
+  const r = parseInt(m.slice(0, 2), 16);
+  const g = parseInt(m.slice(2, 4), 16);
+  const b = parseInt(m.slice(4, 6), 16);
+  // Perceived luminance
+  return (0.299 * r + 0.587 * g + 0.114 * b) / 255 < 0.55;
+}
+
+function LandingOptions({ project }: { project: BrandProject }) {
+  const variants = project.outputs.landingVariants ?? [];
+  if (variants.length === 0) return null;
+  return (
+    <div className="mb-12">
+      <div className="flex items-end justify-between mb-4 flex-wrap gap-2">
+        <div>
+          <div className="kicker mb-1">05 · Landing page options</div>
+          <h2 className="text-2xl font-medium tracking-tight">Three layouts</h2>
+        </div>
+      </div>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        {variants.map((v) => (
+          <div key={v.key} className="card overflow-hidden flex flex-col">
+            <div
+              className="relative"
+              style={{ aspectRatio: "4 / 3", background: "var(--color-surface-2)" }}
+            >
+              <iframe
+                src={v.url}
+                title={v.title}
+                style={{
+                  position: "absolute",
+                  inset: 0,
+                  width: "250%",
+                  height: "250%",
+                  transform: "scale(0.4)",
+                  transformOrigin: "top left",
+                  border: 0,
+                  pointerEvents: "none",
+                }}
+              />
+            </div>
+            <div className="p-4 border-t" style={{ borderColor: "var(--color-border)" }}>
+              <div className="flex items-baseline justify-between gap-2 mb-1">
+                <div className="font-medium tracking-tight">{v.title}</div>
+                <div className="flex gap-2">
+                  <a
+                    href={v.url}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="font-mono text-[11px] hover:underline"
+                    style={{ color: "var(--color-text-muted)" }}
+                  >
+                    Open ↗
+                  </a>
+                  <a
+                    href={v.url}
+                    download
+                    className="font-mono text-[11px] hover:underline"
+                    style={{ color: "var(--color-text-muted)" }}
+                  >
+                    Download
+                  </a>
+                </div>
+              </div>
+              <div className="text-xs" style={{ color: "var(--color-text-muted)" }}>
+                {v.rationale}
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function SocialKit({ project }: { project: BrandProject }) {
+  const assets = project.outputs.socialKit ?? [];
+  if (assets.length === 0) return null;
+  return (
+    <div className="mb-12">
+      <div className="flex items-end justify-between mb-4 flex-wrap gap-2">
+        <div>
+          <div className="kicker mb-1">06 · Social kit</div>
+          <h2 className="text-2xl font-medium tracking-tight">Branded assets</h2>
+        </div>
+      </div>
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+        {assets.map((a) => (
+          <div key={a.key} className="card overflow-hidden flex flex-col">
+            <div
+              className="flex items-center justify-center p-3"
+              style={{
+                aspectRatio: "1 / 1",
+                background: "var(--color-surface-2)",
+              }}
+            >
+              <object
+                data={a.url}
+                type="image/svg+xml"
+                aria-label={a.title}
+                style={{ maxWidth: "100%", maxHeight: "100%", pointerEvents: "none" }}
+              />
+            </div>
+            <div className="p-3 border-t" style={{ borderColor: "var(--color-border)" }}>
+              <div className="font-medium text-sm tracking-tight truncate">{a.title}</div>
+              <div className="flex items-baseline justify-between gap-2 mt-0.5">
+                <div
+                  className="font-mono text-[10px]"
+                  style={{ color: "var(--color-text-muted)" }}
+                >
+                  {a.platform} · {a.size}
+                </div>
+                <a
+                  href={a.url}
+                  download
+                  className="font-mono text-[10px] hover:underline"
+                  style={{ color: "var(--color-text-muted)" }}
+                >
+                  Download
+                </a>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function PitchOnePagerSection({ project }: { project: BrandProject }) {
+  const p = project.outputs.pitchOnePager;
+  if (!p) return null;
+  return (
+    <div className="mb-12">
+      <div className="flex items-end justify-between mb-4 flex-wrap gap-2">
+        <div>
+          <div className="kicker mb-1">07 · Pitch one-pager</div>
+          <h2 className="text-2xl font-medium tracking-tight">Brand snapshot</h2>
+        </div>
+        <div className="flex gap-2">
+          <a href={p.htmlUrl} target="_blank" rel="noreferrer" className="btn btn-ghost btn-sm">
+            Open HTML
+          </a>
+          {p.pdfUrl && (
+            <a href={p.pdfUrl} download className="btn btn-secondary btn-sm">
+              Download PDF
+            </a>
+          )}
+        </div>
+      </div>
+      <div
+        className="card overflow-hidden"
+        style={{ maxWidth: 720, margin: "0 auto" }}
+      >
+        <iframe
+          src={p.htmlUrl}
+          title="Pitch one-pager"
+          style={{
+            width: "100%",
+            aspectRatio: "850 / 1100",
+            border: 0,
+            display: "block",
+          }}
+        />
+      </div>
+    </div>
+  );
+}
+
+function PitchOnePager({ project }: { project: BrandProject }) {
+  return <PitchOnePagerSection project={project} />;
+}
+
+function EmailKit({ project }: { project: BrandProject }) {
+  const e = project.outputs.emailKit;
+  if (!e || (!e.headerUrl && !e.signatureUrl)) return null;
+  return (
+    <div className="mb-12">
+      <div className="flex items-end justify-between mb-4 flex-wrap gap-2">
+        <div>
+          <div className="kicker mb-1">08 · Email kit</div>
+          <h2 className="text-2xl font-medium tracking-tight">Header + signature</h2>
+        </div>
+      </div>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        {e.headerUrl && (
+          <div className="card overflow-hidden">
+            <div
+              className="flex items-center justify-center p-6"
+              style={{ background: "var(--color-surface-2)", minHeight: 160 }}
+            >
+              <object
+                data={e.headerUrl}
+                type="image/svg+xml"
+                aria-label="Email header"
+                style={{ maxWidth: "100%", maxHeight: 120, pointerEvents: "none" }}
+              />
+            </div>
+            <div className="p-4 border-t flex items-baseline justify-between" style={{ borderColor: "var(--color-border)" }}>
+              <div>
+                <div className="font-medium">Email header</div>
+                <div className="text-xs" style={{ color: "var(--color-text-muted)" }}>
+                  600×120 · SVG · drop into mailer headers
+                </div>
+              </div>
+              <a
+                href={e.headerUrl}
+                download
+                className="font-mono text-[11px] hover:underline"
+                style={{ color: "var(--color-text-muted)" }}
+              >
+                Download
+              </a>
+            </div>
+          </div>
+        )}
+        {e.signatureUrl && (
+          <div className="card overflow-hidden">
+            <div
+              className="flex items-center justify-center p-6"
+              style={{ background: "var(--color-surface-2)", minHeight: 160 }}
+            >
+              <iframe
+                src={e.signatureUrl}
+                title="Email signature"
+                style={{ width: "100%", height: 140, border: 0 }}
+              />
+            </div>
+            <div className="p-4 border-t flex items-baseline justify-between" style={{ borderColor: "var(--color-border)" }}>
+              <div>
+                <div className="font-medium">Email signature</div>
+                <div className="text-xs" style={{ color: "var(--color-text-muted)" }}>
+                  HTML table · paste into Gmail signature settings
+                </div>
+              </div>
+              <a
+                href={e.signatureUrl}
+                download
+                className="font-mono text-[11px] hover:underline"
+                style={{ color: "var(--color-text-muted)" }}
+              >
+                Download
+              </a>
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
   );
 }
 
@@ -343,7 +664,7 @@ function LogoOptions({ project }: { project: BrandProject }) {
     <div className="mb-12">
       <div className="flex items-end justify-between mb-4 flex-wrap gap-2">
         <div>
-          <div className="kicker mb-1">03 · Logo options</div>
+          <div className="kicker mb-1">04 · Logo options</div>
           <h2 className="text-2xl font-medium tracking-tight">Three directions</h2>
         </div>
       </div>
@@ -455,7 +776,7 @@ function Typography({ brand }: { brand: LiveBrandJson | null }) {
     <div className="mb-12">
       <div className="flex items-end justify-between mb-4 flex-wrap gap-2">
         <div>
-          <div className="kicker mb-1">02 · Typography</div>
+          <div className="kicker mb-1">03 · Typography</div>
           <h2 className="text-2xl font-medium tracking-tight">Type system</h2>
         </div>
       </div>

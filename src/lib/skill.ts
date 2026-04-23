@@ -5,19 +5,26 @@ import { createBrand, getBrand, updateBrand } from "./db";
 import { skill } from "./skills";
 import { brandDir } from "./storage";
 import { generateLogoVariants } from "./logos";
-import type { BrandIntake, BrandProject, LogoVariantRef } from "./types";
+import { generateLandingVariants } from "./variants/landing";
+import { generatePaletteExpansion } from "./variants/palette-expand";
+import { generateSocialKit } from "./variants/social";
+import { generatePitchOnePager } from "./variants/pitch";
+import { generateEmailKit } from "./variants/email";
+import type {
+  BrandIntake,
+  BrandProject,
+  EmailKitRef,
+  LandingVariantRef,
+  LogoVariantRef,
+  PaletteExpansionRef,
+  PitchOnePagerRef,
+  SocialAssetRef,
+} from "./types";
 
 export function newBrandId(): string {
   return randomUUID();
 }
 
-/**
- * Kick off a brand build. Returns immediately with the pending project;
- * the skill runs in the background and updates the DB row as it progresses.
- *
- * Fire-and-forget is fine for our single-instance self-hosted setup. A real
- * production multi-instance deploy would want BullMQ or similar.
- */
 export function enqueueBrandBuild(
   intake: BrandIntake,
   opts: { tenantId?: string; userId?: string } = {}
@@ -51,23 +58,98 @@ async function runBrandBuildInBackground(project: BrandProject): Promise<void> {
     });
     const fileUrl = (name?: string) =>
       name ? `/api/brands/${id}/files/${encodeURIComponent(name)}` : undefined;
+    const assetUrl = (rel: string) =>
+      `/api/brands/${id}/files/${rel.split("/").map(encodeURIComponent).join("/")}`;
 
-    // Dedicated logo-variants pass — runs regardless of main adapter.
-    // Best-effort; empty array on failure, doesn't fail the whole build.
-    let logoVariants: LogoVariantRef[] = [];
+    // Load the brand.json so the variant generators can work from real data.
+    let brand: Record<string, unknown> = {};
     try {
-      updateBrand(id, { progressStage: "generating logo options", progressPct: 0.92 });
-      const brandJsonPath = path.join(outDir, manifest.brandJson);
-      const brand = JSON.parse(fs.readFileSync(brandJsonPath, "utf8"));
-      const variants = await generateLogoVariants(brand, outDir, 3);
-      logoVariants = variants.map((v) => ({
-        key: v.key,
-        title: v.title,
-        rationale: v.rationale,
-        url: `/api/brands/${id}/files/${encodeURIComponent(v.filename)}`,
-      }));
+      brand = JSON.parse(fs.readFileSync(path.join(outDir, manifest.brandJson), "utf8"));
     } catch (err) {
-      console.warn(`[skill] logo variants failed:`, err instanceof Error ? err.message : err);
+      console.warn(`[skill] couldn't read brand.json for variants:`, err);
+    }
+
+    // Fire all 6 variant generators in parallel. Each is best-effort —
+    // failure of any one doesn't block the others or fail the build.
+    updateBrand(id, { progressStage: "generating brand extras", progressPct: 0.92 });
+    const [
+      logoResult,
+      landingResult,
+      paletteResult,
+      socialResult,
+      pitchResult,
+      emailResult,
+    ] = await Promise.allSettled([
+      generateLogoVariants(brand as never, outDir, 3),
+      generateLandingVariants(brand as never, outDir, 3),
+      generatePaletteExpansion(brand as never, outDir),
+      generateSocialKit(brand as never, outDir),
+      generatePitchOnePager(brand as never, outDir),
+      generateEmailKit(brand as never, outDir),
+    ]);
+
+    const logoVariants: LogoVariantRef[] =
+      logoResult.status === "fulfilled"
+        ? logoResult.value.map((v) => ({
+            key: v.key,
+            title: v.title,
+            rationale: v.rationale,
+            url: assetUrl(v.filename),
+          }))
+        : [];
+
+    const landingVariants: LandingVariantRef[] =
+      landingResult.status === "fulfilled"
+        ? landingResult.value.map((v) => ({
+            key: v.key,
+            title: v.title,
+            rationale: v.rationale,
+            url: assetUrl(v.filename),
+          }))
+        : [];
+
+    let paletteExpansion: PaletteExpansionRef | undefined;
+    if (paletteResult.status === "fulfilled" && paletteResult.value) {
+      const p = paletteResult.value;
+      paletteExpansion = {
+        url: assetUrl(p.filename),
+        light: p.light,
+        dark: p.dark,
+        semantic: p.semantic,
+      };
+    }
+
+    const socialKit: SocialAssetRef[] =
+      socialResult.status === "fulfilled"
+        ? socialResult.value.map((a) => ({
+            key: a.key,
+            title: a.title,
+            platform: a.platform,
+            size: a.size,
+            url: assetUrl(a.filename),
+          }))
+        : [];
+
+    let pitchOnePager: PitchOnePagerRef | undefined;
+    if (pitchResult.status === "fulfilled" && pitchResult.value) {
+      pitchOnePager = {
+        htmlUrl: assetUrl(pitchResult.value.htmlFilename),
+        pdfUrl: pitchResult.value.pdfFilename
+          ? assetUrl(pitchResult.value.pdfFilename)
+          : undefined,
+      };
+    }
+
+    let emailKit: EmailKitRef | undefined;
+    if (emailResult.status === "fulfilled" && emailResult.value) {
+      emailKit = {
+        headerUrl: emailResult.value.headerFilename
+          ? assetUrl(emailResult.value.headerFilename)
+          : undefined,
+        signatureUrl: emailResult.value.signatureFilename
+          ? assetUrl(emailResult.value.signatureFilename)
+          : undefined,
+      };
     }
 
     updateBrand(id, {
@@ -81,6 +163,11 @@ async function runBrandBuildInBackground(project: BrandProject): Promise<void> {
         landingHtml: fileUrl(manifest.landingHtml),
         logoSvg: fileUrl(manifest.logoSvg),
         logoVariants: logoVariants.length ? logoVariants : undefined,
+        landingVariants: landingVariants.length ? landingVariants : undefined,
+        paletteExpansion,
+        socialKit: socialKit.length ? socialKit : undefined,
+        pitchOnePager,
+        emailKit,
       },
     });
   } catch (err) {
