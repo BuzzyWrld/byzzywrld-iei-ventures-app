@@ -65,6 +65,11 @@ function buildUserPrompt(intake: BrandIntake, outputDir: string): string {
   const userPickedPalette = (hexMatches?.length ?? 0) >= 4;
 
   return [
+    "FRESH-CONTEXT GUARD: build for the brand in the intake below ONLY. The system prompt mentions",
+    "other brands by name (Aurelian Labs, Pen2Purpose, AceTV, FamFit, Wone, Banger, OffScript, Vent,",
+    "DOL, Halcyon, IEI, Ideas Equal Income, etc.) — those are STRUCTURAL EXAMPLES. Never copy their",
+    "names or copy. If your output contains any of those brand names, that is a critical defect.",
+    "",
     `Build a complete brand playbook NOW using the Write tool. The working directory is already set to:`,
     `  ${outputDir}`,
     "",

@@ -83,7 +83,7 @@ export async function generateSocialKit(
     text = await callClaude({
       system: SYSTEM,
       user: buildUser(brand),
-      maxTokens: 6000,
+      maxTokens: 12000,
     });
   } catch (err) {
     console.warn(`[social-kit] call failed:`, err instanceof Error ? err.message : err);

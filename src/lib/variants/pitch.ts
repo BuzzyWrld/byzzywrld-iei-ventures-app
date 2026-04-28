@@ -12,6 +12,7 @@ import {
   parseJson,
   type BrandForVariants,
 } from "./shared";
+import { pitchExemplar } from "./exemplar";
 
 export type PitchOnePager = {
   htmlFilename: string;
@@ -56,8 +57,9 @@ export async function generatePitchOnePager(
 ): Promise<PitchOnePager | null> {
   let text: string | null = null;
   try {
+    const exemplar = await pitchExemplar();
     text = await callClaude({
-      system: SYSTEM,
+      system: SYSTEM + exemplar,
       user: buildUser(brand),
       maxTokens: 4500,
     });

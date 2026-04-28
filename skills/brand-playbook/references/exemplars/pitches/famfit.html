@@ -1,0 +1,2130 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --navy:     #0D1822;
+      --navy2:    #152233;
+      --navy3:    #1C2E42;
+      --teal:     #00C6A2;
+      --teal2:    #009E82;
+      --amber:    #F5A623;
+      --red:      #E05252;
+      --white:    #F4F6F8;
+      --muted:    rgba(244,246,248,0.45);
+      --border:   rgba(0,198,162,0.18);
+      --fd:       'Syne', sans-serif;
+      --fb:       'DM Sans', sans-serif;
+      --fm:       'IBM Plex Mono', monospace;
+    }
+
+    @page { size: 1100px 850px; margin: 0; }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: var(--fb);
+      background: var(--navy);
+      color: var(--white);
+      width: 1100px;
+    }
+
+    .page {
+      width: 1100px;
+      height: 850px;
+      overflow: hidden;
+      page-break-after: always;
+      position: relative;
+    }
+    .page:last-child { page-break-after: avoid; }
+
+    /* ── shared atoms ── */
+    .mono { font-family: var(--fm); }
+    .syne { font-family: var(--fd); }
+
+    .eyebrow {
+      font-family: var(--fm);
+      font-size: 10px;
+      letter-spacing: 0.32em;
+      text-transform: uppercase;
+      color: var(--teal);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+    .eyebrow::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(90deg, var(--teal), transparent);
+      opacity: 0.35;
+    }
+
+    .pill {
+      display: inline-block;
+      font-family: var(--fm);
+      font-size: 10px;
+      letter-spacing: 0.12em;
+      padding: 4px 12px;
+      border-radius: 20px;
+      border: 1px solid rgba(0,198,162,0.35);
+      color: var(--teal);
+      background: rgba(0,198,162,0.08);
+    }
+
+    .pill.amber {
+      border-color: rgba(245,166,35,0.35);
+      color: var(--amber);
+      background: rgba(245,166,35,0.08);
+    }
+
+    .pill.red {
+      border-color: rgba(224,82,82,0.35);
+      color: var(--red);
+      background: rgba(224,82,82,0.08);
+    }
+
+    .card {
+      background: var(--navy2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 22px 24px;
+    }
+
+    .card-left {
+      background: var(--navy2);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--teal);
+      border-radius: 10px;
+      padding: 20px 22px;
+    }
+
+    .accent-bar {
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, var(--teal), var(--amber));
+    }
+
+    .bottom-strip {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 36px;
+      background: var(--navy2);
+      border-top: 1px solid rgba(255,255,255,0.05);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 52px;
+    }
+
+    .strip-label {
+      font-family: var(--fm);
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      color: rgba(244,246,248,0.2);
+      text-transform: uppercase;
+    }
+
+    .strip-dots {
+      display: flex;
+      gap: 6px;
+    }
+
+    .strip-dot {
+      width: 5px; height: 5px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.12);
+    }
+
+    .strip-dot.active {
+      background: var(--teal);
+    }
+
+    /* grid utility */
+    .g2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .g3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; }
+
+    /* ════════════════════════════════════════
+       SLIDE 1 — COVER
+    ════════════════════════════════════════ */
+    .s1 {
+      background: var(--navy);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 68px 80px;
+    }
+
+    .s1-grid {
+      display: grid;
+      grid-template-columns: 1fr 420px;
+      gap: 60px;
+      align-items: center;
+    }
+
+    .s1-logo-row {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 32px;
+    }
+
+    .logo-icon {
+      width: 48px; height: 48px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, var(--teal), var(--amber));
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .logo-name {
+      font-family: var(--fd);
+      font-size: 26px;
+      font-weight: 800;
+      letter-spacing: 0.01em;
+    }
+
+    .s1-tag {
+      font-family: var(--fm);
+      font-size: 10px;
+      letter-spacing: 0.32em;
+      color: var(--teal);
+      text-transform: uppercase;
+      margin-bottom: 18px;
+    }
+
+    .s1-h1 {
+      font-family: var(--fd);
+      font-size: 54px;
+      font-weight: 800;
+      line-height: 1.05;
+      letter-spacing: -0.02em;
+      margin-bottom: 20px;
+    }
+
+    .s1-h1 em {
+      font-style: normal;
+      color: var(--teal);
+    }
+
+    .s1-sub {
+      font-family: var(--fb);
+      font-size: 16px;
+      color: var(--muted);
+      line-height: 1.65;
+      max-width: 380px;
+      margin-bottom: 32px;
+    }
+
+    .s1-meta-row {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    /* Cover card */
+    .s1-card {
+      background: var(--navy2);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 32px 28px;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    .s1-stat {
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+      padding-bottom: 20px;
+    }
+
+    .s1-stat:last-child {
+      border-bottom: none;
+      padding-bottom: 0;
+    }
+
+    .s1-stat-num {
+      font-family: var(--fd);
+      font-size: 38px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      color: var(--teal);
+      line-height: 1;
+      margin-bottom: 4px;
+    }
+
+    .s1-stat-num.amber { color: var(--amber); }
+
+    .s1-stat-label {
+      font-family: var(--fm);
+      font-size: 10px;
+      letter-spacing: 0.18em;
+      color: var(--muted);
+      text-transform: uppercase;
+    }
+
+    /* ════════════════════════════════════════
+       SLIDE 2 — PROBLEM
+    ════════════════════════════════════════ */
+    .s2 {
+      background: var(--navy);
+      padding: 52px 68px 52px;
+    }
+
+    .pain-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 14px;
+      margin-top: 28px;
+    }
+
+    .pain-card {
+      background: var(--navy2);
+      border: 1px solid rgba(224,82,82,0.18);
+      border-top: 3px solid var(--red);
+      border-radius: 10px;
+      padding: 22px 20px;
+    }
+
+    .pain-icon {
+      font-size: 26px;
+      margin-bottom: 10px;
+    }
+
+    .pain-title {
+      font-family: var(--fd);
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--white);
+      margin-bottom: 8px;
+    }
+
+    .pain-body {
+      font-family: var(--fb);
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.65;
+    }
+
+    .stat-callout {
+      margin-top: 24px;
+      background: rgba(224,82,82,0.06);
+      border: 1px solid rgba(224,82,82,0.2);
+      border-radius: 10px;
+      padding: 20px 28px;
+      display: flex;
+      gap: 48px;
+      align-items: center;
+    }
+
+    .sc-num {
+      font-family: var(--fd);
+      font-size: 44px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      line-height: 1;
+      white-space: nowrap;
+    }
+
+    .sc-desc {
+      font-family: var(--fb);
+      font-size: 14px;
+      color: var(--muted);
+      line-height: 1.65;
+    }
+
+    /* ════════════════════════════════════════
+       SLIDE 3 — SOLUTION
+    ════════════════════════════════════════ */
+    .s3 {
+      background: var(--navy);
+      padding: 52px 68px;
+    }
+
+    .solution-layout {
+      display: grid;
+      grid-template-columns: 1fr 340px;
+      gap: 32px;
+      margin-top: 28px;
+      align-items: start;
+    }
+
+    .sol-feat {
+      display: flex;
+      gap: 16px;
+      align-items: flex-start;
+      padding: 18px 20px;
+      background: var(--navy2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      margin-bottom: 12px;
+    }
+
+    .sol-feat-icon {
+      width: 38px; height: 38px;
+      border-radius: 10px;
+      background: rgba(0,198,162,0.1);
+      border: 1px solid rgba(0,198,162,0.2);
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .sol-feat-title {
+      font-family: var(--fd);
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--white);
+      margin-bottom: 4px;
+    }
+
+    .sol-feat-body {
+      font-family: var(--fb);
+      font-size: 12px;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    /* phone mock */
+    .phone-mock {
+      background: var(--navy2);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 28px;
+      padding: 14px 12px;
+      box-shadow: 0 24px 60px rgba(0,0,0,0.4);
+    }
+
+    .phone-notch {
+      width: 60px; height: 7px;
+      background: rgba(255,255,255,0.06);
+      border-radius: 4px;
+      margin: 0 auto 16px;
+    }
+
+    .phone-ui {
+      background: var(--navy);
+      border-radius: 18px;
+      padding: 16px;
+    }
+
+    .phone-hdr {
+      font-family: var(--fm);
+      font-size: 9px;
+      letter-spacing: 0.15em;
+      color: rgba(244,246,248,0.3);
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+
+    .phone-streak-num {
+      font-family: var(--fd);
+      font-size: 48px;
+      font-weight: 800;
+      color: var(--teal);
+      text-align: center;
+      line-height: 1;
+    }
+
+    .phone-streak-label {
+      font-family: var(--fm);
+      font-size: 9px;
+      letter-spacing: 0.2em;
+      color: var(--muted);
+      text-align: center;
+      text-transform: uppercase;
+      margin-bottom: 14px;
+    }
+
+    .phone-partner {
+      background: var(--navy2);
+      border-radius: 8px;
+      padding: 10px 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+
+    .pav {
+      width: 28px; height: 28px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-family: var(--fd);
+      font-size: 11px;
+      font-weight: 700;
+      color: white;
+      flex-shrink: 0;
+    }
+
+    .pname { font-family: var(--fd); font-size: 12px; font-weight: 600; color: var(--white); }
+    .pstatus { font-family: var(--fm); font-size: 9px; color: var(--muted); }
+
+    .pbadge {
+      margin-left: auto;
+      font-family: var(--fm);
+      font-size: 9px;
+      padding: 2px 7px;
+      border-radius: 4px;
+      background: rgba(0,198,162,0.12);
+      border: 1px solid rgba(0,198,162,0.25);
+      color: var(--teal);
+    }
+
+    .pbadge.pending {
+      background: rgba(245,166,35,0.12);
+      border-color: rgba(245,166,35,0.25);
+      color: var(--amber);
+    }
+
+    /* ════════════════════════════════════════
+       SLIDE 4 — WHY NOW
+    ════════════════════════════════════════ */
+    .s4 {
+      background: var(--navy);
+      padding: 52px 68px;
+    }
+
+    .tailwind-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin-top: 28px;
+    }
+
+    .tw-card {
+      background: var(--navy2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 24px 22px;
+      display: flex;
+      gap: 16px;
+      align-items: flex-start;
+    }
+
+    .tw-num {
+      font-family: var(--fd);
+      font-size: 32px;
+      font-weight: 800;
+      color: var(--teal);
+      line-height: 1;
+      min-width: 52px;
+    }
+
+    .tw-num.amber { color: var(--amber); }
+
+    .tw-title {
+      font-family: var(--fd);
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--white);
+      margin-bottom: 6px;
+    }
+
+    .tw-body {
+      font-family: var(--fb);
+      font-size: 12px;
+      color: var(--muted);
+      line-height: 1.65;
+    }
+
+    .insight-bar {
+      margin-top: 18px;
+      background: rgba(0,198,162,0.06);
+      border: 1px solid rgba(0,198,162,0.2);
+      border-left: 3px solid var(--teal);
+      border-radius: 10px;
+      padding: 18px 24px;
+    }
+
+    .ib-text {
+      font-family: var(--fb);
+      font-size: 15px;
+      font-style: italic;
+      color: rgba(244,246,248,0.8);
+      line-height: 1.65;
+    }
+
+    /* ════════════════════════════════════════
+       SLIDE 5 — MARKET
+    ════════════════════════════════════════ */
+    .s5 {
+      background: var(--navy);
+      padding: 52px 68px;
+    }
+
+    .market-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin-top: 28px;
+    }
+
+    .market-circle-wrap {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .mkt-row {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .mkt-circle {
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+      font-family: var(--fd);
+      font-weight: 800;
+      color: var(--white);
+    }
+
+    .mkt-label-col {}
+
+    .mkt-abbr {
+      font-family: var(--fm);
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      margin-bottom: 4px;
+    }
+
+    .mkt-size {
+      font-family: var(--fd);
+      font-size: 28px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      line-height: 1;
+    }
+
+    .mkt-desc {
+      font-family: var(--fb);
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .mkt-notes {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .mkt-note {
+      background: var(--navy2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 16px 18px;
+    }
+
+    .mkt-note-title {
+      font-family: var(--fd);
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--white);
+      margin-bottom: 4px;
+    }
+
+    .mkt-note-body {
+      font-family: var(--fb);
+      font-size: 12px;
+      color: var(--muted);
+      line-height: 1.55;
+    }
+
+    /* ════════════════════════════════════════
+       SLIDE 6 — PRODUCT
+    ════════════════════════════════════════ */
+    .s6 {
+      background: var(--navy);
+      padding: 52px 68px;
+    }
+
+    .product-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 14px;
+      margin-top: 28px;
+    }
+
+    .prod-card {
+      background: var(--navy2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 22px 20px;
+    }
+
+    .prod-num {
+      font-family: var(--fm);
+      font-size: 9px;
+      letter-spacing: 0.3em;
+      color: var(--teal);
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+
+    .prod-icon-wrap {
+      width: 42px; height: 42px;
+      border-radius: 11px;
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: 14px;
+    }
+
+    .prod-title {
+      font-family: var(--fd);
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--white);
+      margin-bottom: 8px;
+    }
+
+    .prod-body {
+      font-family: var(--fb);
+      font-size: 12px;
+      color: var(--muted);
+      line-height: 1.65;
+      margin-bottom: 14px;
+    }
+
+    .feature-list {}
+
+    .fl-item {
+      display: flex;
+      gap: 8px;
+      font-family: var(--fb);
+      font-size: 11px;
+      color: rgba(244,246,248,0.55);
+      margin-bottom: 5px;
+      line-height: 1.4;
+    }
+
+    .fl-dot {
+      color: var(--teal);
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    .roadmap-bar {
+      margin-top: 20px;
+      background: var(--navy2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 16px 22px;
+      display: flex;
+      align-items: center;
+      gap: 0;
+    }
+
+    .rb-phase {
+      flex: 1;
+      text-align: center;
+      position: relative;
+    }
+
+    .rb-phase + .rb-phase::before {
+      content: '→';
+      position: absolute;
+      left: 0; top: 50%;
+      transform: translate(-50%, -50%);
+      color: rgba(0,198,162,0.3);
+      font-size: 16px;
+    }
+
+    .rb-label {
+      font-family: var(--fm);
+      font-size: 9px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      margin-bottom: 4px;
+    }
+
+    .rb-title {
+      font-family: var(--fd);
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    /* ════════════════════════════════════════
+       SLIDE 7 — TRACTION
+    ════════════════════════════════════════ */
+    .s7 {
+      background: var(--navy);
+      padding: 52px 68px;
+    }
+
+    .traction-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      margin-top: 28px;
+      margin-bottom: 18px;
+    }
+
+    .tr-card {
+      background: var(--navy2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 22px 20px;
+      text-align: center;
+    }
+
+    .tr-num {
+      font-family: var(--fd);
+      font-size: 42px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      line-height: 1;
+      margin-bottom: 6px;
+    }
+
+    .tr-label {
+      font-family: var(--fm);
+      font-size: 10px;
+      letter-spacing: 0.15em;
+      color: var(--muted);
+      text-transform: uppercase;
+    }
+
+    .milestone-row {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .milestone {
+      background: var(--navy2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 14px 18px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .ms-dot {
+      width: 10px; height: 10px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .ms-text {
+      font-family: var(--fb);
+      font-size: 13px;
+      color: rgba(244,246,248,0.75);
+      flex: 1;
+    }
+
+    .ms-tag {
+      font-family: var(--fm);
+      font-size: 10px;
+      padding: 3px 10px;
+      border-radius: 4px;
+    }
+
+    /* ════════════════════════════════════════
+       SLIDE 8 — BUSINESS MODEL
+    ════════════════════════════════════════ */
+    .s8 {
+      background: var(--navy);
+      padding: 52px 68px;
+    }
+
+    .biz-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin-top: 28px;
+    }
+
+    .tier-card {
+      background: var(--navy2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 24px 22px;
+    }
+
+    .tier-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+    }
+
+    .tier-name {
+      font-family: var(--fd);
+      font-size: 18px;
+      font-weight: 700;
+    }
+
+    .tier-price {
+      font-family: var(--fd);
+      font-size: 24px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+    }
+
+    .tier-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .tier-item {
+      display: flex;
+      gap: 8px;
+      font-family: var(--fb);
+      font-size: 12px;
+      color: rgba(244,246,248,0.65);
+      line-height: 1.5;
+    }
+
+    .unit-econ {
+      background: rgba(0,198,162,0.06);
+      border: 1px solid rgba(0,198,162,0.2);
+      border-radius: 10px;
+      padding: 20px 22px;
+    }
+
+    .ue-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin-top: 14px;
+    }
+
+    .ue-item {}
+
+    .ue-num {
+      font-family: var(--fd);
+      font-size: 28px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      line-height: 1;
+      margin-bottom: 4px;
+    }
+
+    .ue-label {
+      font-family: var(--fm);
+      font-size: 10px;
+      letter-spacing: 0.14em;
+      color: var(--muted);
+      text-transform: uppercase;
+    }
+
+    /* ════════════════════════════════════════
+       SLIDE 9 — COMPETITION
+    ════════════════════════════════════════ */
+    .s9 {
+      background: var(--navy);
+      padding: 52px 68px;
+    }
+
+    .comp-table-wrap {
+      margin-top: 28px;
+    }
+
+    .comp-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .comp-table th {
+      font-family: var(--fm);
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--teal);
+      padding: 12px 16px;
+      text-align: left;
+      border-bottom: 1px solid rgba(0,198,162,0.2);
+    }
+
+    .comp-table td {
+      font-family: var(--fb);
+      font-size: 13px;
+      padding: 14px 16px;
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+      vertical-align: middle;
+    }
+
+    .comp-table tr.famfit-row td {
+      background: rgba(0,198,162,0.06);
+      border-bottom: 1px solid rgba(0,198,162,0.15);
+    }
+
+    .comp-table tr.famfit-row td:first-child {
+      border-left: 3px solid var(--teal);
+      font-weight: 600;
+      color: var(--teal);
+    }
+
+    .check { color: var(--teal); font-size: 16px; }
+    .cross { color: rgba(244,246,248,0.2); font-size: 14px; }
+    .partial { color: var(--amber); font-size: 14px; }
+
+    .moat-bar {
+      margin-top: 20px;
+      background: rgba(0,198,162,0.06);
+      border: 1px solid rgba(0,198,162,0.2);
+      border-radius: 8px;
+      padding: 16px 22px;
+      display: flex;
+      gap: 32px;
+      align-items: flex-start;
+    }
+
+    .moat-item {}
+
+    .moat-title {
+      font-family: var(--fd);
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--teal);
+      margin-bottom: 4px;
+    }
+
+    .moat-body {
+      font-family: var(--fb);
+      font-size: 12px;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    /* ════════════════════════════════════════
+       SLIDE 10 — TEAM
+    ════════════════════════════════════════ */
+    .s10 {
+      background: var(--navy);
+      padding: 52px 68px;
+    }
+
+    .team-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+      margin-top: 28px;
+    }
+
+    .team-card {
+      background: var(--navy2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 26px 24px;
+      display: flex;
+      gap: 20px;
+    }
+
+    .team-av {
+      width: 56px; height: 56px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-family: var(--fd);
+      font-size: 22px;
+      font-weight: 800;
+      color: white;
+      flex-shrink: 0;
+    }
+
+    .team-name {
+      font-family: var(--fd);
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--white);
+      margin-bottom: 2px;
+    }
+
+    .team-role {
+      font-family: var(--fm);
+      font-size: 10px;
+      letter-spacing: 0.18em;
+      color: var(--teal);
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+
+    .team-bio {
+      font-family: var(--fb);
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    .team-tags {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      margin-top: 10px;
+    }
+
+    .team-tag {
+      font-family: var(--fm);
+      font-size: 9px;
+      letter-spacing: 0.1em;
+      color: var(--muted);
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.08);
+      padding: 3px 9px;
+      border-radius: 4px;
+    }
+
+    .advisor-row {
+      margin-top: 18px;
+      background: var(--navy2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 16px 22px;
+      display: flex;
+      gap: 28px;
+      align-items: center;
+    }
+
+    .adv-label {
+      font-family: var(--fm);
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      color: var(--muted);
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    .adv-items {
+      display: flex;
+      gap: 20px;
+    }
+
+    .adv-item {
+      font-family: var(--fb);
+      font-size: 13px;
+      color: rgba(244,246,248,0.65);
+    }
+
+    .adv-item strong {
+      color: var(--white);
+      font-weight: 600;
+      font-family: var(--fd);
+    }
+
+    /* ════════════════════════════════════════
+       SLIDE 11 — THE ASK
+    ════════════════════════════════════════ */
+    .s11 {
+      background: var(--navy);
+      display: flex;
+      flex-direction: column;
+      padding: 52px 68px;
+    }
+
+    .ask-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      margin-top: 28px;
+      flex: 1;
+    }
+
+    .ask-left {}
+
+    .ask-headline {
+      font-family: var(--fd);
+      font-size: 52px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      line-height: 1.0;
+      margin-bottom: 8px;
+    }
+
+    .ask-sub {
+      font-family: var(--fm);
+      font-size: 11px;
+      letter-spacing: 0.18em;
+      color: var(--muted);
+      text-transform: uppercase;
+      margin-bottom: 28px;
+    }
+
+    .ask-use {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .use-row {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .use-bar-wrap {
+      flex: 1;
+      height: 6px;
+      background: rgba(255,255,255,0.06);
+      border-radius: 3px;
+      overflow: hidden;
+    }
+
+    .use-bar {
+      height: 100%;
+      border-radius: 3px;
+    }
+
+    .use-pct {
+      font-family: var(--fm);
+      font-size: 11px;
+      color: var(--teal);
+      min-width: 36px;
+      text-align: right;
+    }
+
+    .use-label {
+      font-family: var(--fb);
+      font-size: 13px;
+      color: var(--muted);
+      min-width: 160px;
+    }
+
+    .ask-right {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .ask-milestone {
+      background: var(--navy2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 18px 20px;
+    }
+
+    .am-phase {
+      font-family: var(--fm);
+      font-size: 9px;
+      letter-spacing: 0.25em;
+      color: var(--teal);
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+
+    .am-title {
+      font-family: var(--fd);
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--white);
+      margin-bottom: 4px;
+    }
+
+    .am-body {
+      font-family: var(--fb);
+      font-size: 12px;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    /* ════════════════════════════════════════
+       SLIDE 12 — CLOSING
+    ════════════════════════════════════════ */
+    .s12 {
+      background: var(--navy);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 68px;
+    }
+
+    .close-icon {
+      width: 72px; height: 72px;
+      border-radius: 20px;
+      background: linear-gradient(135deg, var(--teal), var(--amber));
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 28px;
+    }
+
+    .close-h1 {
+      font-family: var(--fd);
+      font-size: 58px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      line-height: 1.0;
+      margin-bottom: 14px;
+    }
+
+    .close-sub {
+      font-family: var(--fb);
+      font-size: 17px;
+      color: var(--muted);
+      max-width: 500px;
+      margin: 0 auto 36px;
+      line-height: 1.65;
+    }
+
+    .close-contact {
+      display: flex;
+      gap: 40px;
+      justify-content: center;
+      margin-bottom: 36px;
+    }
+
+    .cc-item {}
+
+    .cc-label {
+      font-family: var(--fm);
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      color: var(--teal);
+      text-transform: uppercase;
+      margin-bottom: 4px;
+    }
+
+    .cc-val {
+      font-family: var(--fb);
+      font-size: 14px;
+      color: var(--white);
+    }
+
+    .confidential {
+      font-family: var(--fm);
+      font-size: 10px;
+      letter-spacing: 0.25em;
+      color: rgba(244,246,248,0.18);
+      text-transform: uppercase;
+      border: 1px solid rgba(255,255,255,0.08);
+      padding: 5px 16px;
+      border-radius: 20px;
+    }
+  </style>
+</head>
+<body>
+
+<!-- ═══ SLIDE 1: COVER ═══ -->
+<div class="page s1">
+  <div class="accent-bar"></div>
+
+  <div class="s1-grid">
+    <div>
+      <div class="s1-logo-row">
+        <div class="logo-icon">
+          <svg width="26" height="26" viewBox="0 0 28 28" fill="none">
+            <path d="M14 4C8.48 4 4 8.48 4 14s4.48 10 10 10 10-4.48 10-10S19.52 4 14 4z" stroke="white" stroke-width="1.8" fill="none"/>
+            <circle cx="14" cy="14" r="2.5" fill="white"/>
+            <path d="M14 10V7M14 21v-3M10 14H7M21 14h-3" stroke="white" stroke-width="1.8" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <div class="logo-name">FamFit</div>
+      </div>
+
+      <div class="s1-tag">Pre-Seed · Investor Deck · 2025</div>
+
+      <h1 class="s1-h1">Fitness is better<br>when you do it<br><em>together.</em></h1>
+
+      <p class="s1-sub">FamFit is a social accountability fitness app that pairs two people — friends, siblings, couples — so they stay consistent through shared responsibility, not willpower alone.</p>
+
+      <div class="s1-meta-row">
+        <span class="pill">Social Fitness</span>
+        <span class="pill">Mobile App</span>
+        <span class="pill amber">Pre-Seed Round</span>
+      </div>
+    </div>
+
+    <div class="s1-card">
+      <div class="s1-stat">
+        <div class="s1-stat-num">$96B</div>
+        <div class="s1-stat-label">Global Fitness App Market by 2030</div>
+      </div>
+      <div class="s1-stat">
+        <div class="s1-stat-num">67%</div>
+        <div class="s1-stat-label">Of gym memberships go unused — solo</div>
+      </div>
+      <div class="s1-stat">
+        <div class="s1-stat-num amber">0</div>
+        <div class="s1-stat-label">Apps built around 1:1 accountability</div>
+      </div>
+      <div class="s1-stat">
+        <div class="s1-stat-num">$250K</div>
+        <div class="s1-stat-label">Pre-seed ask · 18-month runway</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="bottom-strip">
+    <span class="strip-label">FamFit · Confidential</span>
+    <div class="strip-dots">
+      <div class="strip-dot active"></div>
+      <div class="strip-dot"></div><div class="strip-dot"></div><div class="strip-dot"></div>
+      <div class="strip-dot"></div><div class="strip-dot"></div><div class="strip-dot"></div>
+      <div class="strip-dot"></div><div class="strip-dot"></div><div class="strip-dot"></div>
+      <div class="strip-dot"></div><div class="strip-dot"></div>
+    </div>
+    <span class="strip-label">Slide 01 / 12</span>
+  </div>
+</div>
+
+<!-- ═══ SLIDE 2: PROBLEM ═══ -->
+<div class="page s2">
+  <div class="accent-bar"></div>
+
+  <div class="eyebrow">01 · The Problem</div>
+  <h2 style="font-family:var(--fd);font-size:38px;font-weight:800;letter-spacing:-0.02em;line-height:1.1;">Solo fitness is a broken<br>accountability model.</h2>
+
+  <div class="pain-grid">
+    <div class="pain-card">
+      <div class="pain-icon">📉</div>
+      <div class="pain-title">Motivation Evaporates</div>
+      <div class="pain-body">Motivation is a renewable resource — but it depletes fast without external reinforcement. Most people quit within 3 months because there's no social consequence for skipping.</div>
+    </div>
+    <div class="pain-card">
+      <div class="pain-icon">🏝️</div>
+      <div class="pain-title">Fitness is Isolated</div>
+      <div class="pain-body">Every mainstream fitness app treats health as a solo endeavor. Even "social" apps like Strava are broadcast-based — public performance, not private accountability.</div>
+    </div>
+    <div class="pain-card">
+      <div class="pain-icon">📲</div>
+      <div class="pain-title">Apps Assume Too Much</div>
+      <div class="pain-body">The majority of fitness apps are built for people who already have habits. Beginners feel intimidated, overwhelmed, and underserved — and they churn immediately.</div>
+    </div>
+  </div>
+
+  <div class="stat-callout">
+    <div>
+      <div class="sc-num" style="color:var(--red);">80%</div>
+      <div style="font-family:var(--fm);font-size:10px;letter-spacing:0.15em;color:var(--muted);text-transform:uppercase;margin-top:4px;">quit within 5 months</div>
+    </div>
+    <div style="width:1px;background:rgba(255,255,255,0.06);align-self:stretch;"></div>
+    <div class="sc-desc">
+      <strong style="color:var(--white);font-family:var(--fd);font-size:15px;">The fitness industry has a retention problem, not a product problem.</strong><br><br>
+      The gap isn't better workout content or smarter algorithms. It's the absence of a human relationship that makes skipping feel consequential. FamFit closes that gap.
+    </div>
+  </div>
+
+  <div class="bottom-strip">
+    <span class="strip-label">FamFit · Confidential</span>
+    <div class="strip-dots">
+      <div class="strip-dot"></div>
+      <div class="strip-dot active"></div><div class="strip-dot"></div><div class="strip-dot"></div>
+      <div class="strip-dot"></div><div class="strip-dot"></div><div class="strip-dot"></div>
+      <div class="strip-dot"></div><div class="strip-dot"></div><div class="strip-dot"></div>
+      <div class="strip-dot"></div><div class="strip-dot"></div>
+    </div>
+    <span class="strip-label">Slide 02 / 12</span>
+  </div>
+</div>
+
+<!-- ═══ SLIDE 3: SOLUTION ═══ -->
+<div class="page s3">
+  <div class="accent-bar"></div>
+
+  <div class="eyebrow">02 · The Solution</div>
+  <h2 style="font-family:var(--fd);font-size:38px;font-weight:800;letter-spacing:-0.02em;line-height:1.1;">Two people. One shared commitment.<br><span style="color:var(--teal);">Real accountability.</span></h2>
+
+  <div class="solution-layout">
+    <div>
+      <div class="sol-feat">
+        <div class="sol-feat-icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" stroke="#00C6A2" stroke-width="1.8" stroke-linecap="round"/><circle cx="9" cy="7" r="4" stroke="#00C6A2" stroke-width="1.8"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75" stroke="#00C6A2" stroke-width="1.8" stroke-linecap="round"/></svg>
+        </div>
+        <div>
+          <div class="sol-feat-title">1:1 Partner Pairing</div>
+          <div class="sol-feat-body">Pair privately with one specific person — not a leaderboard. Your accountability is intimate, not performative.</div>
+        </div>
+      </div>
+      <div class="sol-feat">
+        <div class="sol-feat-icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12" stroke="#00C6A2" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <div>
+          <div class="sol-feat-title">Shared Streak Engine</div>
+          <div class="sol-feat-body">Streaks belong to the pair — not to you alone. Breaking it means letting your partner down. That asymmetry changes behavior.</div>
+        </div>
+      </div>
+      <div class="sol-feat">
+        <div class="sol-feat-icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="18" height="18" rx="4" stroke="#00C6A2" stroke-width="1.8"/><path d="M8 12l3 3 5-5" stroke="#00C6A2" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <div>
+          <div class="sol-feat-title">Scalable Workout Plans</div>
+          <div class="sol-feat-body">Routines adapt to each partner's level — beginners and intermediates can pair without frustration.</div>
+        </div>
+      </div>
+      <div class="sol-feat">
+        <div class="sol-feat-icon" style="background:rgba(245,166,35,0.1);border-color:rgba(245,166,35,0.2);">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M18 8h1a4 4 0 010 8h-1M2 8h16v9a4 4 0 01-4 4H6a4 4 0 01-4-4V8z" stroke="#F5A623" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <div>
+          <div class="sol-feat-title">Accountability Challenges</div>
+          <div class="sol-feat-body">Weekly partner challenges that make consistency a habit loop, not a willpower competition.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="phone-mock">
+      <div class="phone-notch"></div>
+      <div class="phone-ui">
+        <div class="phone-hdr">This Week</div>
+        <div class="phone-streak-num">14</div>
+        <div class="phone-streak-label">Day Streak 🔥</div>
+        <div class="phone-partner">
+          <div class="pav" style="background:#00C6A2;">M</div>
+          <div><div class="pname">Maya</div><div class="pstatus">Logged today ✓</div></div>
+          <div class="pbadge">Active</div>
+        </div>
+        <div class="phone-partner">
+          <div class="pav" style="background:#F5A623;">J</div>
+          <div><div class="pname">Jordan</div><div class="pstatus">Waiting on you...</div></div>
+          <div class="pbadge pending">Pending</div>
+        </div>
+        <div style="margin-top:12px;background:var(--navy2);border-radius:8px;padding:10px 12px;">
+          <div style="font-family:var(--fm);font-size:9px;color:var(--teal);margin-bottom:4px;letter-spacing:0.1em;">CHALLENGE</div>
+          <div style="font-family:var(--fd);font-size:13px;font-weight:600;color:var(--white);">30-day core streak</div>
+          <div style="font-family:var(--fb);font-size:11px;color:var(--muted);">Starts Monday · 2 days left</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="bottom-strip">
+    <span class="strip-label">FamFit · Confidential</span>
+    <div class="strip-dots">
+      <div class="strip-dot"></div><div class="strip-dot"></div>
+      <div class="strip-dot active"></div><div class="strip-dot"></div>
+      <div class="strip-dot"></div><div class="strip-dot"></div><div class="strip-dot"></div>
+      <div class="strip-dot"></div><div class="strip-dot"></div><div class="strip-dot"></div>
+      <div class="strip-dot"></div><div class="strip-dot"></div>
+    </div>
+    <span class="strip-label">Slide 03 / 12</span>
+  </div>
+</div>
+
+<!-- ═══ SLIDE 4: WHY NOW ═══ -->
+<div class="page s4">
+  <div class="accent-bar"></div>
+
+  <div class="eyebrow">03 · Why Now</div>
+  <h2 style="font-family:var(--fd);font-size:38px;font-weight:800;letter-spacing:-0.02em;line-height:1.1;">Four tailwinds converging<br>at the same moment.</h2>
+
+  <div class="tailwind-grid">
+    <div class="tw-card">
+      <div class="tw-num">01</div>
+      <div>
+        <div class="tw-title">Post-Pandemic Distance Relationships</div>
+        <div class="tw-body">Remote work normalized staying connected digitally. 40%+ of close friendships are now primarily long-distance. People are hungry for shared rituals that bridge geography.</div>
+      </div>
+    </div>
+    <div class="tw-card">
+      <div class="tw-num amber">02</div>
+      <div>
+        <div class="tw-title">Gen Z Rejects Solo Hustle Culture</div>
+        <div class="tw-body">Gen Z's dominant wellness narrative is communal, not individual. "Soft life" and accountability culture on TikTok have primed the exact audience FamFit targets.</div>
+      </div>
+    </div>
+    <div class="tw-card">
+      <div class="tw-num">03</div>
+      <div>
+        <div class="tw-title">Fitness App Fatigue Is Real</div>
+        <div class="tw-body">Peloton lost 75% of its value. Mirror was sold. Solo content-based fitness models are proving fragile. The next wave is relational, not transactional.</div>
+      </div>
+    </div>
+    <div class="tw-card">
+      <div class="tw-num amber">04</div>
+      <div>
+        <div class="tw-title">Mobile-First Health Investment Surge</div>
+        <div class="tw-body">Digital health VC hit $29B in 2023. Behavioral change and habit formation apps are commanding premium multiples. FamFit sits exactly at that intersection.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="insight-bar">
+    <div class="ib-text">"The fitness industry built better content. FamFit is building better relationships. These are not the same thing — and investors are just starting to notice the difference."</div>
+  </div>
+
+  <div class="bottom-strip">
+    <span class="strip-label">FamFit · Confidential</span>
+    <div class="strip-dots">
+      <div class="strip-dot"></div><div class="strip-dot"></div><div class="strip-dot"></div>
+      <div class="strip-dot active"></div><div class="strip-dot"></div><div class="strip-dot"></div>
+      <div class="strip-dot"></div><div class="strip-dot"></div><div class="strip-dot"></div>
+      <div class="strip-dot"></div><div class="strip-dot"></div><div class="strip-dot"></div>
+    </div>
+    <span class="strip-label">Slide 04 / 12</span>
+  </div>
+</div>
+
+<!-- ═══ SLIDE 5: MARKET ═══ -->
+<div class="page s5">
+  <div class="accent-bar"></div>
+
+  <div class="eyebrow">04 · Market Opportunity</div>
+  <h2 style="font-family:var(--fd);font-size:38px;font-weight:800;letter-spacing:-0.02em;line-height:1.1;">A massive market with<br>no direct incumbent.</h2>
+
+  <div class="market-layout">
+    <div class="market-circle-wrap">
+      <div class="mkt-row">
+        <div class="mkt-circle" style="width:90px;height:90px;background:rgba(0,198,162,0.12);border:2px solid rgba(0,198,162,0.3);font-size:14px;">TAM</div>
+        <div class="mkt-label-col">
+          <div class="mkt-abbr" style="color:var(--teal);">Total Addressable Market</div>
+          <div class="mkt-size" style="color:var(--teal);">$96B</div>
+          <div class="mkt-desc">Global fitness app market by 2030 (18.9% CAGR)</div>
+        </div>
+      </div>
+      <div class="mkt-row">
+        <div class="mkt-circle" style="width:70px;height:70px;background:rgba(245,166,35,0.1);border:2px solid rgba(245,166,35,0.25);font-size:13px;color:var(--amber);">SAM</div>
+        <div class="mkt-label-col">
+          <div class="mkt-abbr" style="color:var(--amber);">Serviceable Addressable Market</div>
+          <div class="mkt-size" style="color:var(--amber);">$22B</div>
+          <div class="mkt-desc">Social / community fitness apps · US + EU + APAC</div>
+        </div>
+      </div>
+      <div class="mkt-row">
+        <div class="mkt-circle" style="width:52px;height:52px;background:rgba(224,82,82,0.08);border:2px solid rgba(224,82,82,0.2);font-size:11px;color:var(--red);">SOM</div>
+        <div class="mkt-label-col">
+          <div class="mkt-abbr" style="color:var(--red);">Serviceable Obtainable Market</div>
+          <div class="mkt-size" style="color:var(--red);">$450M</div>
+          <div class="mkt-desc">1:1 accountability-first fitness · 18–35 demographic · US</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="mkt-notes">
+      <div class="mkt-note">
+        <div class="mkt-note-title">Primary Audience</div>
+        <div class="mkt-note-body">18–35 year olds · beginners and inconsistent gym-goers · people who want to work out with someone they care about · estimated 68M in the US alone.</div>
+      </div>
+      <div class="mkt-note">
+        <div class="mkt-note-title">Secondary Audience</div>
+        <div class="mkt-note-body">Long-distance relationships and friendships · busy professionals seeking structure · fitness mentors wanting a tool to guide their athlete.</div>
+      </div>
+      <div class="mkt-note">
+        <div class="mkt-note-title">B2B Expansion Opportunity</div>
+        <div class="mkt-note-body">Corporate wellness programs represent a $62B market. FamFit's pair-based model maps cleanly onto employer-sponsored health initiatives — Phase 2 revenue stream.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="bottom-strip">
+    <span class="strip-label">FamFit · Confidential</span>
+    <div class="strip-dots">
+      <div class="strip-dot"></div><div class="strip-dot"></div><div class="strip-dot"></div><div class="strip-dot"></div>
+      <div class="strip-dot active"></div><div class="strip-dot"></div><div class="strip-dot"></div>
+      <div class="strip-dot"></div><div class="strip-dot"></div><div class="strip-dot"></div>
+      <div class="strip-dot"></div><div class="strip-dot"></div>
+    </div>
+    <span class="strip-label">Slide 05 / 12</span>
+  </div>
+</div>
+
+<!-- ═══ SLIDE 6: PRODUCT ═══ -->
+<div class="page s6">
+  <div class="accent-bar"></div>
+
+  <div class="eyebrow">05 · Product</div>
+  <h2 style="font-family:var(--fd);font-size:38px;font-weight:800;letter-spacing:-0.02em;line-height:1.1;">Three layers. One cohesive<br>accountability engine.</h2>
+
+  <div class="product-grid">
+    <div class="prod-card">
+      <div class="prod-num">Core · Phase 1</div>
+      <div class="prod-icon-wrap" style="background:rgba(0,198,162,0.1);border:1px solid rgba(0,198,162,0.2);">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" stroke="#00C6A2" stroke-width="1.8" stroke-linecap="round"/><circle cx="9" cy="7" r="4" stroke="#00C6A2" stroke-width="1.8"/></svg>
+      </div>
+      <div class="prod-title">FamFit Platform</div>
+      <div class="prod-body">The core pair-based accountability experience. MVP in development. Beta-ready Q2 2025.</div>
+      <div class="feature-list">
+        <div class="fl-item"><span class="fl-dot">✦</span>Partner pairing + invite flow</div>
+        <div class="fl-item"><span class="fl-dot">✦</span>Workout logging + streak tracking</div>
+        <div class="fl-item"><span class="fl-dot">✦</span>Activity feed + notifications</div>
+        <div class="fl-item"><span class="fl-dot">✦</span>Accountability challenges</div>
+      </div>
+    </div>
+
+    <div class="prod-card">
+      <div class="prod-num">Adaptive · Phase 2</div>
+      <div class="prod-icon-wrap" style="background:rgba(245,166,35,0.1);border:1px solid rgba(245,166,35,0.2);">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12" stroke="#F5A623" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+      <div class="prod-title">Scalable Workouts</div>
+      <div class="prod-body">AI-assisted workout adaptation that scales to each partner's level. Closes the skill-gap barrier to pairing.</div>
+      <div class="feature-list">
+        <div class="fl-item"><span class="fl-dot" style="color:var(--amber);">✦</span>Level-adaptive routines</div>
+        <div class="fl-item"><span class="fl-dot" style="color:var(--amber);">✦</span>Beginner-first design</div>
+        <div class="fl-item"><span class="fl-dot" style="color:var(--amber);">✦</span>Cross-partner difficulty scaling</div>
+        <div class="fl-item"><span class="fl-dot" style="color:var(--amber);">✦</span>Claude API integration (AI layer)</div>
+      </div>
+    </div>
+
+    <div class="prod-card">
+      <div class="prod-num">Social · Phase 3</div>
+      <div class="prod-icon-wrap" style="background:rgba(0,198,162,0.1);border:1px solid rgba(0,198,162,0.2);">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M18 20V10M12 20V4M6 20v-6" stroke="#00C6A2" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+      <div class="prod-title">Social Layer + B2B</div>
+      <div class="prod-body">Extended social features and corporate wellness program integrations for B2B revenue.</div>
+      <div class="feature-list">
+        <div class="fl-item"><span class="fl-dot">✦</span>Group accountability pods</div>
+        <div class="fl-item"><span class="fl-dot">✦</span>Corporate wellness portal</div>
+        <div class="fl-item"><span class="fl-dot">✦</span>Leaderboards + public profiles</div>
+        <div class="fl-item"><span class="fl-dot">✦</span>API partner integrations</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="roadmap-bar">
+    <div class="rb-phase">
+      <div class="rb-label" style="color:var(--teal);">Now</div>
+      <div class="rb-title" style="color:var(--teal);">MVP Build</div>
+    </div>
+    <div class="rb-phase">
+      <div class="rb-label" style="color:var(--muted);">Q2 2025</div>
+      <div class="rb-title" style="color:var(--white);">Beta Launch</div>
+    </div>
+    <div class="rb-phase">
+      <div class="rb-label" style="color:var(--muted);">Q4 2025</div>
+      <div class="rb-title" style="color:var(--white);">Public Launch</div>
+    </div>
+    <div class="rb-phase">
+      <div class="rb-label" style="color:var(--muted);">Q2 2026</div>
+      <div class="rb-title" style="color:var(--white);">Adaptive System</div>
+    </div>
+    <div class="rb-phase">
+      <div class="rb-label" style="color:var(--muted);">Q4 2026</div>
+      <div class="rb-title" style="color:var(--amber);">Seed Round</div>
+    </div>
+  </div>
+
+  <div class="bottom-strip">
+    <span class="strip-label">FamFit · Confidential</span>
+    <div class="strip-dots">
+      <div class="strip-dot"></div><div class="strip-dot"></div><div class="strip-dot"></div><div class="strip-dot"></div><div class="strip-dot"></div>
+      <div class="strip-dot active"></div><div class="strip-dot"></div><div class="strip-dot"></div>
+      <div class="strip-dot"></div><div class="strip-dot"></div><div class="strip-dot"></div><div class="strip-dot"></div>
+    </div>
+    <span class="strip-label">Slide 06 / 12</span>
+  </div>
+</div>
+
+<!-- ═══ SLIDE 7: TRACTION ═══ -->
+<div class="page s7">
+  <div class="accent-bar"></div>
+
+  <div class="eyebrow">06 · Traction</div>
+  <h2 style="font-family:var(--fd);font-size:38px;font-weight:800;letter-spacing:-0.02em;line-height:1.1;">Early signal. Pre-product.<br><span style="color:var(--teal);">Proof of pull.</span></h2>
+
+  <div class="traction-grid">
+    <div class="tr-card">
+      <div class="tr-num" style="color:var(--teal);">240+</div>
+      <div class="tr-label">Waitlist Sign-ups<br>(Organic, No Ads)</div>
+    </div>
+    <div class="tr-card">
+      <div class="tr-num" style="color:var(--amber);">12</div>
+      <div class="tr-label">Beta Users<br>Committed to Testing</div>
+    </div>
+    <div class="tr-card">
+      <div class="tr-num" style="color:var(--teal);">4.8★</div>
+      <div class="tr-label">Avg. Concept Feedback<br>Score (Beta Survey)</div>
+    </div>
+  </div>
+
+  <div class="milestone-row">
+    <div class="milestone">
+      <div class="ms-dot" style="background:var(--teal);"></div>
+      <div class="ms-text"><strong style="color:var(--white);">Brand & identity complete</strong> — Brand playbook, landing page, QR networking assets, full visual system deployed</div>
+      <div class="ms-tag" style="background:rgba(0,198,162,0.1);border:1px solid rgba(0,198,162,0.25);color:var(--teal);">Done</div>
+    </div>
+    <div class="milestone">
+      <div class="ms-dot" style="background:var(--teal);"></div>
+      <div class="ms-text"><strong style="color:var(--white);">Waitlist landing page live</strong> — SEO-optimized with blog content strategy. Organic traffic building.</div>
+      <div class="ms-tag" style="background:rgba(0,198,162,0.1);border:1px solid rgba(0,198,162,0.25);color:var(--teal);">Done</div>
+    </div>
+    <div class="milestone">
+      <div class="ms-dot" style="background:var(--amber);"></div>
+      <div class="ms-text"><strong style="color:var(--white);">MVP development underway</strong> — Core pairing, logging, and streak systems in build with technical co-founder</div>
+      <div class="ms-tag" style="background:rgba(245,166,35,0.1);border:1px solid rgba(245,166,35,0.25);color:var(--amber);">In Progress</div>
+    </div>
+    <div class="milestone">
+      <div class="ms-dot" style="background:rgba(255,255,255,0.12);"></div>
+      <div class="ms-text"><strong style="color:var(--white);">Beta launch — Q2 2025</strong> — First 50 active pairs. Retention data. Product-market fit signal.</div>
+      <div class="ms-tag" style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);color:var(--muted);">Upcoming</div>
+    </div>
+  </div>
+
+  <div class="bottom-strip">
+    <span class="strip-label">FamFit · Confidential</span>
+    <div class="strip-dots">
+      <div class="strip-dot"></div><div class="strip-dot"></div><div class="strip-dot"></div><div class="strip-dot"></div><div class="strip-dot"></div><div class="strip-dot"></div>
+      <div class="strip-dot active"></div><div class="strip-dot"></div><div class="strip-dot"></div>
+      <div class="strip-dot"></div><div class="strip-dot"></div><div class="strip-dot"></div>
+    </div>
+    <span class="strip-label">Slide 07 / 12</span>
+  </div>
+</div>
+
+<!-- ═══ SLIDE 8: BUSINESS MODEL ═══ -->
+<div class="page s8">
+  <div class="accent-bar"></div>
+
+  <div class="eyebrow">07 · Business Model</div>
+  <h2 style="font-family:var(--fd);font-size:38px;font-weight:800;letter-spacing:-0.02em;line-height:1.1;">Freemium core. Subscription<br>upside. B2B expansion.</h2>
+
+  <div class="biz-layout">
+    <div style="display:flex;flex-direction:column;gap:14px;">
+      <div class="tier-card">
+        <div class="tier-header">
+          <div>
+            <div style="font-family:var(--fm);font-size:9px;letter-spacing:0.2em;color:var(--muted);text-transform:uppercase;margin-bottom:4px;">Tier 1</div>
+            <div class="tier-name">FamFit Free</div>
+          </div>
+          <div class="tier-price" style="color:var(--muted);">$0</div>
+        </div>
+        <div class="tier-list">
+          <div class="tier-item"><span style="color:var(--teal);">✦</span>1 active partner pair</div>
+          <div class="tier-item"><span style="color:var(--teal);">✦</span>Workout logging + basic streaks</div>
+          <div class="tier-item"><span style="color:var(--teal);">✦</span>Activity feed</div>
+          <div class="tier-item" style="color:rgba(244,246,248,0.2);">✦ Advanced analytics — locked</div>
+        </div>
+      </div>
+
+      <div class="tier-card" style="border:1px solid rgba(0,198,162,0.35);">
+        <div class="tier-header">
+          <div>
+            <div style="font-family:var(--fm);font-size:9px;letter-spacing:0.2em;color:var(--teal);text-transform:uppercase;margin-bottom:4px;">Tier 2 · Primary Revenue</div>
+            <div class="tier-name" style="color:var(--teal);">FamFit Pro</div>
+          </div>
+          <div>
+            <div class="tier-price" style="color:var(--teal);">$9.99</div>
+            <div style="font-family:var(--fm);font-size:9px;color:var(--muted);text-align:right;">/month</div>
+          </div>
+        </div>
+        <div class="tier-list">
+          <div class="tier-item"><span style="color:var(--teal);">✦</span>Unlimited partner pairs</div>
+          <div class="tier-item"><span style="color:var(--teal);">✦</span>Adaptive workout plans</div>
+          <div class="tier-item"><span style="color:var(--teal);">✦</span>Advanced streak analytics</div>
+          <div class="tier-item"><span style="color:var(--teal);">✦</span>Custom challenges + leaderboards</div>
+        </div>
+      </div>
+    </div>
+
+    <div style="display:flex;flex-direction:column;gap:14px;">
+      <div class="tier-card">
+        <div class="tier-header">
+          <div>
+            <div style="font-family:var(--fm);font-size:9px;letter-spacing:0.2em;color:var(--amber);text-transform:uppercase;margin-bottom:4px;">Tier 3 · Phase 3</div>
+            <div class="tier-name">FamFit Business</div>
+          </div>
+          <div>
+            <div class="tier-price" style="color:var(--amber);">$6</div>
+            <div style="font-family:var(--fm);font-size:9px;color:var(--muted);text-align:right;">/user/mo</div>
+          </div>
+        </div>
+        <div class="tier-list">
+          <div class="tier-item"><span style="color:var(--amber);">✦</span>Corporate wellness portal</div>
+          <div class="tier-item"><span style="color:var(--amber);">✦</span>Team accountability groups</div>
+          <div class="tier-item"><span style="color:var(--amber);">✦</span>HR dashboard + reporting</div>
+          <div class="tier-item"><span style="color:var(--amber);">✦</span>Custom branding</div>
+        </div>
+      </div>
+
+      <div class="unit-econ">
+        <div class="eyebrow" style="font-size:9px;margin-bottom:10px;">Unit Economics (Projected · Year 2)</div>
+        <div class="ue-grid">
+          <div class="ue-item">
+            <div class="ue-num" style="color:var(--teal);">$18</div>
+            <div class="ue-label">Avg. CAC (referral-led)</div>
+          </div>
+          <div class="ue-item">
+            <div class="ue-num" style="color:var(--white);">$84</div>
+            <div class="ue-label">LTV (Pro · 14mo avg)</div>
+          </div>
+          <div class="ue-item">
+            <div class="ue-num" style="color:var(--amber);">4.7×</div>
+            <div class="ue-label">LTV : CAC Ratio</div>
+          </div>
+          <div class="ue-item">
+            <div class="ue-num" style="color:var(--white);">72%</div>
+            <div class="ue-label">Gross Margin (SaaS)</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="bottom-strip">
+    <span class="strip-label">FamFit · Confidential</span>
+    <div class="strip-dots">
+      <div class="strip-dot"></div><div class="strip-dot"></div><div class="strip-dot"></div><div class="strip-dot"></div><div class="strip-dot"></div><div class="strip-dot"></div><div class="strip-dot"></div>
+      <div class="strip-dot active"></div><div class="strip-dot"></div><div class="strip-dot"></div>
+      <div class="strip-dot"></div><div class="strip-dot"></div>
+    </div>
+    <span class="strip-label">Slide 08 / 12</span>
+  </div>
+</div>
+
+<!-- ═══ SLIDE 9: COMPETITION ═══ -->
+<div class="page s9">
+  <div class="accent-bar"></div>
+
+  <div class="eyebrow">08 · Competitive Landscape</div>
+  <h2 style="font-family:var(--fd);font-size:38px;font-weight:800;letter-spacing:-0.02em;line-height:1.1;">The white space is<br><span style="color:var(--teal);">intimate accountability.</span></h2>
+
+  <div class="comp-table-wrap">
+    <table class="comp-table">
+      <thead>
+        <tr>
+          <th>Platform</th>
+          <th>Social Layer</th>
+          <th>1:1 Accountability</th>
+          <th>Beginner-First</th>
+          <th>Adaptive Workouts</th>
+          <th>Pair Streaks</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="famfit-row">
+          <td>FamFit ✦</td>
+          <td><span class="check">✓</span></td>
+          <td><span class="check">✓</span></td>
+          <td><span class="check">✓</span></td>
+          <td><span class="check">✓</span></td>
+          <td><span class="check">✓</span></td>
+        </tr>
+        <tr>
+          <td style="color:var(--muted);">Strava</td>
+          <td><span class="check">✓</span></td>
+          <td><span class="cross">✕</span></td>
+          <td><span class="cross">✕</span></td>
+          <td><span class="cross">✕</span></td>
+          <td><span class="cross">✕</span></td>
+        </tr>
+        <tr>
+          <td style="color:var(--muted);">Nike Training Club</td>
+          <td><span class="partial">◐</span></td>
+          <td><span class="cross">✕</span></td>
+          <td><span class="check">✓</span></td>
+          <td><span class="partial">◐</span></td>
+          <td><span class="cross">✕</span></td>
+        </tr>
+        <tr>
+          <td style="color:var(--muted);">Fitbod</td>
+          <td><span class="cross">✕</span></td>
+          <td><span class="cross">✕</span></td>
+          <td><span class="partial">◐</span></td>
+          <td><span class="check">✓</span></td>
+          <td><span class="cross">✕</span></td>
+        </tr>
+        <tr>
+          <td style="color:var(--muted);">Future (AI Coaching)</td>
+          <td><span class="cross">✕</span></td>
+          <td><span class="partial">◐</span></td>
+          <td><span class="check">✓</span></td>
+          <td><span class="check">✓</span></td>
+          <td><span class="cross">✕</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="moat-bar">
+    <div class="moat-item" style="flex:1;">
+      <div class="moat-title">Network Moat</div>
+      <div class="moat-body">Every FamFit user invites a partner. The product is structurally viral — you can't use it alone. CAC compounds down as pairs recruit pairs.</div>
+    </div>
+    <div style="width:1px;background:rgba(0,198,162,0.15);align-self:stretch;"></div>
+    <div class="moat-item" style="flex:1;">
+      <div class="moat-title">Relationship Data Moat</div>
+      <div class="moat-body">FamFit captures relational fitness data no competitor has — pair consistency patterns, accountability triggers, dropout signals. Proprietary dataset over time.</div>
+    </div>
+    <div style="width:1px;background:rgba(0,198,162,0.15);align-self:stretch;"></div>
+    <div class="moat-item" style="flex:1;">
+      <div class="moat-title">Brand Positioning Moat</div>
+      <div class="moat-body">"Fitness is better together" is a category-defining position. Being first to own it means incumbents who copy the feature look derivative, not innovative.</div>
+    </div>
+  </div>
+
+  <div class="bottom-strip">
+    <span class="strip-label">FamFit · Confidential</span>
+    <div class="strip-dots">
+      <div class="strip-dot"></div><div class="strip-dot"></div><div class="strip-dot"></div><div class="strip-dot"></div><div class="strip-dot"></div><div class="strip-dot"></div><div class="strip-dot"></div><div class="strip-dot"></div>
+      <div class="strip-dot active"></div><div class="strip-dot"></div><div class="strip-dot"></div><div class="strip-dot"></div>
+    </div>
+    <span class="strip-label">Slide 09 / 12</span>
+  </div>
+</div>
+
+<!-- ═══ SLIDE 10: TEAM ═══ -->
+<div class="page s10">
+  <div class="accent-bar"></div>
+
+  <div class="eyebrow">09 · Team</div>
+  <h2 style="font-family:var(--fd);font-size:38px;font-weight:800;letter-spacing:-0.02em;line-height:1.1;">Built by someone who<br>lived the problem.</h2>
+
+  <div class="team-grid">
+    <div class="team-card">
+      <div class="team-av" style="background:linear-gradient(135deg,var(--teal),var(--teal2));">D</div>
+      <div>
+        <div class="team-name">David Lin</div>
+        <div class="team-role">Founder · CEO</div>
+        <div class="team-bio">Lifelong athlete. Software developer. After career-ending injuries, rebuilt his relationship with fitness around sustainability and community. Built FamFit to solve the problem he watched his family struggle with — staying healthy without a support system nearby.</div>
+        <div class="team-tags">
+          <span class="team-tag">Software Engineering</span>
+          <span class="team-tag">Product</span>
+          <span class="team-tag">Athlete</span>
+          <span class="team-tag">Founder</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="team-card">
+      <div class="team-av" style="background:linear-gradient(135deg,var(--amber),#e8901a);">B</div>
+      <div>
+        <div class="team-name">Buzzy</div>
+        <div class="team-role">Capital Advisor · GTM</div>
+        <div class="team-bio">Director of Capital Markets at Aurelian Labs. Advising FamFit on capital strategy, GTM execution, and investor narrative. Bringing structured deal-making and brand infrastructure to help FamFit close this pre-seed round and build toward seed.</div>
+        <div class="team-tags">
+          <span class="team-tag">Capital Markets</span>
+          <span class="team-tag">GTM Strategy</span>
+          <span class="team-tag">Brand</span>
+          <span class="team-tag">Fundraising</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="advisor-row">
+    <div class="adv-label">Seeking · Advisory Roles</div>
+    <div class="adv-items">
+      <div class="adv-item"><strong>Fitness Industry Operator</strong> — brand partnerships, influencer network, retention playbooks</div>
+      <div class="adv-item"><strong>Consumer Mobile Investor</strong> — App Store growth, freemium conversion benchmarks</div>
+      <div class="adv-item"><strong>Behavioral Scientist</strong> — habit loop design, accountability mechanics validation</div>
+    </div>
+  </div>
+
+  <div class="bottom-strip">
+    <span class="strip-label">FamFit · Confidential</span>
+    <div class="strip-dots">
+      <div class="strip-dot"></div><div class="strip-dot"></div><div class="strip-dot"></div><div class="strip-dot"></div><div class="strip-dot"></div><div class="strip-dot"></div><div class="strip-dot"></div><div class="strip-dot"></div><div class="strip-dot"></div>
+      <div class="strip-dot active"></div><div class="strip-dot"></div><div class="strip-dot"></div>
+    </div>
+    <span class="strip-label">Slide 10 / 12</span>
+  </div>
+</div>
+
+<!-- ═══ SLIDE 11: THE ASK ═══ -->
+<div class="page s11">
+  <div class="accent-bar"></div>
+
+  <div class="eyebrow">10 · The Ask</div>
+
+  <div class="ask-layout">
+    <div class="ask-left">
+      <div class="ask-headline" style="color:var(--teal);">$250K</div>
+      <div class="ask-sub">Pre-Seed Round · 18-Month Runway</div>
+
+      <div style="font-family:var(--fd);font-size:14px;font-weight:700;color:var(--white);margin-bottom:14px;">Use of Funds</div>
+      <div class="ask-use">
+        <div class="use-row">
+          <div class="use-label" style="font-size:12px;color:var(--muted);">Product Development</div>
+          <div class="use-bar-wrap"><div class="use-bar" style="width:45%;background:var(--teal);"></div></div>
+          <div class="use-pct">45%</div>
+        </div>
+        <div class="use-row">
+          <div class="use-label" style="font-size:12px;color:var(--muted);">Growth & User Acquisition</div>
+          <div class="use-bar-wrap"><div class="use-bar" style="width:25%;background:var(--amber);"></div></div>
+          <div class="use-pct" style="color:var(--amber);">25%</div>
+        </div>
+        <div class="use-row">
+          <div class="use-label" style="font-size:12px;color:var(--muted);">Operations & Legal</div>
+          <div class="use-bar-wrap"><div class="use-bar" style="width:15%;background:rgba(0,198,162,0.4);"></div></div>
+          <div class="use-pct" style="color:rgba(0,198,162,0.6);">15%</div>
+        </div>
+        <div class="use-row">
+          <div class="use-label" style="font-size:12px;color:var(--muted);">Marketing & Brand</div>
+          <div class="use-bar-wrap"><div class="use-bar" style="width:10%;background:rgba(255,255,255,0.15);"></div></div>
+          <div class="use-pct" style="color:var(--muted);">10%</div>
+        </div>
+        <div class="use-row">
+          <div class="use-label" style="font-size:12px;color:var(--muted);">Reserve</div>
+          <div class="use-bar-wrap"><div class="use-bar" style="width:5%;background:rgba(255,255,255,0.08);"></div></div>
+          <div class="use-pct" style="color:var(--muted);">5%</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="ask-right">
+      <div style="font-family:var(--fd);font-size:14px;font-weight:700;color:var(--white);margin-bottom:4px;">18-Month Milestones</div>
+      <div style="font-family:var(--fm);font-size:10px;color:var(--muted);margin-bottom:14px;letter-spacing:0.1em;">WHAT THIS CAPITAL UNLOCKS</div>
+
+      <div class="ask-milestone">
+        <div class="am-phase">Month 1–3</div>
+        <div class="am-title">MVP → Beta</div>
+        <div class="am-body">Core pairing, logging, and streak systems shipped. 50 active pairs in beta. Product feedback loop running.</div>
+      </div>
+
+      <div class="ask-milestone">
+        <div class="am-phase">Month 4–9</div>
+        <div class="am-title">Public Launch → 1,000 Pairs</div>
+        <div class="am-body">App Store launch (iOS + Android). First 1,000 active pairs. Retention data proving the accountability model. Referral engine live.</div>
+      </div>
+
+      <div class="ask-milestone">
+        <div class="am-phase">Month 10–18</div>
+        <div class="am-title">Pro Conversion → Seed Ready</div>
+        <div class="am-body">FamFit Pro launched. 15–20% free-to-paid conversion. $25K+ MRR. Seed round materials + fundraise initiated.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="bottom-strip">
+    <span class="strip-label">FamFit · Confidential</span>
+    <div class="strip-dots">
+      <div class="strip-dot"></div><div class="strip-dot"></div><div class="strip-dot"></div><div class="strip-dot"></div><div class="strip-dot"></div><div class="strip-dot"></div><div class="strip-dot"></div><div class="strip-dot"></div><div class="strip-dot"></div><div class="strip-dot"></div>
+      <div class="strip-dot active"></div><div class="strip-dot"></div>
+    </div>
+    <span class="strip-label">Slide 11 / 12</span>
+  </div>
+</div>
+
+<!-- ═══ SLIDE 12: CLOSE ═══ -->
+<div class="page s12">
+  <div class="accent-bar"></div>
+
+  <div class="close-icon">
+    <svg width="36" height="36" viewBox="0 0 28 28" fill="none">
+      <path d="M14 4C8.48 4 4 8.48 4 14s4.48 10 10 10 10-4.48 10-10S19.52 4 14 4z" stroke="white" stroke-width="1.8" fill="none"/>
+      <circle cx="14" cy="14" r="2.5" fill="white"/>
+      <path d="M14 10V7M14 21v-3M10 14H7M21 14h-3" stroke="white" stroke-width="1.8" stroke-linecap="round"/>
+    </svg>
+  </div>
+
+  <h1 class="close-h1">Get fit<br><span style="color:var(--teal);">together.</span></h1>
+  <p class="close-sub">FamFit is building the first fitness platform designed around the most underutilized performance tool in existence — the people you already care about.</p>
+
+  <div class="close-contact">
+    <div class="cc-item">
+      <div class="cc-label">Founder</div>
+      <div class="cc-val">David Lin</div>
+    </div>
+    <div class="cc-item">
+      <div class="cc-label">Email</div>
+      <div class="cc-val">david@famfit.app</div>
+    </div>
+    <div class="cc-item">
+      <div class="cc-label">Deck</div>
+      <div class="cc-val">famfit.app/investors</div>
+    </div>
+    <div class="cc-item">
+      <div class="cc-label">Advisor</div>
+      <div class="cc-val">Aurelian Labs</div>
+    </div>
+  </div>
+
+  <div class="confidential">Confidential · For Accredited Investors Only · 2025</div>
+
+  <div class="bottom-strip">
+    <span class="strip-label">FamFit · Confidential</span>
+    <div class="strip-dots">
+      <div class="strip-dot"></div><div class="strip-dot"></div><div class="strip-dot"></div><div class="strip-dot"></div><div class="strip-dot"></div><div class="strip-dot"></div><div class="strip-dot"></div><div class="strip-dot"></div><div class="strip-dot"></div><div class="strip-dot"></div><div class="strip-dot"></div>
+      <div class="strip-dot active"></div>
+    </div>
+    <span class="strip-label">Slide 12 / 12</span>
+  </div>
+</div>
+
+</body>
+</html>

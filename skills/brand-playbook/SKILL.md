@@ -19,6 +19,23 @@ Builds a complete Brand Playbook — a structured, designed document covering al
 foundation worksheets — from any level of client input. This is the mandatory first step before
 any brand asset is created.
 
+## CRITICAL: NO BRAND-NAME BLEED
+
+This document and its references mention many real brands by name as **examples of structure
+and quality only** — including but not limited to: Aurelian Labs, Pen2Purpose, DOL Capital
+Solutions, AceTV, FamFit, Wone, Banger, OffScript, Vent, Halcyon Credit Partners, Ideas Equal
+Income, IEI Ventures.
+
+**These names are NEVER content to copy.** Generate ALL content (brand name, tagline, mission,
+vision, values, story, copy, palette interpretation) ONLY for the brand specified in the user's
+intake. If you find yourself about to write any of the example brand names above into
+brand.json, playbook.html, landing.html, or any other output file, STOP — that is a memory
+leak and a critical defect.
+
+The user's intake is the only source of truth for the brand being built. Treat every other
+brand name in this document as anonymized — replace mentally with "[example brand]" before
+incorporating any structural pattern.
+
 ---
 
 ## The 10 Foundational Documents (in build order)
@@ -64,6 +81,24 @@ Do not ask more than these. Infer everything else.
 
 ---
 
+## Step 0.5: Study the Exemplars
+
+Before generating anything, read `references/exemplars/INDEX.md`. It is a routing guide for 7 real
+IEI brand playbooks (AceTV, FamFit, Wone, Pen2Purpose, Banger, OffScript, Vent). Pick the **1–2
+exemplars closest to this client** by industry, audience, and aesthetic — then read those
+exemplars in full before drafting.
+
+The exemplars are how the playbook gets to IEI's quality bar:
+- HTML exemplars (`acetv.html`, `famfit.html`, `wone.html`, `pen2purpose.html`) carry real
+  structural patterns, CSS, section ordering, and copy voice. Mimic the moves, not the content.
+- PDF-extracted markdown exemplars (`banger.md`, `offscript.md`, `vent.md`) carry the brand
+  voice, persona depth, and value-proposition language IEI ships. Match the depth, not the words.
+
+**Do not skip this step.** Without exemplars, output drifts to generic LLM brand-deck filler.
+With them, the model pattern-matches to IEI's actual deliverables.
+
+---
+
 ## Step 1: Build the Brand Foundation (Internal)
 
 Before writing any HTML, build the full foundation in your reasoning. Populate every section
@@ -74,6 +109,21 @@ in the playbook with: `[Recommended — confirm with client]`
 Cross-reference rule: every section must be internally consistent. The persona in WS7 must match
 the audience in WS2. The competitor analysis in WS6 must reference competitors named in WS2.
 The niche markets in WS9 must map back to the Dream 100 ICA in WS10.
+
+**Load these pattern files before populating worksheets:**
+- For WS2 (Brand Identity), WS3 (Brand Messaging), and any voice/copy work →
+  `references/patterns/messaging-voice.md` — the IEI house voice, the "Informed Sibling" persona,
+  Green-Light/Red-Light vocabulary, anti-patterns to avoid.
+- For WS7 (Target Audience), WS9 (Niche Markets), WS10 (Dream 100) →
+  `references/patterns/audience-personas.md` — Island A → Island B framing, Whale-vs-Vampire
+  matrix, 4-Stage Tribal Funnel, named-individual ICA construction.
+- For WS8 (Product Positioning), WS5 (SMART Goals), and offer/value-prop sections →
+  `references/patterns/offer-frameworks.md` — Cure-Not-Commodity framing, Prescription Framework
+  (Diagnosis → Cost of Inaction → Prescription → Mechanism → First Win → Risk Reversal),
+  Universal Business Model Modifier, anti-discounting / capped-capacity pricing logic.
+
+These patterns carry IEI's distinctive vocabulary. Use it. Don't translate it back to generic
+agency-speak.
 
 ---
 
@@ -408,3 +458,9 @@ Key competitors: [List]
 - `references/social-sizes.md` — Social media image dimensions by platform
 - `references/color-theory.md` — Color psychology × industry archetype × audience demographics cross-reference (load during Step 2 palette selection)
 - `references/logo-theory.md` — Logo typology, form/composition, color-in-logo rules, sizing, scaling, variant system, forbidden treatments (load during Step 2 logo system)
+- `references/exemplars/INDEX.md` — Routing guide for 7 real IEI playbooks; load during Step 0.5, then read the 1–2 closest matches in full
+- `references/exemplars/{acetv,famfit,wone,pen2purpose}.html` — HTML exemplars (structure, CSS, voice patterns)
+- `references/exemplars/{banger,offscript,vent}.md` — PDF-extracted exemplars (voice, persona depth, value-prop language)
+- `references/patterns/messaging-voice.md` — IEI house voice, Informed Sibling persona, copy do/don'ts (load during Step 1 for WS2/WS3)
+- `references/patterns/audience-personas.md` — Island A→B framing, Whale-vs-Vampire matrix, ICA construction (load during Step 1 for WS7/WS9/WS10)
+- `references/patterns/offer-frameworks.md` — Cure-Not-Commodity, Prescription Framework, pricing logic (load during Step 1 for WS5/WS8)

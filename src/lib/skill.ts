@@ -10,6 +10,7 @@ import { generatePaletteExpansion } from "./variants/palette-expand";
 import { generateSocialKit } from "./variants/social";
 import { generatePitchOnePager } from "./variants/pitch";
 import { generateEmailKit } from "./variants/email";
+import { generateDevBrief } from "./variants/dev-brief";
 import type {
   BrandIntake,
   BrandOutputs,
@@ -134,7 +135,10 @@ async function runBrandBuildInBackground(project: BrandProject): Promise<void> {
       (async () => {
         if (userUploadedLogoUrl) return;
         try {
-          const variants = await generateLogoVariants(brand as never, outDir, 3);
+          const variants = await generateLogoVariants(brand as never, outDir, 3, {
+            style: intake.logoStyle,
+            inspirationUrls: intake.logoInspirationUrls,
+          });
           mergeOutputs({
             logoVariants: variants.length
               ? variants.map((v) => ({
@@ -234,6 +238,22 @@ async function runBrandBuildInBackground(project: BrandProject): Promise<void> {
           }
         } catch (err) {
           console.warn(`[skill] email kit failed:`, err);
+        }
+      })(),
+      // Developer Brief — handoff doc for the website builder
+      (async () => {
+        try {
+          const d = await generateDevBrief(brand as never, outDir);
+          if (d) {
+            mergeOutputs({
+              devBrief: {
+                htmlUrl: assetUrl(d.htmlFilename),
+                pdfUrl: d.pdfFilename ? assetUrl(d.pdfFilename) : undefined,
+              },
+            });
+          }
+        } catch (err) {
+          console.warn(`[skill] dev brief failed:`, err);
         }
       })(),
     ];

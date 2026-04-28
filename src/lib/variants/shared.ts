@@ -79,6 +79,12 @@ export async function callClaude(opts: CallOpts): Promise<string | null> {
 export function brandBrief(brand: BrandForVariants): string {
   const c = brand.colors ?? {};
   return [
+    "FRESH-CONTEXT GUARD: this brand is fully specified by the fields below. If any reference",
+    "or exemplar in your system prompt mentions other brands by name (Aurelian Labs, Pen2Purpose,",
+    "AceTV, FamFit, Wone, Banger, OffScript, Vent, DOL, Halcyon, IEI, Ideas Equal Income, etc.),",
+    "those are STRUCTURAL EXAMPLES ONLY — never copy their names, taglines, copy, or content.",
+    "Use ONLY the brand specified here.",
+    "",
     `Name: ${brand.name}`,
     brand.tagline ? `Tagline: ${brand.tagline}` : "",
     brand.positioning ? `Positioning: ${brand.positioning.slice(0, 280)}` : "",

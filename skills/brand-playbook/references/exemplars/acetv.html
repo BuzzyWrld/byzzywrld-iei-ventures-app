@@ -1,0 +1,1322 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,700;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #0A0A0A;
+      --surface: #111111;
+      --surface2: #1A1A1A;
+      --accent: #E8231A;
+      --accent2: #FF5A52;
+      --gold: #F5A623;
+      --text: #F2F2EF;
+      --text-muted: rgba(242,242,239,0.5);
+      --text-faint: rgba(242,242,239,0.25);
+      --border: rgba(242,242,239,0.1);
+      --border-accent: rgba(232,35,26,0.35);
+      --font-display: 'Space Grotesk', sans-serif;
+      --font-body: 'DM Sans', sans-serif;
+      --font-mono: 'IBM Plex Mono', monospace;
+    }
+
+    @page { size: 1100px 850px; margin: 0; }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: var(--font-body);
+      background: var(--primary);
+      color: var(--text);
+      width: 1100px;
+    }
+
+    .page {
+      width: 1100px;
+      height: 850px;
+      overflow: hidden;
+      page-break-after: always;
+      position: relative;
+      background: var(--primary);
+    }
+    .page:last-child { page-break-after: avoid; }
+
+    .accent-bar { position: absolute; top: 0; left: 0; right: 0; height: 4px; background: var(--accent); }
+    .bottom-bar { position: absolute; bottom: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, var(--accent), transparent); }
+
+    .eyebrow {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      color: var(--accent);
+    }
+
+    .section-label {
+      font-family: var(--font-mono);
+      font-size: 9px;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 6px;
+    }
+    .section-label::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(90deg, var(--border), transparent);
+    }
+
+    .divider {
+      border: none;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--accent), transparent);
+      opacity: 0.25;
+      margin: 20px 0;
+    }
+
+    .card {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--accent);
+      border-radius: 6px;
+      padding: 20px;
+    }
+
+    .tag {
+      display: inline-block;
+      background: rgba(232,35,26,0.15);
+      border: 1px solid var(--border-accent);
+      color: var(--accent2);
+      font-family: var(--font-mono);
+      font-size: 9px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      padding: 3px 8px;
+      border-radius: 3px;
+    }
+
+    .page-num {
+      position: absolute;
+      bottom: 20px;
+      right: 52px;
+      font-family: var(--font-mono);
+      font-size: 9px;
+      color: var(--text-faint);
+      letter-spacing: 0.2em;
+    }
+
+    .brand-name {
+      font-family: var(--font-display);
+      font-weight: 700;
+    }
+  </style>
+</head>
+<body>
+
+<!-- ============================================================ -->
+<!-- SLIDE 1: COVER -->
+<!-- ============================================================ -->
+<div class="page" style="background: #0A0A0A; display: flex; flex-direction: column; justify-content: space-between; padding: 0;">
+  <div class="accent-bar"></div>
+
+  <!-- Top nav strip -->
+  <div style="padding: 32px 52px 0; display: flex; justify-content: space-between; align-items: center;">
+    <div style="font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.3em; color: var(--text-faint); text-transform: uppercase;">Brand Identity Playbook</div>
+    <div style="font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.2em; color: var(--text-faint);">V1.0 · 2025</div>
+  </div>
+
+  <!-- Center hero -->
+  <div style="padding: 0 52px; flex: 1; display: flex; flex-direction: column; justify-content: center;">
+    <div class="eyebrow" style="margin-bottom: 24px;">Media · Culture · Community</div>
+
+    <!-- Logo lockup mockup -->
+    <div style="display: flex; align-items: center; gap: 20px; margin-bottom: 28px;">
+      <!-- TV icon mark -->
+      <div style="width: 72px; height: 72px; background: var(--accent); border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+        <svg width="44" height="36" viewBox="0 0 44 36" fill="none">
+          <rect x="2" y="8" width="40" height="26" rx="3" stroke="#F2F2EF" stroke-width="2.5" fill="none"/>
+          <path d="M14 2L22 9L30 2" stroke="#F2F2EF" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <line x1="16" y1="34" x2="28" y2="34" stroke="#F2F2EF" stroke-width="2.5" stroke-linecap="round"/>
+          <rect x="7" y="13" width="30" height="16" rx="1.5" fill="rgba(242,242,239,0.12)"/>
+          <circle cx="22" cy="21" r="4" fill="rgba(242,242,239,0.25)" stroke="#F2F2EF" stroke-width="1.5"/>
+        </svg>
+      </div>
+      <div>
+        <div style="font-family: var(--font-display); font-size: 62px; font-weight: 700; line-height: 1; letter-spacing: -0.02em; color: var(--text);">AceTV<span style="color: var(--accent);">+</span></div>
+      </div>
+    </div>
+
+    <div style="font-family: var(--font-body); font-size: 18px; font-weight: 300; color: var(--text-muted); margin-bottom: 40px; font-style: italic; letter-spacing: 0.02em;">
+      "We're all we got."
+    </div>
+
+    <!-- Bottom divider with sections -->
+    <div style="display: flex; gap: 8px;">
+      <span class="tag">Identity</span>
+      <span class="tag">Messaging</span>
+      <span class="tag">Style Guide</span>
+      <span class="tag">Strategy</span>
+      <span class="tag">Audience</span>
+    </div>
+  </div>
+
+  <!-- Bottom strip -->
+  <div style="padding: 0 52px 32px; display: flex; justify-content: space-between; align-items: flex-end;">
+    <div style="font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.2em; color: var(--text-faint);">CONFIDENTIAL — FOR INTERNAL USE</div>
+    <div style="font-family: var(--font-mono); font-size: 10px; color: var(--text-faint);">ACETV+ · BRAND PLAYBOOK</div>
+  </div>
+
+  <div class="bottom-bar"></div>
+</div>
+
+<!-- ============================================================ -->
+<!-- SLIDE 2: BRAND IDENTITY — CORE -->
+<!-- ============================================================ -->
+<div class="page" style="padding: 52px 60px;">
+  <div class="accent-bar"></div>
+
+  <div class="eyebrow" style="margin-bottom: 6px;">Worksheet 2</div>
+  <h1 style="font-family: var(--font-display); font-size: 34px; font-weight: 700; margin-bottom: 4px;">Brand Identity</h1>
+  <div class="section-label" style="margin-bottom: 24px;">Foundation · Core Intake</div>
+
+  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+    <!-- Left -->
+    <div style="display: flex; flex-direction: column; gap: 16px;">
+      <div class="card">
+        <div class="section-label" style="margin-bottom: 8px;">Brand Name</div>
+        <div style="font-family: var(--font-display); font-size: 28px; font-weight: 700; color: var(--text);">AceTV<span style="color: var(--accent);">+</span></div>
+        <div style="font-size: 11px; color: var(--text-muted); margin-top: 6px; font-family: var(--font-mono);">Media · Production · Community</div>
+      </div>
+
+      <div class="card">
+        <div class="section-label" style="margin-bottom: 8px;">Tagline</div>
+        <div style="font-family: var(--font-display); font-size: 22px; font-weight: 600; font-style: italic; color: var(--text);">"We're all we got."</div>
+        <div style="font-size: 12px; color: var(--text-muted); margin-top: 8px; line-height: 1.5;">A community rallying cry. Signals solidarity, urgency, and the fact that this platform exists because mainstream media stopped showing up for its audience.</div>
+      </div>
+
+      <div class="card">
+        <div class="section-label" style="margin-bottom: 8px;">Unique Ability</div>
+        <div style="font-size: 13px; color: var(--text); line-height: 1.6;">AceTV+ is willing to fight anyone to get to the truth — opposed to the agenda of modern media while still appreciating the craft of entertainment. Media literacy as armor, not elitism.</div>
+      </div>
+    </div>
+
+    <!-- Right -->
+    <div style="display: flex; flex-direction: column; gap: 16px;">
+      <div class="card" style="flex: 1;">
+        <div class="section-label" style="margin-bottom: 8px;">Brand Essence</div>
+        <div style="font-size: 13px; color: var(--text); line-height: 1.6; margin-bottom: 12px;">Empathy without muddying reality. The honest friend in the room — not optimistic, not pessimistic, but radically real. The centrist voice proud of not being dragged left or right.</div>
+        <div style="display: flex; flex-wrap: wrap; gap: 6px;">
+          <span class="tag">Authentic</span>
+          <span class="tag">Vibrant</span>
+          <span class="tag">Resilient</span>
+          <span class="tag">Daring</span>
+          <span class="tag">Fresh</span>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="section-label" style="margin-bottom: 8px;">Company Background</div>
+        <div style="font-size: 12px; color: var(--text); line-height: 1.65;">AceTV+ is a budding production house creating hard-hitting film, diligent journalism and fun-loving content that pushes empathy and community. We break the bullies, expose the liars, and inspire the youth — opening minds while letting them choose their own perspective.</div>
+      </div>
+
+      <div class="card" style="background: rgba(232,35,26,0.08); border-color: var(--border-accent);">
+        <div class="section-label" style="margin-bottom: 6px;">Top 3 Objectives</div>
+        <div style="display: flex; flex-direction: column; gap: 6px;">
+          <div style="display: flex; gap: 8px; align-items: flex-start;"><span style="color: var(--accent); font-family: var(--font-mono); font-size: 11px; font-weight: 700; flex-shrink: 0;">01</span><span style="font-size: 12px; color: var(--text); line-height: 1.4;">Become a memeable personality on the internet</span></div>
+          <div style="display: flex; gap: 8px; align-items: flex-start;"><span style="color: var(--accent); font-family: var(--font-mono); font-size: 11px; font-weight: 700; flex-shrink: 0;">02</span><span style="font-size: 12px; color: var(--text); line-height: 1.4;">Show people how to appreciate entertainment with empathy, respect and understanding</span></div>
+          <div style="display: flex; gap: 8px; align-items: flex-start;"><span style="color: var(--accent); font-family: var(--font-mono); font-size: 11px; font-weight: 700; flex-shrink: 0;">03</span><span style="font-size: 12px; color: var(--text); line-height: 1.4;">Become part of the promotion cycle for new shows and movies</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-num">02</div>
+  <div class="bottom-bar"></div>
+</div>
+
+<!-- ============================================================ -->
+<!-- SLIDE 3: MISSION / VISION / VALUES -->
+<!-- ============================================================ -->
+<div class="page" style="padding: 52px 60px;">
+  <div class="accent-bar"></div>
+
+  <div class="eyebrow" style="margin-bottom: 6px;">Worksheet 2 · Step 2</div>
+  <h1 style="font-family: var(--font-display); font-size: 34px; font-weight: 700; margin-bottom: 4px;">Mission · Vision · Values</h1>
+  <div class="section-label" style="margin-bottom: 24px;">The why behind the brand</div>
+
+  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px;">
+    <!-- Mission -->
+    <div style="background: var(--accent); border-radius: 8px; padding: 28px;">
+      <div style="font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.3em; text-transform: uppercase; color: rgba(242,242,239,0.65); margin-bottom: 10px;">Mission</div>
+      <div style="font-family: var(--font-display); font-size: 20px; font-weight: 700; color: #fff; line-height: 1.3; margin-bottom: 12px;">To uplift, encourage, and energize the next generation.</div>
+      <div style="font-size: 12px; color: rgba(255,255,255,0.75); line-height: 1.6;">AceTV+ exists as a response to the negativity that has infected the internet — but we don't kill with kindness. We equip our audience with the tools to defend themselves and a safe space to share their love of entertainment.</div>
+    </div>
+
+    <!-- Vision -->
+    <div class="card">
+      <div class="section-label" style="margin-bottom: 10px;">Vision</div>
+      <div style="font-family: var(--font-display); font-size: 18px; font-weight: 600; color: var(--text); line-height: 1.4; margin-bottom: 12px;">Build a community of media-literate, ethical consumers. Empower the next generation of thinkers.</div>
+      <div style="font-size: 12px; color: var(--text-muted); line-height: 1.6;">A future where young audiences choose perspective over propaganda — where empathy is practiced, not just preached, and where quality content wins.</div>
+    </div>
+  </div>
+
+  <!-- Values -->
+  <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px;">
+    <div style="background: var(--surface2); border: 1px solid var(--border); border-top: 3px solid var(--accent); border-radius: 6px; padding: 18px 16px; text-align: center;">
+      <div style="font-family: var(--font-display); font-size: 15px; font-weight: 700; margin-bottom: 6px; color: var(--text);">Integrity</div>
+      <div style="font-size: 11px; color: var(--text-muted); line-height: 1.5;">Say what's true even when it costs you. No hidden agendas, ever.</div>
+    </div>
+    <div style="background: var(--surface2); border: 1px solid var(--border); border-top: 3px solid var(--accent); border-radius: 6px; padding: 18px 16px; text-align: center;">
+      <div style="font-family: var(--font-display); font-size: 15px; font-weight: 700; margin-bottom: 6px; color: var(--text);">Empathy</div>
+      <div style="font-size: 11px; color: var(--text-muted); line-height: 1.5;">Understand before you judge. Lead every conversation from a place of care.</div>
+    </div>
+    <div style="background: var(--surface2); border: 1px solid var(--border); border-top: 3px solid var(--accent); border-radius: 6px; padding: 18px 16px; text-align: center;">
+      <div style="font-family: var(--font-display); font-size: 15px; font-weight: 700; margin-bottom: 6px; color: var(--text);">Honesty</div>
+      <div style="font-size: 11px; color: var(--text-muted); line-height: 1.5;">Blunt when necessary. Kind when possible. Never one without the other.</div>
+    </div>
+    <div style="background: var(--surface2); border: 1px solid var(--border); border-top: 3px solid var(--accent); border-radius: 6px; padding: 18px 16px; text-align: center;">
+      <div style="font-family: var(--font-display); font-size: 15px; font-weight: 700; margin-bottom: 6px; color: var(--text);">Energy</div>
+      <div style="font-size: 11px; color: var(--text-muted); line-height: 1.5;">Show up charged. Content should feel alive — not corporate, not exhausted.</div>
+    </div>
+  </div>
+
+  <div class="page-num">03</div>
+  <div class="bottom-bar"></div>
+</div>
+
+<!-- ============================================================ -->
+<!-- SLIDE 4: BRAND STORY + PERSONA -->
+<!-- ============================================================ -->
+<div class="page" style="padding: 52px 60px;">
+  <div class="accent-bar"></div>
+
+  <div class="eyebrow" style="margin-bottom: 6px;">Worksheet 2 · Steps 3–4</div>
+  <h1 style="font-family: var(--font-display); font-size: 34px; font-weight: 700; margin-bottom: 4px;">Brand Story & Persona</h1>
+  <div class="section-label" style="margin-bottom: 22px;">Narrative, voice, and character</div>
+
+  <div style="display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 16px;">
+    <div style="display: flex; flex-direction: column; gap: 14px;">
+      <!-- Brand Story -->
+      <div style="border-left: 3px solid var(--accent); padding-left: 20px;">
+        <div class="section-label" style="margin-bottom: 8px;">Brand Story</div>
+        <div style="font-family: var(--font-display); font-size: 15px; font-weight: 500; color: var(--text); line-height: 1.65; font-style: italic;">"AceTV+ exists as a response to the negativity that has infected the internet. But we don't kill with kindness."</div>
+        <div style="font-size: 12px; color: var(--text-muted); margin-top: 10px; line-height: 1.65;">We want to give internet consumers the tools to defend themselves, and a safe space to share their love of entertainment. Born from the frustration of watching a generation raised on algorithmically amplified outrage — AceTV+ is the counter-programming they deserved but never got.</div>
+      </div>
+
+      <!-- Reason Why -->
+      <div class="card">
+        <div class="section-label" style="margin-bottom: 6px;">Our Why</div>
+        <div style="font-size: 12px; color: var(--text); line-height: 1.65;">We want to give internet consumers the tools to defend themselves and a safe space to share their love of entertainment. The world gave them the feeds. We give them the framework.</div>
+      </div>
+
+      <!-- Legacy -->
+      <div class="card" style="background: rgba(245,166,35,0.07); border-left-color: var(--gold);">
+        <div class="section-label" style="margin-bottom: 6px; color: var(--gold);">Legacy</div>
+        <div style="font-size: 13px; color: var(--text); font-style: italic; line-height: 1.5;">"A brand that stood up for what it believed in and made quality entertainment."</div>
+      </div>
+    </div>
+
+    <div style="display: flex; flex-direction: column; gap: 14px;">
+      <!-- Tone + Voice -->
+      <div class="card">
+        <div class="section-label" style="margin-bottom: 10px;">Tone & Voice</div>
+        <div style="display: flex; flex-direction: column; gap: 8px;">
+          <div style="display: flex; gap: 10px; align-items: flex-start;">
+            <div style="width: 6px; height: 6px; border-radius: 50%; background: var(--accent); flex-shrink: 0; margin-top: 5px;"></div>
+            <div><span style="font-weight: 600; font-size: 12px; color: var(--text);">Register:</span><span style="font-size: 12px; color: var(--text-muted);"> Friendly like we're already familiar. Not formal, not dumbed-down — the sweet spot between young energy and adult substance.</span></div>
+          </div>
+          <div style="display: flex; gap: 10px; align-items: flex-start;">
+            <div style="width: 6px; height: 6px; border-radius: 50%; background: var(--accent); flex-shrink: 0; margin-top: 5px;"></div>
+            <div><span style="font-weight: 600; font-size: 12px; color: var(--text);">Persona:</span><span style="font-size: 12px; color: var(--text-muted);"> The older sibling who watched everything and has receipts. Family rapport — truthful, upfront, never performatively nice.</span></div>
+          </div>
+          <div style="display: flex; gap: 10px; align-items: flex-start;">
+            <div style="width: 6px; height: 6px; border-radius: 50%; background: var(--accent); flex-shrink: 0; margin-top: 5px;"></div>
+            <div><span style="font-weight: 600; font-size: 12px; color: var(--text);">Goal:</span><span style="font-size: 12px; color: var(--text-muted);"> Not too stupid for adults. Not too polished for teens. Accessible authority.</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Communication Persona -->
+      <div class="card" style="background: rgba(232,35,26,0.07); border-left-color: var(--accent);">
+        <div class="section-label" style="margin-bottom: 8px;">Communication Persona</div>
+        <div style="font-family: var(--font-display); font-size: 16px; font-weight: 700; color: var(--text); margin-bottom: 8px;">The Informed Older Sibling</div>
+        <div style="font-size: 12px; color: var(--text-muted); line-height: 1.6;">Family energy — shows up real, speaks with receipts, never condescending. Empathetic but not soft. Willing to be wrong, but rarely is. The person you text when you need to understand what actually happened.</div>
+      </div>
+
+      <!-- Personality Traits -->
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+        <div style="background: var(--surface2); border: 1px solid var(--border); border-radius: 4px; padding: 10px 12px; text-align: center;">
+          <div style="font-size: 11px; font-weight: 600; color: var(--text);">Authentic</div>
+        </div>
+        <div style="background: var(--surface2); border: 1px solid var(--border); border-radius: 4px; padding: 10px 12px; text-align: center;">
+          <div style="font-size: 11px; font-weight: 600; color: var(--text);">Vibrant</div>
+        </div>
+        <div style="background: var(--surface2); border: 1px solid var(--border); border-radius: 4px; padding: 10px 12px; text-align: center;">
+          <div style="font-size: 11px; font-weight: 600; color: var(--text);">Resilient</div>
+        </div>
+        <div style="background: var(--surface2); border: 1px solid var(--border); border-radius: 4px; padding: 10px 12px; text-align: center;">
+          <div style="font-size: 11px; font-weight: 600; color: var(--text);">Daring</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-num">04</div>
+  <div class="bottom-bar"></div>
+</div>
+
+<!-- ============================================================ -->
+<!-- SLIDE 5: BRAND MESSAGING -->
+<!-- ============================================================ -->
+<div class="page" style="padding: 52px 60px;">
+  <div class="accent-bar"></div>
+
+  <div class="eyebrow" style="margin-bottom: 6px;">Worksheet 3</div>
+  <h1 style="font-family: var(--font-display); font-size: 34px; font-weight: 700; margin-bottom: 4px;">Brand Messaging</h1>
+  <div class="section-label" style="margin-bottom: 22px;">Copy pillars, bios, and value statements</div>
+
+  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+    <div style="display: flex; flex-direction: column; gap: 14px;">
+      <!-- Brand Blurb -->
+      <div class="card">
+        <div class="section-label" style="margin-bottom: 8px;">Brand Blurb</div>
+        <div style="font-size: 12px; color: var(--text); line-height: 1.7;">AceTV+ is a media platform built for the generation that grew up online and got lied to by the feeds. We produce film, reviews, journalism, and content that actually respects your intelligence — empathy-forward, truth-first, never captured by an agenda. We're not here to tell you what to think. We're here to make sure you can.</div>
+      </div>
+
+      <!-- Instagram Bios -->
+      <div class="card">
+        <div class="section-label" style="margin-bottom: 8px;">Instagram Bio Options</div>
+        <div style="display: flex; flex-direction: column; gap: 8px;">
+          <div style="background: var(--surface); border-radius: 4px; padding: 10px 12px; border: 1px solid var(--border);">
+            <div style="font-family: var(--font-mono); font-size: 9px; color: var(--accent); margin-bottom: 4px; letter-spacing: 0.2em;">OPTION A</div>
+            <div style="font-size: 12px; color: var(--text);">film • culture • truth 📺 we're all we got. ↓ watch something real</div>
+          </div>
+          <div style="background: var(--surface); border-radius: 4px; padding: 10px 12px; border: 1px solid var(--border);">
+            <div style="font-family: var(--font-mono); font-size: 9px; color: var(--accent); margin-bottom: 4px; letter-spacing: 0.2em;">OPTION B</div>
+            <div style="font-size: 12px; color: var(--text);">the media literacy channel for ppl who are tired of being played 🔴 reviews · films · real talk</div>
+          </div>
+          <div style="background: var(--surface); border-radius: 4px; padding: 10px 12px; border: 1px solid var(--border);">
+            <div style="font-family: var(--font-mono); font-size: 9px; color: var(--accent); margin-bottom: 4px; letter-spacing: 0.2em;">OPTION C</div>
+            <div style="font-size: 12px; color: var(--text);">we watch. we review. we expose. AceTV+ — empathy without the agenda ✊</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div style="display: flex; flex-direction: column; gap: 14px;">
+      <!-- Value Prop -->
+      <div style="background: var(--accent); border-radius: 8px; padding: 24px;">
+        <div style="font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.3em; color: rgba(255,255,255,0.65); margin-bottom: 10px; text-transform: uppercase;">Value Proposition</div>
+        <div style="font-family: var(--font-display); font-size: 17px; font-weight: 700; color: #fff; line-height: 1.45;">We help young media consumers cut through polarized noise so they can form their own perspective — without losing the joy of entertainment.</div>
+      </div>
+
+      <!-- Copy Pillars -->
+      <div class="card">
+        <div class="section-label" style="margin-bottom: 10px;">Content Pillars</div>
+        <div style="display: flex; flex-direction: column; gap: 8px;">
+          <div style="display: flex; gap: 10px; align-items: flex-start;">
+            <div style="background: var(--accent); color: #fff; font-family: var(--font-mono); font-size: 9px; font-weight: 700; width: 20px; height: 20px; border-radius: 3px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">01</div>
+            <div><div style="font-size: 12px; font-weight: 600; color: var(--text);">Truth in Entertainment</div><div style="font-size: 11px; color: var(--text-muted);">Film reviews, show breakdowns, industry analysis without the PR spin</div></div>
+          </div>
+          <div style="display: flex; gap: 10px; align-items: flex-start;">
+            <div style="background: var(--accent); color: #fff; font-family: var(--font-mono); font-size: 9px; font-weight: 700; width: 20px; height: 20px; border-radius: 3px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">02</div>
+            <div><div style="font-size: 12px; font-weight: 600; color: var(--text);">Media Literacy</div><div style="font-size: 11px; color: var(--text-muted);">How to spot bias, decode narratives, protect your perspective</div></div>
+          </div>
+          <div style="display: flex; gap: 10px; align-items: flex-start;">
+            <div style="background: var(--accent); color: #fff; font-family: var(--font-mono); font-size: 9px; font-weight: 700; width: 20px; height: 20px; border-radius: 3px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">03</div>
+            <div><div style="font-size: 12px; font-weight: 600; color: var(--text);">Community Culture</div><div style="font-size: 11px; color: var(--text-muted);">We watch together, discuss together, grow together — no toxic fandoms</div></div>
+          </div>
+          <div style="display: flex; gap: 10px; align-items: flex-start;">
+            <div style="background: rgba(232,35,26,0.2); color: var(--accent2); font-family: var(--font-mono); font-size: 9px; font-weight: 700; width: 20px; height: 20px; border-radius: 3px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">04</div>
+            <div><div style="font-size: 12px; font-weight: 600; color: var(--text);">History & Context</div><div style="font-size: 11px; color: var(--text-muted);">The story behind the story — history lessons, deep dives, context wins</div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- USP -->
+      <div style="background: var(--surface2); border: 1px solid var(--border); border-radius: 6px; padding: 16px 18px;">
+        <div class="section-label" style="margin-bottom: 6px;">Unique Selling Proposition</div>
+        <div style="font-size: 13px; color: var(--text); line-height: 1.5; font-style: italic;">"The only media brand that fights for truth and still loves the culture — no agenda, no apologies."</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-num">05</div>
+  <div class="bottom-bar"></div>
+</div>
+
+<!-- ============================================================ -->
+<!-- SLIDE 6: BRAND STYLE GUIDE — COLORS -->
+<!-- ============================================================ -->
+<div class="page" style="padding: 52px 60px;">
+  <div class="accent-bar"></div>
+
+  <div class="eyebrow" style="margin-bottom: 6px;">Worksheet 4</div>
+  <h1 style="font-family: var(--font-display); font-size: 34px; font-weight: 700; margin-bottom: 4px;">Color Palette</h1>
+  <div class="section-label" style="margin-bottom: 20px;">Visual Identity · Brand Style Guide</div>
+
+  <!-- Color swatches row 1 -->
+  <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 12px;">
+    <div style="border-radius: 8px; overflow: hidden; border: 1px solid var(--border);">
+      <div style="background: #0A0A0A; height: 90px;"></div>
+      <div style="background: var(--surface2); padding: 10px 12px;">
+        <div style="font-family: var(--font-display); font-size: 12px; font-weight: 700; color: var(--text);">Void Black</div>
+        <div style="font-family: var(--font-mono); font-size: 10px; color: var(--accent); margin: 2px 0;">#0A0A0A</div>
+        <div style="font-size: 10px; color: var(--text-muted); line-height: 1.4;">Primary background. Authority × digital-native × Gen Z dark mode aesthetic. All primary surfaces.</div>
+      </div>
+    </div>
+    <div style="border-radius: 8px; overflow: hidden; border: 1px solid var(--border);">
+      <div style="background: #E8231A; height: 90px;"></div>
+      <div style="background: var(--surface2); padding: 10px 12px;">
+        <div style="font-family: var(--font-display); font-size: 12px; font-weight: 700; color: var(--text);">Broadcast Red</div>
+        <div style="font-family: var(--font-mono); font-size: 10px; color: var(--accent); margin: 2px 0;">#E8231A</div>
+        <div style="font-size: 10px; color: var(--text-muted); line-height: 1.4;">Accent / urgency. Media urgency × appetite for content × high-saturation Gen Z energy.</div>
+      </div>
+    </div>
+    <div style="border-radius: 8px; overflow: hidden; border: 1px solid var(--border);">
+      <div style="background: #F2F2EF; height: 90px;"></div>
+      <div style="background: var(--surface2); padding: 10px 12px;">
+        <div style="font-family: var(--font-display); font-size: 12px; font-weight: 700; color: var(--text);">Signal White</div>
+        <div style="font-family: var(--font-mono); font-size: 10px; color: var(--accent); margin: 2px 0;">#F2F2EF</div>
+        <div style="font-size: 10px; color: var(--text-muted); line-height: 1.4;">Primary text. Warm white avoids clinical cold. Reads as editorial, not sterile.</div>
+      </div>
+    </div>
+    <div style="border-radius: 8px; overflow: hidden; border: 1px solid var(--border);">
+      <div style="background: #F5A623; height: 90px;"></div>
+      <div style="background: var(--surface2); padding: 10px 12px;">
+        <div style="font-family: var(--font-display); font-size: 12px; font-weight: 700; color: var(--text);">Press Gold</div>
+        <div style="font-family: var(--font-mono); font-size: 10px; color: var(--accent); margin: 2px 0;">#F5A623</div>
+        <div style="font-size: 10px; color: var(--text-muted); line-height: 1.4;">Secondary accent. Achievement + warmth. Highlights, awards, callout moments. Sparingly.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Color swatches row 2 -->
+  <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 14px;">
+    <div style="border-radius: 8px; overflow: hidden; border: 1px solid var(--border);">
+      <div style="background: #111111; height: 60px;"></div>
+      <div style="background: var(--surface2); padding: 8px 12px;">
+        <div style="font-family: var(--font-display); font-size: 11px; font-weight: 700; color: var(--text);">Studio Surface</div>
+        <div style="font-family: var(--font-mono); font-size: 10px; color: var(--accent);">#111111</div>
+        <div style="font-size: 10px; color: var(--text-muted);">Card backgrounds, elevated surfaces.</div>
+      </div>
+    </div>
+    <div style="border-radius: 8px; overflow: hidden; border: 1px solid var(--border);">
+      <div style="background: #1A1A1A; height: 60px;"></div>
+      <div style="background: var(--surface2); padding: 8px 12px;">
+        <div style="font-family: var(--font-display); font-size: 11px; font-weight: 700; color: var(--text);">Deep Surface</div>
+        <div style="font-family: var(--font-mono); font-size: 10px; color: var(--accent);">#1A1A1A</div>
+        <div style="font-size: 10px; color: var(--text-muted);">Nested cards, input fields, secondary UI.</div>
+      </div>
+    </div>
+    <div style="border-radius: 8px; overflow: hidden; border: 1px solid var(--border);">
+      <div style="background: #FF5A52; height: 60px;"></div>
+      <div style="background: var(--surface2); padding: 8px 12px;">
+        <div style="font-family: var(--font-display); font-size: 11px; font-weight: 700; color: var(--text);">Signal Red Light</div>
+        <div style="font-family: var(--font-mono); font-size: 10px; color: var(--accent);">#FF5A52</div>
+        <div style="font-size: 10px; color: var(--text-muted);">Hover states, soft accent overlays.</div>
+      </div>
+    </div>
+    <div style="border-radius: 8px; overflow: hidden; border: 1px solid var(--border);">
+      <div style="background: rgba(242,242,239,0.35); height: 60px;"></div>
+      <div style="background: var(--surface2); padding: 8px 12px;">
+        <div style="font-family: var(--font-display); font-size: 11px; font-weight: 700; color: var(--text);">Static Mute</div>
+        <div style="font-family: var(--font-mono); font-size: 10px; color: var(--accent);">rgba(242,242,239,0.35)</div>
+        <div style="font-size: 10px; color: var(--text-muted);">Secondary text, captions, meta info.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Do Not Use + Usage Rule -->
+  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+    <div style="background: rgba(232,35,26,0.07); border: 1px solid rgba(232,35,26,0.2); border-radius: 6px; padding: 14px 16px;">
+      <div style="font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.25em; color: var(--accent); text-transform: uppercase; margin-bottom: 8px;">Do Not Use</div>
+      <div style="display: flex; flex-wrap: wrap; gap: 6px;">
+        <span style="background: var(--surface); border: 1px solid var(--border); border-radius: 3px; padding: 3px 8px; font-size: 10px; color: var(--text-muted);">Pure White #FFFFFF — too clinical</span>
+        <span style="background: var(--surface); border: 1px solid var(--border); border-radius: 3px; padding: 3px 8px; font-size: 10px; color: var(--text-muted);">Navy Blue — signals establishment</span>
+        <span style="background: var(--surface); border: 1px solid var(--border); border-radius: 3px; padding: 3px 8px; font-size: 10px; color: var(--text-muted);">Pastel colors — undercuts authority</span>
+        <span style="background: var(--surface); border: 1px solid var(--border); border-radius: 3px; padding: 3px 8px; font-size: 10px; color: var(--text-muted);">Mid-gray on dark — fails contrast</span>
+      </div>
+    </div>
+    <div style="background: var(--surface2); border: 1px solid var(--border); border-radius: 6px; padding: 14px 16px;">
+      <div style="font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.25em; color: var(--text-muted); text-transform: uppercase; margin-bottom: 8px;">60–30–10 Rule</div>
+      <div style="display: flex; gap: 10px; align-items: center;">
+        <div style="text-align: center;">
+          <div style="font-family: var(--font-display); font-size: 22px; font-weight: 700; color: var(--text);">60%</div>
+          <div style="font-size: 10px; color: var(--text-muted);">Void Black</div>
+        </div>
+        <div style="height: 30px; width: 1px; background: var(--border);"></div>
+        <div style="text-align: center;">
+          <div style="font-family: var(--font-display); font-size: 22px; font-weight: 700; color: var(--text);">30%</div>
+          <div style="font-size: 10px; color: var(--text-muted);">Signal White</div>
+        </div>
+        <div style="height: 30px; width: 1px; background: var(--border);"></div>
+        <div style="text-align: center;">
+          <div style="font-family: var(--font-display); font-size: 22px; font-weight: 700; color: var(--accent);">10%</div>
+          <div style="font-size: 10px; color: var(--text-muted);">Broadcast Red</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-num">06</div>
+  <div class="bottom-bar"></div>
+</div>
+
+<!-- ============================================================ -->
+<!-- SLIDE 7: TYPOGRAPHY -->
+<!-- ============================================================ -->
+<div class="page" style="padding: 52px 60px;">
+  <div class="accent-bar"></div>
+
+  <div class="eyebrow" style="margin-bottom: 6px;">Worksheet 4</div>
+  <h1 style="font-family: var(--font-display); font-size: 34px; font-weight: 700; margin-bottom: 4px;">Typography System</h1>
+  <div class="section-label" style="margin-bottom: 22px;">Type stack · Hierarchy · Rules</div>
+
+  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+    <div style="display: flex; flex-direction: column; gap: 14px;">
+      <!-- Display Font -->
+      <div class="card">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px;">
+          <div>
+            <div class="section-label" style="margin-bottom: 4px;">Display / Heading</div>
+            <div style="font-family: var(--font-mono); font-size: 11px; color: var(--accent);">Space Grotesk</div>
+          </div>
+          <span class="tag">Google Fonts</span>
+        </div>
+        <div style="font-family: 'Space Grotesk', sans-serif; font-size: 32px; font-weight: 700; line-height: 1.1; color: var(--text); margin-bottom: 6px;">We're all we got.</div>
+        <div style="font-family: 'Space Grotesk', sans-serif; font-size: 18px; font-weight: 500; color: var(--text-muted); margin-bottom: 4px;">Media Literacy Matters.</div>
+        <div style="font-family: 'Space Grotesk', sans-serif; font-size: 13px; font-weight: 400; color: var(--text-muted);">Weights: 300 / 400 / 500 / 600 / 700</div>
+        <div class="divider" style="margin: 8px 0;"></div>
+        <div style="font-size: 11px; color: var(--text-muted);">Use for: Logo wordmark, hero titles, section headers, card titles. Min: 14px. Never light weight below 20px.</div>
+      </div>
+
+      <!-- Body Font -->
+      <div class="card">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px;">
+          <div>
+            <div class="section-label" style="margin-bottom: 4px;">Body</div>
+            <div style="font-family: var(--font-mono); font-size: 11px; color: var(--accent);">DM Sans</div>
+          </div>
+          <span class="tag">Google Fonts</span>
+        </div>
+        <div style="font-family: 'DM Sans', sans-serif; font-size: 15px; font-weight: 400; color: var(--text); line-height: 1.6; margin-bottom: 6px;">The kind of content that actually respects your intelligence — empathy-forward, truth-first, never captured by an agenda.</div>
+        <div style="font-family: 'DM Sans', sans-serif; font-size: 12px; color: var(--text-muted);">Weights: 300 / 400 / 500 / 700 · Italic available</div>
+        <div class="divider" style="margin: 8px 0;"></div>
+        <div style="font-size: 11px; color: var(--text-muted);">Use for: All body copy, descriptions, captions. Min: 11px. Never bold for long paragraphs.</div>
+      </div>
+    </div>
+
+    <div style="display: flex; flex-direction: column; gap: 14px;">
+      <!-- Mono Font -->
+      <div class="card">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px;">
+          <div>
+            <div class="section-label" style="margin-bottom: 4px;">Accent / Label</div>
+            <div style="font-family: var(--font-mono); font-size: 11px; color: var(--accent);">IBM Plex Mono</div>
+          </div>
+          <span class="tag">Google Fonts</span>
+        </div>
+        <div style="font-family: 'IBM Plex Mono', monospace; font-size: 14px; font-weight: 500; color: var(--accent); letter-spacing: 0.2em; text-transform: uppercase; margin-bottom: 4px;">ACETV+ · EPISODE 42</div>
+        <div style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--text-muted); letter-spacing: 0.3em; margin-bottom: 4px;">MEDIA LITERACY · 2025</div>
+        <div class="divider" style="margin: 8px 0;"></div>
+        <div style="font-size: 11px; color: var(--text-muted);">Use for: Eyebrow labels, episode numbers, dates, category tags, data callouts. Always uppercase. Min: 9px.</div>
+      </div>
+
+      <!-- Type Hierarchy -->
+      <div class="card">
+        <div class="section-label" style="margin-bottom: 10px;">Type Hierarchy</div>
+        <div style="display: flex; flex-direction: column; gap: 6px;">
+          <div style="display: flex; justify-content: space-between; align-items: baseline; padding: 6px 0; border-bottom: 1px solid var(--border);">
+            <div style="font-family: 'Space Grotesk', sans-serif; font-size: 28px; font-weight: 700; color: var(--text);">H1</div>
+            <div style="text-align: right;"><div style="font-family: var(--font-mono); font-size: 10px; color: var(--accent);">34px / 700</div><div style="font-size: 10px; color: var(--text-muted);">Space Grotesk</div></div>
+          </div>
+          <div style="display: flex; justify-content: space-between; align-items: baseline; padding: 6px 0; border-bottom: 1px solid var(--border);">
+            <div style="font-family: 'Space Grotesk', sans-serif; font-size: 20px; font-weight: 600; color: var(--text);">H2 Section</div>
+            <div style="text-align: right;"><div style="font-family: var(--font-mono); font-size: 10px; color: var(--accent);">22px / 600</div><div style="font-size: 10px; color: var(--text-muted);">Space Grotesk</div></div>
+          </div>
+          <div style="display: flex; justify-content: space-between; align-items: baseline; padding: 6px 0; border-bottom: 1px solid var(--border);">
+            <div style="font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 500; color: var(--text);">H3 Card Title</div>
+            <div style="text-align: right;"><div style="font-family: var(--font-mono); font-size: 10px; color: var(--accent);">14px / 500</div><div style="font-size: 10px; color: var(--text-muted);">DM Sans</div></div>
+          </div>
+          <div style="display: flex; justify-content: space-between; align-items: baseline; padding: 6px 0; border-bottom: 1px solid var(--border);">
+            <div style="font-family: 'DM Sans', sans-serif; font-size: 12px; font-weight: 400; color: var(--text-muted);">Body Copy</div>
+            <div style="text-align: right;"><div style="font-family: var(--font-mono); font-size: 10px; color: var(--accent);">12–13px / 400</div><div style="font-size: 10px; color: var(--text-muted);">DM Sans</div></div>
+          </div>
+          <div style="display: flex; justify-content: space-between; align-items: baseline; padding: 6px 0;">
+            <div style="font-family: 'IBM Plex Mono', monospace; font-size: 9px; letter-spacing: 0.25em; text-transform: uppercase; color: var(--accent);">EYEBROW LABEL</div>
+            <div style="text-align: right;"><div style="font-family: var(--font-mono); font-size: 10px; color: var(--accent);">9–10px / 500</div><div style="font-size: 10px; color: var(--text-muted);">IBM Plex Mono</div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Pairing Rules -->
+      <div style="background: rgba(245,166,35,0.07); border: 1px solid rgba(245,166,35,0.2); border-radius: 6px; padding: 12px 14px;">
+        <div style="font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.25em; color: var(--gold); text-transform: uppercase; margin-bottom: 6px;">Forbidden Combinations</div>
+        <div style="font-size: 11px; color: var(--text-muted); line-height: 1.6;">Never use IBM Plex Mono for body paragraphs · Never use Space Grotesk below 12px · Never stack three different fonts on one element · Never use light (300) weight for small text below 18px</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-num">07</div>
+  <div class="bottom-bar"></div>
+</div>
+
+<!-- ============================================================ -->
+<!-- SLIDE 8: LOGO SYSTEM -->
+<!-- ============================================================ -->
+<div class="page" style="padding: 52px 60px;">
+  <div class="accent-bar"></div>
+
+  <div class="eyebrow" style="margin-bottom: 6px;">Worksheet 4</div>
+  <h1 style="font-family: var(--font-display); font-size: 34px; font-weight: 700; margin-bottom: 4px;">Logo System</h1>
+  <div class="section-label" style="margin-bottom: 20px;">Combination mark · Variant rules · Usage</div>
+
+  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+    <div style="display: flex; flex-direction: column; gap: 14px;">
+
+      <!-- Primary Lockup: Dark field -->
+      <div style="background: #111111; border: 1px solid var(--border); border-radius: 8px; padding: 24px; display: flex; align-items: center; justify-content: center; gap: 16px; height: 110px;">
+        <div style="width: 52px; height: 52px; background: var(--accent); border-radius: 6px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+          <svg width="32" height="26" viewBox="0 0 44 36" fill="none">
+            <rect x="2" y="8" width="40" height="26" rx="3" stroke="#F2F2EF" stroke-width="2.5" fill="none"/>
+            <path d="M14 2L22 9L30 2" stroke="#F2F2EF" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <line x1="16" y1="34" x2="28" y2="34" stroke="#F2F2EF" stroke-width="2.5" stroke-linecap="round"/>
+            <rect x="7" y="13" width="30" height="16" rx="1.5" fill="rgba(242,242,239,0.15)"/>
+            <circle cx="22" cy="21" r="4" fill="none" stroke="#F2F2EF" stroke-width="1.5"/>
+          </svg>
+        </div>
+        <div style="font-family: var(--font-display); font-size: 38px; font-weight: 700; color: var(--text); letter-spacing: -0.01em; line-height: 1;">AceTV<span style="color: var(--accent);">+</span></div>
+      </div>
+      <div style="font-family: var(--font-mono); font-size: 9px; color: var(--text-muted); letter-spacing: 0.2em; text-align: center; text-transform: uppercase;">Primary — Dark Field (Default)</div>
+
+      <!-- Logo on red -->
+      <div style="background: var(--accent); border-radius: 8px; padding: 18px; display: flex; align-items: center; justify-content: center; gap: 12px; height: 80px;">
+        <div style="width: 42px; height: 42px; background: rgba(0,0,0,0.2); border-radius: 5px; display: flex; align-items: center; justify-content: center;">
+          <svg width="26" height="21" viewBox="0 0 44 36" fill="none">
+            <rect x="2" y="8" width="40" height="26" rx="3" stroke="#F2F2EF" stroke-width="2.5" fill="none"/>
+            <path d="M14 2L22 9L30 2" stroke="#F2F2EF" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <line x1="16" y1="34" x2="28" y2="34" stroke="#F2F2EF" stroke-width="2.5" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <div style="font-family: var(--font-display); font-size: 28px; font-weight: 700; color: #fff; letter-spacing: -0.01em;">AceTV+</div>
+      </div>
+      <div style="font-family: var(--font-mono); font-size: 9px; color: var(--text-muted); letter-spacing: 0.2em; text-align: center; text-transform: uppercase;">Alert Version — Broadcast Red Background</div>
+
+      <!-- Icon only -->
+      <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px;">
+        <div style="background: var(--accent); border-radius: 8px; height: 60px; display: flex; align-items: center; justify-content: center;">
+          <svg width="28" height="22" viewBox="0 0 44 36" fill="none">
+            <rect x="2" y="8" width="40" height="26" rx="3" stroke="#F2F2EF" stroke-width="3" fill="none"/>
+            <path d="M14 2L22 9L30 2" stroke="#F2F2EF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+            <circle cx="22" cy="21" r="4" fill="none" stroke="#F2F2EF" stroke-width="2"/>
+          </svg>
+        </div>
+        <div style="background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; height: 60px; display: flex; align-items: center; justify-content: center;">
+          <svg width="28" height="22" viewBox="0 0 44 36" fill="none">
+            <rect x="2" y="8" width="40" height="26" rx="3" stroke="var(--accent)" stroke-width="3" fill="none"/>
+            <path d="M14 2L22 9L30 2" stroke="var(--accent)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+            <circle cx="22" cy="21" r="4" fill="none" stroke="var(--accent)" stroke-width="2"/>
+          </svg>
+        </div>
+        <div style="background: #fff; border-radius: 8px; height: 60px; display: flex; align-items: center; justify-content: center;">
+          <svg width="28" height="22" viewBox="0 0 44 36" fill="none">
+            <rect x="2" y="8" width="40" height="26" rx="3" stroke="#0A0A0A" stroke-width="3" fill="none"/>
+            <path d="M14 2L22 9L30 2" stroke="#0A0A0A" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+            <circle cx="22" cy="21" r="4" fill="none" stroke="#0A0A0A" stroke-width="2"/>
+          </svg>
+        </div>
+      </div>
+      <div style="font-family: var(--font-mono); font-size: 9px; color: var(--text-muted); letter-spacing: 0.2em; text-align: center; text-transform: uppercase;">Monogram Variants: Red · Dark · White</div>
+    </div>
+
+    <div style="display: flex; flex-direction: column; gap: 12px;">
+      <!-- Logo Type + Rules -->
+      <div class="card">
+        <div class="section-label" style="margin-bottom: 8px;">Logo Type</div>
+        <div style="font-family: var(--font-display); font-size: 14px; font-weight: 700; color: var(--text); margin-bottom: 6px;">Combination Mark</div>
+        <div style="font-size: 12px; color: var(--text-muted); line-height: 1.6;">TV icon (pictorial) + "AceTV+" wordmark. Icon and wordmark can be used independently after the brand is established. Icon uses a screen/display metaphor with antenna — signals broadcasting, media, and community. The "+" suffix denotes premium content and platform ambition (referencing streaming naming conventions).</div>
+      </div>
+
+      <div class="card">
+        <div class="section-label" style="margin-bottom: 8px;">Sizing & Clear Space</div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+          <div style="background: var(--surface); border-radius: 4px; padding: 10px;">
+            <div style="font-family: var(--font-mono); font-size: 9px; color: var(--accent); margin-bottom: 4px; text-transform: uppercase;">Digital Min</div>
+            <div style="font-family: var(--font-display); font-size: 16px; font-weight: 700; color: var(--text);">120px</div>
+            <div style="font-size: 10px; color: var(--text-muted);">Full lockup width</div>
+          </div>
+          <div style="background: var(--surface); border-radius: 4px; padding: 10px;">
+            <div style="font-family: var(--font-mono); font-size: 9px; color: var(--accent); margin-bottom: 4px; text-transform: uppercase;">Print Min</div>
+            <div style="font-family: var(--font-display); font-size: 16px; font-weight: 700; color: var(--text);">1.25"</div>
+            <div style="font-size: 10px; color: var(--text-muted);">Full lockup</div>
+          </div>
+          <div style="background: var(--surface); border-radius: 4px; padding: 10px;">
+            <div style="font-family: var(--font-mono); font-size: 9px; color: var(--accent); margin-bottom: 4px; text-transform: uppercase;">Icon Min</div>
+            <div style="font-family: var(--font-display); font-size: 16px; font-weight: 700; color: var(--text);">32px</div>
+            <div style="font-size: 10px; color: var(--text-muted);">Favicon/app icon</div>
+          </div>
+          <div style="background: var(--surface); border-radius: 4px; padding: 10px;">
+            <div style="font-family: var(--font-mono); font-size: 9px; color: var(--accent); margin-bottom: 4px; text-transform: uppercase;">Clear Space</div>
+            <div style="font-family: var(--font-display); font-size: 16px; font-weight: 700; color: var(--text);">1× "A"</div>
+            <div style="font-size: 10px; color: var(--text-muted);">Cap-height all sides</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Forbidden Treatments -->
+      <div style="background: rgba(232,35,26,0.06); border: 1px solid rgba(232,35,26,0.2); border-radius: 6px; padding: 14px 16px;">
+        <div style="font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.25em; color: var(--accent); text-transform: uppercase; margin-bottom: 8px;">Forbidden Treatments</div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 4px;">
+          <div style="font-size: 11px; color: var(--text-muted);">✕ Stretch or distort proportions</div>
+          <div style="font-size: 11px; color: var(--text-muted);">✕ Rotate the logo</div>
+          <div style="font-size: 11px; color: var(--text-muted);">✕ Add drop shadows or glows</div>
+          <div style="font-size: 11px; color: var(--text-muted);">✕ Recolor outside approved palette</div>
+          <div style="font-size: 11px; color: var(--text-muted);">✕ Place on busy backgrounds</div>
+          <div style="font-size: 11px; color: var(--text-muted);">✕ Rearrange icon/wordmark order</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-num">08</div>
+  <div class="bottom-bar"></div>
+</div>
+
+<!-- ============================================================ -->
+<!-- SLIDE 9: SMART GOALS -->
+<!-- ============================================================ -->
+<div class="page" style="padding: 52px 60px;">
+  <div class="accent-bar"></div>
+
+  <div class="eyebrow" style="margin-bottom: 6px;">Worksheet 5</div>
+  <h1 style="font-family: var(--font-display); font-size: 34px; font-weight: 700; margin-bottom: 4px;">SMART Goals</h1>
+  <div class="section-label" style="margin-bottom: 22px;">12-month brand and business targets</div>
+
+  <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; margin-bottom: 14px;">
+    <div class="card" style="border-left-color: var(--accent);">
+      <div class="section-label" style="margin-bottom: 6px;">Goal 01</div>
+      <div style="font-family: var(--font-display); font-size: 15px; font-weight: 700; color: var(--text); margin-bottom: 8px;">Social Media Presence</div>
+      <div style="font-family: var(--font-display); font-size: 28px; font-weight: 700; color: var(--accent); margin-bottom: 4px;">50K</div>
+      <div style="font-size: 11px; color: var(--text-muted); margin-bottom: 8px;">Followers across YouTube + Instagram combined</div>
+      <div style="display: flex; flex-direction: column; gap: 4px;">
+        <div style="font-size: 10px; color: var(--text-muted);"><span style="color: var(--text);">Metric:</span> Follower count + avg. engagement >5%</div>
+        <div style="font-size: 10px; color: var(--text-muted);"><span style="color: var(--text);">Timeline:</span> 12 months from launch</div>
+        <div style="font-size: 10px; color: var(--text-muted);"><span style="color: var(--text);">Milestone:</span> 5K by Month 3, 20K by Month 6</div>
+      </div>
+    </div>
+    <div class="card" style="border-left-color: var(--gold);">
+      <div class="section-label" style="margin-bottom: 6px;">Goal 02</div>
+      <div style="font-family: var(--font-display); font-size: 15px; font-weight: 700; color: var(--text); margin-bottom: 8px;">Meme / Cultural Reach</div>
+      <div style="font-family: var(--font-display); font-size: 28px; font-weight: 700; color: var(--gold); margin-bottom: 4px;">3+</div>
+      <div style="font-size: 11px; color: var(--text-muted); margin-bottom: 8px;">Viral moments (1M+ impressions) in first year</div>
+      <div style="display: flex; flex-direction: column; gap: 4px;">
+        <div style="font-size: 10px; color: var(--text-muted);"><span style="color: var(--text);">Metric:</span> Impressions + share velocity</div>
+        <div style="font-size: 10px; color: var(--text-muted);"><span style="color: var(--text);">Timeline:</span> 12 months</div>
+        <div style="font-size: 10px; color: var(--text-muted);"><span style="color: var(--text);">Milestone:</span> 1 clip hits 500K by Month 4</div>
+      </div>
+    </div>
+    <div class="card" style="border-left-color: var(--accent);">
+      <div class="section-label" style="margin-bottom: 6px;">Goal 03</div>
+      <div style="font-family: var(--font-display); font-size: 15px; font-weight: 700; color: var(--text); margin-bottom: 8px;">Promo Cycle Partnerships</div>
+      <div style="font-family: var(--font-display); font-size: 28px; font-weight: 700; color: var(--accent); margin-bottom: 4px;">5</div>
+      <div style="font-size: 11px; color: var(--text-muted); margin-bottom: 8px;">Confirmed collab / review partnerships with studios or PR</div>
+      <div style="display: flex; flex-direction: column; gap: 4px;">
+        <div style="font-size: 10px; color: var(--text-muted);"><span style="color: var(--text);">Metric:</span> Signed agreements + deliverables</div>
+        <div style="font-size: 10px; color: var(--text-muted);"><span style="color: var(--text);">Timeline:</span> 12 months</div>
+        <div style="font-size: 10px; color: var(--text-muted);"><span style="color: var(--text);">Milestone:</span> First screener access by Month 5</div>
+      </div>
+    </div>
+  </div>
+
+  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+    <div class="card" style="border-left-color: var(--gold);">
+      <div class="section-label" style="margin-bottom: 6px;">Goal 04</div>
+      <div style="font-family: var(--font-display); font-size: 15px; font-weight: 700; color: var(--text); margin-bottom: 6px;">Community Infrastructure</div>
+      <div style="font-family: var(--font-display); font-size: 24px; font-weight: 700; color: var(--gold); margin-bottom: 4px;">1,000</div>
+      <div style="font-size: 11px; color: var(--text-muted); margin-bottom: 6px;">Active Discord or community members</div>
+      <div style="font-size: 10px; color: var(--text-muted);"><span style="color: var(--text);">Timeline:</span> 6 months · <span style="color: var(--text);">Milestone:</span> 250 by Month 2</div>
+    </div>
+    <div class="card" style="border-left-color: var(--accent);">
+      <div class="section-label" style="margin-bottom: 6px;">Goal 05</div>
+      <div style="font-family: var(--font-display); font-size: 15px; font-weight: 700; color: var(--text); margin-bottom: 6px;">Content Output Cadence</div>
+      <div style="font-family: var(--font-display); font-size: 24px; font-weight: 700; color: var(--accent); margin-bottom: 4px;">2× / week</div>
+      <div style="font-size: 11px; color: var(--text-muted); margin-bottom: 6px;">Consistent publishing across video + written formats</div>
+      <div style="font-size: 10px; color: var(--text-muted);"><span style="color: var(--text);">Timeline:</span> Achieve by Month 3 · <span style="color: var(--text);">Milestone:</span> 1× week in Month 1</div>
+    </div>
+  </div>
+
+  <div class="page-num">09</div>
+  <div class="bottom-bar"></div>
+</div>
+
+<!-- ============================================================ -->
+<!-- SLIDE 10: COMPETITOR ANALYSIS -->
+<!-- ============================================================ -->
+<div class="page" style="padding: 52px 60px;">
+  <div class="accent-bar"></div>
+
+  <div class="eyebrow" style="margin-bottom: 6px;">Worksheet 6</div>
+  <h1 style="font-family: var(--font-display); font-size: 34px; font-weight: 700; margin-bottom: 4px;">Competitor Analysis</h1>
+  <div class="section-label" style="margin-bottom: 20px;">Market research · Landscape positioning</div>
+
+  <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; margin-bottom: 16px;">
+    <!-- Dissect -->
+    <div class="card">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+        <div style="font-family: var(--font-display); font-size: 14px; font-weight: 700; color: var(--text);">Dissect Podcast</div>
+        <span class="tag">Audio</span>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 6px;">
+        <div style="font-size: 11px; color: var(--text-muted);"><span style="color: var(--accent); font-weight: 600;">USP:</span> Deep-dive album analysis, serialized format, academic depth</div>
+        <div style="font-size: 11px; color: var(--text-muted);"><span style="color: var(--text); font-weight: 600;">Strength:</span> Format consistency + loyal niche fanbase</div>
+        <div style="font-size: 11px; color: var(--text-muted);"><span style="color: var(--text); font-weight: 600;">Weakness:</span> Audio-only limits reach; not culturally broad</div>
+        <div style="font-size: 11px; color: var(--accent2); font-weight: 600;">Opportunity: AceTV+ covers all entertainment, not just music — broader aperture</div>
+      </div>
+    </div>
+
+    <!-- John Oliver / Late Night -->
+    <div class="card">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+        <div style="font-family: var(--font-display); font-size: 14px; font-weight: 700; color: var(--text);">Late Night TV</div>
+        <span class="tag">Broadcast</span>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 6px;">
+        <div style="font-size: 11px; color: var(--text-muted);"><span style="color: var(--accent); font-weight: 600;">USP:</span> Mainstream reach + comedy + news commentary (John Oliver format)</div>
+        <div style="font-size: 11px; color: var(--text-muted);"><span style="color: var(--text); font-weight: 600;">Strength:</span> Production quality, institutional credibility, massive budgets</div>
+        <div style="font-size: 11px; color: var(--text-muted);"><span style="color: var(--text); font-weight: 600;">Weakness:</span> Perceived left-leaning bias; alienates centrists + right-of-center</div>
+        <div style="font-size: 11px; color: var(--accent2); font-weight: 600;">Opportunity: AceTV+ fills the centrist, non-preachy media gap entirely</div>
+      </div>
+    </div>
+
+    <!-- Video Essays -->
+    <div class="card">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+        <div style="font-family: var(--font-display); font-size: 14px; font-weight: 700; color: var(--text);">YouTube Video Essays</div>
+        <span class="tag">Video</span>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 6px;">
+        <div style="font-size: 11px; color: var(--text-muted);"><span style="color: var(--accent); font-weight: 600;">USP:</span> Long-form analysis, individual creator authority, niche depth</div>
+        <div style="font-size: 11px; color: var(--text-muted);"><span style="color: var(--text); font-weight: 600;">Strength:</span> Algorithmic discoverability, cult followings, no gatekeeping</div>
+        <div style="font-size: 11px; color: var(--text-muted);"><span style="color: var(--text); font-weight: 600;">Weakness:</span> Inconsistent, solo creator burnout, no brand cohesion</div>
+        <div style="font-size: 11px; color: var(--accent2); font-weight: 600;">Opportunity: AceTV+ offers the brand consistency solo creators can't</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Positioning Summary -->
+  <div style="background: rgba(232,35,26,0.07); border: 1px solid var(--border-accent); border-radius: 8px; padding: 18px 22px; display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+    <div>
+      <div class="section-label" style="margin-bottom: 8px;">Market Position</div>
+      <div style="font-size: 12px; color: var(--text); line-height: 1.65;">AceTV+ occupies a unique gap: media-literate, community-first, centrist-leaning, multi-format. None of the three competitors deliver all four simultaneously. The white space is real.</div>
+    </div>
+    <div>
+      <div class="section-label" style="margin-bottom: 8px;">Key Differentiator</div>
+      <div style="font-size: 12px; color: var(--text); line-height: 1.65;">The only platform that combines entertainment appreciation, critical media analysis, and genuine community — without ideological capture or solo-creator fragility. Brand > personality.</div>
+    </div>
+  </div>
+
+  <div class="page-num">10</div>
+  <div class="bottom-bar"></div>
+</div>
+
+<!-- ============================================================ -->
+<!-- SLIDE 11: TARGET AUDIENCE + PERSONA -->
+<!-- ============================================================ -->
+<div class="page" style="padding: 52px 60px;">
+  <div class="accent-bar"></div>
+
+  <div class="eyebrow" style="margin-bottom: 6px;">Worksheet 7</div>
+  <h1 style="font-family: var(--font-display); font-size: 34px; font-weight: 700; margin-bottom: 4px;">Target Audience & Persona</h1>
+  <div class="section-label" style="margin-bottom: 20px;">Demographics · Psychographics · ICA</div>
+
+  <div style="display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 16px;">
+    <div style="display: flex; flex-direction: column; gap: 14px;">
+      <!-- ICA Narrative -->
+      <div style="background: var(--accent); border-radius: 8px; padding: 24px;">
+        <div style="font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.3em; color: rgba(255,255,255,0.65); margin-bottom: 6px; text-transform: uppercase;">Ideal Client Avatar</div>
+        <div style="font-family: var(--font-display); font-size: 20px; font-weight: 700; color: #fff; margin-bottom: 4px;">Jordan, 19 — College Sophomore</div>
+        <div style="font-family: var(--font-mono); font-size: 10px; color: rgba(255,255,255,0.7); letter-spacing: 0.15em; margin-bottom: 12px;">NEW YORK / ATLANTA / LOS ANGELES</div>
+        <div style="font-size: 12px; color: rgba(255,255,255,0.85); line-height: 1.7;">Jordan grew up on TikTok and YouTube but feels like every channel has an angle. They love film and TV but get frustrated when culture becomes a battleground. They don't want to be lectured — they want to understand. AceTV+ is the first media brand they've seen that talks to them like they're smart without trying to recruit them to a side.</div>
+      </div>
+
+      <!-- Demographics -->
+      <div class="card">
+        <div class="section-label" style="margin-bottom: 10px;">Demographics</div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px;">
+          <div style="background: var(--surface); border-radius: 4px; padding: 8px 10px;">
+            <div style="font-size: 10px; color: var(--text-muted);">Age</div>
+            <div style="font-size: 13px; font-weight: 600; color: var(--text);">14–24</div>
+          </div>
+          <div style="background: var(--surface); border-radius: 4px; padding: 8px 10px;">
+            <div style="font-size: 10px; color: var(--text-muted);">Gender</div>
+            <div style="font-size: 13px; font-weight: 600; color: var(--text);">All — 55% Male</div>
+          </div>
+          <div style="background: var(--surface); border-radius: 4px; padding: 8px 10px;">
+            <div style="font-size: 10px; color: var(--text-muted);">Location</div>
+            <div style="font-size: 13px; font-weight: 600; color: var(--text);">US Urban/Suburban</div>
+          </div>
+          <div style="background: var(--surface); border-radius: 4px; padding: 8px 10px;">
+            <div style="font-size: 10px; color: var(--text-muted);">Education</div>
+            <div style="font-size: 13px; font-weight: 600; color: var(--text);">High School – College</div>
+          </div>
+          <div style="background: var(--surface); border-radius: 4px; padding: 8px 10px;">
+            <div style="font-size: 10px; color: var(--text-muted);">Income</div>
+            <div style="font-size: 13px; font-weight: 600; color: var(--text);">$0–$30K (student/entry)</div>
+          </div>
+          <div style="background: var(--surface); border-radius: 4px; padding: 8px 10px;">
+            <div style="font-size: 10px; color: var(--text-muted);">Platform</div>
+            <div style="font-size: 13px; font-weight: 600; color: var(--text);">YouTube · TikTok · IG</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div style="display: flex; flex-direction: column; gap: 14px;">
+      <!-- Psychographics -->
+      <div class="card">
+        <div class="section-label" style="margin-bottom: 10px;">Psychographics</div>
+        <div style="display: flex; flex-direction: column; gap: 6px;">
+          <div style="font-size: 12px; color: var(--text); line-height: 1.5;"><span style="color: var(--accent); font-weight: 600;">Interests:</span> Film, TV, music, gaming culture, sports, internet culture, social justice adjacent topics</div>
+          <div style="font-size: 12px; color: var(--text); line-height: 1.5;"><span style="color: var(--accent); font-weight: 600;">Values:</span> Authenticity, fairness, humor, community belonging, not being talked down to</div>
+          <div style="font-size: 12px; color: var(--text); line-height: 1.5;"><span style="color: var(--accent); font-weight: 600;">Pain Points:</span> Media feels biased or performative; algorithm feeds anxiety; tribal culture wars in comment sections</div>
+          <div style="font-size: 12px; color: var(--text); line-height: 1.5;"><span style="color: var(--accent); font-weight: 600;">Behavior:</span> Consumes content in binges; shares clips and memes; joins Discord/Reddit communities for fandoms</div>
+        </div>
+      </div>
+
+      <!-- Buying Triggers + Objections -->
+      <div class="card">
+        <div class="section-label" style="margin-bottom: 8px;">Top 3 Engagement Triggers</div>
+        <div style="display: flex; flex-direction: column; gap: 6px; margin-bottom: 10px;">
+          <div style="display: flex; gap: 8px;"><span style="color: var(--accent); font-weight: 700; flex-shrink: 0; font-size: 12px;">✓</span><span style="font-size: 12px; color: var(--text);">A video that says what they've been thinking but couldn't articulate</span></div>
+          <div style="display: flex; gap: 8px;"><span style="color: var(--accent); font-weight: 700; flex-shrink: 0; font-size: 12px;">✓</span><span style="font-size: 12px; color: var(--text);">A community where their opinion isn't immediately dismissed</span></div>
+          <div style="display: flex; gap: 8px;"><span style="color: var(--accent); font-weight: 700; flex-shrink: 0; font-size: 12px;">✓</span><span style="font-size: 12px; color: var(--text);">Content that makes them look smart for sharing it</span></div>
+        </div>
+        <div class="section-label" style="margin-bottom: 8px;">Top Objections</div>
+        <div style="display: flex; flex-direction: column; gap: 6px;">
+          <div style="display: flex; gap: 8px;"><span style="color: var(--text-muted); flex-shrink: 0; font-size: 12px;">—</span><span style="font-size: 12px; color: var(--text-muted);">"This is just another opinion account with an agenda"</span></div>
+          <div style="display: flex; gap: 8px;"><span style="color: var(--text-muted); flex-shrink: 0; font-size: 12px;">—</span><span style="font-size: 12px; color: var(--text-muted);">"Too many media channels already, why is this one different?"</span></div>
+        </div>
+      </div>
+
+      <!-- Channels -->
+      <div style="background: rgba(245,166,35,0.07); border: 1px solid rgba(245,166,35,0.2); border-radius: 6px; padding: 12px 14px;">
+        <div style="font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.25em; color: var(--gold); text-transform: uppercase; margin-bottom: 8px;">Priority Channels</div>
+        <div style="display: flex; flex-wrap: wrap; gap: 6px;">
+          <span style="background: var(--surface2); border: 1px solid var(--border); border-radius: 3px; padding: 3px 8px; font-size: 10px; color: var(--text);">#1 YouTube</span>
+          <span style="background: var(--surface2); border: 1px solid var(--border); border-radius: 3px; padding: 3px 8px; font-size: 10px; color: var(--text);">#2 TikTok</span>
+          <span style="background: var(--surface2); border: 1px solid var(--border); border-radius: 3px; padding: 3px 8px; font-size: 10px; color: var(--text);">#3 Instagram</span>
+          <span style="background: var(--surface2); border: 1px solid var(--border); border-radius: 3px; padding: 3px 8px; font-size: 10px; color: var(--text);">#4 Discord</span>
+          <span style="background: var(--surface2); border: 1px solid var(--border); border-radius: 3px; padding: 3px 8px; font-size: 10px; color: var(--text);">#5 Twitter/X</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-num">11</div>
+  <div class="bottom-bar"></div>
+</div>
+
+<!-- ============================================================ -->
+<!-- SLIDE 12: PRODUCT POSITIONING -->
+<!-- ============================================================ -->
+<div class="page" style="padding: 52px 60px;">
+  <div class="accent-bar"></div>
+
+  <div class="eyebrow" style="margin-bottom: 6px;">Worksheet 8</div>
+  <h1 style="font-family: var(--font-display); font-size: 34px; font-weight: 700; margin-bottom: 4px;">Product Positioning</h1>
+  <div class="section-label" style="margin-bottom: 20px;">Offerings · Pain points solved · Value propositions</div>
+
+  <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; margin-bottom: 16px;">
+    <!-- Content -->
+    <div class="card">
+      <div class="section-label" style="margin-bottom: 6px;">Offering 01</div>
+      <div style="font-family: var(--font-display); font-size: 15px; font-weight: 700; color: var(--text); margin-bottom: 8px;">Original Content</div>
+      <div style="display: flex; flex-direction: column; gap: 6px;">
+        <div style="font-size: 11px; color: var(--text-muted);"><span style="color: var(--text);">Format:</span> Long-form video, short-form clips, reaction content</div>
+        <div style="font-size: 11px; color: var(--text-muted);"><span style="color: var(--text);">Pain Solved:</span> Young audiences feel fed propaganda — this gives them a lens</div>
+        <div style="font-size: 11px; color: var(--text-muted);"><span style="color: var(--text);">Benefit:</span> Informed perspective + entertainment value in one hit</div>
+        <div style="font-size: 11px; color: var(--text-muted);"><span style="color: var(--text);">Outcome:</span> Audience feels smarter, not preached at</div>
+      </div>
+      <div class="divider"></div>
+      <div style="font-size: 11px; font-style: italic; color: var(--accent2);">"We help young viewers decode media so they can actually enjoy it."</div>
+    </div>
+
+    <!-- Film Reviews + Articles -->
+    <div class="card">
+      <div class="section-label" style="margin-bottom: 6px;">Offering 02</div>
+      <div style="font-family: var(--font-display); font-size: 15px; font-weight: 700; color: var(--text); margin-bottom: 8px;">Film Reviews & Articles</div>
+      <div style="display: flex; flex-direction: column; gap: 6px;">
+        <div style="font-size: 11px; color: var(--text-muted);"><span style="color: var(--text);">Format:</span> Written + video reviews, cultural essays, journalism pieces</div>
+        <div style="font-size: 11px; color: var(--text-muted);"><span style="color: var(--text);">Pain Solved:</span> Review culture is captured by press access and ad dollars — audiences don't trust it</div>
+        <div style="font-size: 11px; color: var(--text-muted);"><span style="color: var(--text);">Benefit:</span> Trustworthy critical voice with no financial conflicts</div>
+        <div style="font-size: 11px; color: var(--text-muted);"><span style="color: var(--text);">Outcome:</span> Audience makes better viewing decisions</div>
+      </div>
+      <div class="divider"></div>
+      <div style="font-size: 11px; font-style: italic; color: var(--accent2);">"We review what we actually watched, not what we were paid to hype."</div>
+    </div>
+
+    <!-- History Lessons + Reactions -->
+    <div class="card">
+      <div class="section-label" style="margin-bottom: 6px;">Offering 03</div>
+      <div style="font-family: var(--font-display); font-size: 15px; font-weight: 700; color: var(--text); margin-bottom: 8px;">History Lessons & Reactions</div>
+      <div style="display: flex; flex-direction: column; gap: 6px;">
+        <div style="font-size: 11px; color: var(--text-muted);"><span style="color: var(--text);">Format:</span> Contextual history breakdowns, live reaction content, cultural explainers</div>
+        <div style="font-size: 11px; color: var(--text-muted);"><span style="color: var(--text);">Pain Solved:</span> Gen Z consumes content without context — history lessons bridge the gap</div>
+        <div style="font-size: 11px; color: var(--text-muted);"><span style="color: var(--text);">Benefit:</span> Context-rich entertainment that builds knowledge passively</div>
+        <div style="font-size: 11px; color: var(--text-muted);"><span style="color: var(--text);">Outcome:</span> More media-literate consumer base</div>
+      </div>
+      <div class="divider"></div>
+      <div style="font-size: 11px; font-style: italic; color: var(--accent2);">"We give the backstory the algorithm always skips."</div>
+    </div>
+  </div>
+
+  <!-- Competitive Matrix -->
+  <div style="background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; padding: 16px 20px;">
+    <div class="section-label" style="margin-bottom: 12px;">Positioning Matrix</div>
+    <div style="display: grid; grid-template-columns: 1.5fr 1fr 1fr 1fr 1fr; gap: 8px; align-items: center;">
+      <div style="font-size: 10px; color: var(--text-muted);">Brand</div>
+      <div style="font-family: var(--font-mono); font-size: 9px; color: var(--text-muted); text-align: center; letter-spacing: 0.1em;">CENTRIST</div>
+      <div style="font-family: var(--font-mono); font-size: 9px; color: var(--text-muted); text-align: center; letter-spacing: 0.1em;">COMMUNITY</div>
+      <div style="font-family: var(--font-mono); font-size: 9px; color: var(--text-muted); text-align: center; letter-spacing: 0.1em;">MULTI-FORMAT</div>
+      <div style="font-family: var(--font-mono); font-size: 9px; color: var(--text-muted); text-align: center; letter-spacing: 0.1em;">YOUTH-FIRST</div>
+
+      <div style="font-size: 12px; font-weight: 700; color: var(--accent);">AceTV+</div>
+      <div style="text-align: center; font-size: 14px; color: var(--accent);">✓</div><div style="text-align: center; font-size: 14px; color: var(--accent);">✓</div><div style="text-align: center; font-size: 14px; color: var(--accent);">✓</div><div style="text-align: center; font-size: 14px; color: var(--accent);">✓</div>
+
+      <div style="font-size: 12px; color: var(--text-muted);">Dissect Podcast</div>
+      <div style="text-align: center; font-size: 14px; color: var(--text-muted);">✓</div><div style="text-align: center; font-size: 14px; color: var(--text-muted);">—</div><div style="text-align: center; font-size: 14px; color: var(--text-muted);">—</div><div style="text-align: center; font-size: 14px; color: var(--text-muted);">—</div>
+
+      <div style="font-size: 12px; color: var(--text-muted);">Late Night TV</div>
+      <div style="text-align: center; font-size: 14px; color: var(--text-muted);">—</div><div style="text-align: center; font-size: 14px; color: var(--text-muted);">—</div><div style="text-align: center; font-size: 14px; color: var(--text-muted);">✓</div><div style="text-align: center; font-size: 14px; color: var(--text-muted);">—</div>
+
+      <div style="font-size: 12px; color: var(--text-muted);">Video Essays</div>
+      <div style="text-align: center; font-size: 14px; color: var(--text-muted);">✓</div><div style="text-align: center; font-size: 14px; color: var(--text-muted);">—</div><div style="text-align: center; font-size: 14px; color: var(--text-muted);">—</div><div style="text-align: center; font-size: 14px; color: var(--text-muted);">✓</div>
+    </div>
+  </div>
+
+  <div class="page-num">12</div>
+  <div class="bottom-bar"></div>
+</div>
+
+<!-- ============================================================ -->
+<!-- SLIDE 13: NICHE MARKETS -->
+<!-- ============================================================ -->
+<div class="page" style="padding: 52px 60px;">
+  <div class="accent-bar"></div>
+
+  <div class="eyebrow" style="margin-bottom: 6px;">Worksheet 9</div>
+  <h1 style="font-family: var(--font-display); font-size: 34px; font-weight: 700; margin-bottom: 4px;">Niche Markets</h1>
+  <div class="section-label" style="margin-bottom: 20px;">5 concentrated audience segments worth targeting first</div>
+
+  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px;">
+    <div class="card">
+      <div style="display: flex; gap: 10px; align-items: flex-start;">
+        <div style="background: var(--accent); color: #fff; font-family: var(--font-mono); font-size: 11px; font-weight: 700; width: 24px; height: 24px; border-radius: 4px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">01</div>
+        <div>
+          <div style="font-family: var(--font-display); font-size: 14px; font-weight: 700; color: var(--text); margin-bottom: 4px;">Film Twitter / Film Twitter Diaspora</div>
+          <div style="font-size: 11px; color: var(--text-muted); line-height: 1.55;">Cinephiles aged 16–28 who live on letterboxd, r/movies, film Twitter. Sophisticated palate, love of discourse, strong sharing behavior. AceTV+ can dominate this niche with quality + attitude.</div>
+          <div style="font-size: 10px; color: var(--accent2); margin-top: 6px; font-weight: 600;">Distribution: Letterboxd, r/movies, Twitter/X film accounts</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div style="display: flex; gap: 10px; align-items: flex-start;">
+        <div style="background: var(--accent); color: #fff; font-family: var(--font-mono); font-size: 11px; font-weight: 700; width: 24px; height: 24px; border-radius: 4px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">02</div>
+        <div>
+          <div style="font-family: var(--font-display); font-size: 14px; font-weight: 700; color: var(--text); margin-bottom: 4px;">Disillusioned Young Men (14–22)</div>
+          <div style="font-size: 11px; color: var(--text-muted); line-height: 1.55;">Gen Z males who feel media doesn't represent them without weaponizing them. Hungry for honest, non-preachy content. Prone to loyalty when a brand earns it. High-risk, high-reward segment.</div>
+          <div style="font-size: 10px; color: var(--accent2); margin-top: 6px; font-weight: 600;">Distribution: YouTube, TikTok, Discord, Podcast clips</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div style="display: flex; gap: 10px; align-items: flex-start;">
+        <div style="background: rgba(232,35,26,0.2); color: var(--accent2); font-family: var(--font-mono); font-size: 11px; font-weight: 700; width: 24px; height: 24px; border-radius: 4px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">03</div>
+        <div>
+          <div style="font-family: var(--font-display); font-size: 14px; font-weight: 700; color: var(--text); margin-bottom: 4px;">Young Black & Brown Media Consumers</div>
+          <div style="font-size: 11px; color: var(--text-muted); line-height: 1.55;">Underserved by mainstream media criticism that still centers white institutional gatekeepers. AceTV+ can be the culturally competent, community-rooted voice this audience has been waiting for.</div>
+          <div style="font-size: 10px; color: var(--accent2); margin-top: 6px; font-weight: 600;">Distribution: Instagram, TikTok, Black Twitter, YouTube</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div style="display: flex; gap: 10px; align-items: flex-start;">
+        <div style="background: rgba(232,35,26,0.2); color: var(--accent2); font-family: var(--font-mono); font-size: 11px; font-weight: 700; width: 24px; height: 24px; border-radius: 4px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">04</div>
+        <div>
+          <div style="font-family: var(--font-display); font-size: 14px; font-weight: 700; color: var(--text); margin-bottom: 4px;">High School Media Studies Students</div>
+          <div style="font-size: 11px; color: var(--text-muted); line-height: 1.55;">Students aged 14–18 studying journalism, media, film, or communications. AceTV+ as educational companion — history lesson format serves directly. Teachers recommend. Students share.</div>
+          <div style="font-size: 10px; color: var(--accent2); margin-top: 6px; font-weight: 600;">Distribution: YouTube, school sharing, TikTok edu-content</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card" style="border-left-color: var(--gold);">
+    <div style="display: flex; gap: 10px; align-items: flex-start;">
+      <div style="background: rgba(245,166,35,0.2); color: var(--gold); font-family: var(--font-mono); font-size: 11px; font-weight: 700; width: 24px; height: 24px; border-radius: 4px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">05</div>
+      <div style="flex: 1;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+          <div style="font-family: var(--font-display); font-size: 14px; font-weight: 700; color: var(--text);">Creators & Aspiring Journalists (18–26)</div>
+          <span class="tag" style="color: var(--gold); border-color: rgba(245,166,35,0.3); background: rgba(245,166,35,0.1);">Long-Term Bet</span>
+        </div>
+        <div style="font-size: 11px; color: var(--text-muted); line-height: 1.55;">Young people building their own media voices. AceTV+ as the brand they want to be — a model and a community. They amplify because they aspire to the same lane. Builds referral engine naturally.</div>
+        <div style="font-size: 10px; color: var(--gold); margin-top: 6px; font-weight: 600;">Distribution: LinkedIn, YouTube, Twitter, Creator communities</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-num">13</div>
+  <div class="bottom-bar"></div>
+</div>
+
+<!-- ============================================================ -->
+<!-- SLIDE 14: DREAM 100 -->
+<!-- ============================================================ -->
+<div class="page" style="padding: 52px 60px;">
+  <div class="accent-bar"></div>
+
+  <div class="eyebrow" style="margin-bottom: 6px;">Worksheet 10</div>
+  <h1 style="font-family: var(--font-display); font-size: 34px; font-weight: 700; margin-bottom: 4px;">Dream 100</h1>
+  <div class="section-label" style="margin-bottom: 20px;">ICA pain points · Where they're hiding · Who to target</div>
+
+  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+    <div>
+      <div class="section-label" style="margin-bottom: 10px;">12 ICA Pain Points & Obsessions</div>
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+        <div style="background: var(--surface2); border: 1px solid var(--border); border-radius: 4px; padding: 8px 10px; font-size: 11px; color: var(--text); line-height: 1.4;">Media feels biased — can't trust reviews</div>
+        <div style="background: var(--surface2); border: 1px solid var(--border); border-radius: 4px; padding: 8px 10px; font-size: 11px; color: var(--text); line-height: 1.4;">Algorithm only shows them what confirms their bias</div>
+        <div style="background: var(--surface2); border: 1px solid var(--border); border-radius: 4px; padding: 8px 10px; font-size: 11px; color: var(--text); line-height: 1.4;">Film/TV discourse is exhausting and tribal</div>
+        <div style="background: var(--surface2); border: 1px solid var(--border); border-radius: 4px; padding: 8px 10px; font-size: 11px; color: var(--text); line-height: 1.4;">No safe space to have a nuanced opinion</div>
+        <div style="background: var(--surface2); border: 1px solid var(--border); border-radius: 4px; padding: 8px 10px; font-size: 11px; color: var(--text); line-height: 1.4;">Missing historical context on current events</div>
+        <div style="background: var(--surface2); border: 1px solid var(--border); border-radius: 4px; padding: 8px 10px; font-size: 11px; color: var(--text); line-height: 1.4;">Wanting to love entertainment without guilt trips</div>
+        <div style="background: var(--surface2); border: 1px solid var(--border); border-radius: 4px; padding: 8px 10px; font-size: 11px; color: var(--text); line-height: 1.4;">Feeling underrepresented in mainstream criticism</div>
+        <div style="background: var(--surface2); border: 1px solid var(--border); border-radius: 4px; padding: 8px 10px; font-size: 11px; color: var(--text); line-height: 1.4;">Scared of being mocked for having "wrong" opinions</div>
+        <div style="background: var(--surface2); border: 1px solid var(--border); border-radius: 4px; padding: 8px 10px; font-size: 11px; color: var(--text); line-height: 1.4;">Wanting a community, not just a comment section</div>
+        <div style="background: var(--surface2); border: 1px solid var(--border); border-radius: 4px; padding: 8px 10px; font-size: 11px; color: var(--text); line-height: 1.4;">Can't keep up with all the content being dropped</div>
+        <div style="background: var(--surface2); border: 1px solid var(--border); border-radius: 4px; padding: 8px 10px; font-size: 11px; color: var(--text); line-height: 1.4;">Don't want to be lectured while being entertained</div>
+        <div style="background: var(--surface2); border: 1px solid var(--border); border-left-color: var(--accent); border-left-width: 3px; padding: 8px 10px; font-size: 11px; color: var(--text); line-height: 1.4;">Craving creators who look and sound like them</div>
+      </div>
+    </div>
+
+    <div>
+      <div class="section-label" style="margin-bottom: 10px;">Where They're Hiding (Top 20)</div>
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px;">
+        <div style="display: flex; flex-direction: column; gap: 4px;">
+          <div style="background: var(--surface2); border: 1px solid var(--border); border-radius: 4px; padding: 6px 10px; font-size: 10px; color: var(--text);">📺 r/movies · r/television</div>
+          <div style="background: var(--surface2); border: 1px solid var(--border); border-radius: 4px; padding: 6px 10px; font-size: 10px; color: var(--text);">🎬 Letterboxd community</div>
+          <div style="background: var(--surface2); border: 1px solid var(--border); border-radius: 4px; padding: 6px 10px; font-size: 10px; color: var(--text);">🐦 Film Twitter / #FilmTwt</div>
+          <div style="background: var(--surface2); border: 1px solid var(--border); border-radius: 4px; padding: 6px 10px; font-size: 10px; color: var(--text);">🎵 Genius lyrics community</div>
+          <div style="background: var(--surface2); border: 1px solid var(--border); border-radius: 4px; padding: 6px 10px; font-size: 10px; color: var(--text);">📱 TikTok #booktok adjacent</div>
+          <div style="background: var(--surface2); border: 1px solid var(--border); border-radius: 4px; padding: 6px 10px; font-size: 10px; color: var(--text);">🎮 Gaming + anime Discord</div>
+          <div style="background: var(--surface2); border: 1px solid var(--border); border-radius: 4px; padding: 6px 10px; font-size: 10px; color: var(--text);">📹 CinemaSins / NerdWriter1</div>
+          <div style="background: var(--surface2); border: 1px solid var(--border); border-radius: 4px; padding: 6px 10px; font-size: 10px; color: var(--text);">🎙 YouTube: Every Frame a Painting</div>
+          <div style="background: var(--surface2); border: 1px solid var(--border); border-radius: 4px; padding: 6px 10px; font-size: 10px; color: var(--text);">🏆 Oscars discourse accounts</div>
+          <div style="background: var(--surface2); border: 1px solid var(--border); border-radius: 4px; padding: 6px 10px; font-size: 10px; color: var(--text);">📺 Black Twitter culture accounts</div>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 4px;">
+          <div style="background: var(--surface2); border: 1px solid var(--border); border-radius: 4px; padding: 6px 10px; font-size: 10px; color: var(--text);">🎬 Dissect Podcast listeners</div>
+          <div style="background: var(--surface2); border: 1px solid var(--border); border-radius: 4px; padding: 6px 10px; font-size: 10px; color: var(--text);">📰 The Ringer community</div>
+          <div style="background: var(--surface2); border: 1px solid var(--border); border-radius: 4px; padding: 6px 10px; font-size: 10px; color: var(--text);">🎙 Media criticism newsletters</div>
+          <div style="background: var(--surface2); border: 1px solid var(--border); border-radius: 4px; padding: 6px 10px; font-size: 10px; color: var(--text);">🏫 Media studies Facebook groups</div>
+          <div style="background: var(--surface2); border: 1px solid var(--border); border-radius: 4px; padding: 6px 10px; font-size: 10px; color: var(--text);">🎥 IMDb forums / Score fans</div>
+          <div style="background: var(--surface2); border: 1px solid var(--border); border-radius: 4px; padding: 6px 10px; font-size: 10px; color: var(--text);">🔴 YouTube: h3h3, Kurtis Conner</div>
+          <div style="background: var(--surface2); border: 1px solid var(--border); border-radius: 4px; padding: 6px 10px; font-size: 10px; color: var(--text);">🎙 Spotify podcast listeners 16–24</div>
+          <div style="background: var(--surface2); border: 1px solid var(--border); border-radius: 4px; padding: 6px 10px; font-size: 10px; color: var(--text);">📱 IG: Pop culture meme accounts</div>
+          <div style="background: var(--surface2); border: 1px solid var(--border); border-radius: 4px; padding: 6px 10px; font-size: 10px; color: var(--text);">🎓 HS journalism club networks</div>
+          <div style="background: var(--surface2); border: 1px solid var(--border); border-left-color: var(--accent); border-left-width: 3px; padding: 6px 10px; font-size: 10px; color: var(--text); font-weight: 600;">🏆 Young creators on Creator IRL events</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-num">14</div>
+  <div class="bottom-bar"></div>
+</div>
+
+<!-- ============================================================ -->
+<!-- SLIDE 15: CLOSING / GO-TO-MARKET SUMMARY -->
+<!-- ============================================================ -->
+<div class="page" style="background: #0A0A0A; padding: 0; display: flex; flex-direction: column;">
+  <div class="accent-bar"></div>
+
+  <!-- Top nav -->
+  <div style="padding: 32px 60px 0; display: flex; justify-content: space-between; align-items: center;">
+    <div style="font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.3em; color: var(--text-faint); text-transform: uppercase;">Go-to-Market Summary</div>
+    <div style="font-family: var(--font-mono); font-size: 10px; color: var(--text-faint);">WS1 · FourFold Path</div>
+  </div>
+
+  <div style="padding: 28px 60px; flex: 1; display: flex; flex-direction: column; gap: 16px;">
+    <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 8px;">
+      <div style="background: var(--surface2); border: 1px solid var(--border); border-top: 3px solid var(--accent); border-radius: 6px; padding: 20px 16px;">
+        <div style="font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.2em; color: var(--accent); text-transform: uppercase; margin-bottom: 8px;">Ideation</div>
+        <div style="font-family: var(--font-display); font-size: 14px; font-weight: 700; color: var(--text); margin-bottom: 8px;">The What</div>
+        <div style="display: flex; flex-direction: column; gap: 4px;">
+          <div style="font-size: 11px; color: var(--text-muted);">✓ Brand identity locked</div>
+          <div style="font-size: 11px; color: var(--text-muted);">✓ Messaging defined</div>
+          <div style="font-size: 11px; color: var(--text-muted);">✓ Style guide complete</div>
+          <div style="font-size: 11px; color: var(--text-muted);">→ Visual assets TBD</div>
+        </div>
+      </div>
+      <div style="background: var(--surface2); border: 1px solid var(--border); border-top: 3px solid var(--accent); border-radius: 6px; padding: 20px 16px;">
+        <div style="font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.2em; color: var(--accent); text-transform: uppercase; margin-bottom: 8px;">Impact</div>
+        <div style="font-family: var(--font-display); font-size: 14px; font-weight: 700; color: var(--text); margin-bottom: 8px;">Goal + Intention</div>
+        <div style="display: flex; flex-direction: column; gap: 4px;">
+          <div style="font-size: 11px; color: var(--text-muted);">✓ 5 SMART Goals set</div>
+          <div style="font-size: 11px; color: var(--text-muted);">✓ Competitor analysis done</div>
+          <div style="font-size: 11px; color: var(--text-muted);">✓ Personas built</div>
+          <div style="font-size: 11px; color: var(--text-muted);">✓ Products positioned</div>
+        </div>
+      </div>
+      <div style="background: var(--surface2); border: 1px solid var(--border); border-top: 3px solid var(--accent); border-radius: 6px; padding: 20px 16px;">
+        <div style="font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.2em; color: var(--accent); text-transform: uppercase; margin-bottom: 8px;">Implementation</div>
+        <div style="font-family: var(--font-display); font-size: 14px; font-weight: 700; color: var(--text); margin-bottom: 8px;">The How</div>
+        <div style="display: flex; flex-direction: column; gap: 4px;">
+          <div style="font-size: 11px; color: var(--text-muted);">→ Content strategy next</div>
+          <div style="font-size: 11px; color: var(--text-muted);">→ Channel rollout plan</div>
+          <div style="font-size: 11px; color: var(--text-muted);">→ Launch timeline TBD</div>
+          <div style="font-size: 11px; color: var(--text-muted);">✓ Niches identified</div>
+        </div>
+      </div>
+      <div style="background: var(--surface2); border: 1px solid var(--border); border-top: 3px solid var(--gold); border-radius: 6px; padding: 20px 16px;">
+        <div style="font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.2em; color: var(--gold); text-transform: uppercase; margin-bottom: 8px;">Income</div>
+        <div style="font-family: var(--font-display); font-size: 14px; font-weight: 700; color: var(--text); margin-bottom: 8px;">Revenue + Growth</div>
+        <div style="display: flex; flex-direction: column; gap: 4px;">
+          <div style="font-size: 11px; color: var(--text-muted);">→ AdSense / YT monetize</div>
+          <div style="font-size: 11px; color: var(--text-muted);">→ Brand deal outreach</div>
+          <div style="font-size: 11px; color: var(--text-muted);">→ Merch / community tier</div>
+          <div style="font-size: 11px; color: var(--text-muted);">→ Press/screener access</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Closing statement -->
+    <div style="text-align: center; padding: 20px 80px;">
+      <div class="eyebrow" style="margin-bottom: 14px; text-align: center; display: block;">Brand Context Summary</div>
+      <div style="font-family: var(--font-display); font-size: 24px; font-weight: 700; color: var(--text); line-height: 1.3; margin-bottom: 14px;">AceTV+ is the media brand Gen Z actually deserves.<br>Truth. Community. Culture. No agenda.</div>
+      <div style="font-size: 12px; color: var(--text-muted); line-height: 1.7; max-width: 680px; margin: 0 auto;">Palette: Void Black · Broadcast Red · Signal White · Press Gold. Fonts: Space Grotesk + DM Sans + IBM Plex Mono. Voice: Authentic · Vibrant · Daring. ICA: Jordan, 19, disillusioned Gen Z media consumer tired of being recruited by an agenda. Offerings: Original content, Film reviews, History lessons. Competitors: Dissect, Late Night TV, Video Essays.</div>
+    </div>
+  </div>
+
+  <!-- Bottom strip -->
+  <div style="padding: 0 60px 28px; display: flex; justify-content: space-between; align-items: flex-end;">
+    <div>
+      <div style="font-family: var(--font-display); font-size: 22px; font-weight: 700; color: var(--text);">AceTV<span style="color: var(--accent);">+</span></div>
+      <div style="font-family: var(--font-mono); font-size: 9px; color: var(--text-faint); letter-spacing: 0.2em; margin-top: 2px;">BRAND PLAYBOOK V1.0</div>
+    </div>
+    <div style="font-family: var(--font-mono); font-size: 10px; color: var(--text-faint);">"We're all we got."</div>
+  </div>
+
+  <div class="bottom-bar"></div>
+</div>
+
+</body>
+</html>

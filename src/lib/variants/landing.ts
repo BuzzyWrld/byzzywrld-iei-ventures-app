@@ -1,6 +1,10 @@
 /**
  * Landing page variants — 3 distinct layouts for the brand's marketing site.
  * Each is a self-contained HTML file with inline CSS and Google Fonts link.
+ *
+ * Generated as 3 parallel single-variant calls so the FamFit exemplar (~47KB)
+ * doesn't crowd output budget. Earlier batched single-call approach truncated
+ * JSON when the model signal-matched the exemplar's verbosity.
  */
 import fs from "node:fs/promises";
 import path from "node:path";
@@ -11,6 +15,7 @@ import {
   safeSlug,
   type BrandForVariants,
 } from "./shared";
+import { landingExemplar } from "./exemplar";
 
 export type LandingVariant = {
   key: string;
@@ -19,37 +24,51 @@ export type LandingVariant = {
   filename: string;
 };
 
-const SYSTEM = `You design marketing landing pages as self-contained HTML. Each page uses inline CSS and optional Google Fonts <link> in <head>. No external JS, no images (use CSS shapes/gradients for visuals), no <img> tags, no data: URIs. Pages must be production-quality: real copy, real structure, responsive layout.
+type LayoutSpec = {
+  key: "hero-centric" | "long-scroll" | "split-screen";
+  description: string;
+};
 
-ABSOLUTELY NO EMOJIS. No 🔗 ⚡ 📊 🧠 ✨ 🎯 🛡️ 📱 or any other emoji character anywhere on the page — not as feature-card icons, not in headings, not inline. Use CSS-drawn geometric shapes (circles, squares, arrows, bars, brackets) or no icon at all. Emojis are the #1 tell of AI-generated design.
+const LAYOUTS: LayoutSpec[] = [
+  {
+    key: "hero-centric",
+    description:
+      "one massive hero (big H1, short subtitle, single CTA) + one content section + footer. Feels product-led.",
+  },
+  {
+    key: "long-scroll",
+    description:
+      "editorial, multiple sections: hero, features, testimonial-style pull quote, offerings list, contact. Feels narrative.",
+  },
+  {
+    key: "split-screen",
+    description:
+      "hero is a 2-column split: copy left, accent-colored decorative block right. Feels premium.",
+  },
+];
 
-OUTPUT:
-Return ONLY valid JSON, no prose, no markdown fences:
+const SYSTEM = `You design ONE marketing landing page as a single self-contained HTML file. Inline CSS and optional Google Fonts <link> in <head>. No external JS, no images, no <img> tags, no data: URIs. Use CSS shapes/gradients for any visuals.
+
+ABSOLUTELY NO EMOJIS. No 🔗 ⚡ 📊 🧠 ✨ 🎯 🛡️ 📱 or any other emoji character anywhere — not as icons, not in headings, not inline. Use CSS-drawn geometric shapes (circles, squares, arrows, bars, brackets) or no icon at all. Emojis are the #1 tell of AI-generated design.
+
+OUTPUT (JSON only, no prose, no markdown fences):
 {
-  "variants": [
-    {
-      "key": "hero-centric" | "long-scroll" | "split-screen",
-      "title": "<2-3 words>",
-      "rationale": "<one-sentence why this layout fits the brand>",
-      "html": "<!DOCTYPE html>...</html>"
-    }
-  ]
+  "key": "<provided layout key>",
+  "title": "<2-3 word page name>",
+  "rationale": "<one sentence on why this layout fits the brand>",
+  "html": "<!DOCTYPE html>...</html>"
 }
 
 HTML constraints:
 - <!DOCTYPE html> + <html lang="en">
 - One <style> block in <head>; no external stylesheets except Google Fonts
 - Use brand colors + heading font via inline styles or CSS variables
-- Hero + 2-3 content sections + footer with contact CTA
-- Mobile responsive via simple @media (max-width: 768px) rules
-- Keep each under 6000 chars — split across multiple tool calls is not allowed here`;
+- Mobile responsive via @media (max-width: 768px) rules
+- Target ~5,000-7,000 characters of HTML. The exemplar below is for STYLE INSPIRATION ONLY — match its quality and structural sophistication, NOT its length. Our pages are intentionally tighter.`;
 
-function buildUser(brand: BrandForVariants): string {
+function buildUser(brand: BrandForVariants, layout: LayoutSpec): string {
   return [
-    "Design 3 distinct landing page layouts for this brand. Each must use a different structural approach:",
-    "  1. hero-centric  — one massive hero (big H1, short subtitle, single CTA) + one section + footer. Feels product-led.",
-    "  2. long-scroll   — editorial, multiple sections: hero, features, testimonial-style pull quote, offerings list, contact. Feels narrative.",
-    "  3. split-screen  — hero is a 2-column split: copy left, accent-colored decorative block right. Feels premium.",
+    `Design ONE landing page using the "${layout.key}" layout: ${layout.description}`,
     "",
     "Copy requirements:",
     "  - Real marketing copy, not placeholder text",
@@ -62,48 +81,64 @@ function buildUser(brand: BrandForVariants): string {
 }
 
 type ModelResponse = {
-  variants: Array<{
-    key?: string;
-    title?: string;
-    rationale?: string;
-    html?: string;
-  }>;
+  key?: string;
+  title?: string;
+  rationale?: string;
+  html?: string;
 };
+
+async function generateOne(
+  brand: BrandForVariants,
+  layout: LayoutSpec,
+  exemplar: string
+): Promise<ModelResponse | null> {
+  let text: string | null = null;
+  try {
+    text = await callClaude({
+      system: SYSTEM + exemplar,
+      user: buildUser(brand, layout),
+      maxTokens: 12000,
+    });
+  } catch (err) {
+    console.warn(
+      `[landing-variants] ${layout.key} call failed:`,
+      err instanceof Error ? err.message : err
+    );
+    return null;
+  }
+  if (!text) return null;
+
+  try {
+    return parseJson<ModelResponse>(text);
+  } catch (err) {
+    console.warn(
+      `[landing-variants] ${layout.key} parse failed:`,
+      err instanceof Error ? err.message : err
+    );
+    return null;
+  }
+}
 
 export async function generateLandingVariants(
   brand: BrandForVariants,
   outputDir: string,
   count = 3
 ): Promise<LandingVariant[]> {
-  let text: string | null = null;
-  try {
-    text = await callClaude({
-      system: SYSTEM,
-      user: buildUser(brand),
-      maxTokens: 8000,
-    });
-  } catch (err) {
-    console.warn(`[landing-variants] call failed:`, err instanceof Error ? err.message : err);
-    return [];
-  }
-  if (!text) return [];
+  const exemplar = await landingExemplar();
+  const layouts = LAYOUTS.slice(0, count);
 
-  let parsed: ModelResponse;
-  try {
-    parsed = parseJson<ModelResponse>(text);
-  } catch (err) {
-    console.warn(`[landing-variants] parse failed:`, err instanceof Error ? err.message : err);
-    return [];
-  }
+  const results = await Promise.all(
+    layouts.map((l) => generateOne(brand, l, exemplar))
+  );
 
   const dir = path.join(outputDir, "landing-variants");
   await fs.mkdir(dir, { recursive: true });
 
   const manifest: LandingVariant[] = [];
-  for (let i = 0; i < Math.min(parsed.variants.length, count); i++) {
-    const v = parsed.variants[i];
-    if (!v.html || !v.html.includes("<html")) continue;
-    const key = safeSlug(v.key || `option-${i + 1}`);
+  for (let i = 0; i < results.length; i++) {
+    const v = results[i];
+    if (!v?.html || !v.html.includes("<html")) continue;
+    const key = safeSlug(v.key || layouts[i].key);
     const filename = `landing-variants/${key}.html`;
     await fs.writeFile(path.join(outputDir, filename), v.html);
     manifest.push({

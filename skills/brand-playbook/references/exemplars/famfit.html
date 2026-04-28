@@ -1,0 +1,1748 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #0F1923;
+      --secondary: #1A2B3C;
+      --accent: #00C6A2;
+      --accent-warm: #F5A623;
+      --accent-light: rgba(0,198,162,0.15);
+      --accent-dark: #009E82;
+      --bg: #F4F6F8;
+      --surface: #FFFFFF;
+      --surface-dark: #1E2D3D;
+      --text: #0F1923;
+      --text-light: #FFFFFF;
+      --text-muted: #637585;
+      --border: rgba(0,198,162,0.2);
+      --font-display: 'Space Grotesk', sans-serif;
+      --font-body: 'DM Sans', sans-serif;
+      --font-accent: 'IBM Plex Mono', monospace;
+    }
+
+    @page { size: 850px 1100px; margin: 0; }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: var(--font-body);
+      background: var(--bg);
+      color: var(--text);
+      width: 850px;
+    }
+
+    .page {
+      width: 850px;
+      height: 1100px;
+      overflow: hidden;
+      page-break-after: always;
+      position: relative;
+    }
+
+    .page:last-child { page-break-after: avoid; }
+
+    /* ── TYPOGRAPHY ── */
+    h1 { font-family: var(--font-display); font-weight: 700; }
+    h2 { font-family: var(--font-display); font-weight: 600; }
+    h3 { font-family: var(--font-display); font-weight: 600; }
+
+    .eyebrow {
+      font-family: var(--font-accent);
+      font-size: 10px;
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      color: var(--accent);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 10px;
+    }
+
+    .eyebrow::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(90deg, var(--accent), transparent);
+      opacity: 0.4;
+    }
+
+    .section-rule {
+      width: 40px;
+      height: 3px;
+      background: var(--accent);
+      margin-bottom: 16px;
+    }
+
+    /* ── CARDS ── */
+    .card {
+      background: var(--surface);
+      border: 1px solid rgba(0,0,0,0.06);
+      border-left: 3px solid var(--accent);
+      border-radius: 6px;
+      padding: 20px;
+    }
+
+    .card-dark {
+      background: var(--surface-dark);
+      border: 1px solid rgba(0,198,162,0.2);
+      border-radius: 6px;
+      padding: 20px;
+    }
+
+    .value-pill {
+      display: inline-block;
+      background: var(--accent-light);
+      color: var(--accent-dark);
+      border: 1px solid rgba(0,198,162,0.3);
+      border-radius: 20px;
+      padding: 5px 14px;
+      font-family: var(--font-accent);
+      font-size: 11px;
+      letter-spacing: 0.05em;
+    }
+
+    /* ── DIVIDER ── */
+    .divider {
+      border: none;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--accent), transparent);
+      opacity: 0.2;
+      margin: 24px 0;
+    }
+
+    /* ─── PAGE 1: COVER ─── */
+    .cover {
+      background: var(--primary);
+      display: flex;
+      flex-direction: column;
+      padding: 0;
+    }
+
+    .cover-top-bar {
+      width: 100%;
+      height: 5px;
+      background: linear-gradient(90deg, var(--accent), var(--accent-warm));
+    }
+
+    .cover-inner {
+      flex: 1;
+      padding: 60px 72px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .cover-logo-area {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .cover-icon {
+      width: 52px;
+      height: 52px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, var(--accent), var(--accent-warm));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .cover-brand-label {
+      font-family: var(--font-display);
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--text-light);
+      letter-spacing: 0.02em;
+    }
+
+    .cover-brand-sub {
+      font-family: var(--font-accent);
+      font-size: 10px;
+      color: var(--accent);
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+    }
+
+    .cover-hero {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 60px 0;
+    }
+
+    .cover-pill {
+      display: inline-block;
+      background: rgba(0,198,162,0.15);
+      color: var(--accent);
+      border: 1px solid rgba(0,198,162,0.3);
+      border-radius: 20px;
+      padding: 6px 16px;
+      font-family: var(--font-accent);
+      font-size: 11px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      margin-bottom: 24px;
+    }
+
+    .cover-title {
+      font-family: var(--font-display);
+      font-size: 72px;
+      font-weight: 700;
+      color: var(--text-light);
+      line-height: 1.0;
+      margin-bottom: 16px;
+    }
+
+    .cover-accent-word {
+      color: var(--accent);
+    }
+
+    .cover-tagline {
+      font-family: var(--font-body);
+      font-size: 20px;
+      color: rgba(255,255,255,0.55);
+      font-style: italic;
+      margin-bottom: 40px;
+    }
+
+    .cover-stat-row {
+      display: flex;
+      gap: 40px;
+    }
+
+    .cover-stat {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .cover-stat-num {
+      font-family: var(--font-display);
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--accent);
+    }
+
+    .cover-stat-label {
+      font-family: var(--font-accent);
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      color: rgba(255,255,255,0.4);
+      text-transform: uppercase;
+    }
+
+    .cover-footer {
+      border-top: 1px solid rgba(255,255,255,0.08);
+      padding-top: 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .cover-footer-left {
+      font-family: var(--font-accent);
+      font-size: 10px;
+      color: rgba(255,255,255,0.3);
+      letter-spacing: 0.2em;
+    }
+
+    .cover-footer-nav {
+      display: flex;
+      gap: 20px;
+    }
+
+    .cover-footer-nav span {
+      font-family: var(--font-accent);
+      font-size: 9px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.3);
+    }
+
+    /* ─── SECTION DIVIDER PAGE ─── */
+    .section-divider {
+      background: var(--primary);
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: center;
+      padding: 72px;
+    }
+
+    .section-divider .num {
+      font-family: var(--font-display);
+      font-size: 140px;
+      font-weight: 700;
+      color: rgba(0,198,162,0.08);
+      line-height: 1;
+      margin-bottom: -20px;
+    }
+
+    .section-divider .sec-label {
+      font-family: var(--font-accent);
+      font-size: 11px;
+      letter-spacing: 0.4em;
+      color: var(--accent);
+      text-transform: uppercase;
+      margin-bottom: 16px;
+    }
+
+    .section-divider .sec-title {
+      font-family: var(--font-display);
+      font-size: 48px;
+      font-weight: 700;
+      color: var(--text-light);
+      line-height: 1.1;
+      margin-bottom: 24px;
+    }
+
+    .section-divider .sec-desc {
+      font-family: var(--font-body);
+      font-size: 16px;
+      color: rgba(255,255,255,0.5);
+      max-width: 440px;
+      line-height: 1.6;
+    }
+
+    /* ─── LIGHT CONTENT PAGE ─── */
+    .content-page {
+      background: var(--bg);
+      padding: 60px 72px;
+    }
+
+    .content-page-header {
+      margin-bottom: 36px;
+    }
+
+    /* ─── DARK CONTENT PAGE ─── */
+    .dark-page {
+      background: var(--primary);
+      padding: 60px 72px;
+    }
+
+    /* ─── COLOR SWATCHES ─── */
+    .color-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+
+    .color-card {
+      border-radius: 8px;
+      overflow: hidden;
+      border: 1px solid rgba(0,0,0,0.06);
+    }
+
+    .color-swatch {
+      height: 100px;
+    }
+
+    .color-info {
+      background: var(--surface);
+      padding: 14px 16px;
+    }
+
+    .color-name {
+      font-family: var(--font-display);
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 2px;
+    }
+
+    .color-hex {
+      font-family: var(--font-accent);
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-bottom: 4px;
+    }
+
+    .color-usage {
+      font-family: var(--font-body);
+      font-size: 11px;
+      color: var(--text-muted);
+      line-height: 1.4;
+    }
+
+    /* ─── TYPE SPECIMEN ─── */
+    .type-specimen-block {
+      background: var(--surface);
+      border-radius: 8px;
+      padding: 24px 28px;
+      border: 1px solid rgba(0,0,0,0.05);
+      margin-bottom: 16px;
+    }
+
+    .type-specimen-label {
+      font-family: var(--font-accent);
+      font-size: 10px;
+      letter-spacing: 0.3em;
+      color: var(--accent);
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+
+    .type-meta {
+      font-family: var(--font-accent);
+      font-size: 10px;
+      color: var(--text-muted);
+      margin-top: 8px;
+    }
+
+    /* ─── COMPETITOR CARDS ─── */
+    .competitor-card {
+      background: var(--surface-dark);
+      border: 1px solid rgba(0,198,162,0.15);
+      border-radius: 8px;
+      padding: 22px 24px;
+      margin-bottom: 16px;
+    }
+
+    .competitor-label {
+      font-family: var(--font-accent);
+      font-size: 9px;
+      letter-spacing: 0.3em;
+      color: var(--accent);
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+
+    .competitor-name {
+      font-family: var(--font-display);
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--text-light);
+      margin-bottom: 12px;
+    }
+
+    .competitor-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .comp-item-label {
+      font-family: var(--font-accent);
+      font-size: 9px;
+      letter-spacing: 0.2em;
+      color: var(--accent);
+      text-transform: uppercase;
+      margin-bottom: 3px;
+    }
+
+    .comp-item-text {
+      font-family: var(--font-body);
+      font-size: 12px;
+      color: rgba(255,255,255,0.7);
+      line-height: 1.5;
+    }
+
+    /* ─── GOAL CARDS ─── */
+    .goal-card {
+      background: var(--surface);
+      border-radius: 8px;
+      padding: 20px 24px;
+      border: 1px solid rgba(0,0,0,0.06);
+      margin-bottom: 14px;
+      display: flex;
+      gap: 20px;
+      align-items: flex-start;
+    }
+
+    .goal-num {
+      font-family: var(--font-display);
+      font-size: 36px;
+      font-weight: 700;
+      color: var(--accent);
+      line-height: 1;
+      min-width: 40px;
+    }
+
+    .goal-content {}
+
+    .goal-title {
+      font-family: var(--font-display);
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 6px;
+    }
+
+    .goal-meta {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .goal-tag {
+      font-family: var(--font-accent);
+      font-size: 10px;
+      color: var(--text-muted);
+    }
+
+    .goal-tag span {
+      color: var(--accent);
+      font-weight: 500;
+    }
+
+    /* ─── PERSONA ─── */
+    .persona-card {
+      background: var(--primary);
+      border-radius: 10px;
+      padding: 28px;
+      color: var(--text-light);
+    }
+
+    .persona-avatar {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent), var(--accent-warm));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-display);
+      font-size: 22px;
+      font-weight: 700;
+      color: white;
+      margin-bottom: 14px;
+    }
+
+    .persona-name {
+      font-family: var(--font-display);
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--text-light);
+      margin-bottom: 4px;
+    }
+
+    .persona-subtitle {
+      font-family: var(--font-accent);
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      color: var(--accent);
+      text-transform: uppercase;
+      margin-bottom: 14px;
+    }
+
+    .persona-desc {
+      font-family: var(--font-body);
+      font-size: 13px;
+      color: rgba(255,255,255,0.7);
+      line-height: 1.7;
+    }
+
+    /* ─── DREAM 100 ─── */
+    .dream-pill {
+      display: inline-block;
+      background: rgba(0,198,162,0.1);
+      border: 1px solid rgba(0,198,162,0.2);
+      border-radius: 4px;
+      padding: 4px 10px;
+      font-family: var(--font-accent);
+      font-size: 10px;
+      color: var(--accent);
+      margin: 3px;
+    }
+
+    /* ─── GTM CHECKLIST ─── */
+    .checklist-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 10px 0;
+      border-bottom: 1px solid rgba(0,0,0,0.04);
+    }
+
+    .check-box {
+      width: 18px;
+      height: 18px;
+      border-radius: 4px;
+      background: var(--accent-light);
+      border: 1.5px solid var(--accent);
+      flex-shrink: 0;
+      margin-top: 1px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .check-text {
+      font-family: var(--font-body);
+      font-size: 13px;
+      color: var(--text);
+      line-height: 1.5;
+    }
+
+    .check-text strong {
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    /* ─── NICHE CARDS ─── */
+    .niche-card {
+      background: var(--surface);
+      border-radius: 8px;
+      padding: 18px 22px;
+      border-top: 3px solid var(--accent);
+      border: 1px solid rgba(0,0,0,0.06);
+      border-top: 3px solid var(--accent);
+    }
+
+    .niche-title {
+      font-family: var(--font-display);
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 8px;
+    }
+
+    .niche-row {
+      font-family: var(--font-body);
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-bottom: 4px;
+      line-height: 1.5;
+    }
+
+    .niche-row strong {
+      color: var(--text);
+      font-weight: 600;
+    }
+
+    /* ─── OFFERING CARDS ─── */
+    .offering-card {
+      background: var(--surface);
+      border-radius: 8px;
+      padding: 22px 26px;
+      border: 1px solid rgba(0,0,0,0.06);
+      margin-bottom: 16px;
+    }
+
+    .offering-num {
+      font-family: var(--font-accent);
+      font-size: 10px;
+      letter-spacing: 0.3em;
+      color: var(--accent);
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+
+    .offering-name {
+      font-family: var(--font-display);
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 10px;
+    }
+
+    .offering-vp {
+      font-family: var(--font-body);
+      font-style: italic;
+      font-size: 13px;
+      color: var(--text-muted);
+      border-left: 2px solid var(--accent);
+      padding-left: 12px;
+      margin-bottom: 12px;
+      line-height: 1.5;
+    }
+
+    .offering-cols {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .offering-col-label {
+      font-family: var(--font-accent);
+      font-size: 9px;
+      letter-spacing: 0.2em;
+      color: var(--accent);
+      text-transform: uppercase;
+      margin-bottom: 4px;
+    }
+
+    .offering-col-body {
+      font-family: var(--font-body);
+      font-size: 12px;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+
+    /* BACK COVER */
+    .back-cover {
+      background: var(--primary);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 72px;
+    }
+
+    .back-icon {
+      width: 80px;
+      height: 80px;
+      border-radius: 22px;
+      background: linear-gradient(135deg, var(--accent), var(--accent-warm));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 28px;
+    }
+
+    .back-title {
+      font-family: var(--font-display);
+      font-size: 48px;
+      font-weight: 700;
+      color: var(--text-light);
+      margin-bottom: 12px;
+    }
+
+    .back-tagline {
+      font-family: var(--font-body);
+      font-size: 18px;
+      color: rgba(255,255,255,0.5);
+      font-style: italic;
+      margin-bottom: 40px;
+    }
+
+    .back-contact-row {
+      display: flex;
+      gap: 40px;
+      justify-content: center;
+      margin-bottom: 40px;
+    }
+
+    .back-contact-item {
+      text-align: center;
+    }
+
+    .back-contact-label {
+      font-family: var(--font-accent);
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      color: var(--accent);
+      text-transform: uppercase;
+      margin-bottom: 4px;
+    }
+
+    .back-contact-val {
+      font-family: var(--font-body);
+      font-size: 13px;
+      color: rgba(255,255,255,0.7);
+    }
+
+    .confidential-badge {
+      font-family: var(--font-accent);
+      font-size: 10px;
+      letter-spacing: 0.3em;
+      color: rgba(255,255,255,0.2);
+      text-transform: uppercase;
+      border: 1px solid rgba(255,255,255,0.1);
+      padding: 6px 16px;
+      border-radius: 20px;
+    }
+  </style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════ PAGE 1: COVER ═══════════════════════════════════ -->
+<div class="page cover">
+  <div class="cover-top-bar"></div>
+  <div class="cover-inner">
+    <div class="cover-logo-area">
+      <div class="cover-icon">
+        <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+          <path d="M14 4C8.477 4 4 8.477 4 14s4.477 10 10 10 10-4.477 10-10S19.523 4 14 4z" stroke="white" stroke-width="1.5" fill="none"/>
+          <path d="M10 14c0-2.21 1.79-4 4-4s4 1.79 4 4-1.79 4-4 4" stroke="white" stroke-width="1.5" stroke-linecap="round"/>
+          <circle cx="14" cy="14" r="2" fill="white"/>
+          <path d="M14 10V7M14 21v-3M10 14H7M21 14h-3" stroke="white" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <div>
+        <div class="cover-brand-label">FamFit</div>
+        <div class="cover-brand-sub">Brand Playbook · 2025</div>
+      </div>
+    </div>
+
+    <div class="cover-hero">
+      <div class="cover-pill">Brand Identity Kit · Version 1.0</div>
+      <div class="cover-title">Get <span class="cover-accent-word">Fit</span><br>Together.</div>
+      <div class="cover-tagline">Social accountability meets scalable fitness.</div>
+      <div class="cover-stat-row">
+        <div class="cover-stat">
+          <div class="cover-stat-num">5</div>
+          <div class="cover-stat-label">Core Values</div>
+        </div>
+        <div class="cover-stat">
+          <div class="cover-stat-num">3</div>
+          <div class="cover-stat-label">Core Offerings</div>
+        </div>
+        <div class="cover-stat">
+          <div class="cover-stat-num">18–35</div>
+          <div class="cover-stat-label">Primary Audience</div>
+        </div>
+        <div class="cover-stat">
+          <div class="cover-stat-num">10</div>
+          <div class="cover-stat-label">Sections</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="cover-footer">
+      <div class="cover-footer-left">CONFIDENTIAL · INTERNAL USE ONLY</div>
+      <div class="cover-footer-nav">
+        <span>Brand Identity</span>
+        <span>Style Guide</span>
+        <span>Audience</span>
+        <span>Positioning</span>
+        <span>Go-to-Market</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════ PAGE 2: SECTION DIVIDER — BRAND OVERVIEW ═══════════ -->
+<div class="page section-divider">
+  <div class="num">01</div>
+  <div class="sec-label">Section One</div>
+  <div class="sec-title">Brand<br>Overview</div>
+  <div class="sec-desc">Who FamFit is, why it exists, and what it stands for — the foundation every brand decision rests on.</div>
+</div>
+
+<!-- ═══════════════════════════════════ PAGE 3: BRAND OVERVIEW ═══════════════════════════ -->
+<div class="page content-page">
+  <div class="content-page-header">
+    <div class="eyebrow">01 · Brand Overview</div>
+    <h2 style="font-size: 30px; color: var(--text); margin-bottom: 8px;">Who We Are</h2>
+  </div>
+
+  <div class="card" style="margin-bottom: 20px; background: var(--primary); border-color: transparent; border-left: 3px solid var(--accent);">
+    <p style="font-family: var(--font-body); font-size: 15px; color: rgba(255,255,255,0.85); line-height: 1.75; font-style: italic;">
+      "FamFit is a social fitness platform that bridges the gap between personal health goals and human connection — combining partner accountability with scalable workout systems so anyone, at any level, can stay consistent in their fitness journey through the people they care about."
+    </p>
+  </div>
+
+  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 20px;">
+    <div>
+      <div class="eyebrow" style="font-size: 9px;">Background</div>
+      <p style="font-family: var(--font-body); font-size: 13px; color: var(--text-muted); line-height: 1.7;">
+        Founded by a lifelong athlete and software developer who, after career-ending injuries, rethought fitness around longevity and connection. Built to help the people he cared about stay consistent — even at a distance.
+      </p>
+    </div>
+    <div>
+      <div class="eyebrow" style="font-size: 9px;">Brand Essence</div>
+      <p style="font-family: var(--font-body); font-size: 13px; color: var(--text-muted); line-height: 1.7;">
+        FamFit feels like a <strong style="color: var(--text);">reliable older sibling</strong> — someone who supports you, pushes you when needed, shows up consistently, and never judges where you're starting from.
+      </p>
+    </div>
+  </div>
+
+  <div class="eyebrow" style="font-size: 9px;">Brand Personality · 5 Core Traits</div>
+  <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 20px;">
+    <div class="value-pill">Supportive</div>
+    <div class="value-pill">Trustworthy</div>
+    <div class="value-pill">Motivating</div>
+    <div class="value-pill">Relatable</div>
+    <div class="value-pill">Consistent</div>
+  </div>
+
+  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+    <div class="card" style="border-left-color: var(--accent-warm);">
+      <div style="font-family: var(--font-accent); font-size: 9px; letter-spacing: 0.2em; color: var(--accent-warm); text-transform: uppercase; margin-bottom: 6px;">Tagline</div>
+      <div style="font-family: var(--font-display); font-size: 22px; font-weight: 700; color: var(--text);">Get fit together.</div>
+    </div>
+    <div class="card">
+      <div style="font-family: var(--font-accent); font-size: 9px; letter-spacing: 0.2em; color: var(--accent); text-transform: uppercase; margin-bottom: 6px;">Communication Persona</div>
+      <div style="font-family: var(--font-body); font-size: 13px; color: var(--text-muted); line-height: 1.5;">The accountability partner / older sibling who checks in, pushes when needed, and celebrates every win.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════ PAGE 4: MISSION / VISION / VALUES ═══════════════ -->
+<div class="page dark-page">
+  <div class="content-page-header">
+    <div class="eyebrow" style="color: var(--accent);">01 · Brand Foundation</div>
+    <h2 style="font-size: 30px; color: var(--text-light); margin-bottom: 8px;">Mission · Vision · Values</h2>
+  </div>
+
+  <div style="margin-bottom: 20px;">
+    <div class="card-dark" style="margin-bottom: 14px;">
+      <div style="font-family: var(--font-accent); font-size: 9px; letter-spacing: 0.3em; color: var(--accent); text-transform: uppercase; margin-bottom: 8px;">Mission</div>
+      <p style="font-family: var(--font-body); font-size: 15px; color: rgba(255,255,255,0.9); line-height: 1.65;">To connect people through their health journey by making fitness social, accessible, and sustainable — no matter where they are starting from.</p>
+    </div>
+    <div class="card-dark">
+      <div style="font-family: var(--font-accent); font-size: 9px; letter-spacing: 0.3em; color: var(--accent-warm); text-transform: uppercase; margin-bottom: 8px;">Vision</div>
+      <p style="font-family: var(--font-body); font-size: 15px; color: rgba(255,255,255,0.9); line-height: 1.65;">To become a trusted platform that connects people through fitness — transforming how individuals stay consistent through relationships and shared accountability, not discipline alone.</p>
+    </div>
+  </div>
+
+  <div class="eyebrow" style="color: var(--accent);">Core Values</div>
+  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+    <div class="card-dark" style="padding: 16px 18px;">
+      <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 6px;">
+        <div style="width: 6px; height: 6px; border-radius: 50%; background: var(--accent);"></div>
+        <div style="font-family: var(--font-display); font-size: 14px; font-weight: 600; color: var(--text-light);">Accessibility</div>
+      </div>
+      <div style="font-family: var(--font-body); font-size: 12px; color: rgba(255,255,255,0.5); line-height: 1.5;">Fitness should be approachable for everyone, regardless of starting point.</div>
+    </div>
+    <div class="card-dark" style="padding: 16px 18px;">
+      <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 6px;">
+        <div style="width: 6px; height: 6px; border-radius: 50%; background: var(--accent);"></div>
+        <div style="font-family: var(--font-display); font-size: 14px; font-weight: 600; color: var(--text-light);">Community</div>
+      </div>
+      <div style="font-family: var(--font-body); font-size: 12px; color: rgba(255,255,255,0.5); line-height: 1.5;">Progress is stronger when shared with someone who shows up for you.</div>
+    </div>
+    <div class="card-dark" style="padding: 16px 18px;">
+      <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 6px;">
+        <div style="width: 6px; height: 6px; border-radius: 50%; background: var(--accent-warm);"></div>
+        <div style="font-family: var(--font-display); font-size: 14px; font-weight: 600; color: var(--text-light);">Growth</div>
+      </div>
+      <div style="font-family: var(--font-body); font-size: 12px; color: rgba(255,255,255,0.5); line-height: 1.5;">Small consistent improvements compound into transformation over time.</div>
+    </div>
+    <div class="card-dark" style="padding: 16px 18px;">
+      <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 6px;">
+        <div style="width: 6px; height: 6px; border-radius: 50%; background: var(--accent-warm);"></div>
+        <div style="font-family: var(--font-display); font-size: 14px; font-weight: 600; color: var(--text-light);">Accountability</div>
+      </div>
+      <div style="font-family: var(--font-body); font-size: 12px; color: rgba(255,255,255,0.5); line-height: 1.5;">Showing up for yourself by showing up for someone else.</div>
+    </div>
+    <div class="card-dark" style="padding: 16px 18px; grid-column: span 2;">
+      <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 6px;">
+        <div style="width: 6px; height: 6px; border-radius: 50%; background: var(--accent);"></div>
+        <div style="font-family: var(--font-display); font-size: 14px; font-weight: 600; color: var(--text-light);">Authenticity</div>
+      </div>
+      <div style="font-family: var(--font-body); font-size: 12px; color: rgba(255,255,255,0.5); line-height: 1.5;">Real people, real progress — no performative fitness culture. Meet people where they are.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════ PAGE 5: BRAND MESSAGING ═══════════════════════════ -->
+<div class="page content-page">
+  <div class="content-page-header">
+    <div class="eyebrow">02 · Brand Messaging</div>
+    <h2 style="font-size: 30px; color: var(--text); margin-bottom: 8px;">Voice, Tone & Copy</h2>
+  </div>
+
+  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 20px;">
+    <div>
+      <div class="eyebrow" style="font-size: 9px;">Tone Pillars</div>
+      <div class="card" style="background: var(--bg); border: 1px solid rgba(0,0,0,0.06); border-left: 3px solid var(--accent);">
+        <div style="font-family: var(--font-body); font-size: 13px; color: var(--text-muted); line-height: 2.0;">
+          ✦ Encouraging, not aggressive<br>
+          ✦ Calm but motivating<br>
+          ✦ Friendly and human<br>
+          ✦ Never judgmental or intimidating
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="eyebrow" style="font-size: 9px;">Voice Pillars</div>
+      <div class="card" style="background: var(--bg); border: 1px solid rgba(0,0,0,0.06); border-left: 3px solid var(--accent-warm);">
+        <div style="font-family: var(--font-body); font-size: 13px; color: var(--text-muted); line-height: 2.0;">
+          ✦ Simple and clear<br>
+          ✦ Conversational<br>
+          ✦ Action-oriented<br>
+          ✦ Emotionally supportive
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="eyebrow" style="font-size: 9px;">Brand Quotables</div>
+  <div style="margin-bottom: 20px;">
+    <div style="border-left: 3px solid var(--accent); padding-left: 20px; margin-bottom: 14px; font-family: var(--font-body); font-style: italic; font-size: 14px; color: var(--text-muted); line-height: 1.6;">
+      "Consistency is easier when you're not alone."
+    </div>
+    <div style="border-left: 3px solid var(--accent-warm); padding-left: 20px; margin-bottom: 14px; font-family: var(--font-body); font-style: italic; font-size: 14px; color: var(--text-muted); line-height: 1.6;">
+      "Show up for yourself by showing up for someone else."
+    </div>
+    <div style="border-left: 3px solid var(--accent); padding-left: 20px; font-family: var(--font-body); font-style: italic; font-size: 14px; color: var(--text-muted); line-height: 1.6;">
+      "You don't need motivation — you need accountability."
+    </div>
+  </div>
+
+  <div class="eyebrow" style="font-size: 9px;">Instagram Bio Options</div>
+  <div style="display: grid; grid-template-columns: 1fr; gap: 10px;">
+    <div class="card" style="padding: 14px 18px;">
+      <div style="font-family: var(--font-accent); font-size: 9px; letter-spacing: 0.2em; color: var(--accent); margin-bottom: 4px;">OPTION A</div>
+      <div style="font-family: var(--font-body); font-size: 13px; color: var(--text);">💪 Stay consistent. Stay connected. | Pair up. Show up. Get fit together. | 📲 Download FamFit ↓</div>
+    </div>
+    <div class="card" style="padding: 14px 18px; border-left-color: var(--accent-warm);">
+      <div style="font-family: var(--font-accent); font-size: 9px; letter-spacing: 0.2em; color: var(--accent-warm); margin-bottom: 4px;">OPTION B</div>
+      <div style="font-family: var(--font-body); font-size: 13px; color: var(--text);">Your accountability partner, in your pocket 📱 | Social fitness for real people | Get fit together ↓</div>
+    </div>
+    <div class="card" style="padding: 14px 18px;">
+      <div style="font-family: var(--font-accent); font-size: 9px; letter-spacing: 0.2em; color: var(--accent); margin-bottom: 4px;">OPTION C</div>
+      <div style="font-family: var(--font-body); font-size: 13px; color: var(--text);">Don't work out alone. 🤝 | Pair with someone you care about | Build habits that actually stick ↓</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════ PAGE 6: SECTION DIVIDER — STYLE GUIDE ══════════ -->
+<div class="page section-divider">
+  <div class="num">03</div>
+  <div class="sec-label">Section Three</div>
+  <div class="sec-title">Brand<br>Style Guide</div>
+  <div class="sec-desc">Colors, typography, logo rules, and visual language that define how FamFit looks across every touchpoint.</div>
+</div>
+
+<!-- ═══════════════════════════════════ PAGE 7: COLOR PALETTE ══════════════════════════ -->
+<div class="page content-page">
+  <div class="content-page-header">
+    <div class="eyebrow">03 · Style Guide</div>
+    <h2 style="font-size: 30px; color: var(--text); margin-bottom: 8px;">Color Palette</h2>
+  </div>
+
+  <div class="color-grid" style="margin-bottom: 20px;">
+    <div class="color-card">
+      <div class="color-swatch" style="background: #0F1923;"></div>
+      <div class="color-info">
+        <div class="color-name">Midnight Navy</div>
+        <div class="color-hex">#0F1923</div>
+        <div class="color-usage">Primary. Backgrounds, headers, authority elements.</div>
+      </div>
+    </div>
+    <div class="color-card">
+      <div class="color-swatch" style="background: #00C6A2;"></div>
+      <div class="color-info">
+        <div class="color-name">Fit Teal</div>
+        <div class="color-hex">#00C6A2</div>
+        <div class="color-usage">Primary accent. CTAs, highlights, active states.</div>
+      </div>
+    </div>
+    <div class="color-card">
+      <div class="color-swatch" style="background: #F5A623;"></div>
+      <div class="color-info">
+        <div class="color-name">Energy Amber</div>
+        <div class="color-hex">#F5A623</div>
+        <div class="color-usage">Warm accent. Achievements, milestones, celebration.</div>
+      </div>
+    </div>
+    <div class="color-card">
+      <div class="color-swatch" style="background: #1A2B3C;"></div>
+      <div class="color-info">
+        <div class="color-name">Deep Ocean</div>
+        <div class="color-hex">#1A2B3C</div>
+        <div class="color-usage">Secondary. Cards on dark fields, surface layers.</div>
+      </div>
+    </div>
+    <div class="color-card">
+      <div class="color-swatch" style="background: #F4F6F8;"></div>
+      <div class="color-info">
+        <div class="color-name">Cloud White</div>
+        <div class="color-hex">#F4F6F8</div>
+        <div class="color-usage">Background. Light page surfaces, section breaks.</div>
+      </div>
+    </div>
+    <div class="color-card">
+      <div class="color-swatch" style="background: #637585;"></div>
+      <div class="color-info">
+        <div class="color-name">Slate Mist</div>
+        <div class="color-hex">#637585</div>
+        <div class="color-usage">Muted. Captions, secondary text, labels.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="eyebrow" style="font-size: 9px;">Do Not Use</div>
+  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+    <div class="card" style="padding: 14px 18px; border-left-color: #e53935;">
+      <div style="font-family: var(--font-accent); font-size: 10px; color: #e53935; margin-bottom: 4px;">❌ Pure White #FFFFFF</div>
+      <div style="font-family: var(--font-body); font-size: 12px; color: var(--text-muted);">Too stark. Use Cloud White (#F4F6F8) instead — warmer and easier on screen.</div>
+    </div>
+    <div class="card" style="padding: 14px 18px; border-left-color: #e53935;">
+      <div style="font-family: var(--font-accent); font-size: 10px; color: #e53935; margin-bottom: 4px;">❌ Neon Green variants</div>
+      <div style="font-family: var(--font-body); font-size: 12px; color: var(--text-muted);">Feels aggressive and gamified. FamFit teal is intentionally calmer.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════ PAGE 8: TYPOGRAPHY ═════════════════════════════ -->
+<div class="page content-page">
+  <div class="content-page-header">
+    <div class="eyebrow">03 · Style Guide</div>
+    <h2 style="font-size: 30px; color: var(--text); margin-bottom: 8px;">Typography System</h2>
+  </div>
+
+  <div class="type-specimen-block">
+    <div class="type-specimen-label">Display / Heading Font</div>
+    <div style="font-family: 'Space Grotesk', sans-serif; font-size: 40px; font-weight: 700; color: var(--text); line-height: 1.1;">
+      Show up for<br>each other.
+    </div>
+    <div style="font-family: 'Space Grotesk', sans-serif; font-size: 22px; font-weight: 400; color: var(--text-muted); margin-top: 8px;">
+      Regular · Medium · Bold · Extra Bold
+    </div>
+    <div class="type-meta">Space Grotesk · Display · 400/500/600/700 · Headlines, app UI, section titles · Min size: 18px</div>
+  </div>
+
+  <div class="type-specimen-block">
+    <div class="type-specimen-label">Body Font</div>
+    <div style="font-family: 'DM Sans', sans-serif; font-size: 16px; font-weight: 400; color: var(--text); line-height: 1.7;">
+      Consistency is built one day at a time — and it's a lot easier when someone is counting on you to show up. FamFit turns that social bond into your greatest fitness asset.
+    </div>
+    <div style="font-family: 'DM Sans', sans-serif; font-size: 16px; font-weight: 600; color: var(--text); margin-top: 6px;">
+      Semibold for emphasis. Regular for body copy.
+    </div>
+    <div class="type-meta">DM Sans · Body · 300/400/500/600 · Paragraphs, descriptions, notifications · Min size: 12px</div>
+  </div>
+
+  <div class="type-specimen-block">
+    <div class="type-specimen-label">Accent / Label Font</div>
+    <div style="font-family: 'IBM Plex Mono', monospace; font-size: 14px; font-weight: 500; color: var(--accent); letter-spacing: 0.1em;">
+      STREAK · 14 DAYS · ACTIVE · PARTNER LINKED
+    </div>
+    <div style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; font-weight: 400; color: var(--text-muted); margin-top: 4px;">
+      Stats · Labels · Timestamps · UI metadata
+    </div>
+    <div class="type-meta">IBM Plex Mono · Accent · 400/500 · Eyebrows, stats, tags, code elements · Min size: 10px</div>
+  </div>
+
+  <div style="background: rgba(229,57,53,0.06); border: 1px solid rgba(229,57,53,0.2); border-radius: 6px; padding: 14px 18px;">
+    <div style="font-family: var(--font-accent); font-size: 10px; letter-spacing: 0.2em; color: #e53935; margin-bottom: 6px;">PAIRING RULES</div>
+    <div style="font-family: var(--font-body); font-size: 12px; color: var(--text-muted); line-height: 1.7;">
+      Never pair Space Grotesk with IBM Plex Mono at the same size — one must dominate.<br>
+      Never use DM Sans below 12px. Never use IBM Plex Mono for body copy.
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════ PAGE 9: LOGO SYSTEM ════════════════════════════ -->
+<div class="page dark-page">
+  <div class="content-page-header">
+    <div class="eyebrow" style="color: var(--accent);">03 · Style Guide</div>
+    <h2 style="font-size: 30px; color: var(--text-light); margin-bottom: 8px;">Logo System</h2>
+  </div>
+
+  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 20px;">
+    <div style="background: rgba(0,198,162,0.1); border: 1px solid rgba(0,198,162,0.2); border-radius: 8px; padding: 28px; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 140px;">
+      <div style="display: flex; align-items: center; gap: 12px;">
+        <div style="width: 44px; height: 44px; border-radius: 12px; background: linear-gradient(135deg, #00C6A2, #F5A623); display: flex; align-items: center; justify-content: center;">
+          <svg width="22" height="22" viewBox="0 0 28 28" fill="none"><path d="M14 4C8.477 4 4 8.477 4 14s4.477 10 10 10 10-4.477 10-10S19.523 4 14 4z" stroke="white" stroke-width="1.5" fill="none"/><circle cx="14" cy="14" r="2" fill="white"/><path d="M14 10V7M14 21v-3M10 14H7M21 14h-3" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg>
+        </div>
+        <span style="font-family: var(--font-display); font-size: 24px; font-weight: 700; color: white;">FamFit</span>
+      </div>
+      <div style="font-family: var(--font-accent); font-size: 9px; letter-spacing: 0.3em; color: rgba(255,255,255,0.3); margin-top: 14px; text-transform: uppercase;">Primary — Dark Field</div>
+    </div>
+    <div style="background: var(--bg); border-radius: 8px; padding: 28px; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 140px;">
+      <div style="display: flex; align-items: center; gap: 12px;">
+        <div style="width: 44px; height: 44px; border-radius: 12px; background: var(--primary); display: flex; align-items: center; justify-content: center;">
+          <svg width="22" height="22" viewBox="0 0 28 28" fill="none"><path d="M14 4C8.477 4 4 8.477 4 14s4.477 10 10 10 10-4.477 10-10S19.523 4 14 4z" stroke="#00C6A2" stroke-width="1.5" fill="none"/><circle cx="14" cy="14" r="2" fill="#00C6A2"/><path d="M14 10V7M14 21v-3M10 14H7M21 14h-3" stroke="#00C6A2" stroke-width="1.5" stroke-linecap="round"/></svg>
+        </div>
+        <span style="font-family: var(--font-display); font-size: 24px; font-weight: 700; color: var(--text);">FamFit</span>
+      </div>
+      <div style="font-family: var(--font-accent); font-size: 9px; letter-spacing: 0.3em; color: var(--text-muted); margin-top: 14px; text-transform: uppercase;">Reversed — Light Field</div>
+    </div>
+  </div>
+
+  <div class="eyebrow" style="color: var(--accent);">Logo Usage Rules</div>
+  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+    <div class="card-dark" style="padding: 14px 18px;">
+      <div style="font-family: var(--font-accent); font-size: 9px; letter-spacing: 0.2em; color: var(--accent); margin-bottom: 5px;">MINIMUM SIZE</div>
+      <div style="font-family: var(--font-body); font-size: 12px; color: rgba(255,255,255,0.6);">Digital: 80px wide. Print: 1 inch wide. Icon-only: 32px.</div>
+    </div>
+    <div class="card-dark" style="padding: 14px 18px;">
+      <div style="font-family: var(--font-accent); font-size: 9px; letter-spacing: 0.2em; color: var(--accent); margin-bottom: 5px;">CLEAR SPACE</div>
+      <div style="font-family: var(--font-body); font-size: 12px; color: rgba(255,255,255,0.6);">Equal to the cap-height of the "F" in FamFit on all four sides.</div>
+    </div>
+    <div class="card-dark" style="padding: 14px 18px; border: 1px solid rgba(229,57,53,0.3);">
+      <div style="font-family: var(--font-accent); font-size: 9px; letter-spacing: 0.2em; color: #e53935; margin-bottom: 5px;">NEVER DO</div>
+      <div style="font-family: var(--font-body); font-size: 12px; color: rgba(255,255,255,0.6);">No stretching, skewing, drop shadows, gradient text, or unauthorized recoloring.</div>
+    </div>
+    <div class="card-dark" style="padding: 14px 18px;">
+      <div style="font-family: var(--font-accent); font-size: 9px; letter-spacing: 0.2em; color: var(--accent); margin-bottom: 5px;">APPROVED BG COLORS</div>
+      <div style="font-family: var(--font-body); font-size: 12px; color: rgba(255,255,255,0.6);">Midnight Navy · Cloud White · Fit Teal (icon only) · Photography only with overlay.</div>
+    </div>
+  </div>
+
+  <div class="eyebrow" style="color: var(--accent); margin-top: 20px;">Visual Language</div>
+  <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px;">
+    <div class="card-dark" style="padding: 12px 14px;">
+      <div style="font-family: var(--font-accent); font-size: 9px; color: var(--accent); margin-bottom: 4px;">PHOTOGRAPHY</div>
+      <div style="font-family: var(--font-body); font-size: 12px; color: rgba(255,255,255,0.55); line-height: 1.5;">Candid, real people. No stock-photo grins. High contrast, slightly desaturated.</div>
+    </div>
+    <div class="card-dark" style="padding: 12px 14px;">
+      <div style="font-family: var(--font-accent); font-size: 9px; color: var(--accent); margin-bottom: 4px;">ICONS</div>
+      <div style="font-family: var(--font-body); font-size: 12px; color: rgba(255,255,255,0.55); line-height: 1.5;">Outlined with 1.5px stroke weight. Rounded corners. Teal on dark, Navy on light.</div>
+    </div>
+    <div class="card-dark" style="padding: 12px 14px;">
+      <div style="font-family: var(--font-accent); font-size: 9px; color: var(--accent); margin-bottom: 4px;">SPACING</div>
+      <div style="font-family: var(--font-body); font-size: 12px; color: rgba(255,255,255,0.55); line-height: 1.5;">Airy and breathable. Content-forward, never cluttered. 8px base grid unit.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════ PAGE 10: TARGET AUDIENCE ═══════════════════════ -->
+<div class="page content-page">
+  <div class="content-page-header">
+    <div class="eyebrow">04 · Target Audience</div>
+    <h2 style="font-size: 30px; color: var(--text); margin-bottom: 8px;">Customer Persona</h2>
+  </div>
+
+  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 20px;">
+    <div class="persona-card">
+      <div class="persona-avatar">J</div>
+      <div class="persona-name">Jordan, 26</div>
+      <div class="persona-subtitle">Primary ICA · The Inconsistent Beginner</div>
+      <div class="persona-desc">Jordan wants to get healthier but keeps falling off. Works a 9–5, can't always coordinate gym schedules with friends, and feels intimidated by fitness apps that assume too much. What Jordan needs isn't a new workout plan — it's someone to stay accountable to. FamFit pairs Jordan with a friend, and suddenly showing up becomes about more than personal discipline.</div>
+    </div>
+    <div>
+      <div class="eyebrow" style="font-size: 9px;">Demographics</div>
+      <div class="card" style="margin-bottom: 12px; padding: 16px 18px;">
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+          <div>
+            <div style="font-family: var(--font-accent); font-size: 9px; color: var(--accent); margin-bottom: 2px;">AGE</div>
+            <div style="font-family: var(--font-body); font-size: 12px; color: var(--text);">18–35</div>
+          </div>
+          <div>
+            <div style="font-family: var(--font-accent); font-size: 9px; color: var(--accent); margin-bottom: 2px;">INCOME</div>
+            <div style="font-family: var(--font-body); font-size: 12px; color: var(--text);">$35K–$85K</div>
+          </div>
+          <div>
+            <div style="font-family: var(--font-accent); font-size: 9px; color: var(--accent); margin-bottom: 2px;">LOCATION</div>
+            <div style="font-family: var(--font-body); font-size: 12px; color: var(--text);">Urban / Suburban US</div>
+          </div>
+          <div>
+            <div style="font-family: var(--font-accent); font-size: 9px; color: var(--accent); margin-bottom: 2px;">EDUCATION</div>
+            <div style="font-family: var(--font-body); font-size: 12px; color: var(--text);">Some college–BA</div>
+          </div>
+        </div>
+      </div>
+      <div class="eyebrow" style="font-size: 9px;">Top Pain Points</div>
+      <div class="card" style="padding: 16px 18px;">
+        <div style="font-family: var(--font-body); font-size: 13px; color: var(--text-muted); line-height: 2.0;">
+          ✦ Can't stay consistent alone<br>
+          ✦ Gym feels intimidating<br>
+          ✦ No one to coordinate with<br>
+          ✦ Lacks structured guidance
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+    <div>
+      <div class="eyebrow" style="font-size: 9px;">Top 3 Buying Triggers</div>
+      <div class="card" style="padding: 16px 18px;">
+        <div style="font-family: var(--font-body); font-size: 12px; color: var(--text-muted); line-height: 1.9;">
+          1. A friend already using it and inviting them<br>
+          2. Seeing a real accountability story on social<br>
+          3. Feeling isolated with their current routine
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="eyebrow" style="font-size: 9px;">Priority Channels</div>
+      <div class="card" style="padding: 16px 18px;">
+        <div style="font-family: var(--font-body); font-size: 12px; color: var(--text-muted); line-height: 1.9;">
+          1. Instagram (Reels + Stories)<br>
+          2. TikTok (transformation content)<br>
+          3. Word of mouth / friend referral<br>
+          4. App Store (organic search)
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════ PAGE 11: PRODUCT OFFERINGS ═════════════════════ -->
+<div class="page content-page">
+  <div class="content-page-header">
+    <div class="eyebrow">05 · Product Positioning</div>
+    <h2 style="font-size: 30px; color: var(--text); margin-bottom: 8px;">Core Offerings</h2>
+  </div>
+
+  <div class="offering-card">
+    <div class="offering-num">Offering 01</div>
+    <div class="offering-name">FamFit Core App</div>
+    <div class="offering-vp">"We help beginners and inconsistent gym-goers build lasting habits through 1:1 partner accountability — so they can finally stay consistent."</div>
+    <div class="offering-cols">
+      <div>
+        <div class="offering-col-label">Key Features</div>
+        <div class="offering-col-body">Partner pairing · Workout logging · Streak tracking · Activity feed · Accountability challenges</div>
+      </div>
+      <div>
+        <div class="offering-col-label">Key Benefits</div>
+        <div class="offering-col-body">Builds consistency · Encourages social connection · Creates structured habits · Removes solo motivation dependency</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="offering-card" style="border-top: 3px solid var(--accent-warm);">
+    <div class="offering-num" style="color: var(--accent-warm);">Offering 02 · [Recommended — confirm with client]</div>
+    <div class="offering-name">Scalable Workout System</div>
+    <div class="offering-vp">"We help users at different fitness levels work out together without confusion — adapting routines to each partner's ability."</div>
+    <div class="offering-cols">
+      <div>
+        <div class="offering-col-label">Key Features</div>
+        <div class="offering-col-body">Personalized workout adaptation · Beginner-friendly routines · Cross-partner scaling · AI or logic-based difficulty</div>
+      </div>
+      <div>
+        <div class="offering-col-label">Key Benefits</div>
+        <div class="offering-col-body">Removes confusion · Reduces intimidation · Makes workouts achievable across skill gaps</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="offering-card">
+    <div class="offering-num">Offering 03</div>
+    <div class="offering-name">Social Accountability Layer</div>
+    <div class="offering-vp">"We keep users engaged beyond the first week through friendly competition, shared milestones, and social reinforcement."</div>
+    <div class="offering-cols">
+      <div>
+        <div class="offering-col-label">Key Features</div>
+        <div class="offering-col-body">Push notifications · Partner challenges · Friendly competition · Shared progress tracking</div>
+      </div>
+      <div>
+        <div class="offering-col-label">Key Benefits</div>
+        <div class="offering-col-body">Keeps users engaged long-term · Reinforces habits · Makes fitness enjoyable and social</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════ PAGE 12: COMPETITOR ANALYSIS ═══════════════════ -->
+<div class="page dark-page">
+  <div class="content-page-header">
+    <div class="eyebrow" style="color: var(--accent);">06 · Competitive Landscape</div>
+    <h2 style="font-size: 30px; color: var(--text-light); margin-bottom: 8px;">Competitor Analysis</h2>
+  </div>
+
+  <div class="competitor-card">
+    <div class="competitor-label">Competitor 01</div>
+    <div class="competitor-name">Strava</div>
+    <div class="competitor-grid">
+      <div>
+        <div class="comp-item-label">Strength</div>
+        <div class="comp-item-text">Best-in-class social activity sharing and community segments. Strong brand identity among runners and cyclists.</div>
+      </div>
+      <div>
+        <div class="comp-item-label">Weakness</div>
+        <div class="comp-item-text">Lacks 1:1 accountability. Community is broadcast-based, not intimate. Intimidating for beginners.</div>
+      </div>
+      <div>
+        <div class="comp-item-label">FamFit Opportunity</div>
+        <div class="comp-item-text">Own the intimate, private pair — where Strava owns the crowd. Different relationship model entirely.</div>
+      </div>
+      <div>
+        <div class="comp-item-label">Threat</div>
+        <div class="comp-item-text">Brand equity and athlete loyalty. Could add 1:1 features if FamFit proves the model.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="competitor-card">
+    <div class="competitor-label">Competitor 02</div>
+    <div class="competitor-name">Nike Training Club</div>
+    <div class="competitor-grid">
+      <div>
+        <div class="comp-item-label">Strength</div>
+        <div class="comp-item-text">Premium content library, free tier, and massive brand trust. Accessible workout quality.</div>
+      </div>
+      <div>
+        <div class="comp-item-label">Weakness</div>
+        <div class="comp-item-text">Content consumption, not connection. No accountability mechanism. Passive app experience.</div>
+      </div>
+      <div>
+        <div class="comp-item-label">FamFit Opportunity</div>
+        <div class="comp-item-text">NTC users who want to work out with a partner but have no coordination tool. Direct addressable market.</div>
+      </div>
+      <div>
+        <div class="comp-item-label">Threat</div>
+        <div class="comp-item-text">Nike brand can add social features with near-zero CAC if they choose to compete directly.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="competitor-card">
+    <div class="competitor-label">Competitor 03</div>
+    <div class="competitor-name">Fitbod / Future</div>
+    <div class="competitor-grid">
+      <div>
+        <div class="comp-item-label">Strength</div>
+        <div class="comp-item-text">Strong personalized workout algorithms. Future has premium human coaching. High retention via customization.</div>
+      </div>
+      <div>
+        <div class="comp-item-label">Weakness</div>
+        <div class="comp-item-text">Completely solo experience. Future is expensive ($150+/mo). No peer accountability component.</div>
+      </div>
+      <div>
+        <div class="comp-item-label">FamFit Opportunity</div>
+        <div class="comp-item-text">Be the affordable, social alternative. Pair the AI workout logic with real human accountability.</div>
+      </div>
+      <div>
+        <div class="comp-item-label">Threat</div>
+        <div class="comp-item-text">Fitbod's algorithm quality is high. Could bundle a "workout with a friend" mode as a feature.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════ PAGE 13: SMART GOALS ═══════════════════════════ -->
+<div class="page content-page">
+  <div class="content-page-header">
+    <div class="eyebrow">07 · SMART Goals</div>
+    <h2 style="font-size: 30px; color: var(--text); margin-bottom: 8px;">12-Month Brand Goals</h2>
+  </div>
+
+  <div class="goal-card">
+    <div class="goal-num">01</div>
+    <div class="goal-content">
+      <div class="goal-title">Launch & Acquire First 1,000 Active Pairs</div>
+      <div class="goal-meta">
+        <div class="goal-tag">Metric: <span>1,000 active partner pairs logged in-app</span></div>
+        <div class="goal-tag">Timeline: <span>Months 1–4</span></div>
+        <div class="goal-tag">Milestone: <span>100 pairs by Day 30</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="goal-card">
+    <div class="goal-num">02</div>
+    <div class="goal-content">
+      <div class="goal-title">Build Instagram to 10,000 Followers</div>
+      <div class="goal-meta">
+        <div class="goal-tag">Metric: <span>10K followers + avg. 4%+ engagement rate</span></div>
+        <div class="goal-tag">Timeline: <span>6 months from launch</span></div>
+        <div class="goal-tag">Milestone: <span>2,500 followers at Month 2</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="goal-card">
+    <div class="goal-num">03</div>
+    <div class="goal-content">
+      <div class="goal-title">Hit 60-Day Retention Rate of 45%+</div>
+      <div class="goal-meta">
+        <div class="goal-tag">Metric: <span>% of users still active at Day 60</span></div>
+        <div class="goal-tag">Timeline: <span>Measured from first cohort</span></div>
+        <div class="goal-tag">Milestone: <span>Day 30 retention baseline of 65%+</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="goal-card">
+    <div class="goal-num">04</div>
+    <div class="goal-content">
+      <div class="goal-title">Establish 3 Niche Partnership Channels</div>
+      <div class="goal-meta">
+        <div class="goal-tag">Metric: <span>3 signed partnership / referral agreements</span></div>
+        <div class="goal-tag">Timeline: <span>Month 6–9</span></div>
+        <div class="goal-tag">Milestone: <span>1 pilot partnership by Month 4</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="goal-card">
+    <div class="goal-num">05</div>
+    <div class="goal-content">
+      <div class="goal-title">Achieve 4.4+ App Store Rating</div>
+      <div class="goal-meta">
+        <div class="goal-tag">Metric: <span>Avg. rating across iOS + Android stores</span></div>
+        <div class="goal-tag">Timeline: <span>Ongoing from Day 1</span></div>
+        <div class="goal-tag">Milestone: <span>50+ reviews by Month 2</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════ PAGE 14: NICHE MARKETS ═════════════════════════ -->
+<div class="page content-page">
+  <div class="content-page-header">
+    <div class="eyebrow">08 · Market Niches</div>
+    <h2 style="font-size: 30px; color: var(--text); margin-bottom: 8px;">Niche Market Segments</h2>
+  </div>
+
+  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 16px;">
+    <div class="niche-card">
+      <div class="niche-title">Long-Distance Friends & Couples</div>
+      <div class="niche-row"><strong>Trend:</strong> Post-pandemic remote relationships; desire for shared rituals</div>
+      <div class="niche-row"><strong>Need:</strong> Something to do together from separate cities/countries</div>
+      <div class="niche-row"><strong>Channels:</strong> Instagram, referral, couples apps, Reddit</div>
+      <div class="niche-row"><strong>Tactic:</strong> "Work out together, even apart" — dedicated campaign</div>
+    </div>
+    <div class="niche-card" style="border-top-color: var(--accent-warm);">
+      <div class="niche-title">College Students & Young Adults</div>
+      <div class="niche-row"><strong>Trend:</strong> High social media usage, new friendships, shared gym culture</div>
+      <div class="niche-row"><strong>Need:</strong> Accountability without the pressure; fun social fitness</div>
+      <div class="niche-row"><strong>Channels:</strong> TikTok, campus ambassadors, dorm/sorority/frat networks</div>
+      <div class="niche-row"><strong>Tactic:</strong> Campus ambassador program + referral rewards</div>
+    </div>
+    <div class="niche-card">
+      <div class="niche-title">Busy Professionals (25–40)</div>
+      <div class="niche-row"><strong>Trend:</strong> Wellness as a priority post-burnout; need for structure</div>
+      <div class="niche-row"><strong>Need:</strong> Low-friction fitness that doesn't require scheduling</div>
+      <div class="niche-row"><strong>Channels:</strong> LinkedIn, Slack communities, corporate wellness programs</div>
+      <div class="niche-row"><strong>Tactic:</strong> Partner with HR/wellness platforms for B2B distribution</div>
+    </div>
+    <div class="niche-card" style="border-top-color: var(--accent-warm);">
+      <div class="niche-title">Family Units (Siblings, Parent-Child)</div>
+      <div class="niche-row"><strong>Trend:</strong> Health as a family value; older adults entering fitness</div>
+      <div class="niche-row"><strong>Need:</strong> A way for family to stay healthy together remotely</div>
+      <div class="niche-row"><strong>Channels:</strong> Facebook, YouTube, family/parenting communities</div>
+      <div class="niche-row"><strong>Tactic:</strong> "Work out with your parent/sibling" heartwarming content</div>
+    </div>
+  </div>
+
+  <div class="niche-card" style="border-top-color: var(--accent);">
+    <div class="niche-title">Fitness Mentors / Experienced Users</div>
+    <div class="niche-row"><strong>Trend:</strong> Growing creator economy around fitness coaching and mentorship</div>
+    <div class="niche-row"><strong>Need:</strong> A structured tool to guide someone they're already informally coaching</div>
+    <div class="niche-row"><strong>Channels:</strong> Instagram, YouTube fitness communities, gyms</div>
+    <div class="niche-row"><strong>Tactic:</strong> "Bring your athlete" campaign — target coaches/experienced users as secondary growth engine</div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════ PAGE 15: DREAM 100 ══════════════════════════════ -->
+<div class="page dark-page">
+  <div class="content-page-header">
+    <div class="eyebrow" style="color: var(--accent);">09 · Dream 100</div>
+    <h2 style="font-size: 30px; color: var(--text-light); margin-bottom: 8px;">Where the ICA Is Hiding</h2>
+  </div>
+
+  <div style="margin-bottom: 18px;">
+    <div class="eyebrow" style="color: var(--accent); font-size: 9px;">ICA Core Desire</div>
+    <div class="card-dark" style="padding: 16px 20px;">
+      <p style="font-family: var(--font-body); font-size: 14px; color: rgba(255,255,255,0.8); line-height: 1.7;">The FamFit ICA craves <strong style="color: var(--accent);">health + relationships</strong> simultaneously. They don't just want to be fit — they want to feel connected, supported, and seen in their effort. Fitness for them is a proxy for being cared about.</p>
+    </div>
+  </div>
+
+  <div style="margin-bottom: 16px;">
+    <div class="eyebrow" style="color: var(--accent); font-size: 9px;">12 ICA Pain Points</div>
+    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px;">
+      <div class="card-dark" style="padding: 10px 12px; font-family: var(--font-body); font-size: 11px; color: rgba(255,255,255,0.65); line-height: 1.5;">"I start strong, then fall off after two weeks."</div>
+      <div class="card-dark" style="padding: 10px 12px; font-family: var(--font-body); font-size: 11px; color: rgba(255,255,255,0.65); line-height: 1.5;">"I don't know anyone who's on the same level as me."</div>
+      <div class="card-dark" style="padding: 10px 12px; font-family: var(--font-body); font-size: 11px; color: rgba(255,255,255,0.65); line-height: 1.5;">"Working out alone is boring."</div>
+      <div class="card-dark" style="padding: 10px 12px; font-family: var(--font-body); font-size: 11px; color: rgba(255,255,255,0.65); line-height: 1.5;">"My friend wants to get fit with me but we can't always coordinate."</div>
+      <div class="card-dark" style="padding: 10px 12px; font-family: var(--font-body); font-size: 11px; color: rgba(255,255,255,0.65); line-height: 1.5;">"Fitness apps assume I already know what I'm doing."</div>
+      <div class="card-dark" style="padding: 10px 12px; font-family: var(--font-body); font-size: 11px; color: rgba(255,255,255,0.65); line-height: 1.5;">"I feel guilty skipping but I do it anyway."</div>
+      <div class="card-dark" style="padding: 10px 12px; font-family: var(--font-body); font-size: 11px; color: rgba(255,255,255,0.65); line-height: 1.5;">"I can't afford a personal trainer."</div>
+      <div class="card-dark" style="padding: 10px 12px; font-family: var(--font-body); font-size: 11px; color: rgba(255,255,255,0.65); line-height: 1.5;">"Motivation fades fast without external pressure."</div>
+      <div class="card-dark" style="padding: 10px 12px; font-family: var(--font-body); font-size: 11px; color: rgba(255,255,255,0.65); line-height: 1.5;">"Gym culture feels intimidating and judgmental."</div>
+      <div class="card-dark" style="padding: 10px 12px; font-family: var(--font-body); font-size: 11px; color: rgba(255,255,255,0.65); line-height: 1.5;">"I want to support my family member's health from far away."</div>
+      <div class="card-dark" style="padding: 10px 12px; font-family: var(--font-body); font-size: 11px; color: rgba(255,255,255,0.65); line-height: 1.5;">"I've downloaded 5 fitness apps and deleted them all."</div>
+      <div class="card-dark" style="padding: 10px 12px; font-family: var(--font-body); font-size: 11px; color: rgba(255,255,255,0.65); line-height: 1.5;">"I don't want to compete — I just want to stay consistent."</div>
+    </div>
+  </div>
+
+  <div class="eyebrow" style="color: var(--accent); font-size: 9px;">Where They're Hiding (Top 20)</div>
+  <div style="line-height: 1;">
+    <div class="dream-pill">@natacha.oceane</div>
+    <div class="dream-pill">r/xxfitness</div>
+    <div class="dream-pill">r/fitness</div>
+    <div class="dream-pill">@heatherrobertsonfit</div>
+    <div class="dream-pill">@sydneyshuyler</div>
+    <div class="dream-pill">Body By Science FB Group</div>
+    <div class="dream-pill">@movewithnicole</div>
+    <div class="dream-pill">#workoutwithme (TikTok)</div>
+    <div class="dream-pill">@madfit.ig</div>
+    <div class="dream-pill">Nike Training Club Community</div>
+    <div class="dream-pill">r/loseit</div>
+    <div class="dream-pill">#beginnerworkout (IG)</div>
+    <div class="dream-pill">Mindbodygreen Newsletter</div>
+    <div class="dream-pill">@blogilates</div>
+    <div class="dream-pill">College rec center Facebook groups</div>
+    <div class="dream-pill">Slack wellness channels</div>
+    <div class="dream-pill">#accountabilitypartner</div>
+    <div class="dream-pill">The Fitnessista Blog</div>
+    <div class="dream-pill">Well+Good</div>
+    <div class="dream-pill">@halfwaythere_weightloss</div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════ PAGE 16: GO-TO-MARKET ROADMAP ══════════════════ -->
+<div class="page content-page">
+  <div class="content-page-header">
+    <div class="eyebrow">10 · Go-to-Market Roadmap</div>
+    <h2 style="font-size: 30px; color: var(--text); margin-bottom: 8px;">Launch Checklist</h2>
+  </div>
+
+  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+    <div>
+      <div style="font-family: var(--font-display); font-size: 14px; font-weight: 600; color: var(--text); margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">
+        <div style="background: var(--accent); color: white; font-size: 11px; font-family: var(--font-accent); padding: 3px 10px; border-radius: 10px;">PHASE 1 · MONTHS 0–2</div>
+      </div>
+      <div style="font-family: var(--font-display); font-size: 13px; font-weight: 600; color: var(--accent-dark); margin-bottom: 8px;">IDEATION + FOUNDATION</div>
+      <div class="checklist-item"><div class="check-box"><div style="width: 8px; height: 8px; border-radius: 50%; background: var(--accent);"></div></div><div class="check-text">Brand identity + playbook complete</div></div>
+      <div class="checklist-item"><div class="check-box"><div style="width: 8px; height: 8px; border-radius: 50%; background: var(--accent);"></div></div><div class="check-text">Brand messaging + copy finalized</div></div>
+      <div class="checklist-item"><div class="check-box"></div><div class="check-text">App MVP in TestFlight / beta</div></div>
+      <div class="checklist-item"><div class="check-box"></div><div class="check-text">Social media profiles live (IG, TikTok)</div></div>
+      <div class="checklist-item"><div class="check-box"></div><div class="check-text">Landing page live with waitlist</div></div>
+      <div class="checklist-item"><div class="check-box"></div><div class="check-text">5–10 beta users recruited</div></div>
+      <div class="checklist-item"><div class="check-box"></div><div class="check-text">Content calendar built (30 days)</div></div>
+
+      <div style="font-family: var(--font-display); font-size: 14px; font-weight: 600; color: var(--text); margin: 20px 0 12px; display: flex; align-items: center; gap: 8px;">
+        <div style="background: var(--accent-warm); color: white; font-size: 11px; font-family: var(--font-accent); padding: 3px 10px; border-radius: 10px;">PHASE 2 · MONTHS 3–6</div>
+      </div>
+      <div style="font-family: var(--font-display); font-size: 13px; font-weight: 600; color: var(--accent-warm); margin-bottom: 8px;">IMPACT + GROWTH</div>
+      <div class="checklist-item"><div class="check-box"></div><div class="check-text">App Store public launch (iOS + Android)</div></div>
+      <div class="checklist-item"><div class="check-box"></div><div class="check-text">First 1,000 user pairs onboarded</div></div>
+      <div class="checklist-item"><div class="check-box"></div><div class="check-text">First referral campaign live</div></div>
+      <div class="checklist-item"><div class="check-box"></div><div class="check-text">Influencer micro-partnership × 3</div></div>
+    </div>
+
+    <div>
+      <div style="font-family: var(--font-display); font-size: 14px; font-weight: 600; color: var(--text); margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">
+        <div style="background: var(--secondary); color: var(--accent); font-size: 11px; font-family: var(--font-accent); padding: 3px 10px; border-radius: 10px; border: 1px solid var(--accent);">PHASE 3 · MONTHS 7–12</div>
+      </div>
+      <div style="font-family: var(--font-display); font-size: 13px; font-weight: 600; color: var(--text-muted); margin-bottom: 8px;">INCOME + SCALE</div>
+      <div class="checklist-item"><div class="check-box"></div><div class="check-text">Scalable workout system launched</div></div>
+      <div class="checklist-item"><div class="check-box"></div><div class="check-text">First monetization model tested (freemium / subscription)</div></div>
+      <div class="checklist-item"><div class="check-box"></div><div class="check-text">B2B wellness pilot partnership signed</div></div>
+      <div class="checklist-item"><div class="check-box"></div><div class="check-text">10K Instagram followers milestone</div></div>
+      <div class="checklist-item"><div class="check-box"></div><div class="check-text">Press / media outreach (health + tech beat)</div></div>
+      <div class="checklist-item"><div class="check-box"></div><div class="check-text">Seed fundraising materials ready</div></div>
+      <div class="checklist-item"><div class="check-box"></div><div class="check-text">Brand one-pager / media kit live</div></div>
+
+      <div style="background: var(--primary); border-radius: 8px; padding: 18px 20px; margin-top: 24px;">
+        <div style="font-family: var(--font-accent); font-size: 9px; letter-spacing: 0.2em; color: var(--accent); text-transform: uppercase; margin-bottom: 8px;">Revenue Model [Recommended]</div>
+        <div style="font-family: var(--font-body); font-size: 12px; color: rgba(255,255,255,0.7); line-height: 1.7;">
+          Free core app → <strong style="color: white;">FamFit Pro</strong> subscription ($7–$12/mo) for advanced analytics, unlimited challenges, and scaled workout plans. B2B corporate wellness as secondary stream.
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════ PAGE 17: BRAND ASSETS INVENTORY ═══════════════ -->
+<div class="page content-page">
+  <div class="content-page-header">
+    <div class="eyebrow">04 · Style Guide</div>
+    <h2 style="font-size: 30px; color: var(--text); margin-bottom: 8px;">Visual Assets Inventory</h2>
+  </div>
+
+  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+    <div>
+      <div class="eyebrow" style="font-size: 9px;">Priority Assets · Build First</div>
+      <div class="card" style="padding: 0; overflow: hidden;">
+        <div style="padding: 14px 18px; border-bottom: 1px solid rgba(0,0,0,0.05); display: flex; gap: 10px; align-items: center;">
+          <div style="width: 8px; height: 8px; border-radius: 50%; background: var(--accent); flex-shrink: 0;"></div>
+          <div>
+            <div style="font-family: var(--font-display); font-size: 13px; font-weight: 600;">Logo System</div>
+            <div style="font-family: var(--font-body); font-size: 11px; color: var(--text-muted);">Full color, reversed, icon-only, app icon</div>
+          </div>
+        </div>
+        <div style="padding: 14px 18px; border-bottom: 1px solid rgba(0,0,0,0.05); display: flex; gap: 10px; align-items: center;">
+          <div style="width: 8px; height: 8px; border-radius: 50%; background: var(--accent); flex-shrink: 0;"></div>
+          <div>
+            <div style="font-family: var(--font-display); font-size: 13px; font-weight: 600;">Instagram Feed Templates</div>
+            <div style="font-family: var(--font-body); font-size: 11px; color: var(--text-muted);">1080×1080 — minimum 9 grid posts</div>
+          </div>
+        </div>
+        <div style="padding: 14px 18px; border-bottom: 1px solid rgba(0,0,0,0.05); display: flex; gap: 10px; align-items: center;">
+          <div style="width: 8px; height: 8px; border-radius: 50%; background: var(--accent); flex-shrink: 0;"></div>
+          <div>
+            <div style="font-family: var(--font-display); font-size: 13px; font-weight: 600;">Landing Page</div>
+            <div style="font-family: var(--font-body); font-size: 11px; color: var(--text-muted);">App waitlist capture + brand story</div>
+          </div>
+        </div>
+        <div style="padding: 14px 18px; border-bottom: 1px solid rgba(0,0,0,0.05); display: flex; gap: 10px; align-items: center;">
+          <div style="width: 8px; height: 8px; border-radius: 50%; background: var(--accent-warm); flex-shrink: 0;"></div>
+          <div>
+            <div style="font-family: var(--font-display); font-size: 13px; font-weight: 600;">Stories Templates</div>
+            <div style="font-family: var(--font-body); font-size: 11px; color: var(--text-muted);">1080×1920 — Instagram + TikTok</div>
+          </div>
+        </div>
+        <div style="padding: 14px 18px; display: flex; gap: 10px; align-items: center;">
+          <div style="width: 8px; height: 8px; border-radius: 50%; background: var(--accent-warm); flex-shrink: 0;"></div>
+          <div>
+            <div style="font-family: var(--font-display); font-size: 13px; font-weight: 600;">Email Signature</div>
+            <div style="font-family: var(--font-body); font-size: 11px; color: var(--text-muted);">Founder + team use</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div class="eyebrow" style="font-size: 9px;">Phase 2 Assets</div>
+      <div class="card" style="padding: 0; overflow: hidden; margin-bottom: 16px;">
+        <div style="padding: 14px 18px; border-bottom: 1px solid rgba(0,0,0,0.05); display: flex; gap: 10px; align-items: center;">
+          <div style="width: 8px; height: 8px; border-radius: 50%; background: var(--text-muted); flex-shrink: 0;"></div>
+          <div>
+            <div style="font-family: var(--font-display); font-size: 13px; font-weight: 600;">Pitch Deck</div>
+            <div style="font-family: var(--font-body); font-size: 11px; color: var(--text-muted);">Investor-facing deck for seed raise</div>
+          </div>
+        </div>
+        <div style="padding: 14px 18px; border-bottom: 1px solid rgba(0,0,0,0.05); display: flex; gap: 10px; align-items: center;">
+          <div style="width: 8px; height: 8px; border-radius: 50%; background: var(--text-muted); flex-shrink: 0;"></div>
+          <div>
+            <div style="font-family: var(--font-display); font-size: 13px; font-weight: 600;">Business Cards</div>
+            <div style="font-family: var(--font-body); font-size: 11px; color: var(--text-muted);">3.5×2in — founder cards for events</div>
+          </div>
+        </div>
+        <div style="padding: 14px 18px; border-bottom: 1px solid rgba(0,0,0,0.05); display: flex; gap: 10px; align-items: center;">
+          <div style="width: 8px; height: 8px; border-radius: 50%; background: var(--text-muted); flex-shrink: 0;"></div>
+          <div>
+            <div style="font-family: var(--font-display); font-size: 13px; font-weight: 600;">YouTube Thumbnail Template</div>
+            <div style="font-family: var(--font-body); font-size: 11px; color: var(--text-muted);">1280×720 — for content creators</div>
+          </div>
+        </div>
+        <div style="padding: 14px 18px; display: flex; gap: 10px; align-items: center;">
+          <div style="width: 8px; height: 8px; border-radius: 50%; background: var(--text-muted); flex-shrink: 0;"></div>
+          <div>
+            <div style="font-family: var(--font-display); font-size: 13px; font-weight: 600;">Media Kit / One-Pager</div>
+            <div style="font-family: var(--font-body); font-size: 11px; color: var(--text-muted);">Partnership + press outreach</div>
+          </div>
+        </div>
+      </div>
+
+      <div style="background: rgba(0,198,162,0.08); border: 1px solid rgba(0,198,162,0.2); border-radius: 8px; padding: 16px 18px;">
+        <div style="font-family: var(--font-accent); font-size: 9px; letter-spacing: 0.2em; color: var(--accent); margin-bottom: 6px;">SOCIAL SIZES REFERENCE</div>
+        <div style="font-family: var(--font-body); font-size: 12px; color: var(--text-muted); line-height: 1.7;">
+          IG Post: 1080×1080 · IG Story: 1080×1920<br>
+          TikTok: 1080×1920 · LinkedIn: 1200×627<br>
+          YouTube Banner: 2560×1440 · Thumbnail: 1280×720
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════ PAGE 18: BACK COVER ════════════════════════════ -->
+<div class="page back-cover">
+  <div style="position: absolute; top: 0; left: 0; right: 0; height: 5px; background: linear-gradient(90deg, var(--accent), var(--accent-warm));"></div>
+
+  <div class="back-icon">
+    <svg width="38" height="38" viewBox="0 0 28 28" fill="none">
+      <path d="M14 4C8.477 4 4 8.477 4 14s4.477 10 10 10 10-4.477 10-10S19.523 4 14 4z" stroke="white" stroke-width="1.5" fill="none"/>
+      <path d="M10 14c0-2.21 1.79-4 4-4s4 1.79 4 4-1.79 4-4 4" stroke="white" stroke-width="1.5" stroke-linecap="round"/>
+      <circle cx="14" cy="14" r="2" fill="white"/>
+      <path d="M14 10V7M14 21v-3M10 14H7M21 14h-3" stroke="white" stroke-width="1.5" stroke-linecap="round"/>
+    </svg>
+  </div>
+
+  <div class="back-title">FamFit</div>
+  <div class="back-tagline">"Get fit together."</div>
+
+  <div class="back-contact-row">
+    <div class="back-contact-item">
+      <div class="back-contact-label">Founder</div>
+      <div class="back-contact-val">David Lin</div>
+    </div>
+    <div class="back-contact-item">
+      <div class="back-contact-label">Platform</div>
+      <div class="back-contact-val">iOS · Android</div>
+    </div>
+    <div class="back-contact-item">
+      <div class="back-contact-label">Category</div>
+      <div class="back-contact-val">Social Fitness</div>
+    </div>
+  </div>
+
+  <div style="border-top: 1px solid rgba(255,255,255,0.08); padding-top: 28px; margin-bottom: 20px;">
+    <div style="font-family: var(--font-body); font-size: 13px; color: rgba(255,255,255,0.4); line-height: 1.7; max-width: 420px; margin: 0 auto; text-align: center;">
+      Prepared by Aurelian Labs · Capital Advisory &amp; Brand Strategy<br>
+      All brand recommendations to be confirmed with client before production.
+    </div>
+  </div>
+
+  <div class="confidential-badge">Confidential · For Client Use Only</div>
+</div>
+
+</body>
+</html>
