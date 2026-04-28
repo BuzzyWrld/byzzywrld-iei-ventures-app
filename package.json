@@ -6,7 +6,8 @@
     "dev": "next dev --webpack -p 3030",
     "build": "next build",
     "start": "next start -p 3030",
-    "skill": "tsx scripts/run-skill.ts"
+    "skill": "tsx scripts/run-skill.ts",
+    "seed:demo": "tsx scripts/seed-demo-brand.ts"
   },
   "dependencies": {
     "@anthropic-ai/claude-agent-sdk": "^0.2.118",
