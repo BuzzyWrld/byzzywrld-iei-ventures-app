@@ -80,13 +80,39 @@ SVG TECH:
 - Inline font-family using the brand's heading font
 - No <image>, no <foreignObject>, no external resources, no data: URIs`;
 
-function buildUserPrompt(brand: BrandForLogos, count: number): string {
+export type LogoOptions = {
+  /** "professional" | "playful" | "minimal" | "cartoonish" | "vintage" | "bold" — empty = AI picks. */
+  style?: string;
+  /** Comma- or newline-separated inspiration URLs (Pinterest, Dribbble). */
+  inspirationUrls?: string;
+};
+
+const STYLE_HINTS: Record<string, string> = {
+  professional: "Clean wordmark or geometric mark. Suit-and-tie polish. Conservative typography. No mascot, no illustrative flourish.",
+  playful:      "Friendly curves, bouncy proportions, expressive shapes. Optimistic energy without being childish.",
+  minimal:      "Single line or single shape. Negative space does the work. Strict reduction — every element must justify itself.",
+  cartoonish:   "Mascot-driven or illustrative character. Hand-drawn energy. Bold outlines, expressive shapes. Suitable for consumer/playful brands.",
+  vintage:      "Heritage typography (serif or slab), badge or seal silhouettes, ornamental detail. Hand-built feel.",
+  bold:         "Heavy typographic weights, strong geometry, high contrast. Industrial confidence.",
+};
+
+function buildUserPrompt(brand: BrandForLogos, count: number, opts: LogoOptions = {}): string {
   const heading = fontOf(brand.typography?.heading);
   const c = brand.colors ?? {};
+  const styleHint = opts.style && STYLE_HINTS[opts.style] ? STYLE_HINTS[opts.style] : "";
+  const inspiration = (opts.inspirationUrls ?? "")
+    .split(/[\n,]+/)
+    .map((s) => s.trim())
+    .filter(Boolean);
   return [
     `Design ${count} DISTINCT logo directions for the brand below. Follow the 3 approaches in order: wordmark, monogram, mark-lockup.`,
     "",
     "REMINDER: the ONLY text allowed anywhere in the logo is the brand name (or its initials). No tagline, no industry, no subtitle, no descriptor.",
+    "",
+    styleHint ? `STYLE DIRECTION (${opts.style}): ${styleHint} All 3 variants should fit this style.` : "",
+    inspiration.length
+      ? `INSPIRATION REFERENCES (the user pasted these as visual cues — match the vibe, do NOT copy):\n${inspiration.map((u) => `  - ${u}`).join("\n")}`
+      : "",
     "",
     "Brand:",
     `  Name: ${brand.name}`,
@@ -128,7 +154,8 @@ function parseJson(raw: string): ModelResponse {
 export async function generateLogoVariants(
   brand: BrandForLogos,
   outputDir: string,
-  count = 3
+  count = 3,
+  opts: LogoOptions = {}
 ): Promise<LogoVariant[]> {
   if (!process.env.ANTHROPIC_API_KEY) {
     // No key — no AI logos. Caller should fall back.
@@ -142,7 +169,7 @@ export async function generateLogoVariants(
       model: process.env.LOGO_MODEL ?? "claude-haiku-4-5",
       max_tokens: 4000,
       system: SYSTEM_PROMPT,
-      messages: [{ role: "user", content: buildUserPrompt(brand, count) }],
+      messages: [{ role: "user", content: buildUserPrompt(brand, count, opts) }],
     });
     text = msg.content
       .filter((b): b is Anthropic.TextBlock => b.type === "text")

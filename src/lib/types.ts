@@ -8,11 +8,57 @@ export const BrandIntakeSchema = z.object({
   toneOfVoice: z.string().min(1),
   competitors: z.string().optional().default(""),
   archetype: z.string().optional().default(""),
+  /** Palette preference. Empty string means "let AI choose based on color theory + brand". */
   palettePreference: z.string().optional().default(""),
   notes: z.string().optional().default(""),
   /** If set, user uploaded their own logo and we should skip variant generation.
    *  Format: "/api/uploads/<sessionId>/<filename>" */
   uploadedLogoPath: z.string().optional().default(""),
+
+  /** "quick" (8-step) or "deep" (full Worksheet 2 dossier). */
+  mode: z.enum(["quick", "deep"]).optional().default("quick"),
+
+  // --- Logo questionnaire (Quick + Deep) ---
+  /** Logo style direction: cartoonish | realistic | professional | playful | minimal | vintage */
+  logoStyle: z.string().optional().default(""),
+  /** Optional Pinterest / inspiration URLs (comma- or newline-separated). */
+  logoInspirationUrls: z.string().optional().default(""),
+
+  // --- Deep mode (all optional) ---
+  // Step 1: Identity
+  objectives: z.array(z.string()).optional().default([]),
+  companyBackground: z.string().optional().default(""),
+  tagline: z.string().optional().default(""),
+  brandEssence: z.string().optional().default(""),
+  uniqueAbility: z.string().optional().default(""),
+  // Step 2: Mission/Vision/Values
+  vision: z.string().optional().default(""),
+  mission: z.string().optional().default(""),
+  coreValues: z.array(z.string()).optional().default([]),
+  // Step 3: Brand Story
+  brandStory: z.string().optional().default(""),
+  why: z.string().optional().default(""),
+  legacy: z.string().optional().default(""),
+  quotables: z.string().optional().default(""),
+  // Step 4: Persona
+  personalityTraits: z.array(z.string()).optional().default([]),
+  toneVoiceDescription: z.string().optional().default(""),
+  interactionStyle: z.string().optional().default(""),
+  personaType: z.string().optional().default(""),
+  // Step 5: Value
+  valueProposition: z.string().optional().default(""),
+  // Step 6: Products (structured)
+  products: z.array(z.object({
+    name: z.string(),
+    features: z.string(),
+    benefits: z.string(),
+  })).optional().default([]),
+  // Step 7: Competitors (structured)
+  competitorsList: z.array(z.object({
+    name: z.string(),
+    website: z.string().optional().default(""),
+    instagram: z.string().optional().default(""),
+  })).optional().default([]),
 });
 export type BrandIntake = z.infer<typeof BrandIntakeSchema>;
 
@@ -64,6 +110,12 @@ export type EmailKitRef = {
   signatureUrl?: string;
 };
 
+/** Developer Brief — structured handoff document for whoever builds the website. */
+export type DevBriefRef = {
+  htmlUrl: string;
+  pdfUrl?: string;
+};
+
 export type BrandOutputs = {
   brandJson?: string;
   playbookHtml?: string;
@@ -79,6 +131,7 @@ export type BrandOutputs = {
   socialKit?: SocialAssetRef[];
   pitchOnePager?: PitchOnePagerRef;
   emailKit?: EmailKitRef;
+  devBrief?: DevBriefRef;
   landingLiveUrl?: string;
 };
 

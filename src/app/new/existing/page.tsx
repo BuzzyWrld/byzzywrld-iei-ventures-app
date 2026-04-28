@@ -179,6 +179,9 @@ export default function ExistingBrandPage() {
           >
             I have existing assets
           </span>
+          <Link href="/new/deep" className="px-2 py-1 rounded" style={{ color: "var(--color-text-muted)" }}>
+            Deep questionnaire (~20 min)
+          </Link>
         </div>
       </div>
 

@@ -2,8 +2,16 @@
 
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { useMemo, useRef, useState } from "react";
+import { useMemo, useState } from "react";
 import type { BrandIntake } from "@/lib/types";
+import {
+  ArchetypeStep,
+  ToneStep,
+  PaletteStep,
+  LogoStyleStep,
+  LogoStep,
+  expandPaletteForSubmit,
+} from "./_steps";
 
 type StepKey =
   | "company"
@@ -12,6 +20,7 @@ type StepKey =
   | "tone"
   | "archetype"
   | "palette"
+  | "logo-style"
   | "logo"
   | "review";
 const STEPS: { key: StepKey; label: string }[] = [
@@ -21,36 +30,9 @@ const STEPS: { key: StepKey; label: string }[] = [
   { key: "tone", label: "Tone" },
   { key: "archetype", label: "Archetype" },
   { key: "palette", label: "Palette" },
+  { key: "logo-style", label: "Logo style" },
   { key: "logo", label: "Logo" },
   { key: "review", label: "Review" },
-];
-
-const TONE_OPTIONS = [
-  "confident", "precise", "modern", "institutional", "warm", "discreet",
-  "direct", "playful", "technical", "bold", "restrained", "unpretentious",
-  "visionary", "grounded",
-];
-
-const ARCHETYPES = [
-  { key: "sage", title: "Sage", blurb: "Authority, depth, editorial clarity." },
-  { key: "hero", title: "Hero", blurb: "Bold, decisive, a flag to rally around." },
-  { key: "creator", title: "Creator", blurb: "Craft, warmth, unpretentious taste." },
-  { key: "caregiver", title: "Caregiver", blurb: "Calm, clear, reliably trustworthy." },
-];
-
-const PALETTES = [
-  { key: "inkwell",   title: "Inkwell",   blurb: "Deep ink, restrained, editorial.",        swatches: ["#0f172a", "#334155", "#cbd5e1", "#f8fafc"] },
-  { key: "vellum",    title: "Vellum",    blurb: "Warm paper, muted gold, print-weight.",   swatches: ["#2a2620", "#5c4a2c", "#d9b87a", "#f6f1e4"] },
-  { key: "meridian",  title: "Meridian",  blurb: "Institutional navy with a single cyan.",  swatches: ["#0b3a66", "#1e5b8f", "#59c4e6", "#eef3f6"] },
-  { key: "plenum",    title: "Plenum",    blurb: "Moss on paper — sage, calm.",             swatches: ["#1a1f1a", "#263e0f", "#a8b098", "#f2f0e9"] },
-  { key: "graphite",  title: "Graphite",  blurb: "Near-black + electric cyan. Tech edge.",   swatches: ["#0a0a0a", "#06b6d4", "#94a3b8", "#f5f5f5"] },
-  { key: "rust",      title: "Rust",      blurb: "Burnt sienna, cream, charcoal. Warm craft.", swatches: ["#9a3412", "#1f2937", "#fcd34d", "#fffbeb"] },
-  { key: "oxblood",   title: "Oxblood",   blurb: "Dark red, champagne, onyx. Luxury.",       swatches: ["#7f1d1d", "#ca8a04", "#18181b", "#f5f5f4"] },
-  { key: "clinic",    title: "Clinic",    blurb: "Single blue on cool whites. Healthcare-clean.", swatches: ["#0369a1", "#7dd3fc", "#e2e8f0", "#ffffff"] },
-  { key: "dune",      title: "Dune",      blurb: "Sandstone, terracotta, bone. Desert warm.", swatches: ["#78350f", "#d97706", "#fde68a", "#fef3c7"] },
-  { key: "cobalt",    title: "Cobalt",    blurb: "Deep cobalt, amber, ivory. Bold + modern.", swatches: ["#1e3a8a", "#f59e0b", "#fef3c7", "#ffffff"] },
-  { key: "forest",    title: "Forest",    blurb: "Pine, moss, bark, cream. Heritage outdoors.", swatches: ["#14532d", "#365314", "#84cc16", "#fafaf5"] },
-  { key: "orchid",    title: "Orchid",    blurb: "Plum, rose, ivory. Feminine + refined.",    swatches: ["#581c87", "#db2777", "#fbcfe8", "#fdf2f8"] },
 ];
 
 const EMPTY: BrandIntake = {
@@ -64,6 +46,28 @@ const EMPTY: BrandIntake = {
   palettePreference: "",
   notes: "",
   uploadedLogoPath: "",
+  mode: "quick",
+  logoStyle: "",
+  logoInspirationUrls: "",
+  objectives: [],
+  companyBackground: "",
+  tagline: "",
+  brandEssence: "",
+  uniqueAbility: "",
+  vision: "",
+  mission: "",
+  coreValues: [],
+  brandStory: "",
+  why: "",
+  legacy: "",
+  quotables: "",
+  personalityTraits: [],
+  toneVoiceDescription: "",
+  interactionStyle: "",
+  personaType: "",
+  valueProposition: "",
+  products: [],
+  competitorsList: [],
 };
 
 export default function NewBrandPage() {
@@ -84,6 +88,7 @@ export default function NewBrandPage() {
       case "tone":      return intake.toneOfVoice.split(",").map((s) => s.trim()).filter(Boolean).length >= 1;
       case "archetype": return intake.archetype.trim().length > 0;
       case "palette":   return intake.palettePreference.trim().length > 0;
+      case "logo-style":return true;  // optional — defaults blank
       case "logo":      return true;  // optional; default = create
       case "review":    return true;
     }
@@ -99,13 +104,7 @@ export default function NewBrandPage() {
   async function submit() {
     setSubmitting(true);
     setError(null);
-    // Expand the palette pick into a hex-carrying string so the skill knows
-    // the exact colors the user chose (just the name isn't enough — the skill
-    // has no idea what "Plenum" looks like).
-    const picked = PALETTES.find((p) => p.title === intake.palettePreference);
-    const intakeWithHexes = picked
-      ? { ...intake, palettePreference: `${picked.title} — ${picked.swatches.join(", ")}` }
-      : intake;
+    const intakeWithHexes = expandPaletteForSubmit(intake);
     const res = await fetch("/api/brands", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -143,6 +142,13 @@ export default function NewBrandPage() {
           >
             I have existing assets
           </Link>
+          <Link
+            href="/new/deep"
+            className="px-2 py-1 rounded"
+            style={{ color: "var(--color-text-muted)" }}
+          >
+            Deep questionnaire (~20 min)
+          </Link>
         </div>
         <div className="text-xs font-mono" style={{ color: "var(--color-text-muted)" }}>
           Step {stepIdx + 1} of {STEPS.length}
@@ -173,6 +179,9 @@ export default function NewBrandPage() {
         )}
         {step.key === "palette" && (
           <PaletteStep intake={intake} onChange={set} />
+        )}
+        {step.key === "logo-style" && (
+          <LogoStyleStep intake={intake} onChange={set} />
         )}
         {step.key === "logo" && (
           <LogoStep intake={intake} onChange={set} />
@@ -281,7 +290,7 @@ function Stepper({ current }: { current: number }) {
   );
 }
 
-/* ---------------- Steps ---------------- */
+/* ---------------- Quick-flow-only steps ---------------- */
 
 function CompanyStep({
   intake,
@@ -392,322 +401,6 @@ function AudienceStep({
   );
 }
 
-function ToneStep({
-  intake,
-  onChange,
-}: {
-  intake: BrandIntake;
-  onChange: (p: Partial<BrandIntake>) => void;
-}) {
-  const selected = intake.toneOfVoice.split(",").map((s) => s.trim()).filter(Boolean);
-  const toggle = (word: string) => {
-    const exists = selected.includes(word);
-    const next = exists ? selected.filter((w) => w !== word) : [...selected, word];
-    onChange({ toneOfVoice: next.join(", ") });
-  };
-  return (
-    <>
-      <h1 className="font-serif leading-[1.05] mb-3" style={{ fontSize: 44 }}>
-        How should your brand <em style={{ fontStyle: "italic" }}>sound?</em>
-      </h1>
-      <p className="text-base mb-6" style={{ color: "var(--color-text-muted)", maxWidth: "52ch" }}>
-        Pick 3–5 that feel right — leave the rest.
-      </p>
-      <div className="flex flex-wrap gap-2 mb-4">
-        {TONE_OPTIONS.map((word) => {
-          const isOn = selected.includes(word);
-          return (
-            <button
-              key={word}
-              type="button"
-              className={`pill ${isOn ? "pill-selected" : ""}`}
-              onClick={() => toggle(word)}
-            >
-              {word}
-              {isOn && (
-                <span aria-hidden="true" style={{ marginLeft: 4 }}>
-                  ×
-                </span>
-              )}
-            </button>
-          );
-        })}
-      </div>
-      <p className="text-xs" style={{ color: "var(--color-text-muted)" }}>
-        {selected.length} selected.
-      </p>
-    </>
-  );
-}
-
-function ArchetypeStep({
-  intake,
-  onChange,
-}: {
-  intake: BrandIntake;
-  onChange: (p: Partial<BrandIntake>) => void;
-}) {
-  return (
-    <>
-      <h1 className="font-serif leading-[1.05] mb-3" style={{ fontSize: 44 }}>
-        What shape should the brand take?
-      </h1>
-      <p className="text-base mb-6" style={{ color: "var(--color-text-muted)", maxWidth: "52ch" }}>
-        Archetypes give the skill a baseline personality to design against.
-      </p>
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        {ARCHETYPES.map((a) => {
-          const on = intake.archetype === a.key;
-          return (
-            <button
-              key={a.key}
-              type="button"
-              onClick={() => onChange({ archetype: a.key })}
-              className={`card card-hover p-4 text-left ${on ? "ring-2" : ""}`}
-              style={
-                on
-                  ? { borderColor: "var(--color-primary)", boxShadow: "var(--sh-focus)" }
-                  : undefined
-              }
-            >
-              <div className="font-medium tracking-tight mb-1">{a.title}</div>
-              <div className="text-xs" style={{ color: "var(--color-text-muted)" }}>
-                {a.blurb}
-              </div>
-            </button>
-          );
-        })}
-      </div>
-    </>
-  );
-}
-
-function PaletteStep({
-  intake,
-  onChange,
-}: {
-  intake: BrandIntake;
-  onChange: (p: Partial<BrandIntake>) => void;
-}) {
-  return (
-    <>
-      <h1 className="font-serif leading-[1.05] mb-3" style={{ fontSize: 44 }}>
-        Here are four directions your palette could take.
-      </h1>
-      <p className="text-base mb-6" style={{ color: "var(--color-text-muted)", maxWidth: "58ch" }}>
-        Pulled from your archetype{intake.archetype ? ` (${intake.archetype})` : ""} and industry. Pick one, or skip.
-      </p>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-        {PALETTES.map((p) => {
-          const on = intake.palettePreference === p.title;
-          return (
-            <button
-              key={p.key}
-              type="button"
-              onClick={() => onChange({ palettePreference: p.title })}
-              className={`card card-hover p-4 text-left ${on ? "ring-2" : ""}`}
-              style={
-                on
-                  ? { borderColor: "var(--color-primary)", boxShadow: "var(--sh-focus)" }
-                  : undefined
-              }
-            >
-              <div className="flex items-center justify-between mb-3">
-                <div className="font-medium tracking-tight">{p.title}</div>
-                <input
-                  type="radio"
-                  name="palette"
-                  checked={on}
-                  onChange={() => onChange({ palettePreference: p.title })}
-                />
-              </div>
-              <div className="flex gap-1.5 mb-3">
-                {p.swatches.map((hex) => (
-                  <span
-                    key={hex}
-                    className="flex-1 rounded"
-                    style={{
-                      height: 48,
-                      background: hex,
-                      border: "1px solid rgba(0,0,0,.06)",
-                    }}
-                  />
-                ))}
-              </div>
-              <div className="text-xs" style={{ color: "var(--color-text-muted)" }}>
-                {p.blurb}
-              </div>
-            </button>
-          );
-        })}
-      </div>
-    </>
-  );
-}
-
-function LogoStep({
-  intake,
-  onChange,
-}: {
-  intake: BrandIntake;
-  onChange: (p: Partial<BrandIntake>) => void;
-}) {
-  // Track the chosen mode explicitly — having an uploadedLogoPath implies
-  // upload-mode, but the user can be in upload-mode BEFORE they've actually
-  // picked a file (otherwise the chicken-and-egg: we need the hidden input
-  // to exist to trigger the file picker, but we were only rendering it
-  // after the state flip).
-  const [mode, setMode] = useState<"create" | "upload">(
-    intake.uploadedLogoPath ? "upload" : "create"
-  );
-  const [uploading, setUploading] = useState(false);
-  const [dragOver, setDragOver] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const fileRef = useRef<HTMLInputElement>(null);
-
-  function pickCreate() {
-    setMode("create");
-    onChange({ uploadedLogoPath: "" });
-  }
-  function pickUpload() {
-    setMode("upload");
-    // Trigger file picker on next tick so the input has definitely mounted
-    // (it's now always rendered, but we defer for safety across StrictMode).
-    setTimeout(() => fileRef.current?.click(), 0);
-  }
-
-  async function uploadLogo(file: File) {
-    setUploading(true);
-    setError(null);
-    const form = new FormData();
-    form.append("files", file);
-    const res = await fetch("/api/uploads", { method: "POST", body: form });
-    if (!res.ok) {
-      const body = (await res.json().catch(() => ({}))) as { error?: string };
-      setError(body.error ?? `HTTP ${res.status}`);
-      setUploading(false);
-      return;
-    }
-    const data = (await res.json()) as {
-      sessionId: string;
-      uploaded: { filename: string; url: string }[];
-    };
-    const first = data.uploaded[0];
-    if (first) onChange({ uploadedLogoPath: first.url });
-    setUploading(false);
-  }
-
-  return (
-    <>
-      <h1 className="font-serif leading-[1.05] mb-3" style={{ fontSize: 44 }}>
-        What about the logo?
-      </h1>
-      <p className="text-base mb-6" style={{ color: "var(--color-text-muted)", maxWidth: "54ch" }}>
-        We can design 3 distinct options for you to pick from — or if you already have one you love, upload it and we&apos;ll build the rest of the brand around it.
-      </p>
-
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-        <button
-          type="button"
-          onClick={pickCreate}
-          className={`card card-hover p-5 text-left ${mode === "create" ? "ring-2" : ""}`}
-          style={
-            mode === "create"
-              ? { borderColor: "var(--color-primary)", boxShadow: "var(--sh-focus)" }
-              : undefined
-          }
-        >
-          <div className="font-medium tracking-tight mb-1">Create 3 options for me</div>
-          <div className="text-xs" style={{ color: "var(--color-text-muted)" }}>
-            Wordmark, monogram, and a geometric mark. Pick your favorite after.
-          </div>
-        </button>
-        <button
-          type="button"
-          onClick={pickUpload}
-          className={`card card-hover p-5 text-left ${mode === "upload" ? "ring-2" : ""}`}
-          style={
-            mode === "upload"
-              ? { borderColor: "var(--color-primary)", boxShadow: "var(--sh-focus)" }
-              : undefined
-          }
-        >
-          <div className="font-medium tracking-tight mb-1">I already have one</div>
-          <div className="text-xs" style={{ color: "var(--color-text-muted)" }}>
-            Upload SVG or PNG. We&apos;ll build the rest of the brand system around it.
-          </div>
-        </button>
-      </div>
-
-      {/* File input is ALWAYS rendered (hidden) so the ref is always valid
-          regardless of current mode. Visible dropzone below toggles on mode. */}
-      <input
-        ref={fileRef}
-        type="file"
-        accept="image/svg+xml,image/png,image/jpeg,image/webp"
-        className="hidden"
-        onChange={(e) => {
-          if (e.target.files?.[0]) void uploadLogo(e.target.files[0]);
-          e.target.value = "";
-        }}
-      />
-
-      {mode === "upload" && (
-        <div
-          className="p-6 text-center transition cursor-pointer"
-          onClick={() => fileRef.current?.click()}
-          onDragOver={(e) => {
-            e.preventDefault();
-            setDragOver(true);
-          }}
-          onDragLeave={() => setDragOver(false)}
-          onDrop={(e) => {
-            e.preventDefault();
-            setDragOver(false);
-            if (e.dataTransfer.files?.length) void uploadLogo(e.dataTransfer.files[0]);
-          }}
-          style={{
-            border: `1.5px dashed ${dragOver ? "var(--color-primary)" : "var(--color-border)"}`,
-            borderRadius: "var(--r-lg)",
-            background: dragOver ? "var(--color-surface-2)" : "var(--color-surface)",
-          }}
-        >
-          {intake.uploadedLogoPath ? (
-            <div className="flex items-center justify-center gap-4">
-              <object
-                data={intake.uploadedLogoPath}
-                type="image/svg+xml"
-                aria-label="Uploaded logo"
-                style={{ maxHeight: 80, maxWidth: 240, pointerEvents: "none" }}
-              />
-              <div className="text-left">
-                <div className="font-medium text-sm">Logo uploaded</div>
-                <div className="text-xs" style={{ color: "var(--color-text-muted)" }}>
-                  Click to replace.
-                </div>
-              </div>
-            </div>
-          ) : (
-            <div>
-              <div className="font-medium">
-                {uploading ? "Uploading…" : "Drop your logo here or click to browse"}
-              </div>
-              <div className="text-sm mt-1" style={{ color: "var(--color-text-muted)" }}>
-                SVG, PNG, JPG · up to 20 MB
-              </div>
-            </div>
-          )}
-        </div>
-      )}
-      {error && (
-        <p className="mt-3 text-sm" style={{ color: "var(--color-status-failed)" }}>
-          {error}
-        </p>
-      )}
-    </>
-  );
-}
-
 function ReviewStep({
   intake,
   onChange,
@@ -731,7 +424,8 @@ function ReviewStep({
           <ReviewRow label="Audience" value={intake.targetAudience} />
           <ReviewRow label="Tone" value={intake.toneOfVoice || "—"} />
           <ReviewRow label="Archetype" value={intake.archetype || "—"} />
-          <ReviewRow label="Palette" value={intake.palettePreference || "—"} />
+          <ReviewRow label="Palette" value={intake.palettePreference || "AI will choose"} />
+          <ReviewRow label="Logo style" value={intake.logoStyle || "AI will choose"} />
           <ReviewRow
             label="Logo"
             value={intake.uploadedLogoPath ? "Uploaded by you" : "Generate 3 options"}

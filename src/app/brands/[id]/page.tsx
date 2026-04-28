@@ -381,6 +381,12 @@ function computeStages(project: BrandProject): Stage[] {
       blurb: "One-pager + signature",
       state: stateOf(Boolean(o.pitchOnePager || o.emailKit)),
     },
+    {
+      key: "dev-brief",
+      title: "Developer brief",
+      blurb: "Handoff for the website builder",
+      state: stateOf(Boolean(o.devBrief)),
+    },
   ];
 }
 
@@ -574,6 +580,7 @@ function CompletePanel({
         <SocialKit project={project} />
         <PitchOnePager project={project} />
         <EmailKit project={project} />
+        <DevBrief project={project} />
         <Downloads project={project} />
       </>
     );
@@ -832,6 +839,49 @@ function PitchOnePagerSection({ project }: { project: BrandProject }) {
 
 function PitchOnePager({ project }: { project: BrandProject }) {
   return <PitchOnePagerSection project={project} />;
+}
+
+function DevBrief({ project }: { project: BrandProject }) {
+  const d = project.outputs.devBrief;
+  if (!d) return null;
+  return (
+    <div className="mb-12">
+      <div className="flex items-end justify-between mb-4 flex-wrap gap-2">
+        <div>
+          <div className="kicker mb-1">09 · Developer brief</div>
+          <h2 className="text-2xl font-medium tracking-tight">Handoff for the website builder</h2>
+          <p className="text-sm mt-1" style={{ color: "var(--color-text-muted)", maxWidth: "60ch" }}>
+            Color tokens, typography, component specs, site map, content sources, tech notes. Hand this to whoever builds the site.
+          </p>
+        </div>
+        <div className="flex gap-2">
+          <a href={d.htmlUrl} target="_blank" rel="noreferrer" className="btn btn-ghost btn-sm">
+            Open HTML
+          </a>
+          {d.pdfUrl && (
+            <a href={d.pdfUrl} download className="btn btn-secondary btn-sm">
+              Download PDF
+            </a>
+          )}
+        </div>
+      </div>
+      <div
+        className="card overflow-hidden"
+        style={{ maxWidth: 720, margin: "0 auto" }}
+      >
+        <iframe
+          src={d.htmlUrl}
+          title="Developer brief"
+          style={{
+            width: "100%",
+            aspectRatio: "850 / 1100",
+            border: 0,
+            display: "block",
+          }}
+        />
+      </div>
+    </div>
+  );
 }
 
 function EmailKit({ project }: { project: BrandProject }) {
