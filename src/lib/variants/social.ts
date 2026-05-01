@@ -12,6 +12,7 @@ import {
   parseJson,
   safeSlug,
   type BrandForVariants,
+  type IntakeContext,
 } from "./shared";
 
 export type SocialAsset = {
@@ -51,11 +52,11 @@ SVG rules:
 - Avoid generic geometric abstraction; tie visuals to the brand's tone
 - ABSOLUTELY NO EMOJIS. No emoji characters anywhere in the SVG text. Use only the brand's own typography + shapes drawn with SVG primitives (rect, circle, path).`;
 
-function buildUser(brand: BrandForVariants): string {
+function buildUser(brand: BrandForVariants, intake?: IntakeContext): string {
   return [
     "Design the 4 social assets below for this brand. Return JSON only.",
     "",
-    brandBrief(brand),
+    brandBrief(brand, intake),
   ].join("\n");
 }
 
@@ -76,13 +77,14 @@ const DIMS: Record<string, { size: string; platform: string }> = {
 
 export async function generateSocialKit(
   brand: BrandForVariants,
-  outputDir: string
+  outputDir: string,
+  intake?: IntakeContext
 ): Promise<SocialAsset[]> {
   let text: string | null = null;
   try {
     text = await callClaude({
       system: SYSTEM,
-      user: buildUser(brand),
+      user: buildUser(brand, intake),
       maxTokens: 12000,
     });
   } catch (err) {

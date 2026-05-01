@@ -63,12 +63,28 @@ export const BrandIntakeSchema = z.object({
 export type BrandIntake = z.infer<typeof BrandIntakeSchema>;
 
 export type BrandJson = {
+  // --- visual identity ---
   name: string;
   tagline: string;
   colors: { primary: string; secondary: string; accent: string; neutral: string };
   typography: { heading: string; body: string };
   tone: string[];
   positioning: string;
+
+  // --- brand soul (added in Fix 2: makes brand identity survive even if
+  //     playbook rendering hiccups, gives all variants a shared source of truth) ---
+  /** One-sentence mission statement. */
+  mission?: string;
+  /** One-sentence vision statement. */
+  vision?: string;
+  /** 3-5 core values, each a short phrase. */
+  values?: string[];
+  /** 2-4 sentence brand origin / why story. Pulls from intake.notes when present. */
+  brandStory?: string;
+  /** Voice attributes: do/don't list. `say` = on-voice phrases. `dont` = anti-voice. */
+  voice?: { say: string[]; dont: string[] };
+  /** One-paragraph ideal customer archetype description. */
+  ica?: string;
 };
 
 export type LogoVariantRef = {

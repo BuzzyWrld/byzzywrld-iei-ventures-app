@@ -11,6 +11,7 @@ import {
   callClaude,
   parseJson,
   type BrandForVariants,
+  type IntakeContext,
 } from "./shared";
 import { pitchExemplar } from "./exemplar";
 
@@ -41,11 +42,11 @@ Constraints:
 - Dense but not cramped — real copy, not placeholder
 - ABSOLUTELY NO EMOJIS anywhere in the HTML. No bullet-point emojis, no feature icons. Use plain typography, CSS-drawn shapes, or the accent color for emphasis.`;
 
-function buildUser(brand: BrandForVariants): string {
+function buildUser(brand: BrandForVariants, intake?: IntakeContext): string {
   return [
     "Design a 1-page brand snapshot. Return JSON only.",
     "",
-    brandBrief(brand),
+    brandBrief(brand, intake),
   ].join("\n");
 }
 
@@ -53,14 +54,15 @@ type ModelResponse = { html?: string };
 
 export async function generatePitchOnePager(
   brand: BrandForVariants,
-  outputDir: string
+  outputDir: string,
+  intake?: IntakeContext
 ): Promise<PitchOnePager | null> {
   let text: string | null = null;
   try {
     const exemplar = await pitchExemplar();
     text = await callClaude({
       system: SYSTEM + exemplar,
-      user: buildUser(brand),
+      user: buildUser(brand, intake),
       maxTokens: 4500,
     });
   } catch (err) {

@@ -14,6 +14,7 @@ import {
   parseJson,
   safeSlug,
   type BrandForVariants,
+  type IntakeContext,
 } from "./shared";
 import { landingExemplar } from "./exemplar";
 
@@ -66,7 +67,7 @@ HTML constraints:
 - Mobile responsive via @media (max-width: 768px) rules
 - Target ~5,000-7,000 characters of HTML. The exemplar below is for STYLE INSPIRATION ONLY — match its quality and structural sophistication, NOT its length. Our pages are intentionally tighter.`;
 
-function buildUser(brand: BrandForVariants, layout: LayoutSpec): string {
+function buildUser(brand: BrandForVariants, layout: LayoutSpec, intake?: IntakeContext): string {
   return [
     `Design ONE landing page using the "${layout.key}" layout: ${layout.description}`,
     "",
@@ -76,7 +77,7 @@ function buildUser(brand: BrandForVariants, layout: LayoutSpec): string {
     "  - Include 'Request access' or 'Get in touch' CTA",
     "",
     "Brand:",
-    brandBrief(brand),
+    brandBrief(brand, intake),
   ].join("\n");
 }
 
@@ -90,13 +91,14 @@ type ModelResponse = {
 async function generateOne(
   brand: BrandForVariants,
   layout: LayoutSpec,
-  exemplar: string
+  exemplar: string,
+  intake?: IntakeContext
 ): Promise<ModelResponse | null> {
   let text: string | null = null;
   try {
     text = await callClaude({
       system: SYSTEM + exemplar,
-      user: buildUser(brand, layout),
+      user: buildUser(brand, layout, intake),
       maxTokens: 12000,
     });
   } catch (err) {
@@ -122,13 +124,14 @@ async function generateOne(
 export async function generateLandingVariants(
   brand: BrandForVariants,
   outputDir: string,
-  count = 3
+  count = 3,
+  intake?: IntakeContext
 ): Promise<LandingVariant[]> {
   const exemplar = await landingExemplar();
   const layouts = LAYOUTS.slice(0, count);
 
   const results = await Promise.all(
-    layouts.map((l) => generateOne(brand, l, exemplar))
+    layouts.map((l) => generateOne(brand, l, exemplar, intake))
   );
 
   const dir = path.join(outputDir, "landing-variants");

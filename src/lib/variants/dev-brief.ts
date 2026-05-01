@@ -25,6 +25,7 @@ import {
   callClaude,
   parseJson,
   type BrandForVariants,
+  type IntakeContext,
 } from "./shared";
 
 export type DevBrief = {
@@ -80,9 +81,12 @@ Required sections (each on its own .page div, ~6–9 pages total):
     Note global nav structure (sticky? hamburger threshold? footer columns?).
 
   PAGE 7 — Content & Voice
-    Per-page content notes: which copy from the brand playbook goes where. Hero headline source,
-    feature section source, footer copy source. If the brand has a clear voice, include 2 phrases
-    that ARE in voice + 2 phrases that ARE NOT (anti-examples).
+    Per-page content notes: which copy from the brand playbook goes where. Hero headline source
+    (use the brand's tagline verbatim where it fits), feature section source, footer copy source.
+    Voice section: if the brand brief includes "On-voice phrases" and "Anti-voice" arrays, use
+    those VERBATIM as the DO SAY / DO NOT SAY examples — do not paraphrase or invent. Only invent
+    if the brand brief has no voice arrays. Tone guardrails should reference the brand's actual
+    archetype + tone words from the brief, not generic guidance.
 
   PAGE 8 — Imagery & Visual Language
     Photography direction (style, mood, what to AVOID — no stock-photo-smiles, no generic
@@ -101,12 +105,12 @@ CRITICAL:
 - The brief must look like the brand — use the brand colors and heading font as the brief's own design system, so the dev sees the brand applied.
 - Dense but scannable — each page should fit comfortably without overflow.`;
 
-function buildUser(brand: BrandForVariants): string {
+function buildUser(brand: BrandForVariants, intake?: IntakeContext): string {
   return [
     "Build a complete Developer Brief for the brand below. Return JSON only.",
     "",
     "Brand:",
-    brandBrief(brand),
+    brandBrief(brand, intake),
   ].join("\n");
 }
 
@@ -114,13 +118,14 @@ type ModelResponse = { html?: string };
 
 export async function generateDevBrief(
   brand: BrandForVariants,
-  outputDir: string
+  outputDir: string,
+  intake?: IntakeContext
 ): Promise<DevBrief | null> {
   let text: string | null = null;
   try {
     text = await callClaude({
       system: SYSTEM,
-      user: buildUser(brand),
+      user: buildUser(brand, intake),
       maxTokens: 20000,
     });
   } catch (err) {

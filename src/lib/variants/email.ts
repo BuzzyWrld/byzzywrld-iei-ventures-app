@@ -9,6 +9,7 @@ import {
   callClaude,
   parseJson,
   type BrandForVariants,
+  type IntakeContext,
 } from "./shared";
 
 export type EmailKit = {
@@ -36,11 +37,11 @@ Both assets use brand colors + heading font.
 
 ABSOLUTELY NO EMOJIS anywhere in the SVG or signature HTML. Typography + shapes only.`;
 
-function buildUser(brand: BrandForVariants): string {
+function buildUser(brand: BrandForVariants, intake?: IntakeContext): string {
   return [
     "Create the email header SVG and signature HTML for this brand. Return JSON only.",
     "",
-    brandBrief(brand),
+    brandBrief(brand, intake),
   ].join("\n");
 }
 
@@ -51,13 +52,14 @@ type ModelResponse = {
 
 export async function generateEmailKit(
   brand: BrandForVariants,
-  outputDir: string
+  outputDir: string,
+  intake?: IntakeContext
 ): Promise<EmailKit | null> {
   let text: string | null = null;
   try {
     text = await callClaude({
       system: SYSTEM,
-      user: buildUser(brand),
+      user: buildUser(brand, intake),
       maxTokens: 3000,
     });
   } catch (err) {
