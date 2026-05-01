@@ -187,20 +187,39 @@ export async function generateLogoVariants(
 
   const client = new Anthropic();
   let text = "";
-  try {
-    const msg = await client.messages.create({
-      model: process.env.LOGO_MODEL ?? "claude-haiku-4-5",
-      max_tokens: 4000,
-      system: SYSTEM_PROMPT,
-      messages: [{ role: "user", content: buildUserPrompt(brand, count, opts) }],
-    });
-    text = msg.content
-      .filter((b): b is Anthropic.TextBlock => b.type === "text")
-      .map((b) => b.text)
-      .join("");
-  } catch (err) {
-    console.warn(`[logos] model call failed:`, err instanceof Error ? err.message : err);
-    return [];
+  // Retry with exponential backoff on transient errors (429 rate limits, 5xx).
+  // The Anthropic Haiku per-org rate limit (10K output tokens/min) gets hit
+  // when several brands build in parallel. A single 30-60s wait usually clears it.
+  const MAX_ATTEMPTS = 3;
+  let attempt = 0;
+  while (attempt < MAX_ATTEMPTS) {
+    attempt++;
+    try {
+      const msg = await client.messages.create({
+        model: process.env.LOGO_MODEL ?? "claude-haiku-4-5",
+        max_tokens: 4000,
+        system: SYSTEM_PROMPT,
+        messages: [{ role: "user", content: buildUserPrompt(brand, count, opts) }],
+      });
+      text = msg.content
+        .filter((b): b is Anthropic.TextBlock => b.type === "text")
+        .map((b) => b.text)
+        .join("");
+      break;
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : String(err);
+      const isRateLimit = /\b429\b|rate.?limit/i.test(msg);
+      const isServerError = /\b5\d\d\b/.test(msg);
+      const retryable = isRateLimit || isServerError;
+      if (retryable && attempt < MAX_ATTEMPTS) {
+        const waitMs = Math.min(60000, 15000 * attempt); // 15s, 30s, 45s
+        console.warn(`[logos] attempt ${attempt} failed (${isRateLimit ? "rate limit" : "5xx"}), waiting ${waitMs / 1000}s before retry`);
+        await new Promise((r) => setTimeout(r, waitMs));
+        continue;
+      }
+      console.warn(`[logos] giving up after ${attempt} attempt(s):`, msg);
+      return [];
+    }
   }
 
   let parsed: ModelResponse;

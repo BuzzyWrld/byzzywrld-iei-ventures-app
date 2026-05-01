@@ -78,7 +78,7 @@ async function main() {
   let lastStage = "";
   let lastPct = -1;
   const startedAt = Date.now();
-  const TIMEOUT_MS = 10 * 60 * 1000; // 10 min hard cap
+  const TIMEOUT_MS = 15 * 60 * 1000; // 15 min hard cap (heritage brands w/ 15+ playbook pages can run 11+ min)
 
   while (true) {
     await new Promise((r) => setTimeout(r, 1500));

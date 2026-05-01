@@ -560,44 +560,36 @@ function CompletePanel({
     return <LogoPickerGate project={project} />;
   }
 
-  // Imported-brand flow puts 'Scraped from' at the top of intake.notes.
-  // Those users arrived WITH an existing brand kit — they want to see the
-  // AI-harmonized palette/typography first, then explore alternate logos.
-  // Scratch users are creating from nothing — the logo is the payoff moment.
-  const isImported =
-    typeof project.intake.notes === "string" &&
-    project.intake.notes.startsWith("Scraped from");
-
-  if (isImported) {
-    return (
-      <>
-        <Positioning brand={brand} />
-        <Palette brand={brand} />
-        <PaletteExpansion project={project} />
-        <Typography brand={brand} />
-        <LogoOptions project={project} />
-        <LandingOptions project={project} />
-        <SocialKit project={project} />
-        <PitchOnePager project={project} />
-        <EmailKit project={project} />
-        <DevBrief project={project} />
-        <Downloads project={project} />
-      </>
-    );
-  }
-
-  // Scratch flow: logos first — that's the moment that sells the product.
+  // Unified $500-reveal layout: hero cover → 4 headline deliverables (the
+  // 4 things the user paid for) → identity block → "also included" divider →
+  // bonus extras → downloads. Imported and scratch flows now share the same
+  // shape since the BrandHero serves as the lede regardless of origin.
   return (
     <>
-      <Positioning brand={brand} />
-      <LogoOptions project={project} />
-      <Palette brand={brand} />
-      <Typography brand={brand} />
+      <BrandHero project={project} brand={brand} />
+      <HeadlineDeliverables project={project} />
+
+      {/* === HEADLINE: BRAND IDENTITY === */}
+      <div id="brand-identity">
+        <Positioning brand={brand} />
+        <Palette brand={brand} />
+        <Typography brand={brand} />
+      </div>
+
+      {/* === HEADLINE: LOGO === */}
+      <div id="logo-options">
+        <LogoOptions project={project} />
+      </div>
+
+      {/* === BONUS: everything else included at this tier === */}
+      <BonusDivider />
       <PaletteExpansion project={project} />
       <LandingOptions project={project} />
       <SocialKit project={project} />
       <PitchOnePager project={project} />
       <EmailKit project={project} />
+      <DevBrief project={project} />
+
       <Downloads project={project} />
     </>
   );
@@ -1180,6 +1172,273 @@ function AlternativeLogoCard({
           </a>
         </div>
       </div>
+    </div>
+  );
+}
+
+/**
+ * The $500-reveal cover. Big primary-color field with the brand name set
+ * in the brand's heading font, the tagline below, and the picked logo
+ * centered. Loads the brand's Google Fonts via inline <link> so the
+ * browser renders the exact typography the brand specifies.
+ *
+ * Hidden during running/failed states; shown after the user has picked
+ * a logo (or uploaded one). Designed to feel like opening a brand book,
+ * not reading a status dashboard.
+ */
+function BrandHero({
+  project,
+  brand,
+}: {
+  project: BrandProject;
+  brand: LiveBrandJson | null;
+}) {
+  const name = asText(brand?.name, project.intake.companyName);
+  const tagline = asText(brand?.tagline, "");
+  const colors = extractColors(brand) ?? {};
+  const primary = colors.primary ?? "#0f172a";
+  const accent = colors.accent ?? colors.secondary ?? "#f59e0b";
+  const neutral = colors.neutral ?? "#fafaf9";
+  const { heading: headingFont, body: bodyFont } = extractTypography(brand);
+
+  // Pick the picked-logo URL if available, otherwise fall back to the primary logo SVG.
+  const variants = project.outputs.logoVariants ?? [];
+  const primaryKey = project.outputs.primaryLogoKey;
+  const pickedLogo =
+    primaryKey && primaryKey !== "user-uploaded"
+      ? variants.find((v) => v.key === primaryKey)?.url
+      : project.outputs.logoSvg;
+
+  // Decide whether to render dark or light text against the primary field.
+  const useLightText = isDarkColor(primary);
+
+  // Build a Google Fonts URL for the brand's two fonts so the hero typography
+  // actually renders correctly, not as a system fallback.
+  const fontParam = (n: string) =>
+    n && n !== "—" ? n.split(",")[0].trim().replace(/\s+/g, "+") : null;
+  const fontUrls: string[] = [];
+  const h = fontParam(headingFont);
+  const b = fontParam(bodyFont);
+  if (h) fontUrls.push(`family=${h}:wght@400;500;600;700`);
+  if (b && b !== h) fontUrls.push(`family=${b}:wght@400;500;600`);
+  const gFontsHref = fontUrls.length
+    ? `https://fonts.googleapis.com/css2?${fontUrls.join("&")}&display=swap`
+    : null;
+
+  return (
+    <>
+      {gFontsHref && <link rel="stylesheet" href={gFontsHref} />}
+      <div
+        className="mb-12 overflow-hidden rounded-lg"
+        style={{
+          background: primary,
+          color: useLightText ? neutral : "#0a0a0a",
+          padding: "72px 56px",
+          minHeight: 440,
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+          position: "relative",
+        }}
+      >
+        {/* Top eyebrow */}
+        <div
+          className="font-mono"
+          style={{
+            fontSize: 11,
+            letterSpacing: "0.3em",
+            textTransform: "uppercase",
+            opacity: 0.7,
+            marginBottom: 20,
+            color: accent,
+          }}
+        >
+          Brand Identity Kit · {fmtDate(project.createdAt)}
+        </div>
+        {/* Logo — large, centered horizontally on its own line */}
+        {pickedLogo && (
+          <div style={{ marginBottom: 28, maxWidth: 360 }}>
+            <object
+              data={pickedLogo}
+              type="image/svg+xml"
+              aria-label={`${name} logo`}
+              style={{ maxHeight: 120, maxWidth: "100%", pointerEvents: "none" }}
+            />
+          </div>
+        )}
+        {/* Brand name */}
+        <h1
+          style={{
+            fontFamily: headingFont !== "—" ? `${headingFont}, serif` : undefined,
+            fontSize: 64,
+            lineHeight: 1.05,
+            fontWeight: 700,
+            letterSpacing: "-0.02em",
+            margin: 0,
+            marginBottom: tagline ? 16 : 0,
+            wordBreak: "break-word",
+          }}
+        >
+          {name}
+        </h1>
+        {/* Tagline */}
+        {tagline && (
+          <p
+            style={{
+              fontFamily: bodyFont !== "—" ? `${bodyFont}, sans-serif` : undefined,
+              fontSize: 22,
+              lineHeight: 1.4,
+              opacity: 0.85,
+              maxWidth: "60ch",
+              margin: 0,
+              fontStyle: "italic",
+            }}
+          >
+            {tagline}
+          </p>
+        )}
+        {/* Bottom accent rule */}
+        <div
+          style={{
+            position: "absolute",
+            bottom: 0,
+            left: 0,
+            right: 0,
+            height: 4,
+            background: accent,
+          }}
+        />
+      </div>
+    </>
+  );
+}
+
+/** Decide whether to use light text on a given background color. Uses
+ *  perceived brightness (Y' from the Rec. 709 luma formula). */
+function isDarkColor(hex: string): boolean {
+  const m = /^#?([0-9a-f]{6})$/i.exec(hex);
+  if (!m) return true;
+  const n = parseInt(m[1], 16);
+  const r = (n >> 16) & 0xff;
+  const g = (n >> 8) & 0xff;
+  const b = n & 0xff;
+  const y = 0.2126 * r + 0.7152 * g + 0.0722 * b;
+  return y < 140;
+}
+
+/**
+ * The 4 headline deliverables — what the user actually paid for. A grid
+ * of 4 cards above the rest of the panel that frames the deal: identity,
+ * logo, brand kit, dev brief. Each card is a quick-jump anchor.
+ */
+function HeadlineDeliverables({ project }: { project: BrandProject }) {
+  const o = project.outputs;
+  const items = [
+    {
+      key: "identity",
+      title: "Brand Identity",
+      blurb: "Positioning, palette, and type system — the soul of the brand.",
+      anchor: "#brand-identity",
+      ready: true,
+    },
+    {
+      key: "logo",
+      title: "Logo System",
+      blurb: "Three directions to choose from, plus the one you picked.",
+      anchor: "#logo-options",
+      ready: Boolean((o.logoVariants?.length ?? 0) > 0 || o.logoSvg),
+    },
+    {
+      key: "playbook",
+      title: "Brand Kit",
+      blurb: "Multi-page playbook covering mission, voice, and visual standards.",
+      anchor: "",
+      url: o.playbookPdf || o.playbookHtml,
+      ready: Boolean(o.playbookPdf || o.playbookHtml),
+    },
+    {
+      key: "dev-brief",
+      title: "Developer Brief",
+      blurb: "Build-spec doc for whoever ships the website.",
+      anchor: "",
+      url: o.devBrief?.pdfUrl || o.devBrief?.htmlUrl,
+      ready: Boolean(o.devBrief),
+    },
+  ];
+
+  return (
+    <div className="mb-14">
+      <div className="kicker mb-4">What you got</div>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+        {items.map((item) => {
+          const Card = (
+            <div
+              key={item.key}
+              className="card card-hover p-5 h-full flex flex-col"
+              style={{ minHeight: 140 }}
+            >
+              <div className="font-medium tracking-tight mb-2">{item.title}</div>
+              <div
+                className="text-xs leading-relaxed flex-1"
+                style={{ color: "var(--color-text-muted)" }}
+              >
+                {item.blurb}
+              </div>
+              <div
+                className="kicker mt-3"
+                style={{
+                  color: item.ready ? "var(--color-status-complete)" : "var(--color-text-muted)",
+                  fontSize: 10,
+                }}
+              >
+                {item.ready ? "Ready" : "Generating…"}
+              </div>
+            </div>
+          );
+          if (!item.ready) return Card;
+          if (item.url) {
+            return (
+              <a
+                key={item.key}
+                href={item.url}
+                target="_blank"
+                rel="noreferrer"
+                style={{ textDecoration: "none", color: "inherit" }}
+              >
+                {Card}
+              </a>
+            );
+          }
+          return (
+            <a
+              key={item.key}
+              href={item.anchor}
+              style={{ textDecoration: "none", color: "inherit" }}
+            >
+              {Card}
+            </a>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+/** Visual divider between headline deliverables and "also included" extras. */
+function BonusDivider() {
+  return (
+    <div className="mb-10 mt-2 flex items-center gap-4">
+      <div className="kicker" style={{ color: "var(--color-text-muted)" }}>
+        Also included
+      </div>
+      <div
+        style={{
+          flex: 1,
+          height: 1,
+          background:
+            "linear-gradient(90deg, var(--color-border), transparent)",
+        }}
+      />
     </div>
   );
 }
