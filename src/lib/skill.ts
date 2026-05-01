@@ -92,6 +92,24 @@ async function runBrandBuildInBackground(project: BrandProject): Promise<void> {
       },
     });
 
+    // Final safety net: even if the adapter "succeeded," verify the playbook
+    // is actually complete. An empty body (CSS-only) playbook is the #1
+    // quality bug and the user shouldn't see it on the brand panel.
+    const playbookPath = path.join(outDir, manifest.playbookHtml ?? "playbook.html");
+    try {
+      const stat = fs.statSync(playbookPath);
+      const content = fs.readFileSync(playbookPath, "utf8");
+      const pages = (content.match(/<div\s+class\s*=\s*"[^"]*\bpage\b[^"]*"/g) ?? []).length;
+      if (stat.size < 14000 || pages < 5) {
+        throw new Error(
+          `playbook.html is incomplete: ${stat.size} bytes, ${pages} pages — a real brand kit needs at least 14KB and 5+ .page sections`
+        );
+      }
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : String(err);
+      throw new Error(`playbook validation failed: ${msg}`);
+    }
+
     // Save the main skill outputs IMMEDIATELY so the Brand foundation card
     // flips to green the moment the main skill finishes.
     mergeOutputs({
@@ -130,6 +148,19 @@ async function runBrandBuildInBackground(project: BrandProject): Promise<void> {
     // sees stages flip to complete one-by-one, not all at the end.
     updateBrand(id, { progressStage: "generating brand extras", progressPct: 0.92 });
 
+    // Pass the user's own intake context (notes, archetype, competitors, etc.)
+    // to every variant. This is the most personal signal we have and the
+    // brand.json sometimes loses it during summarization.
+    const intakeCtx = {
+      notes: intake.notes,
+      archetype: intake.archetype,
+      competitors: intake.competitors,
+      industry: intake.industry,
+      targetAudience: intake.targetAudience,
+      logoStyle: intake.logoStyle,
+      logoInspirationUrls: intake.logoInspirationUrls,
+    };
+
     const tasks: Array<Promise<void>> = [
       // Logos (skipped if user uploaded)
       (async () => {
@@ -156,7 +187,7 @@ async function runBrandBuildInBackground(project: BrandProject): Promise<void> {
       // Landing variants
       (async () => {
         try {
-          const variants = await generateLandingVariants(brand as never, outDir, 3);
+          const variants = await generateLandingVariants(brand as never, outDir, 3, intakeCtx);
           mergeOutputs({
             landingVariants: variants.length
               ? variants.map((v) => ({
@@ -192,7 +223,7 @@ async function runBrandBuildInBackground(project: BrandProject): Promise<void> {
       // Social kit
       (async () => {
         try {
-          const assets = await generateSocialKit(brand as never, outDir);
+          const assets = await generateSocialKit(brand as never, outDir, intakeCtx);
           mergeOutputs({
             socialKit: assets.length
               ? assets.map((a) => ({
@@ -211,7 +242,7 @@ async function runBrandBuildInBackground(project: BrandProject): Promise<void> {
       // Pitch one-pager
       (async () => {
         try {
-          const p = await generatePitchOnePager(brand as never, outDir);
+          const p = await generatePitchOnePager(brand as never, outDir, intakeCtx);
           if (p) {
             mergeOutputs({
               pitchOnePager: {
@@ -227,7 +258,7 @@ async function runBrandBuildInBackground(project: BrandProject): Promise<void> {
       // Email kit
       (async () => {
         try {
-          const e = await generateEmailKit(brand as never, outDir);
+          const e = await generateEmailKit(brand as never, outDir, intakeCtx);
           if (e) {
             mergeOutputs({
               emailKit: {
@@ -243,7 +274,7 @@ async function runBrandBuildInBackground(project: BrandProject): Promise<void> {
       // Developer Brief — handoff doc for the website builder
       (async () => {
         try {
-          const d = await generateDevBrief(brand as never, outDir);
+          const d = await generateDevBrief(brand as never, outDir, intakeCtx);
           if (d) {
             mergeOutputs({
               devBrief: {

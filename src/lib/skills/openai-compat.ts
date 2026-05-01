@@ -36,8 +36,13 @@ const REFERENCE_FILES = [
 ];
 
 const VERBOSE = process.env.SKILL_DEBUG === "1";
-const MAX_TURNS = 30;
-const MAX_OUTPUT_TOKENS = 8192;
+const MAX_TURNS = 40;
+const MAX_OUTPUT_TOKENS = 16384;
+/** Minimum playbook size — playbooks shorter than this almost always have an
+ *  empty body or only 1-2 pages. Real playbooks are 18-40KB. We retry below this. */
+const PLAYBOOK_MIN_BYTES = 14000;
+/** Minimum number of .page divs in a complete playbook. */
+const PLAYBOOK_MIN_PAGES = 5;
 
 async function loadSystemPrompt(): Promise<string> {
   const skillMd = await fs.readFile(path.join(SKILL_ROOT, "SKILL.md"), "utf8");
@@ -56,7 +61,12 @@ async function loadSystemPrompt(): Promise<string> {
     "3. The `presentation-pdf` skill referenced in SKILL.md Step 5 is NOT available here. SKIP that step. Just write structured playbook.html with 850×1100px .page divs — the host renders it to PDF afterward.",
     "4. Reference files (worksheets, color-theory, logo-theory, social-sizes) are inlined below. Do not Read them.",
     "5. Do not ask clarifying questions. Use Pure Creation mode if information is missing.",
-    "6. OUTPUT TOKEN LIMIT: a single tool call can't return more than ~8000 tokens. For playbook.html (which is typically 20-40KB), you MUST split it across multiple tool calls: Write the first chunk (e.g. <!doctype html> + <head> + first 2-3 .page divs), then Append subsequent chunks with the remaining pages, ending with </body></html>. Never try to fit the whole playbook in one Write — it will truncate mid-file and fail.",
+    "6. PLAYBOOK CHUNKING — non-negotiable. Output cap is ~16,000 tokens per tool call but a real brand playbook is 25,000-40,000 characters. So you MUST chunk the playbook across MULTIPLE tool calls:",
+    "   - Call 1 (Write playbook.html): <!doctype html> + <html> + <head> + <style> + <body> + the FIRST 2-3 <div class=\"page\"> sections (cover, brand overview, mission/vision/values).",
+    "   - Call 2 (Append playbook.html): the next 2-3 .page divs (target audience, brand messaging, brand style guide).",
+    "   - Call 3 (Append playbook.html): the next 2-3 .page divs (offerings, competitors, SMART goals).",
+    "   - Call 4 (Append playbook.html): the final 2-3 .page divs (niches/Dream 100, GTM checklist, back cover) PLUS </body></html>.",
+    "   It is a CRITICAL FAILURE to write only the <head>/<style> in Call 1 and stop. After Call 1, you MUST continue with Append until the file has at least 8 <div class=\"page\"> sections AND ends with </body></html>. The host code verifies this and will reject incomplete playbooks. A playbook of less than 14KB or with fewer than 5 pages is broken — keep going.",
     "7. When all 4 files are complete, reply with a short confirmation and STOP.",
     "8. ABSOLUTELY NO EMOJIS ANYWHERE in landing.html, playbook.html, logo.svg, or brand.json. No 🔗 ⚡ 📊 🧠 ✨ 🎯 🛡️ 📱 or any emoji character. Use CSS-drawn shapes (rect/circle/path/border) or typography only for icons/accents. Emojis are the #1 tell of AI-generated design and this brand cannot look AI-generated.",
     "",
@@ -86,25 +96,35 @@ function buildUserPrompt(intake: BrandIntake): string {
     "  landing.html   — single-page landing site populated with brand data",
     "  logo.svg       — primary logo mark as SVG",
     "",
-    "STRICT brand.json SCHEMA — do not deviate:",
+    "STRICT brand.json SCHEMA — do not deviate. ALL fields below are REQUIRED, including the 'soul of the brand' fields:",
     "{",
-    '  "name": string,                // required, plain string',
-    '  "tagline": string,             // required, one short line',
-    '  "positioning": string,         // required, ONE STRING PARAGRAPH (never an object)',
-    '  "tone": string[],              // required, array of short adjectives',
-    '  "colors": {                    // required; each value is a #RRGGBB hex STRING',
+    '  "name": string,                // plain string',
+    '  "tagline": string,             // one short, memorable line',
+    '  "positioning": string,         // ONE STRING PARAGRAPH (never an object), 2-4 sentences',
+    '  "tone": string[],              // array of 3-6 short adjectives matching the user\'s toneOfVoice',
+    '  "colors": {                    // each value is a #RRGGBB hex STRING',
     '     "primary": "#hex",',
     '     "secondary": "#hex",',
     '     "accent": "#hex",',
     '     "neutral": "#hex"',
     "  },",
-    '  "typography": {                // required; each value is the FONT NAME as a plain string',
+    '  "typography": {                // each value is the FONT NAME as a plain string',
     '     "heading": "Font Name",',
     '     "body": "Font Name"',
-    "  }",
+    "  },",
+    '  "mission": string,             // ONE sentence: why this brand exists, what it does for whom',
+    '  "vision": string,              // ONE sentence: the future this brand is working toward',
+    '  "values": string[],            // 3-5 core values, each a short phrase (e.g. "Earned trust over hype")',
+    '  "brandStory": string,          // 2-4 sentence origin/why story. If intake.notes contains personal',
+    "                                  //   detail (homeless founder, transition story, etc.), USE IT here verbatim or close to it.",
+    '  "voice": {',
+    '     "say": string[],            // 4-6 example phrases this brand WOULD say — short, in-voice',
+    '     "dont": string[]            // 4-6 example phrases this brand would NEVER say — anti-voice',
+    "  },",
+    '  "ica": string                  // 1 paragraph: the ideal customer as a named human ("Maya, 32, runs..."), pains, desires',
     "}",
-    "Additional fields are allowed but the 6 above must be present in exactly these shapes.",
-    "Never nest additional objects inside `positioning`, `tone`, or `typography.{heading,body}` — those must be strings/array-of-strings only.",
+    "Never nest additional objects inside `positioning`, `tone`, `typography.{heading,body}`, `mission`, `vision`, or any string field — those must be strings/array-of-strings only.",
+    "All 'soul of the brand' fields (mission/vision/values/brandStory/voice/ica) MUST be present and substantive. Do not return placeholders or leave them empty — they are the heart of the brand and downstream tools depend on them.",
     "",
     userPickedPalette
       ? "PALETTE OVERRIDE: the user has explicitly chosen a palette. The hex codes below are non-negotiable — use them as primary/secondary/accent/neutral in that order, even if audience/industry analysis would suggest otherwise."
@@ -253,6 +273,34 @@ export function makeOpenAiCompatSkill(cfg: ProviderConfig): BrandPlaybookSkill {
       const required = new Set(["brand.json", "playbook.html", "landing.html", "logo.svg"]);
       let turn = 0;
       let toolCalls = 0;
+      let nudgedAboutPlaybook = false;
+
+      /**
+       * A playbook is "complete" when it has body content — not just CSS.
+       * The orchestrator uses this to decide whether to keep looping after
+       * the model thinks it's done.
+       */
+      async function playbookIsComplete(): Promise<{ ok: boolean; reason?: string; bytes?: number; pages?: number }> {
+        const p = path.join(workDir, "playbook.html");
+        try {
+          const stat = await fs.stat(p);
+          const content = await fs.readFile(p, "utf8");
+          const pages = (content.match(/<div\s+class\s*=\s*"[^"]*\bpage\b[^"]*"/g) ?? []).length;
+          const hasClosingHtml = /<\/html>\s*$/i.test(content.trim());
+          if (stat.size < PLAYBOOK_MIN_BYTES) {
+            return { ok: false, reason: `only ${stat.size} bytes (need ${PLAYBOOK_MIN_BYTES})`, bytes: stat.size, pages };
+          }
+          if (pages < PLAYBOOK_MIN_PAGES) {
+            return { ok: false, reason: `only ${pages} <div class="page"> sections (need ${PLAYBOOK_MIN_PAGES})`, bytes: stat.size, pages };
+          }
+          if (!hasClosingHtml) {
+            return { ok: false, reason: `missing closing </html>`, bytes: stat.size, pages };
+          }
+          return { ok: true, bytes: stat.size, pages };
+        } catch {
+          return { ok: false, reason: "playbook.html not yet written" };
+        }
+      }
 
       while (turn < MAX_TURNS) {
         turn++;
@@ -305,14 +353,39 @@ export function makeOpenAiCompatSkill(cfg: ProviderConfig): BrandPlaybookSkill {
           onProgress?.(label.slice(0, 80), Math.min(0.1 + toolCalls * 0.07, 0.85));
         }
 
-        // Early exit: all 4 required files present.
+        // Early exit: only when all 4 required files exist AND the playbook is
+        // actually complete. Otherwise, nudge the model to keep going.
         const produced = new Set(await fs.readdir(workDir));
         if ([...required].every((f) => produced.has(f))) {
-          if (VERBOSE) console.log(`[${cfg.id}] all required files written`);
-          break;
+          const check = await playbookIsComplete();
+          if (check.ok) {
+            if (VERBOSE) console.log(`[${cfg.id}] all required files written; playbook=${check.bytes}B/${check.pages} pages`);
+            break;
+          }
+          // Playbook is incomplete. Inject a system-style user message telling
+          // the model exactly what's missing and to continue with Append.
+          if (!nudgedAboutPlaybook && VERBOSE) {
+            console.log(`[${cfg.id}] playbook incomplete (${check.reason}); nudging model to continue`);
+          }
+          nudgedAboutPlaybook = true;
+          messages.push({
+            role: "user",
+            content:
+              `Your playbook.html is INCOMPLETE: ${check.reason}. ` +
+              `Do NOT stop yet. Use Append (not Write — that would overwrite) to add more <div class="page"> sections to playbook.html until it has at least ${PLAYBOOK_MIN_PAGES} pages and ends with </body></html>. ` +
+              `Continue with the next page section now. Each Append call should add 1-3 full pages. Keep calling Append until the file is complete.`,
+          });
+          continue;
         }
 
-        if (choice.finish_reason === "stop") break;
+        if (choice.finish_reason === "stop") {
+          // Model stopped voluntarily but we don't have all 4 files. Nudge it.
+          const missing = [...required].filter((f) => !produced.has(f));
+          messages.push({
+            role: "user",
+            content: `You stopped early. The following required files are missing: ${missing.join(", ")}. Write them now using the Write tool.`,
+          });
+        }
       }
 
       // Move files to real outputDir.

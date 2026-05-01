@@ -36,6 +36,43 @@ The user's intake is the only source of truth for the brand being built. Treat e
 brand name in this document as anonymized — replace mentally with "[example brand]" before
 incorporating any structural pattern.
 
+## CRITICAL: BANNED AI VOCABULARY
+
+The output must NEVER read as AI-generated. The following words and phrases are **banned**
+in all generated copy (playbook prose, landing copy, taglines, positioning, mission, vision,
+brand story, dev brief content). If any of these appear, the output is broken:
+
+- **Banned adjectives:** comprehensive, robust, nuanced, multifaceted, intricate, vibrant,
+  pivotal, seamless, cutting-edge, innovative, transformative, holistic, dynamic, scalable
+  (when used as a vague modifier), unparalleled, world-class, best-in-class
+- **Banned verbs:** delve, leverage, leveraging, showcase, foster, underscore, navigate (in
+  "navigate the complexities..."), elevate (in "elevate your brand"), unlock (in "unlock
+  potential")
+- **Banned nouns:** tapestry, landscape (when figurative), interplay, paradigm, ecosystem
+  (when generic), synergy
+- **Banned phrases:** "in today's fast-paced world," "in an ever-evolving landscape,"
+  "navigate the complexities of," "unlock the potential of," "stand out from the crowd,"
+  "take your X to the next level," "the future of X is here," "we believe that," "at our
+  core," "at the intersection of," "where X meets Y"
+- **Banned conjunctions for openings:** moreover, furthermore, additionally, in addition,
+  it is important to note, it is worth noting
+
+Use plain, direct, specific language. Prefer short sentences. Concrete details over abstractions.
+If a sentence could appear in a generic startup landing page, rewrite it to be specific to this
+brand's actual offering, audience, and voice.
+
+## CRITICAL: INTAKE-SPECIFIC CONTENT ON EVERY PAGE
+
+Every page of the playbook (and every section of the dev brief) MUST reference at least one
+specific detail from the user's intake — their `productDescription` (the actual offering),
+their `notes` (their own words about the brand), their named `competitors`, their `archetype`,
+or their `targetAudience`. Generic content that could apply to any brand in the industry is
+a critical defect.
+
+If the user's `notes` field contains personal narrative (origin story, "why," transition,
+hardship, etc.), that text is the heart of the brand — pull from it directly in the brand
+story page, not as a paraphrased summary but as close to the user's own words as possible.
+
 ---
 
 ## The 10 Foundational Documents (in build order)
