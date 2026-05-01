@@ -75,10 +75,18 @@ OUTPUT (JSON only, no fences, no prose):
 
 SVG TECH:
 - xmlns="http://www.w3.org/2000/svg"
-- viewBox="0 0 400 160" for wordmark & mark-lockup, "0 0 200 200" for monogram
+- viewBox="0 0 400 160" for wordmark and mark-lockup, "0 0 200 200" for monogram
 - Use brand primary + accent colors via inline fill
-- Inline font-family using the brand's heading font
-- No <image>, no <foreignObject>, no external resources, no data: URIs`;
+- The SVG renders inside an <object> sandbox, so it WILL NOT inherit fonts from the host page. To use the brand's heading font, embed it via:
+    <defs><style>@import url('https://fonts.googleapis.com/css2?family=FONT+NAME:wght@400;700&amp;display=swap');</style></defs>
+  Replace FONT+NAME with the brand's heading font (URL-encoded — spaces become +). The ampersand MUST be written as &amp; — a raw & makes the SVG invalid XML. This is non-negotiable.
+- After embedding the font, set font-family="FontName, sans-serif" on every <text>.
+- Sizing rules (CRITICAL — text must fit inside viewBox):
+  - Wordmark (viewBox 400×160): for a brand name of N visible characters, set font-size no larger than: min(72, 380 / N * 1.6). For "Tab Industries" (14 chars including space) that's about 43–50px. Always use text-anchor="middle" and x="200" y="100".
+  - Mark-lockup (viewBox 400×160): the symbol takes the left ~110px; the text starts at x≈130 with text-anchor="start". Font-size should be no larger than: min(48, 270 / N * 1.6).
+  - Monogram (viewBox 200×200): the initials should be 80–100px font-size, text-anchor="middle", x="100" y="115".
+- No <image>, no <foreignObject>, no external resources beyond the Google Fonts @import, no data: URIs.
+- All XML special characters in attribute values and text content must be properly escaped: & as &amp;, < as &lt;, > as &gt;, " as &quot;, ' as &apos;.`;
 
 export type LogoOptions = {
   /** "professional" | "playful" | "minimal" | "cartoonish" | "vintage" | "bold" — empty = AI picks. */
@@ -148,6 +156,21 @@ function parseJson(raw: string): ModelResponse {
 }
 
 /**
+ * SVG safety-net: ensures the SVG is valid XML so the browser doesn't render
+ * a parse error instead of the logo. The model often embeds Google Fonts via
+ *   <defs><style>@import url('...&display=swap');</style></defs>
+ * — the unescaped `&` breaks XML parsing. We preserve the @import (the SVG
+ * needs the font to render correctly inside an <object> sandbox) and just
+ * escape every bare `&` that isn't already a known entity.
+ */
+function sanitizeSvg(svg: string): string {
+  return svg.replace(
+    /&(?!amp;|lt;|gt;|quot;|apos;|#\d+;|#x[0-9a-fA-F]+;)/g,
+    "&amp;"
+  );
+}
+
+/**
  * Generate N logo variants for a brand, write them under outputDir/logos/,
  * return a manifest. Returns [] on failure (logos are nice-to-have).
  */
@@ -197,7 +220,7 @@ export async function generateLogoVariants(
     if (!v.svg || !v.svg.includes("<svg")) continue;
     const key = (v.key || `option-${i + 1}`).toLowerCase().replace(/[^a-z0-9-]/g, "-");
     const filename = `logos/${key}.svg`;
-    await fs.writeFile(path.join(outputDir, filename), v.svg);
+    await fs.writeFile(path.join(outputDir, filename), sanitizeSvg(v.svg));
     manifest.push({
       key,
       title: v.title || key,

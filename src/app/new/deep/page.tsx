@@ -533,15 +533,15 @@ function ObjectivesStep({
   return (
     <>
       <h1 className="font-serif leading-[1.05] mb-3" style={{ fontSize: 44 }}>
-        What are your top 3 goals for this brand identity?
+        What are your top 3 goals for the company?
       </h1>
       <p className="text-base mb-6" style={{ color: "var(--color-text-muted)", maxWidth: "56ch" }}>
-        What does success look like? E.g. &ldquo;Land enterprise customers,&rdquo; &ldquo;Look like a serious player at conferences,&rdquo; &ldquo;Justify a 10x price.&rdquo;
+        Where do you want this business in the next 6&ndash;12 months? E.g. &ldquo;Hit $1M ARR,&rdquo; &ldquo;Land 10 enterprise customers,&rdquo; &ldquo;Launch in 3 new markets.&rdquo;
       </p>
       <RepeatingRows
         values={intake.objectives}
         onChange={(v) => onChange({ objectives: v })}
-        placeholder="e.g. Be taken seriously by Fortune-500 buyers"
+        placeholder="e.g. Hit $1M ARR by end of next year"
         min={3}
         max={3}
       />
