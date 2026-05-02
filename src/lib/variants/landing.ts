@@ -17,6 +17,7 @@ import {
   type IntakeContext,
 } from "./shared";
 import { landingExemplar } from "./exemplar";
+import { pickIndustry, industryDirectionBlock } from "@/lib/industries";
 
 export type LandingVariant = {
   key: string;
@@ -92,14 +93,15 @@ async function generateOne(
   brand: BrandForVariants,
   layout: LayoutSpec,
   exemplar: string,
+  industryBlock: string,
   intake?: IntakeContext
 ): Promise<ModelResponse | null> {
   let text: string | null = null;
   try {
     text = await callClaude({
-      system: SYSTEM + exemplar,
+      system: SYSTEM + exemplar + industryBlock,
       user: buildUser(brand, layout, intake),
-      maxTokens: 12000,
+      maxTokens: 16000,
     });
   } catch (err) {
     console.warn(
@@ -128,10 +130,19 @@ export async function generateLandingVariants(
   intake?: IntakeContext
 ): Promise<LandingVariant[]> {
   const exemplar = await landingExemplar();
+  const industry = pickIndustry({
+    industry: intake?.industry,
+    productDescription: intake?.productDescription,
+    notes: intake?.notes,
+  });
+  const industryBlock = industryDirectionBlock(industry);
+  if (industry) {
+    console.log(`[landing] industry match: ${industry.name}`);
+  }
   const layouts = LAYOUTS.slice(0, count);
 
   const results = await Promise.all(
-    layouts.map((l) => generateOne(brand, l, exemplar, intake))
+    layouts.map((l) => generateOne(brand, l, exemplar, industryBlock, intake))
   );
 
   const dir = path.join(outputDir, "landing-variants");

@@ -14,6 +14,7 @@ import {
   type IntakeContext,
 } from "./shared";
 import { pitchExemplar } from "./exemplar";
+import { pickIndustry, industryDirectionBlock } from "@/lib/industries";
 
 export type PitchOnePager = {
   htmlFilename: string;
@@ -57,11 +58,19 @@ export async function generatePitchOnePager(
   outputDir: string,
   intake?: IntakeContext
 ): Promise<PitchOnePager | null> {
+  const industry = pickIndustry({
+    industry: intake?.industry,
+    productDescription: intake?.productDescription,
+    notes: intake?.notes,
+  });
+  const industryBlock = industryDirectionBlock(industry);
+  if (industry) console.log(`[pitch] industry match: ${industry.name}`);
+
   let text: string | null = null;
   try {
     const exemplar = await pitchExemplar();
     text = await callClaude({
-      system: SYSTEM + exemplar,
+      system: SYSTEM + exemplar + industryBlock,
       user: buildUser(brand, intake),
       maxTokens: 4500,
     });

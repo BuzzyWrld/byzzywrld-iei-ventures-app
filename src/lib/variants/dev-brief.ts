@@ -27,6 +27,7 @@ import {
   type BrandForVariants,
   type IntakeContext,
 } from "./shared";
+import { pickIndustry, industryDirectionBlock } from "@/lib/industries";
 
 export type DevBrief = {
   htmlFilename: string;
@@ -121,10 +122,18 @@ export async function generateDevBrief(
   outputDir: string,
   intake?: IntakeContext
 ): Promise<DevBrief | null> {
+  const industry = pickIndustry({
+    industry: intake?.industry,
+    productDescription: intake?.productDescription,
+    notes: intake?.notes,
+  });
+  const industryBlock = industryDirectionBlock(industry);
+  if (industry) console.log(`[dev-brief] industry match: ${industry.name}`);
+
   let text: string | null = null;
   try {
     text = await callClaude({
-      system: SYSTEM,
+      system: SYSTEM + industryBlock,
       user: buildUser(brand, intake),
       maxTokens: 20000,
     });

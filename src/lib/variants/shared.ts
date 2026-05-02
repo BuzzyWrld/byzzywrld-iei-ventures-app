@@ -43,6 +43,7 @@ export type IntakeContext = {
   archetype?: string;
   competitors?: string;
   industry?: string;
+  productDescription?: string;
   targetAudience?: string;
   logoStyle?: string;
   logoInspirationUrls?: string;

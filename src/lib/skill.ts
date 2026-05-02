@@ -156,6 +156,7 @@ async function runBrandBuildInBackground(project: BrandProject): Promise<void> {
       archetype: intake.archetype,
       competitors: intake.competitors,
       industry: intake.industry,
+      productDescription: intake.productDescription,
       targetAudience: intake.targetAudience,
       logoStyle: intake.logoStyle,
       logoInspirationUrls: intake.logoInspirationUrls,
