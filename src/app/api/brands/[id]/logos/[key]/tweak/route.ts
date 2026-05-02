@@ -57,10 +57,23 @@ export async function POST(
   const svgPath = path.join(brandDir(id), "logos", `${key}.svg`);
 
   const result = await tweakLogo(svgPath, instruction);
-  if (!result) {
+  if (!result.ok) {
+    // Translate the discriminated reason into a user-friendly message.
+    // Rate limit is the most common after a fresh build burns Haiku's
+    // per-minute output budget; tell the user to wait, not to rephrase.
+    const message =
+      result.reason === "rate_limited"
+        ? "We hit Anthropic's rate limit (this happens right after a brand build). Wait ~30 seconds and try again."
+        : result.reason === "invalid_response"
+        ? "The model returned something we couldn't use. Try rephrasing — shorter and more specific helps."
+        : result.reason === "io_error"
+        ? "Couldn't read or write the logo file. Refresh the page and try again."
+        : result.reason === "no_key"
+        ? "Anthropic API key isn't configured."
+        : "Empty instruction.";
     return Response.json(
-      { error: "tweak failed — try rephrasing or simplifying the request" },
-      { status: 500 }
+      { error: message, reason: result.reason },
+      { status: result.reason === "rate_limited" ? 429 : 500 }
     );
   }
 

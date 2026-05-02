@@ -57,9 +57,16 @@ CRITICAL CONTENT RULES:
 
 DISTINCTNESS RULE (non-negotiable):
 The 3 variants must be visually and conceptually distinct. NOT 3 wordmarks. NOT 3 monograms.
-  1. WORDMARK   — pure typography, brand name set beautifully, optional 1-color accent detail (a dot, a rule, a single modified letter). No container, no separate mark.
-  2. MONOGRAM   — brand initials inside a bordered container (square, circle, or hexagon). No wordmark beside it in this variant.
-  3. MARK+LOCKUP — abstract geometric mark (built from 1–2 primitives) paired with the full brand name set beside it.
+  1. WORDMARK   — pure typography, brand name set beautifully. NO container, NO separate mark, NO line/rule cutting through the letters. If you add an accent detail (a single dot, a tiny underline, a colored period), place it OUTSIDE the letterforms — never overlapping or bisecting any letter. When in doubt: pure type, nothing else.
+  2. MONOGRAM   — brand initials (2–3 chars) inside a bordered container (square, circle, or hexagon). The initials MUST fit comfortably with at least 15% padding on every side. If the brand has long initials (4+ chars), drop to 2 chars (use the most distinctive). No wordmark beside it in this variant.
+  3. MARK+LOCKUP — abstract geometric mark on the left (built from 1–2 primitives, e.g. circles, lines, triangles) paired with the full brand name on the right. The mark must NOT overlap the wordmark.
+
+OVERLAP/COLLISION CHECK (mandatory):
+Before finalizing each variant, mentally verify:
+  - No element crosses through any letter glyph
+  - No text overflows its container (monogram especially)
+  - Text and decorative elements don't share the same x/y range unless intentional
+  - All elements stay within the viewBox bounds
 
 OUTPUT (JSON only, no fences, no prose):
 {
@@ -82,9 +89,13 @@ SVG TECH:
   Replace FONT+NAME with the brand's heading font (URL-encoded — spaces become +). The ampersand MUST be written as &amp; — a raw & makes the SVG invalid XML. This is non-negotiable.
 - After embedding the font, set font-family="FontName, sans-serif" on every <text>.
 - Sizing rules (CRITICAL — text must fit inside viewBox):
-  - Wordmark (viewBox 400×160): for a brand name of N visible characters, set font-size no larger than: min(72, 380 / N * 1.6). For "Tab Industries" (14 chars including space) that's about 43–50px. Always use text-anchor="middle" and x="200" y="100".
-  - Mark-lockup (viewBox 400×160): the symbol takes the left ~110px; the text starts at x≈130 with text-anchor="start". Font-size should be no larger than: min(48, 270 / N * 1.6).
-  - Monogram (viewBox 200×200): the initials should be 80–100px font-size, text-anchor="middle", x="100" y="115".
+  - Wordmark (viewBox 400×160): for a brand name of N visible characters (count letters AND spaces), set font-size no larger than min(72, 380 / N * 1.6). Examples — 8 chars: ~64px, 14 chars: ~43px, 20 chars: ~30px. Always text-anchor="middle" x="200" y="100".
+  - Mark-lockup (viewBox 400×160): symbol on left takes x=20-110; wordmark on right starts at x=130 with text-anchor="start". Font-size: min(40, 260 / N * 1.6). The wordmark must end before x=380.
+  - Monogram (viewBox 200×200): use 2–3 character initials. Border container is a 160×160 box centered at (100,100), so 20px padding on every side. The text inside MUST fit with another 15% padding inside that. Font-size by initial count:
+    * 2 letters: 90–110px font-size, fits comfortably
+    * 3 letters: 60–75px font-size MAX — never go bigger or letters will overflow the border
+    * 4+ letters: drop to 2 most distinctive letters; do NOT cram 4 letters into a monogram
+    Always text-anchor="middle" x="100" y="120" (the y nudge accounts for cap-height).
 - No <image>, no <foreignObject>, no external resources beyond the Google Fonts @import, no data: URIs.
 - All XML special characters in attribute values and text content must be properly escaped: & as &amp;, < as &lt;, > as &gt;, " as &quot;, ' as &apos;.`;
 
@@ -273,38 +284,44 @@ function buildTweakPrompt(svg: string, instruction: string): string {
   ].join("\n");
 }
 
+export type TweakResult =
+  | { ok: true; svg: string }
+  | { ok: false; reason: "rate_limited" | "invalid_response" | "io_error" | "no_key" | "empty_input" };
+
 /**
  * Apply a user instruction to an existing logo SVG. Reads the file, sends
  * (system + user instruction + current SVG) to Haiku, gets back a modified
  * SVG, sanitizes it (escape & in URLs), writes it back to the same path.
  *
- * Returns the new SVG content on success, or null on failure (caller decides
- * whether to surface an error or leave the original in place).
+ * Returns a discriminated result so the API layer can give the user a
+ * specific error message — "rate limited, try again in a minute" is very
+ * different from "the model couldn't make sense of your request."
  */
 export async function tweakLogo(
   svgPath: string,
   instruction: string
-): Promise<string | null> {
-  if (!process.env.ANTHROPIC_API_KEY) return null;
-  if (!instruction.trim()) return null;
+): Promise<TweakResult> {
+  if (!process.env.ANTHROPIC_API_KEY) return { ok: false, reason: "no_key" };
+  if (!instruction.trim()) return { ok: false, reason: "empty_input" };
 
   let originalSvg = "";
   try {
     originalSvg = await fs.readFile(svgPath, "utf8");
   } catch (err) {
     console.warn(`[logos:tweak] could not read svg:`, err instanceof Error ? err.message : err);
-    return null;
+    return { ok: false, reason: "io_error" };
   }
 
   if (!originalSvg.includes("<svg")) {
     console.warn(`[logos:tweak] file at ${svgPath} is not an SVG`);
-    return null;
+    return { ok: false, reason: "io_error" };
   }
 
   const client = new Anthropic();
   const MAX_ATTEMPTS = 3;
   let attempt = 0;
   let text = "";
+  let lastWasRateLimit = false;
   while (attempt < MAX_ATTEMPTS) {
     attempt++;
     try {
@@ -320,10 +337,13 @@ export async function tweakLogo(
         .filter((b): b is Anthropic.TextBlock => b.type === "text")
         .map((b) => b.text)
         .join("");
+      lastWasRateLimit = false;
       break;
     } catch (err) {
       const msg = err instanceof Error ? err.message : String(err);
-      const retryable = /\b429\b|rate.?limit|\b5\d\d\b/i.test(msg);
+      const isRate = /\b429\b|rate.?limit/i.test(msg);
+      const retryable = isRate || /\b5\d\d\b/.test(msg);
+      lastWasRateLimit = isRate;
       if (retryable && attempt < MAX_ATTEMPTS) {
         const waitMs = Math.min(60000, 15000 * attempt);
         console.warn(`[logos:tweak] attempt ${attempt} retryable (${msg.slice(0, 60)}), waiting ${waitMs / 1000}s`);
@@ -331,7 +351,7 @@ export async function tweakLogo(
         continue;
       }
       console.warn(`[logos:tweak] giving up:`, msg);
-      return null;
+      return { ok: false, reason: lastWasRateLimit ? "rate_limited" : "invalid_response" };
     }
   }
 
@@ -339,15 +359,15 @@ export async function tweakLogo(
   const match = text.match(/<svg[\s\S]*<\/svg>/);
   if (!match) {
     console.warn(`[logos:tweak] response did not contain an <svg> block`);
-    return null;
+    return { ok: false, reason: "invalid_response" };
   }
   const cleaned = sanitizeSvg(match[0]);
 
   try {
     await fs.writeFile(svgPath, cleaned);
-    return cleaned;
+    return { ok: true, svg: cleaned };
   } catch (err) {
     console.warn(`[logos:tweak] write failed:`, err instanceof Error ? err.message : err);
-    return null;
+    return { ok: false, reason: "io_error" };
   }
 }
