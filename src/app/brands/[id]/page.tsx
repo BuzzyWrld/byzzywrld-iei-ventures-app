@@ -958,6 +958,12 @@ function LogoPickerGate({ project }: { project: BrandProject }) {
   const variants = project.outputs.logoVariants ?? [];
   const [picking, setPicking] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+  // Per-variant URL overrides — when a variant gets tweaked, we swap the
+  // rendered <object>'s data attribute without a full reload so the user
+  // sees the result immediately.
+  const [urlByKey, setUrlByKey] = useState<Record<string, string>>(() =>
+    Object.fromEntries(variants.map((v) => [v.key, v.url]))
+  );
 
   async function pick(key: string) {
     setPicking(key);
@@ -1005,7 +1011,8 @@ function LogoPickerGate({ project }: { project: BrandProject }) {
                 style={{ minHeight: 220, background: "var(--color-surface-2)" }}
               >
                 <object
-                  data={v.url}
+                  key={urlByKey[v.key] ?? v.url}
+                  data={urlByKey[v.key] ?? v.url}
                   type="image/svg+xml"
                   aria-label={v.title}
                   style={{ maxWidth: "100%", maxHeight: 180, pointerEvents: "none" }}
@@ -1036,6 +1043,15 @@ function LogoPickerGate({ project }: { project: BrandProject }) {
                     "Use this logo"
                   )}
                 </button>
+                <div className="mt-3">
+                  <LogoTweaker
+                    brandId={project.id}
+                    logoKey={v.key}
+                    onUpdated={(newUrl) =>
+                      setUrlByKey((prev) => ({ ...prev, [v.key]: newUrl }))
+                    }
+                  />
+                </div>
               </div>
             </div>
           );
@@ -1052,9 +1068,16 @@ function LogoPickerGate({ project }: { project: BrandProject }) {
 
 function LogoOptions({ project }: { project: BrandProject }) {
   const variants = project.outputs.logoVariants ?? [];
-  if (variants.length === 0) return null;
   const primaryKey = project.outputs.primaryLogoKey;
-  const primary = variants.find((v) => v.key === primaryKey);
+  const primaryFromVariants = variants.find((v) => v.key === primaryKey);
+  // Local URL for the primary so tweaks update immediately without reload.
+  const [primaryUrl, setPrimaryUrl] = useState<string | undefined>(
+    primaryFromVariants?.url
+  );
+  if (variants.length === 0) return null;
+  const primary = primaryFromVariants
+    ? { ...primaryFromVariants, url: primaryUrl ?? primaryFromVariants.url }
+    : undefined;
   const others = variants.filter((v) => v.key !== primaryKey);
 
   return (
@@ -1076,6 +1099,7 @@ function LogoOptions({ project }: { project: BrandProject }) {
             style={{ minHeight: 260, background: "var(--color-surface-2)" }}
           >
             <object
+              key={primary.url}
               data={primary.url}
               type="image/svg+xml"
               aria-label={primary.title}
@@ -1083,20 +1107,32 @@ function LogoOptions({ project }: { project: BrandProject }) {
             />
           </div>
           <div
-            className="p-5 border-t flex items-start justify-between gap-4 flex-wrap"
+            className="p-5 border-t flex flex-col gap-4"
             style={{ borderColor: "var(--color-border)" }}
           >
-            <div>
-              <div className="font-medium tracking-tight mb-1">{primary.title}</div>
-              <div className="text-xs" style={{ color: "var(--color-text-muted)", maxWidth: "60ch" }}>
-                {primary.rationale}
+            <div className="flex items-start justify-between gap-4 flex-wrap">
+              <div>
+                <div className="font-medium tracking-tight mb-1">{primary.title}</div>
+                <div className="text-xs" style={{ color: "var(--color-text-muted)", maxWidth: "60ch" }}>
+                  {primary.rationale}
+                </div>
+              </div>
+              <div className="flex items-center gap-2 shrink-0">
+                <SendToCanvaButton logoUrl={primary.url} />
+                <a href={primary.url} download className="btn btn-secondary btn-sm">
+                  Download SVG
+                </a>
               </div>
             </div>
-            <div className="flex items-center gap-2 shrink-0">
-              <SendToCanvaButton logoUrl={primary.url} />
-              <a href={primary.url} download className="btn btn-secondary btn-sm">
-                Download SVG
-              </a>
+            <div
+              className="pt-3"
+              style={{ borderTop: "1px dashed var(--color-border)" }}
+            >
+              <LogoTweaker
+                brandId={project.id}
+                logoKey={primary.key}
+                onUpdated={setPrimaryUrl}
+              />
             </div>
           </div>
         </div>
@@ -1116,6 +1152,144 @@ function LogoOptions({ project }: { project: BrandProject }) {
   );
 }
 
+/**
+ * AI-driven logo tweaker. User types one short instruction ("center the T",
+ * "delete the underline", "make the dot smaller"), we POST to the tweak
+ * route, the SVG gets modified server-side, and we call onUpdated with the
+ * cache-busted URL so the parent can re-render the <object>.
+ *
+ * Compact mode (the alt-card case) shows a smaller "Tweak" affordance.
+ */
+function LogoTweaker({
+  brandId,
+  logoKey,
+  onUpdated,
+  compact = false,
+}: {
+  brandId: string;
+  logoKey: string;
+  onUpdated: (newUrl: string) => void;
+  compact?: boolean;
+}) {
+  const [open, setOpen] = useState(false);
+  const [text, setText] = useState("");
+  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  async function send() {
+    const instruction = text.trim();
+    if (!instruction) return;
+    setBusy(true);
+    setError(null);
+    try {
+      const res = await fetch(
+        `/api/brands/${brandId}/logos/${encodeURIComponent(logoKey)}/tweak`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ instruction }),
+        }
+      );
+      const body = (await res.json().catch(() => ({}))) as {
+        url?: string;
+        error?: string;
+      };
+      if (!res.ok || !body.url) {
+        setError(body.error ?? `HTTP ${res.status}`);
+      } else {
+        onUpdated(body.url);
+        setText("");
+      }
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "request failed");
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  if (!open) {
+    return (
+      <button
+        type="button"
+        onClick={() => setOpen(true)}
+        className="font-mono hover:underline"
+        style={{
+          fontSize: compact ? 10 : 11,
+          letterSpacing: "0.1em",
+          textTransform: "uppercase",
+          color: "var(--color-text-muted)",
+          background: "transparent",
+          border: 0,
+          cursor: "pointer",
+          padding: 0,
+        }}
+      >
+        Tweak this logo
+      </button>
+    );
+  }
+
+  return (
+    <div style={{ marginTop: compact ? 8 : 12 }}>
+      <textarea
+        className="textarea"
+        rows={compact ? 2 : 3}
+        placeholder='e.g. "center the T", "delete the underline", "make the dot smaller", "move the lockup down"'
+        value={text}
+        onChange={(e) => setText(e.target.value)}
+        onKeyDown={(e) => {
+          // Cmd/Ctrl+Enter sends — fast for power users
+          if ((e.metaKey || e.ctrlKey) && e.key === "Enter") send();
+        }}
+        disabled={busy}
+        style={{ fontSize: 13 }}
+      />
+      <div className="flex items-center gap-2 mt-2">
+        <button
+          type="button"
+          className="btn btn-primary btn-sm"
+          onClick={send}
+          disabled={busy || !text.trim()}
+        >
+          {busy ? (
+            <>
+              <span className="spinner" /> Tweaking…
+            </>
+          ) : (
+            "Apply tweak"
+          )}
+        </button>
+        <button
+          type="button"
+          className="btn btn-ghost btn-sm"
+          onClick={() => {
+            setOpen(false);
+            setText("");
+            setError(null);
+          }}
+          disabled={busy}
+        >
+          Cancel
+        </button>
+        <span
+          className="font-mono ml-auto"
+          style={{ fontSize: 10, color: "var(--color-text-muted)" }}
+        >
+          ⌘↵ to send
+        </span>
+      </div>
+      {error && (
+        <p
+          className="text-xs mt-2"
+          style={{ color: "var(--color-status-failed)" }}
+        >
+          {error}
+        </p>
+      )}
+    </div>
+  );
+}
+
 function AlternativeLogoCard({
   project,
   variant,
@@ -1124,6 +1298,8 @@ function AlternativeLogoCard({
   variant: { key: string; title: string; rationale: string; url: string };
 }) {
   const [switching, setSwitching] = useState(false);
+  // Local URL so tweaks update the rendered SVG immediately.
+  const [url, setUrl] = useState(variant.url);
   async function switchTo() {
     setSwitching(true);
     const res = await fetch(`/api/brands/${project.id}/primary-logo`, {
@@ -1141,7 +1317,8 @@ function AlternativeLogoCard({
         style={{ minHeight: 140, background: "var(--color-surface-2)" }}
       >
         <object
-          data={variant.url}
+          key={url}
+          data={url}
           type="image/svg+xml"
           aria-label={variant.title}
           style={{ maxWidth: "100%", maxHeight: 100, pointerEvents: "none" }}
@@ -1152,7 +1329,7 @@ function AlternativeLogoCard({
         <div className="text-xs mb-3" style={{ color: "var(--color-text-muted)" }}>
           {variant.rationale}
         </div>
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-3 mb-2">
           <button
             type="button"
             onClick={switchTo}
@@ -1163,7 +1340,7 @@ function AlternativeLogoCard({
             {switching ? "Switching…" : "Use this instead"}
           </button>
           <a
-            href={variant.url}
+            href={url}
             download
             className="font-mono text-[11px] hover:underline ml-auto"
             style={{ color: "var(--color-text-muted)" }}
@@ -1171,6 +1348,12 @@ function AlternativeLogoCard({
             Download
           </a>
         </div>
+        <LogoTweaker
+          brandId={project.id}
+          logoKey={variant.key}
+          onUpdated={setUrl}
+          compact
+        />
       </div>
     </div>
   );

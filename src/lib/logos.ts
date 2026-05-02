@@ -249,3 +249,105 @@ export async function generateLogoVariants(
   }
   return manifest;
 }
+
+const TWEAK_SYSTEM_PROMPT = `You edit existing brand logo SVGs. The user describes ONE small change ("center the T," "delete the underline," "make the dot smaller," "move the lockup down 8 pixels"). You return ONE modified SVG that applies the change and preserves everything else.
+
+CRITICAL RULES:
+- Return ONLY the SVG. No JSON. No prose. No markdown fences. The first character of your response is "<" and the last is ">".
+- Preserve viewBox, dimensions, and overall composition unless the user explicitly asks to change them.
+- Do not add new <text> elements unless the user asked. Do not change the brand name spelling.
+- Keep the @import font block — that's required for the SVG to render in a sandboxed <object>.
+- All XML special characters in attributes/text must be properly escaped: & as &amp;, < as &lt;, > as &gt;, " as &quot;, ' as &apos;. Especially in URL attributes — never write a raw &.
+- If the user's instruction is unclear or impossible (e.g. "make it cooler"), return the SVG unchanged. Do not invent changes the user didn't ask for.
+- The output must remain valid XML — broken SVG renders as a parse error to the user.`;
+
+function buildTweakPrompt(svg: string, instruction: string): string {
+  return [
+    "Apply this single change to the SVG below:",
+    `  "${instruction.trim()}"`,
+    "",
+    "Return ONLY the modified SVG. Preserve everything else.",
+    "",
+    "Current SVG:",
+    svg,
+  ].join("\n");
+}
+
+/**
+ * Apply a user instruction to an existing logo SVG. Reads the file, sends
+ * (system + user instruction + current SVG) to Haiku, gets back a modified
+ * SVG, sanitizes it (escape & in URLs), writes it back to the same path.
+ *
+ * Returns the new SVG content on success, or null on failure (caller decides
+ * whether to surface an error or leave the original in place).
+ */
+export async function tweakLogo(
+  svgPath: string,
+  instruction: string
+): Promise<string | null> {
+  if (!process.env.ANTHROPIC_API_KEY) return null;
+  if (!instruction.trim()) return null;
+
+  let originalSvg = "";
+  try {
+    originalSvg = await fs.readFile(svgPath, "utf8");
+  } catch (err) {
+    console.warn(`[logos:tweak] could not read svg:`, err instanceof Error ? err.message : err);
+    return null;
+  }
+
+  if (!originalSvg.includes("<svg")) {
+    console.warn(`[logos:tweak] file at ${svgPath} is not an SVG`);
+    return null;
+  }
+
+  const client = new Anthropic();
+  const MAX_ATTEMPTS = 3;
+  let attempt = 0;
+  let text = "";
+  while (attempt < MAX_ATTEMPTS) {
+    attempt++;
+    try {
+      const msg = await client.messages.create({
+        model: process.env.LOGO_MODEL ?? "claude-haiku-4-5",
+        max_tokens: 4000,
+        system: TWEAK_SYSTEM_PROMPT,
+        messages: [
+          { role: "user", content: buildTweakPrompt(originalSvg, instruction) },
+        ],
+      });
+      text = msg.content
+        .filter((b): b is Anthropic.TextBlock => b.type === "text")
+        .map((b) => b.text)
+        .join("");
+      break;
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : String(err);
+      const retryable = /\b429\b|rate.?limit|\b5\d\d\b/i.test(msg);
+      if (retryable && attempt < MAX_ATTEMPTS) {
+        const waitMs = Math.min(60000, 15000 * attempt);
+        console.warn(`[logos:tweak] attempt ${attempt} retryable (${msg.slice(0, 60)}), waiting ${waitMs / 1000}s`);
+        await new Promise((r) => setTimeout(r, waitMs));
+        continue;
+      }
+      console.warn(`[logos:tweak] giving up:`, msg);
+      return null;
+    }
+  }
+
+  // Extract just the <svg>...</svg> block in case the model added stray text.
+  const match = text.match(/<svg[\s\S]*<\/svg>/);
+  if (!match) {
+    console.warn(`[logos:tweak] response did not contain an <svg> block`);
+    return null;
+  }
+  const cleaned = sanitizeSvg(match[0]);
+
+  try {
+    await fs.writeFile(svgPath, cleaned);
+    return cleaned;
+  } catch (err) {
+    console.warn(`[logos:tweak] write failed:`, err instanceof Error ? err.message : err);
+    return null;
+  }
+}
