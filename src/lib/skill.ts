@@ -36,7 +36,7 @@ export function enqueueBrandBuild(
     userId: opts.userId,
   };
   createBrand(project);
-  void runBrandBuildInBackground(project);
+  void runPhase1(project);
   return project;
 }
 
@@ -63,11 +63,34 @@ export function retryBrandBuild(id: string): BrandProject | null {
     console.warn(`[skill] retry: couldn't clear outputs dir:`, err);
   }
   const refreshed = getBrand(id)!;
-  void runBrandBuildInBackground(refreshed);
+  void runPhase1(refreshed);
   return refreshed;
 }
 
-async function runBrandBuildInBackground(project: BrandProject): Promise<void> {
+/**
+ * Trigger Phase 2 (the 6 non-logo variants) for a brand whose user has just
+ * picked a logo. Idempotent — if the brand already has variant outputs from
+ * a prior Phase 2 run, skips re-generation. Called from the
+ * /api/brands/[id]/primary-logo PATCH endpoint.
+ */
+export function triggerPhase2(id: string): void {
+  const project = getBrand(id);
+  if (!project) return;
+  // Already done — don't re-fire.
+  if (project.outputs.devBrief && project.outputs.pitchOnePager) return;
+  void runPhase2(project);
+}
+
+/**
+ * Phase 1 of a sequential build: main skill + 3 logo variants only.
+ * Sets status="complete" once logos are ready so the LogoPickerGate
+ * surfaces. Phase 2 (the other 6 variants) is triggered when the user
+ * picks a logo via /api/brands/[id]/primary-logo.
+ *
+ * If the user uploaded their own logo, Phase 2 fires automatically at
+ * the end of this function instead of waiting for a pick.
+ */
+async function runPhase1(project: BrandProject): Promise<void> {
   const { id, intake } = project;
   updateBrand(id, { status: "running", progressStage: "starting", progressPct: 0 });
 
@@ -143,166 +166,204 @@ async function runBrandBuildInBackground(project: BrandProject): Promise<void> {
       }
     }
 
-    // Fire all 6 variant generators in parallel. Each wrapped promise
-    // merges its output into the DB AS SOON AS IT COMPLETES — so the UI
-    // sees stages flip to complete one-by-one, not all at the end.
-    updateBrand(id, { progressStage: "generating brand extras", progressPct: 0.92 });
+    // PHASE 1: generate the 3 logo variants (skipped if user uploaded their own).
+    // Once logos exist, we flip to "complete" so the LogoPickerGate appears
+    // — the user picks one, then Phase 2 fires via triggerPhase2().
+    updateBrand(id, { progressStage: "designing logo options", progressPct: 0.92 });
 
-    // Pass the user's own intake context (notes, archetype, competitors, etc.)
-    // to every variant. This is the most personal signal we have and the
-    // brand.json sometimes loses it during summarization.
-    const intakeCtx = {
-      notes: intake.notes,
-      archetype: intake.archetype,
-      competitors: intake.competitors,
-      industry: intake.industry,
-      productDescription: intake.productDescription,
-      targetAudience: intake.targetAudience,
-      logoStyle: intake.logoStyle,
-      logoInspirationUrls: intake.logoInspirationUrls,
-    };
-
-    const tasks: Array<Promise<void>> = [
-      // Logos (skipped if user uploaded)
-      (async () => {
-        if (userUploadedLogoUrl) return;
-        try {
-          const variants = await generateLogoVariants(brand as never, outDir, 3, {
-            style: intake.logoStyle,
-            inspirationUrls: intake.logoInspirationUrls,
-          });
+    if (!userUploadedLogoUrl) {
+      try {
+        const variants = await generateLogoVariants(brand as never, outDir, 3, {
+          style: intake.logoStyle,
+          inspirationUrls: intake.logoInspirationUrls,
+        });
+        if (variants.length) {
           mergeOutputs({
-            logoVariants: variants.length
-              ? variants.map((v) => ({
-                  key: v.key,
-                  title: v.title,
-                  rationale: v.rationale,
-                  url: assetUrl(v.filename),
-                }))
-              : undefined,
+            logoVariants: variants.map((v) => ({
+              key: v.key,
+              title: v.title,
+              rationale: v.rationale,
+              url: assetUrl(v.filename),
+            })),
           });
-        } catch (err) {
-          console.warn(`[skill] logos failed:`, err);
         }
-      })(),
-      // Landing variants
-      (async () => {
-        try {
-          const variants = await generateLandingVariants(brand as never, outDir, 3, intakeCtx);
-          mergeOutputs({
-            landingVariants: variants.length
-              ? variants.map((v) => ({
-                  key: v.key,
-                  title: v.title,
-                  rationale: v.rationale,
-                  url: assetUrl(v.filename),
-                }))
-              : undefined,
-          });
-        } catch (err) {
-          console.warn(`[skill] landing variants failed:`, err);
-        }
-      })(),
-      // Palette expansion
-      (async () => {
-        try {
-          const p = await generatePaletteExpansion(brand as never, outDir);
-          if (p) {
-            mergeOutputs({
-              paletteExpansion: {
-                url: assetUrl(p.filename),
-                light: p.light,
-                dark: p.dark,
-                semantic: p.semantic,
-              },
-            });
-          }
-        } catch (err) {
-          console.warn(`[skill] palette expansion failed:`, err);
-        }
-      })(),
-      // Social kit
-      (async () => {
-        try {
-          const assets = await generateSocialKit(brand as never, outDir, intakeCtx);
-          mergeOutputs({
-            socialKit: assets.length
-              ? assets.map((a) => ({
-                  key: a.key,
-                  title: a.title,
-                  platform: a.platform,
-                  size: a.size,
-                  url: assetUrl(a.filename),
-                }))
-              : undefined,
-          });
-        } catch (err) {
-          console.warn(`[skill] social kit failed:`, err);
-        }
-      })(),
-      // Pitch one-pager
-      (async () => {
-        try {
-          const p = await generatePitchOnePager(brand as never, outDir, intakeCtx);
-          if (p) {
-            mergeOutputs({
-              pitchOnePager: {
-                htmlUrl: assetUrl(p.htmlFilename),
-                pdfUrl: p.pdfFilename ? assetUrl(p.pdfFilename) : undefined,
-              },
-            });
-          }
-        } catch (err) {
-          console.warn(`[skill] pitch one-pager failed:`, err);
-        }
-      })(),
-      // Email kit
-      (async () => {
-        try {
-          const e = await generateEmailKit(brand as never, outDir, intakeCtx);
-          if (e) {
-            mergeOutputs({
-              emailKit: {
-                headerUrl: e.headerFilename ? assetUrl(e.headerFilename) : undefined,
-                signatureUrl: e.signatureFilename ? assetUrl(e.signatureFilename) : undefined,
-              },
-            });
-          }
-        } catch (err) {
-          console.warn(`[skill] email kit failed:`, err);
-        }
-      })(),
-      // Developer Brief — handoff doc for the website builder
-      (async () => {
-        try {
-          const d = await generateDevBrief(brand as never, outDir, intakeCtx);
-          if (d) {
-            mergeOutputs({
-              devBrief: {
-                htmlUrl: assetUrl(d.htmlFilename),
-                pdfUrl: d.pdfFilename ? assetUrl(d.pdfFilename) : undefined,
-              },
-            });
-          }
-        } catch (err) {
-          console.warn(`[skill] dev brief failed:`, err);
-        }
-      })(),
-    ];
+      } catch (err) {
+        console.warn(`[skill] phase 1 logos failed:`, err);
+      }
+    }
 
-    await Promise.allSettled(tasks);
-
-    updateBrand(id, {
-      status: "complete",
-      progressStage: "complete",
-      progressPct: 1,
-    });
+    if (userUploadedLogoUrl) {
+      // User uploaded their own logo — no pick needed. Fire Phase 2
+      // straight through without flashing a "complete" state.
+      const refreshed = getBrand(id);
+      if (refreshed) void runPhase2(refreshed);
+    } else {
+      // Logos generated; let the brand panel reveal the picker.
+      updateBrand(id, {
+        status: "complete",
+        progressStage: "awaiting logo pick",
+        progressPct: 1,
+      });
+    }
   } catch (err) {
     updateBrand(id, {
       status: "failed",
       error: err instanceof Error ? err.message : String(err),
     });
   }
+}
+
+/**
+ * Phase 2 of a sequential build: the 6 non-logo variants. Triggered after
+ * the user picks a logo (or automatically if they uploaded their own).
+ * Runs all 6 in parallel — each retries on transient errors per the
+ * callClaude helper, so a partial-failure brand panel is the worst case.
+ */
+async function runPhase2(project: BrandProject): Promise<void> {
+  const { id, intake } = project;
+  const outDir = brandDir(id);
+  const assetUrl = (rel: string) =>
+    `/api/brands/${id}/files/${rel.split("/").map(encodeURIComponent).join("/")}`;
+  const mergeOutputs = (patch: Partial<BrandOutputs>) => {
+    const current = getBrand(id)?.outputs ?? {};
+    updateBrand(id, { outputs: { ...current, ...patch } });
+  };
+
+  // Reload brand.json fresh — it may have been touched by tweaks etc.
+  let brand: Record<string, unknown> = {};
+  try {
+    brand = JSON.parse(fs.readFileSync(path.join(outDir, "brand.json"), "utf8"));
+  } catch (err) {
+    console.warn(`[phase2] couldn't read brand.json:`, err);
+    return;
+  }
+
+  // Flip status back to running so the brand panel shows the building UI
+  // again (stage cards + "usually takes 2-3 minutes" copy).
+  updateBrand(id, {
+    status: "running",
+    progressStage: "building the rest of your kit",
+    progressPct: 0,
+  });
+
+  const intakeCtx = {
+    notes: intake.notes,
+    archetype: intake.archetype,
+    competitors: intake.competitors,
+    industry: intake.industry,
+    productDescription: intake.productDescription,
+    targetAudience: intake.targetAudience,
+    logoStyle: intake.logoStyle,
+    logoInspirationUrls: intake.logoInspirationUrls,
+  };
+
+  const tasks: Array<Promise<void>> = [
+    (async () => {
+      try {
+        const variants = await generateLandingVariants(brand as never, outDir, 3, intakeCtx);
+        if (variants.length) {
+          mergeOutputs({
+            landingVariants: variants.map((v) => ({
+              key: v.key,
+              title: v.title,
+              rationale: v.rationale,
+              url: assetUrl(v.filename),
+            })),
+          });
+        }
+      } catch (err) {
+        console.warn(`[phase2] landing variants failed:`, err);
+      }
+    })(),
+    (async () => {
+      try {
+        const p = await generatePaletteExpansion(brand as never, outDir);
+        if (p) {
+          mergeOutputs({
+            paletteExpansion: {
+              url: assetUrl(p.filename),
+              light: p.light,
+              dark: p.dark,
+              semantic: p.semantic,
+            },
+          });
+        }
+      } catch (err) {
+        console.warn(`[phase2] palette expansion failed:`, err);
+      }
+    })(),
+    (async () => {
+      try {
+        const assets = await generateSocialKit(brand as never, outDir, intakeCtx);
+        if (assets.length) {
+          mergeOutputs({
+            socialKit: assets.map((a) => ({
+              key: a.key,
+              title: a.title,
+              platform: a.platform,
+              size: a.size,
+              url: assetUrl(a.filename),
+            })),
+          });
+        }
+      } catch (err) {
+        console.warn(`[phase2] social kit failed:`, err);
+      }
+    })(),
+    (async () => {
+      try {
+        const p = await generatePitchOnePager(brand as never, outDir, intakeCtx);
+        if (p) {
+          mergeOutputs({
+            pitchOnePager: {
+              htmlUrl: assetUrl(p.htmlFilename),
+              pdfUrl: p.pdfFilename ? assetUrl(p.pdfFilename) : undefined,
+            },
+          });
+        }
+      } catch (err) {
+        console.warn(`[phase2] pitch failed:`, err);
+      }
+    })(),
+    (async () => {
+      try {
+        const e = await generateEmailKit(brand as never, outDir, intakeCtx);
+        if (e) {
+          mergeOutputs({
+            emailKit: {
+              headerUrl: e.headerFilename ? assetUrl(e.headerFilename) : undefined,
+              signatureUrl: e.signatureFilename ? assetUrl(e.signatureFilename) : undefined,
+            },
+          });
+        }
+      } catch (err) {
+        console.warn(`[phase2] email failed:`, err);
+      }
+    })(),
+    (async () => {
+      try {
+        const d = await generateDevBrief(brand as never, outDir, intakeCtx);
+        if (d) {
+          mergeOutputs({
+            devBrief: {
+              htmlUrl: assetUrl(d.htmlFilename),
+              pdfUrl: d.pdfFilename ? assetUrl(d.pdfFilename) : undefined,
+            },
+          });
+        }
+      } catch (err) {
+        console.warn(`[phase2] dev brief failed:`, err);
+      }
+    })(),
+  ];
+
+  await Promise.allSettled(tasks);
+
+  updateBrand(id, {
+    status: "complete",
+    progressStage: "complete",
+    progressPct: 1,
+  });
 }
 
 /**

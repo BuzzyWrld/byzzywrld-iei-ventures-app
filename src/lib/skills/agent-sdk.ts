@@ -16,6 +16,7 @@ import { randomUUID } from "node:crypto";
 import type { BrandIntake } from "@/lib/types";
 import { renderPdfFromHtml } from "@/lib/pdf";
 import { BrandPlaybookSkill, SkillError, SkillManifest, SkillRunContext } from "./contract";
+import { pickIndustry, industryDirectionBlock } from "@/lib/industries";
 
 const SKILL_ROOT = path.join(process.cwd(), "skills/brand-playbook");
 const REFERENCE_FILES = [
@@ -63,6 +64,15 @@ function buildUserPrompt(intake: BrandIntake, outputDir: string): string {
     /#(?:[0-9a-f]{3}|[0-9a-f]{6}|[0-9a-f]{8})/gi
   );
   const userPickedPalette = (hexMatches?.length ?? 0) >= 4;
+  // Industry direction (curated by IEI team) — feeds the main skill so
+  // landing.html and playbook reflect industry-appropriate aesthetics
+  // from the FIRST output, not just the variants.
+  const industry = pickIndustry({
+    industry: intake.industry,
+    productDescription: intake.productDescription,
+    notes: intake.notes,
+  });
+  const industryBlock = industryDirectionBlock(industry);
 
   return [
     "FRESH-CONTEXT GUARD: build for the brand in the intake below ONLY. The system prompt mentions",
@@ -92,6 +102,7 @@ function buildUserPrompt(intake: BrandIntake, outputDir: string): string {
     userPickedPalette
       ? "PALETTE OVERRIDE: the user has explicitly chosen a palette. The hex codes below are non-negotiable — use them as primary/secondary/accent/neutral in that order, even if audience/industry analysis would suggest otherwise. This overrides SKILL.md's 'audience > aesthetic preference' hierarchy rule."
       : "",
+    industryBlock,
     "Intake:",
     "```json",
     JSON.stringify(intake, null, 2),

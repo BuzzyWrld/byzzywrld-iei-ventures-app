@@ -1,6 +1,7 @@
 import { NextRequest } from "next/server";
 import { getBrand, updateBrand } from "@/lib/db";
 import { currentUser } from "@/lib/auth";
+import { triggerPhase2 } from "@/lib/skill";
 
 export async function PATCH(
   request: NextRequest,
@@ -36,6 +37,12 @@ export async function PATCH(
       logoSvg: picked.url,
     },
   });
+
+  // SEQUENTIAL GENERATION: this is the trigger for Phase 2 (the 6 non-logo
+  // variants). triggerPhase2 is idempotent — if the brand already has those
+  // outputs (from a re-pick or earlier run), it skips. Fire-and-forget; the
+  // UI sees the brand flip back to "running" while Phase 2 runs.
+  triggerPhase2(id);
 
   return Response.json({ ok: true, primaryLogoKey: key });
 }

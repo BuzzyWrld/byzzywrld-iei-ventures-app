@@ -20,6 +20,7 @@ import type {
 } from "openai/resources/chat/completions";
 import type { BrandIntake } from "@/lib/types";
 import { renderPdfFromHtml } from "@/lib/pdf";
+import { pickIndustry, industryDirectionBlock } from "@/lib/industries";
 import {
   BrandPlaybookSkill,
   SkillError,
@@ -82,6 +83,16 @@ function buildUserPrompt(intake: BrandIntake): string {
     /#(?:[0-9a-f]{3}|[0-9a-f]{6}|[0-9a-f]{8})/gi
   );
   const userPickedPalette = (hexMatches?.length ?? 0) >= 4;
+  // Industry direction (curated by IEI team) — feeds the main skill's
+  // landing.html and playbook so even the FIRST output reflects industry-
+  // appropriate aesthetics. Without this, only the variant generators
+  // were industry-aware and the main landing.html looked generic.
+  const industry = pickIndustry({
+    industry: intake.industry,
+    productDescription: intake.productDescription,
+    notes: intake.notes,
+  });
+  const industryBlock = industryDirectionBlock(industry);
   return [
     "FRESH-CONTEXT GUARD: build for the brand below ONLY. The system prompt mentions other brands",
     "by name (Aurelian Labs, Pen2Purpose, AceTV, FamFit, Wone, Banger, OffScript, Vent, DOL, Halcyon,",
@@ -129,6 +140,7 @@ function buildUserPrompt(intake: BrandIntake): string {
     userPickedPalette
       ? "PALETTE OVERRIDE: the user has explicitly chosen a palette. The hex codes below are non-negotiable — use them as primary/secondary/accent/neutral in that order, even if audience/industry analysis would suggest otherwise."
       : "",
+    industryBlock,
     "Intake:",
     "```json",
     JSON.stringify(intake, null, 2),

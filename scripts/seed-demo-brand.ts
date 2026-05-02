@@ -22,7 +22,8 @@ if (fs.existsSync(envPath)) {
 }
 
 import Database from "better-sqlite3";
-import { enqueueBrandBuild, getBrand } from "../src/lib/skill";
+import { enqueueBrandBuild, getBrand, triggerPhase2 } from "../src/lib/skill";
+import { updateBrand } from "../src/lib/db";
 import { BrandIntakeSchema } from "../src/lib/types";
 
 const DEFAULT_INTAKE = {
@@ -98,6 +99,34 @@ async function main() {
     }
 
     if (cur.status === "complete") {
+      // Sequential generation: Phase 1 finishes with status="complete" and
+      // logoVariants populated but the rest of the variants empty. Auto-pick
+      // the first logo to trigger Phase 2 (simulating user behavior) and
+      // keep polling. We auto-pick at most once per build.
+      const phase1Done =
+        (cur.outputs.logoVariants?.length ?? 0) > 0 &&
+        !cur.outputs.primaryLogoKey &&
+        !cur.outputs.devBrief;
+      if (phase1Done) {
+        const firstKey = cur.outputs.logoVariants![0].key;
+        console.log(
+          `\n[seed] PHASE 1 DONE in ${Math.round((Date.now() - startedAt) / 1000)}s — auto-picking logo "${firstKey}" to trigger Phase 2`
+        );
+        // Inline the pick + Phase 2 trigger so we don't depend on the dev server.
+        const pickedUrl = cur.outputs.logoVariants![0].url;
+        updateBrand(cur.id, {
+          outputs: {
+            ...cur.outputs,
+            primaryLogoKey: firstKey,
+            logoSvg: pickedUrl,
+          },
+        });
+        triggerPhase2(cur.id);
+        lastStage = "";
+        lastPct = -1;
+        continue;
+      }
+      // True "all phases complete" — print summary and exit.
       console.log(`\n[seed] DONE in ${Math.round((Date.now() - startedAt) / 1000)}s`);
       console.log(`[seed] open: http://localhost:3030/brands/${project.id}`);
       console.log(`[seed] outputs:`);
@@ -114,6 +143,7 @@ async function main() {
         ["social kit", o.socialKit?.length ?? 0],
         ["pitch one-pager", o.pitchOnePager ? "yes" : "no"],
         ["email kit", o.emailKit ? "yes" : "no"],
+        ["dev brief", o.devBrief ? "yes" : "no"],
       ];
       for (const [k, v] of list) console.log(`  - ${k}: ${v}`);
       process.exit(0);
