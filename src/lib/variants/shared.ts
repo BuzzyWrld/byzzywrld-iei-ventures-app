@@ -81,22 +81,50 @@ export type CallOpts = {
 };
 
 /**
- * One-shot Claude call returning the text response. Returns null if
- * ANTHROPIC_API_KEY isn't set (so callers can fall through gracefully).
+ * One-shot Claude call with retry-with-backoff on transient errors.
+ *
+ * Returns null if ANTHROPIC_API_KEY isn't set (so callers can fall through
+ * gracefully) — otherwise retries up to 3x on 429 (rate limit) and 5xx
+ * errors with 15s/30s/45s backoff. The Anthropic Haiku per-org rate limit
+ * (10K output tokens/min) gets hit when ~7 variants build in parallel
+ * after a brand kit is generated; without retry, ~5 of the 7 fail silently
+ * and the user sees a half-built brand panel.
  */
 export async function callClaude(opts: CallOpts): Promise<string | null> {
   if (!process.env.ANTHROPIC_API_KEY) return null;
   const client = new Anthropic();
-  const msg = await client.messages.create({
-    model: opts.model ?? process.env.LOGO_MODEL ?? "claude-haiku-4-5",
-    max_tokens: opts.maxTokens ?? 4000,
-    system: opts.system,
-    messages: [{ role: "user", content: opts.user }],
-  });
-  return msg.content
-    .filter((b): b is Anthropic.TextBlock => b.type === "text")
-    .map((b) => b.text)
-    .join("");
+  const MAX_ATTEMPTS = 3;
+  let lastErr: unknown = null;
+  for (let attempt = 1; attempt <= MAX_ATTEMPTS; attempt++) {
+    try {
+      const msg = await client.messages.create({
+        model: opts.model ?? process.env.LOGO_MODEL ?? "claude-haiku-4-5",
+        max_tokens: opts.maxTokens ?? 4000,
+        system: opts.system,
+        messages: [{ role: "user", content: opts.user }],
+      });
+      return msg.content
+        .filter((b): b is Anthropic.TextBlock => b.type === "text")
+        .map((b) => b.text)
+        .join("");
+    } catch (err) {
+      lastErr = err;
+      const msg = err instanceof Error ? err.message : String(err);
+      const retryable = /\b429\b|rate.?limit|\b5\d\d\b/i.test(msg);
+      if (retryable && attempt < MAX_ATTEMPTS) {
+        const waitMs = Math.min(60000, 15000 * attempt); // 15s, 30s, 45s
+        console.warn(
+          `[callClaude] attempt ${attempt} retryable (${msg.slice(0, 80)}), waiting ${waitMs / 1000}s`
+        );
+        await new Promise((r) => setTimeout(r, waitMs));
+        continue;
+      }
+      // Non-retryable or out of attempts: surface the error so callers can warn.
+      throw err;
+    }
+  }
+  // Unreachable but TS wants it.
+  throw lastErr;
 }
 
 export function brandBrief(brand: BrandForVariants, intake?: IntakeContext): string {

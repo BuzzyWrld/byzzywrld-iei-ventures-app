@@ -58,10 +58,12 @@ const RULES: Array<{ key: string; keywords: string[] }> = [
   // Agencies before consultants — "marketing strategy / agency" should
   // match Agencies even though "strategy" is also a consultant keyword.
   { key: "agencies",           keywords: ["agency", "marketing agency", "creative agency", "branding agency", "ad agency", "pr firm", "studio"] },
-  // Service businesses
+  // Financial services BEFORE accountants — "fintech / investment / brokerage"
+  // brands shouldn't match the accountant rule on the word "account."
+  { key: "financial-services", keywords: ["financial", "fintech", "wealth", "advisory", "private credit", "investment", "ria", "vc ", "venture cap", "capital markets", "asset management", "family office", "quant", "trading algorithm", "brokerage", "hedge fund", "robo-advisor"] },
+  // Service businesses — note: "accountant" not "account" so "brokerage account" doesn't hit
   { key: "law-firms",          keywords: ["law firm", "attorney", "legal", "lawyer"] },
-  { key: "accountants",        keywords: ["account", "cpa", "bookkeep", "tax prep"] },
-  { key: "financial-services", keywords: ["financial", "fintech", "wealth", "advisory", "private credit", "investment", "ria", "vc ", "venture cap", "capital markets", "asset management", "family office"] },
+  { key: "accountants",        keywords: ["accountant", "accounting", "cpa", "bookkeep", "tax prep"] },
   { key: "consultants",        keywords: ["consult", "coach", "executive coach"] },
   // Creatives
   { key: "graphic-design",     keywords: ["graphic design", "designer", "art direction", "design studio"] },
