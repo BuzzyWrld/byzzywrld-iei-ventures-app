@@ -15,6 +15,7 @@ import {
 
 type StepKey =
   | "company"
+  | "story"
   | "product"
   | "audience"
   | "tone"
@@ -25,6 +26,7 @@ type StepKey =
   | "review";
 const STEPS: { key: StepKey; label: string }[] = [
   { key: "company", label: "Company" },
+  { key: "story", label: "Your story" },
   { key: "product", label: "Product" },
   { key: "audience", label: "Audience" },
   { key: "tone", label: "Tone" },
@@ -34,6 +36,11 @@ const STEPS: { key: StepKey; label: string }[] = [
   { key: "logo", label: "Logo" },
   { key: "review", label: "Review" },
 ];
+
+/** Story field is required (not optional) but the floor is low — 30 chars is
+ *  enough for a one-line "why we exist." We tell the user a longer story
+ *  produces a richer brand, but we won't gate them at 200 characters. */
+const STORY_MIN_CHARS = 30;
 
 const EMPTY: BrandIntake = {
   companyName: "",
@@ -83,6 +90,7 @@ export default function NewBrandPage() {
   const canContinue = useMemo(() => {
     switch (step.key) {
       case "company":   return intake.companyName.trim().length > 0;
+      case "story":     return intake.notes.trim().length >= STORY_MIN_CHARS;
       case "product":   return intake.productDescription.trim().length >= 20;
       case "audience":  return intake.industry.trim().length > 0 && intake.targetAudience.trim().length > 0;
       case "tone":      return intake.toneOfVoice.split(",").map((s) => s.trim()).filter(Boolean).length >= 1;
@@ -164,6 +172,9 @@ export default function NewBrandPage() {
 
         {step.key === "company" && (
           <CompanyStep intake={intake} onChange={set} onSubmit={next} />
+        )}
+        {step.key === "story" && (
+          <YourStoryStep intake={intake} onChange={set} />
         )}
         {step.key === "product" && (
           <ProductStep intake={intake} onChange={set} />
@@ -323,6 +334,57 @@ function CompanyStep({
   );
 }
 
+/**
+ * The single most important field in the questionnaire. The model pulls
+ * from `notes` near-verbatim into brandStory, voice, and ICA. Generic
+ * intake → generic brand. The user's own words → a brand that feels theirs.
+ *
+ * Required (not optional). Floor of 30 chars to enforce a real answer
+ * without gating users who genuinely have a one-line "why."
+ */
+function YourStoryStep({
+  intake,
+  onChange,
+}: {
+  intake: BrandIntake;
+  onChange: (p: Partial<BrandIntake>) => void;
+}) {
+  const len = intake.notes.trim().length;
+  const remaining = Math.max(0, STORY_MIN_CHARS - len);
+  return (
+    <>
+      <h1 className="font-serif leading-[1.05] mb-3" style={{ fontSize: 44 }}>
+        Tell us your story.
+      </h1>
+      <p className="text-base mb-2" style={{ color: "var(--color-text-muted)", maxWidth: "60ch" }}>
+        Where did this brand come from? What were you doing before? What made you start?
+        Anything that makes this brand <em>yours</em> and not generic.
+      </p>
+      <p className="text-sm mb-6" style={{ color: "var(--color-text-muted)", maxWidth: "60ch" }}>
+        This is the most important field in the whole questionnaire — the AI uses your answer
+        almost verbatim to write the brand&apos;s mission, voice, and origin story.
+        Every other output gets richer the more you put here. Even one strong sentence helps.
+      </p>
+      <textarea
+        className="textarea"
+        rows={7}
+        placeholder={
+          "e.g. Founded by an ex-Citadel quant who watched retail investors get crushed in 2022 while his institutional clients held steady. Realized retail has no access to risk-adjusted strategies — just target-date funds on one end and Reddit YOLOs on the other. Built ACI to put institutional engines into a retail brokerage account."
+        }
+        value={intake.notes}
+        onChange={(e) => onChange({ notes: e.target.value })}
+        autoFocus
+        style={{ fontSize: 16 }}
+      />
+      <p className="mt-3 text-xs" style={{ color: "var(--color-text-muted)" }}>
+        {remaining > 0
+          ? `${remaining} more characters needed.`
+          : `${len} characters. ${len >= 150 ? "Strong." : "Good — feel free to add more for a richer brand."}`}
+      </p>
+    </>
+  );
+}
+
 function ProductStep({
   intake,
   onChange,
@@ -414,11 +476,12 @@ function ReviewStep({
         A last look before we build.
       </h1>
       <p className="text-base mb-6" style={{ color: "var(--color-text-muted)", maxWidth: "52ch" }}>
-        Add anything else the skill should consider. This takes a few minutes to run.
+        Building takes 3&ndash;5 minutes. We&apos;ll show you 3 logo options first &mdash; pick one, then the rest of the kit builds around it.
       </p>
       <div className="card p-5 mb-6">
         <div className="grid grid-cols-1 sm:grid-cols-[160px_1fr] gap-y-3 gap-x-6 text-sm">
           <ReviewRow label="Company" value={intake.companyName} />
+          <ReviewRow label="Your story" value={intake.notes} />
           <ReviewRow label="Product" value={intake.productDescription} />
           <ReviewRow label="Industry" value={intake.industry} />
           <ReviewRow label="Audience" value={intake.targetAudience} />
@@ -432,22 +495,13 @@ function ReviewStep({
           />
         </div>
       </div>
-      <label className="block mb-4">
+      <label className="block">
         <div className="kicker mb-2">Competitors (optional)</div>
         <input
           className="input"
           placeholder="e.g. Hebbia, Harvey"
           value={intake.competitors}
           onChange={(e) => onChange({ competitors: e.target.value })}
-        />
-      </label>
-      <label className="block">
-        <div className="kicker mb-2">Anything else (optional)</div>
-        <textarea
-          className="textarea"
-          placeholder="Constraints, references, things to avoid…"
-          value={intake.notes}
-          onChange={(e) => onChange({ notes: e.target.value })}
         />
       </label>
     </>
