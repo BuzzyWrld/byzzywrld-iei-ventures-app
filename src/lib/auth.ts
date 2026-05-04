@@ -122,12 +122,35 @@ export async function signUp(params: {
   };
 }
 
+// Demo credential bypass — Vercel serverless instances each get a fresh /tmp,
+// so SQLite data written during signup is invisible to the login invocation.
+// Setting DEMO_USER_EMAIL + DEMO_USER_PASSWORD_HASH in Vercel env vars lets
+// a fixed account work across all instances without any database.
+const DEMO_USER: User | null = process.env.DEMO_USER_EMAIL
+  ? {
+      id: "demo-user",
+      email: process.env.DEMO_USER_EMAIL.trim().toLowerCase(),
+      name: "Demo User",
+      tenantId: "default",
+      createdAt: "2026-01-01T00:00:00.000Z",
+    }
+  : null;
+
 export async function signIn(params: {
   email: string;
   password: string;
 }): Promise<{ user?: User; error?: string }> {
   ensureSchema();
   const email = params.email.trim().toLowerCase();
+
+  // Demo bypass — must check before SQLite since /tmp may be empty.
+  if (DEMO_USER && email === DEMO_USER.email) {
+    const hash = process.env.DEMO_USER_PASSWORD_HASH ?? "";
+    const ok = await bcrypt.compare(params.password, hash);
+    if (!ok) return { error: "invalid credentials" };
+    return { user: DEMO_USER };
+  }
+
   const row = db().prepare(`SELECT * FROM users WHERE email = ?`).get(email) as
     | UserRow
     | undefined;
@@ -138,6 +161,9 @@ export async function signIn(params: {
 }
 
 export function getUserById(id: string): User | null {
+  // Demo bypass — the demo user has no SQLite row but must survive page reloads.
+  if (DEMO_USER && id === DEMO_USER.id) return DEMO_USER;
+
   ensureSchema();
   const row = db().prepare(`SELECT * FROM users WHERE id = ?`).get(id) as UserRow | undefined;
   return row ? rowToUser(row) : null;
