@@ -190,7 +190,14 @@ export async function clearSession(): Promise<void> {
   s.destroy();
 }
 
+// ─── TESTING BYPASS ──────────────────────────────────────────────────────────
+// Set to true to skip login for all routes during local/staging testing.
+// Flip back to false before going live with real users.
+const DEV_BYPASS = true;
+// ─────────────────────────────────────────────────────────────────────────────
+
 export async function currentUser(): Promise<User | null> {
+  if (DEV_BYPASS) return DEMO_USER;
   const s = await getSession();
   if (!s.userId) return null;
   return getUserById(s.userId);
