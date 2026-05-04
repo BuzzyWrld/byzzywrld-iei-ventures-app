@@ -124,17 +124,21 @@ export async function signUp(params: {
 
 // Demo credential bypass — Vercel serverless instances each get a fresh /tmp,
 // so SQLite data written during signup is invisible to the login invocation.
-// Setting DEMO_USER_EMAIL + DEMO_USER_PASSWORD_HASH in Vercel env vars lets
-// a fixed account work across all instances without any database.
-const DEMO_USER: User | null = process.env.DEMO_USER_EMAIL
-  ? {
-      id: "demo-user",
-      email: process.env.DEMO_USER_EMAIL.trim().toLowerCase(),
-      name: "Demo User",
-      tenantId: "default",
-      createdAt: "2026-01-01T00:00:00.000Z",
-    }
-  : null;
+// These hardcoded values let a known demo account work across all instances
+// without any database lookup. The hash is bcrypt(IEIDemo2026!, rounds=10).
+// Override via DEMO_USER_EMAIL / DEMO_USER_PASSWORD_HASH env vars if needed.
+const _DEMO_EMAIL = (process.env.DEMO_USER_EMAIL ?? "demo@ieiv.co").trim().toLowerCase();
+const _DEMO_HASH =
+  process.env.DEMO_USER_PASSWORD_HASH ??
+  "$2b$10$3yfGcPC7rkHqh84iQGi8TO5.ipQhTAzSryNFPwZWL7q7ZrA569Km2";
+
+const DEMO_USER: User = {
+  id: "demo-user",
+  email: _DEMO_EMAIL,
+  name: "Demo User",
+  tenantId: "default",
+  createdAt: "2026-01-01T00:00:00.000Z",
+};
 
 export async function signIn(params: {
   email: string;
@@ -144,7 +148,7 @@ export async function signIn(params: {
   const email = params.email.trim().toLowerCase();
 
   // Demo bypass — must check before SQLite since /tmp may be empty.
-  if (DEMO_USER && email === DEMO_USER.email) {
+  if (email === DEMO_USER.email) {
     const hash = process.env.DEMO_USER_PASSWORD_HASH ?? "";
     const ok = await bcrypt.compare(params.password, hash);
     if (!ok) return { error: "invalid credentials" };
@@ -162,7 +166,7 @@ export async function signIn(params: {
 
 export function getUserById(id: string): User | null {
   // Demo bypass — the demo user has no SQLite row but must survive page reloads.
-  if (DEMO_USER && id === DEMO_USER.id) return DEMO_USER;
+  if (id === DEMO_USER.id) return DEMO_USER;
 
   ensureSchema();
   const row = db().prepare(`SELECT * FROM users WHERE id = ?`).get(id) as UserRow | undefined;
