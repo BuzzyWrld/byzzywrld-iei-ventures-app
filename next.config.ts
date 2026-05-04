@@ -1,12 +1,11 @@
 import type { NextConfig } from "next";
 
-// Project is inside an iCloud-synced Documents folder. iCloud touches
-// files mid-write, breaking webpack's atomic rename pattern (0.pack.gz_
-// -> 0.pack.gz fails with ENOENT; routes-manifest.json disappears).
-// Appending `.nosync` to the build dir tells iCloud Drive to skip it.
-// See: https://support.apple.com/en-us/102651
 const nextConfig: NextConfig = {
-  distDir: ".next.nosync",
+  // turbopack.root prevents the "multiple lockfiles" warning when this project
+  // sits inside a larger monorepo-style workspace (e.g. C:\Users\gl3bu\Buzzin).
+  turbopack: {
+    root: __dirname,
+  },
 };
 
 export default nextConfig;

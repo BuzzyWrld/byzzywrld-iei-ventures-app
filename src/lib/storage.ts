@@ -1,7 +1,10 @@
 import path from "node:path";
 import fs from "node:fs";
 
-export const OUTPUTS_ROOT = path.join(process.cwd(), "outputs");
+// On Vercel, process.cwd() is read-only. Use /tmp so brand outputs can be written.
+export const OUTPUTS_ROOT = process.env.VERCEL
+  ? "/tmp/iei-outputs"
+  : path.join(process.cwd(), "outputs");
 
 export function brandDir(brandId: string): string {
   const dir = path.join(OUTPUTS_ROOT, brandId);

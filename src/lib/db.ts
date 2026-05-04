@@ -3,7 +3,10 @@ import path from "node:path";
 import fs from "node:fs";
 import type { BrandProject } from "./types";
 
-const DATA_DIR = path.join(process.cwd(), "data");
+// On Vercel, process.cwd() is read-only. Use /tmp so SQLite can write.
+const DATA_DIR = process.env.VERCEL
+  ? "/tmp/iei-data"
+  : path.join(process.cwd(), "data");
 if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR, { recursive: true });
 
 const DB_PATH = path.join(DATA_DIR, "iei.db");
