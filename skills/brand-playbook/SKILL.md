@@ -143,6 +143,19 @@ for all 10 worksheets. If information is missing, **do not leave blanks** — in
 you know about the industry, the audience, and the brand's positioning. Flag inferences clearly
 in the playbook with: `[Recommended — confirm with client]`
 
+**Identify the brand archetype FIRST — before populating any worksheet.**
+
+Use `references/brand-archetypes.md` and the three-step identification process:
+1. Map the brand's core drive → candidate archetype(s)
+2. Identify the ICA's core desire → validate or reselect
+3. Select Primary + Secondary archetype from the valid pairings table
+
+Document the result: `Primary Archetype: [Name] | Secondary Archetype: [Name or None]`
+
+This archetype declaration governs every downstream decision — voice (WS3), visual direction
+(Step 2), content pillars, and the brand archetype section of the playbook. Do not proceed
+without it. The brand voice in WS3 must match the archetype's Voice + Tone profile.
+
 Cross-reference rule: every section must be internally consistent. The persona in WS7 must match
 the audience in WS2. The competitor analysis in WS6 must reference competitors named in WS2.
 The niche markets in WS9 must map back to the Dream 100 ICA in WS10.
@@ -175,14 +188,17 @@ real logo lockup treatments. Reference the three approved brand kits as the desi
 
 ### Color Palette
 
-**Before selecting any colors, load `references/color-theory.md` and apply the three-axis cross-reference:**
-1. Industry archetype (Section 2 of color-theory.md) — what the category baseline expects
-2. Target audience demographics (Section 3) — age group, gender, wealth tier, geography
-3. Color psychology triggers (Section 1) — what each color does neurologically
+**Before selecting any colors, apply the four-axis cross-reference using `references/color-theory.md` AND `references/brand-archetypes.md` — Archetype × Visual Identity Quick Reference table:**
+1. Brand archetype color anchors (brand-archetypes.md — the archetype's Color Palette Anchors block)
+2. Industry archetype (Section 2 of color-theory.md) — what the category baseline expects
+3. Target audience demographics (Section 3) — age group, gender, wealth tier, geography
+4. Color psychology triggers (Section 1) — what each color does neurologically
 
-**Hierarchy rule: audience > industry > aesthetic preference.** If the ICA is a 28-year-old
-creative-class entrepreneur and the industry anchor says "navy," the audience profile overrides —
-navy will feel too establishment for that ICA.
+**Hierarchy rule: archetype > audience > industry > aesthetic preference.** Archetypes express
+psychological truth; industry colors express category convention. If the archetype's palette
+conflicts with the industry baseline, the archetype wins. Flag conflicts explicitly. If the ICA is
+a 28-year-old creative-class entrepreneur and the industry anchor says "navy," the audience
+profile overrides — navy will feel too establishment for that ICA.
 
 Color selection rules:
 - Minimum 6 colors: Primary, Secondary, Accent, Background, Text, Muted/Neutral
@@ -209,7 +225,8 @@ Color selection rules:
   - Which font never goes below what size
   - Which combinations are forbidden
   - Whether serif/sans-serif rule applies (e.g., "strictly no sans-serif" for literary brands)
-- Font pairings by brand archetype:
+- Font pairings — cross-reference `references/brand-archetypes.md` Font Pairings block for the
+  identified archetype first, then apply industry overlay. Archetype wins if there's a conflict:
   - Institutional Finance → Cinzel (display) + Playfair Display (editorial) + Montserrat (body)
   - Literary/Heritage → IM Fell English (display) + Libre Baskerville (body) + Cormorant Garamond (accent)
   - Boutique Finance → Cormorant Garamond (display) + Crimson Pro (body) + Space Mono (accent)

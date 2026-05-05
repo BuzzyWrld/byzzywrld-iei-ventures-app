@@ -20,10 +20,21 @@ import { pickIndustry, industryDirectionBlock } from "@/lib/industries";
 
 const SKILL_ROOT = path.join(process.cwd(), "skills/brand-playbook");
 const REFERENCE_FILES = [
+  // Core brand-building frameworks
+  "references/brand-archetypes.md",
   "references/worksheets.md",
   "references/color-theory.md",
   "references/logo-theory.md",
   "references/social-sizes.md",
+  // IEI house patterns — voice, audience, offer framing
+  "references/patterns/messaging-voice.md",
+  "references/patterns/audience-personas.md",
+  "references/patterns/offer-frameworks.md",
+  // Exemplar routing index + 3 markdown brand playbooks
+  "references/exemplars/INDEX.md",
+  "references/exemplars/banger.md",
+  "references/exemplars/offscript.md",
+  "references/exemplars/vent.md",
 ];
 
 const VERBOSE = process.env.SKILL_DEBUG === "1";
@@ -43,7 +54,7 @@ async function loadSkillSystemPrompt(): Promise<string> {
     "1. Write ALL output files using the Write tool into the current working directory. Do not ask permission.",
     "2. Required files (exact names): brand.json, playbook.html, landing.html, logo.svg.",
     "3. The `presentation-pdf` skill referenced in SKILL.md Step 5 is NOT available here. SKIP that step. Just write structured playbook.html with 850×1100px .page divs — the host renders it to PDF afterward.",
-    "4. Reference files (worksheets, color-theory, logo-theory, social-sizes) are inlined below. Do not Read them.",
+    "4. ALL reference files are inlined below — brand-archetypes, worksheets, color-theory, logo-theory, social-sizes, patterns (messaging-voice, audience-personas, offer-frameworks), and exemplars (INDEX, banger, offscript, vent). Do NOT attempt to Read any of them — they are already here.",
     "5. Do not ask clarifying questions. Use the Pure Creation mode if information is missing.",
     "6. ABSOLUTELY NO EMOJIS ANYWHERE in landing.html, playbook.html, logo.svg, or brand.json. No 🔗 ⚡ 📊 🧠 ✨ 🎯 🛡️ 📱 or any emoji character. Use CSS-drawn shapes (rect/circle/path/border) or typography only for icons/accents. Emojis are the #1 tell of AI-generated design.",
     "",
