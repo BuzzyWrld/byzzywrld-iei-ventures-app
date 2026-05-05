@@ -34,13 +34,13 @@ const DEFAULT_TENANT: Tenant = {
   slug: DEFAULT_TENANT_SLUG,
   displayName: "IEI Ventures",
   colors: {
-    primary: "#1a1f1a",
-    accent: "#263e0f",
-    surface: "#fafaf7",
-    surface2: "#f2f0e9",
-    border: "#e4e2da",
-    text: "#1a1f1a",
-    textMuted: "#6b6f69",
+    primary:    "#F5CE00",               // Signal Yellow
+    accent:     "#C4941A",               // Deep Gold
+    surface:    "#0A0A0A",               // Ventures Black
+    surface2:   "#181818",               // Carbon
+    border:     "rgba(255,255,255,0.09)",
+    text:       "#F7F6F0",               // Chalk
+    textMuted:  "#898989",               // Ash
   },
 };
 
@@ -75,16 +75,16 @@ function ensureSchema() {
       custom_domain TEXT
     );
   `);
-  // Seed on first run.
-  const existing = db().prepare(`SELECT COUNT(*) as n FROM tenants`).get() as { n: number };
-  if (existing.n === 0) {
-    const ins = db().prepare(
-      `INSERT INTO tenants (id, slug, display_name, logo_url, colors_json, custom_domain)
-       VALUES (?, ?, ?, ?, ?, ?)`
-    );
-    for (const t of SEED) {
-      ins.run(t.id, t.slug, t.displayName, t.logoUrl ?? null, JSON.stringify(t.colors), t.customDomain ?? null);
-    }
+  // Upsert seed tenants so color changes in code take effect immediately.
+  const ups = db().prepare(
+    `INSERT INTO tenants (id, slug, display_name, logo_url, colors_json, custom_domain)
+     VALUES (?, ?, ?, ?, ?, ?)
+     ON CONFLICT(id) DO UPDATE SET
+       display_name = excluded.display_name,
+       colors_json  = excluded.colors_json`
+  );
+  for (const t of SEED) {
+    ups.run(t.id, t.slug, t.displayName, t.logoUrl ?? null, JSON.stringify(t.colors), t.customDomain ?? null);
   }
   _initialized = true;
 }
