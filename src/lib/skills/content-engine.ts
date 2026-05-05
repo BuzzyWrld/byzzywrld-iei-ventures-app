@@ -358,7 +358,7 @@ export const contentEngineSkill: ContentEngineSkill = {
     }
 
     onProgress?.(`pass ${pass}: invoking agent`, baseProgress + 0.02);
-    await runAgentPass(systemPrompt, prompt, workDir, onProgress, baseProgress + 0.02, 0.15);
+    await runAgentPass(prompt, systemPrompt, workDir, onProgress, baseProgress + 0.02, 0.15);
 
     // Move files from workDir back to outputDir
     onProgress?.(`pass ${pass}: collecting outputs`, baseProgress + 0.17);
