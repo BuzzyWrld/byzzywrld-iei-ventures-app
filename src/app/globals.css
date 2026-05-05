@@ -7,29 +7,38 @@
    tenants (see TenantConfig). Status tokens are fixed.
    =========================================================== */
 :root {
-  --color-primary: #1a1f1a;
-  --color-accent: #263e0f;
-  --color-neutral: #6b6f69;
-  --color-surface: #fafaf7;
-  --color-surface-2: #f2f0e9;
-  --color-text: #1a1f1a;
-  --color-text-muted: #6b6f69;
-  --color-border: #e4e2da;
-  --color-border-strong: #1a1f1a;
+  /* ── IEI Ventures Brand Kit v1 ─────────────────────────────
+     Ventures Black  #0A0A0A   60% layouts — page background
+     Signal Yellow   #F5CE00   CTAs, active states, accent
+     Deep Gold       #C4941A   premium badges, sub-brand accent
+     Carbon          #181818   cards, panels, nav
+     Slate           #2A2A2A   hover surfaces
+     Chalk           #F7F6F0   primary text on dark
+     Ash             #898989   muted / secondary text
+  ──────────────────────────────────────────────────────────── */
+  --color-primary:       #F5CE00;               /* Signal Yellow — CTA / action  */
+  --color-accent:        #C4941A;               /* Deep Gold — secondary accent  */
+  --color-neutral:       #2A2A2A;               /* Slate                         */
+  --color-surface:       #0A0A0A;               /* Ventures Black — page bg      */
+  --color-surface-2:     #181818;               /* Carbon — card / panel bg      */
+  --color-text:          #F7F6F0;               /* Chalk — primary text          */
+  --color-text-muted:    #898989;               /* Ash — muted text              */
+  --color-border:        rgba(255,255,255,0.09);/* subtle white border           */
+  --color-border-strong: rgba(245,206,0,0.30);  /* yellow-tinted strong border   */
 
-  --color-status-pending: #a8a59a;
-  --color-status-running: #b8912e;
-  --color-status-complete: #3e6b2a;
-  --color-status-failed: #9a3a2a;
+  --color-status-pending:  #5c5c5c;
+  --color-status-running:  #F5CE00;
+  --color-status-complete: #50C878;
+  --color-status-failed:   #F87171;
 
-  --r-sm: 4px;
-  --r-md: 6px;
-  --r-lg: 10px;
+  --r-sm:   4px;
+  --r-md:   6px;
+  --r-lg:   10px;
   --r-full: 999px;
 
-  --sh-1: 0 1px 0 rgba(26, 31, 26, 0.04), 0 1px 2px rgba(26, 31, 26, 0.06);
-  --sh-2: 0 2px 4px rgba(26, 31, 26, 0.06), 0 4px 12px rgba(26, 31, 26, 0.08);
-  --sh-focus: 0 0 0 3px rgba(38, 62, 15, 0.18);
+  --sh-1:     0 1px 0 rgba(0,0,0,0.5), 0 1px 2px rgba(0,0,0,0.4);
+  --sh-2:     0 2px 4px rgba(0,0,0,0.5), 0 4px 12px rgba(0,0,0,0.4);
+  --sh-focus: 0 0 0 3px rgba(245,206,0,0.25);
 }
 
 @theme inline {
@@ -86,7 +95,7 @@ body {
   width: 6px;
   height: 6px;
   border: 1.5px solid var(--color-accent);
-  background: var(--color-surface);
+  background: var(--color-surface-2);
 }
 .iei-mark::before {
   top: -5px;
@@ -159,22 +168,22 @@ body {
 }
 .btn-primary {
   background: var(--color-primary);
-  color: var(--color-surface);
+  color: #0A0A0A; /* black text on Signal Yellow */
 }
 .btn-primary:hover:not([disabled]) {
-  background: #000;
+  background: #d4b200; /* darker yellow on hover */
 }
 .btn-secondary {
-  background: var(--color-surface);
-  color: var(--color-primary);
-  border-color: var(--color-border-strong);
+  background: var(--color-surface-2);
+  color: var(--color-text);
+  border-color: var(--color-border);
 }
 .btn-secondary:hover:not([disabled]) {
-  background: var(--color-surface-2);
+  background: var(--color-neutral);
 }
 .btn-ghost {
   background: transparent;
-  color: var(--color-primary);
+  color: var(--color-text);
 }
 .btn-ghost:hover:not([disabled]) {
   background: var(--color-surface-2);
@@ -206,7 +215,7 @@ body {
   font: inherit;
   font-size: 15px;
   padding: 10px 12px;
-  background: var(--color-surface);
+  background: var(--color-surface-2);
   border: 1px solid var(--color-border);
   border-radius: var(--r-md);
   color: var(--color-text);
@@ -232,7 +241,7 @@ body {
 }
 .select {
   appearance: none;
-  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'><path d='M3 4.5l3 3 3-3' stroke='%231a1f1a' stroke-width='1.2' fill='none' stroke-linecap='round' stroke-linejoin='round'/></svg>");
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'><path d='M3 4.5l3 3 3-3' stroke='%23F7F6F0' stroke-width='1.2' fill='none' stroke-linecap='round' stroke-linejoin='round'/></svg>");
   background-repeat: no-repeat;
   background-position: right 12px center;
   padding-right: 36px;
@@ -251,7 +260,7 @@ body {
   border-radius: var(--r-full);
   font-size: 13px;
   font-weight: 500;
-  background: var(--color-surface);
+  background: var(--color-surface-2);
   color: var(--color-text);
   border: 1px solid var(--color-border);
   line-height: 1.2;
@@ -280,7 +289,7 @@ body {
   text-transform: uppercase;
   letter-spacing: 0.06em;
   line-height: 1.4;
-  background: var(--color-surface-2);
+  background: var(--color-neutral);
   border: 1px solid var(--color-border);
 }
 .badge::before {
@@ -317,7 +326,7 @@ body {
 
 /* --- Cards ---------------------------------------------- */
 .card {
-  background: var(--color-surface);
+  background: var(--color-surface-2);
   border: 1px solid var(--color-border);
   border-radius: var(--r-lg);
 }
@@ -364,7 +373,7 @@ body {
 
 /* --- Nav ------------------------------------------------ */
 .nav {
-  background: var(--color-surface);
+  background: var(--color-surface-2);
   border-bottom: 1px solid var(--color-border);
 }
 .nav a.active {
@@ -385,7 +394,7 @@ body {
   font-family: var(--font-geist-mono), monospace;
   font-size: 10px;
   color: var(--color-text-muted);
-  background: var(--color-surface);
+  background: var(--color-surface-2);
 }
 
 /* --- Sidebar links (if used) ---------------------------- */
