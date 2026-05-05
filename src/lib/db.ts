@@ -2,6 +2,7 @@ import Database from "better-sqlite3";
 import path from "node:path";
 import fs from "node:fs";
 import type { BrandProject } from "./types";
+import type { ContentRun, ContentRunStatus, ContentRunOutputs } from "./skills/content-engine-contract";
 
 // On Vercel, process.cwd() is read-only. Use /tmp so SQLite can write.
 const DATA_DIR = process.env.VERCEL
@@ -57,10 +58,30 @@ export function db(): Database.Database {
   // any brand currently mid-build. Storing the flag on globalThis survives
   // module reload but resets on real process restart — exactly what we want.
   const g = globalThis as { __iei_cleanup_done?: boolean };
+  // content_runs table — stores state for 5-pass content engine jobs.
+  const createContentRunsTable = `
+    CREATE TABLE IF NOT EXISTS content_runs (
+      id TEXT PRIMARY KEY,
+      created_at TEXT NOT NULL,
+      status TEXT NOT NULL,
+      intake_json TEXT NOT NULL,
+      outputs_json TEXT NOT NULL DEFAULT '{}',
+      error TEXT,
+      progress_stage TEXT,
+      progress_pct REAL,
+      tenant_id TEXT NOT NULL DEFAULT 'default',
+      user_id TEXT
+    )
+  `;
+  _db.prepare(createContentRunsTable).run();
+
   if (!g.__iei_cleanup_done) {
     g.__iei_cleanup_done = true;
     _db.prepare(
       `UPDATE brands SET status = 'failed', error = 'server restarted while job was running' WHERE status = 'running'`
+    ).run();
+    _db.prepare(
+      `UPDATE content_runs SET status = 'failed', error = 'server restarted while job was running' WHERE status IN ('analysis','week_1','week_2','week_3','week_4')`
     ).run();
   }
   return _db;
@@ -160,4 +181,100 @@ export function listBrands(opts?: { tenantId?: string; userId?: string }): Brand
     ` ORDER BY created_at DESC`;
   const rows = (args.length ? db().prepare(sql).all(...args) : db().prepare(sql).all()) as Row[];
   return rows.map(rowToProject);
+}
+
+// ─── ContentRun CRUD ─────────────────────────────────────────────────────────
+
+type ContentRunRow = {
+  id: string;
+  created_at: string;
+  status: ContentRunStatus;
+  intake_json: string;
+  outputs_json: string;
+  error: string | null;
+  progress_stage: string | null;
+  progress_pct: number | null;
+  tenant_id: string | null;
+  user_id: string | null;
+};
+
+const rowToRun = (r: ContentRunRow): ContentRun => ({
+  id: r.id,
+  createdAt: r.created_at,
+  status: r.status,
+  intake: JSON.parse(r.intake_json),
+  outputs: JSON.parse(r.outputs_json || "{}") as ContentRunOutputs,
+  error: r.error ?? undefined,
+  progressStage: r.progress_stage ?? undefined,
+  progressPct: r.progress_pct ?? undefined,
+  tenantId: r.tenant_id ?? "default",
+  userId: r.user_id ?? undefined,
+});
+
+export function createContentRun(run: ContentRun): void {
+  db()
+    .prepare(
+      `INSERT INTO content_runs (id, created_at, status, intake_json, outputs_json, error, progress_stage, progress_pct, tenant_id, user_id)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
+    )
+    .run(
+      run.id,
+      run.createdAt,
+      run.status,
+      JSON.stringify(run.intake),
+      JSON.stringify(run.outputs),
+      run.error ?? null,
+      run.progressStage ?? null,
+      run.progressPct ?? null,
+      run.tenantId,
+      run.userId ?? null
+    );
+}
+
+export function updateContentRun(id: string, patch: Partial<ContentRun>): void {
+  const current = getContentRun(id);
+  if (!current) throw new Error(`content run ${id} not found`);
+  const next = { ...current, ...patch };
+  db()
+    .prepare(
+      `UPDATE content_runs
+       SET status = ?, outputs_json = ?, error = ?, progress_stage = ?, progress_pct = ?
+       WHERE id = ?`
+    )
+    .run(
+      next.status,
+      JSON.stringify(next.outputs),
+      next.error ?? null,
+      next.progressStage ?? null,
+      next.progressPct ?? null,
+      id
+    );
+}
+
+export function getContentRun(id: string): ContentRun | null {
+  const row = db()
+    .prepare(`SELECT * FROM content_runs WHERE id = ?`)
+    .get(id) as ContentRunRow | undefined;
+  return row ? rowToRun(row) : null;
+}
+
+export function listContentRuns(opts?: { tenantId?: string; userId?: string }): ContentRun[] {
+  const where: string[] = [];
+  const args: string[] = [];
+  if (opts?.tenantId) {
+    where.push("tenant_id = ?");
+    args.push(opts.tenantId);
+  }
+  if (opts?.userId) {
+    where.push("user_id = ?");
+    args.push(opts.userId);
+  }
+  const sql =
+    `SELECT * FROM content_runs` +
+    (where.length ? ` WHERE ${where.join(" AND ")}` : "") +
+    ` ORDER BY created_at DESC`;
+  const rows = (
+    args.length ? db().prepare(sql).all(...args) : db().prepare(sql).all()
+  ) as ContentRunRow[];
+  return rows.map(rowToRun);
 }

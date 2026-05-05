@@ -40,6 +40,16 @@ export function NavBar({ initials = "?", email }: { initials?: string; email?: s
           <span className="font-medium tracking-tight hidden sm:inline">IEI Ventures</span>
         </Link>
 
+        <nav className="flex items-center gap-1 hidden md:flex">
+          <Link
+            href="/content-engine"
+            className={`btn btn-ghost btn-sm text-xs ${pathname.startsWith("/content-engine") ? "font-medium" : ""}`}
+            style={pathname.startsWith("/content-engine") ? { color: "var(--color-accent)" } : undefined}
+          >
+            Content Engine
+          </Link>
+        </nav>
+
         <div className="ml-auto flex items-center gap-2">
           <button className="btn btn-ghost btn-sm hidden md:inline-flex" aria-label="Search">
             <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5">
