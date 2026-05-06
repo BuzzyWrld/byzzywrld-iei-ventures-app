@@ -231,6 +231,30 @@ export function createContentRun(run: ContentRun): void {
     );
 }
 
+/**
+ * INSERT OR REPLACE — used by the /run-pass endpoint to restore run state
+ * into a fresh Lambda's SQLite when the self-fetch lands on a new instance.
+ */
+export function upsertContentRun(run: ContentRun): void {
+  db()
+    .prepare(
+      `INSERT OR REPLACE INTO content_runs (id, created_at, status, intake_json, outputs_json, error, progress_stage, progress_pct, tenant_id, user_id)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
+    )
+    .run(
+      run.id,
+      run.createdAt,
+      run.status,
+      JSON.stringify(run.intake),
+      JSON.stringify(run.outputs),
+      run.error ?? null,
+      run.progressStage ?? null,
+      run.progressPct ?? null,
+      run.tenantId,
+      run.userId ?? null
+    );
+}
+
 export function updateContentRun(id: string, patch: Partial<ContentRun>): void {
   const current = getContentRun(id);
   if (!current) throw new Error(`content run ${id} not found`);

@@ -9,7 +9,7 @@
 import path from "node:path";
 import fs from "node:fs";
 import { randomUUID } from "node:crypto";
-import { createContentRun, getContentRun, updateContentRun } from "./db";
+import { createContentRun, getContentRun, updateContentRun, upsertContentRun } from "./db";
 import { contentEngineSkill } from "./skills/content-engine";
 import { OUTPUTS_ROOT } from "./storage";
 import type {
@@ -91,9 +91,11 @@ async function runPass1(run: ContentRun): Promise<void> {
     const outputs = mergeRunState(id, outputDir, run.outputs.weeks ?? []);
     updateContentRun(id, { outputs });
 
-    // Automatically start Week 1 after analysis
+    // Trigger Week 1 in a fresh Lambda invocation so it gets its own 300s budget.
+    // Pass the current run state in the body so the receiving Lambda can restore it
+    // even if it starts with an empty SQLite.
     const refreshed = getContentRun(id);
-    if (refreshed) await runWeekPass(refreshed, 2, "week_1");
+    if (refreshed) await triggerPassViaFetch(refreshed, 2);
   } catch (err) {
     updateContentRun(id, {
       status: "failed",
@@ -205,6 +207,45 @@ function mergeRunState(
   } catch {
     return { runStateFile: "run-state.json", weeks: currentWeeks };
   }
+}
+
+/**
+ * Trigger a week pass in a fresh Lambda invocation via self-fetch.
+ * Each pass gets its own 300s maxDuration budget this way.
+ * The current run state is passed in the request body so the receiving
+ * Lambda can restore it even if it starts with an empty SQLite instance.
+ */
+async function triggerPassViaFetch(run: ContentRun, pass: 2 | 3 | 4 | 5): Promise<void> {
+  const baseUrl = process.env.VERCEL_URL
+    ? `https://${process.env.VERCEL_URL}`
+    : "http://localhost:3000";
+  try {
+    await fetch(`${baseUrl}/api/content-engine/${run.id}/run-pass`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ run, pass }),
+    });
+  } catch (err) {
+    // If the self-fetch fails, mark the run as failed
+    updateContentRun(run.id, {
+      status: "failed",
+      error: `Failed to trigger pass ${pass}: ${err instanceof Error ? err.message : String(err)}`,
+    });
+  }
+}
+
+/**
+ * Entry point for the /run-pass internal endpoint.
+ * Restores run state into local SQLite (idempotent upsert) and runs the pass.
+ * Returns a promise for use with after().
+ */
+export function runPassFromRequest(run: ContentRun, pass: 2 | 3 | 4 | 5): Promise<void> {
+  upsertContentRun(run);
+  // pass 2 = week_1, pass 3 = week_2, pass 4 = week_3, pass 5 = week_4
+  const weekNum = (pass - 1) as 1 | 2 | 3 | 4;
+  const refreshed = getContentRun(run.id);
+  if (!refreshed) return Promise.resolve();
+  return runWeekPass(refreshed, pass, `week_${weekNum}` as ContentRunStatus);
 }
 
 export function contentRunFileUrl(runId: string, filename: string): string {
