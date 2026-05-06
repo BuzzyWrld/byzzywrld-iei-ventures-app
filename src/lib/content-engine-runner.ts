@@ -212,26 +212,36 @@ function mergeRunState(
 /**
  * Trigger a week pass in a fresh Lambda invocation via self-fetch.
  * Each pass gets its own 300s maxDuration budget this way.
- * The current run state is passed in the request body so the receiving
- * Lambda can restore it even if it starts with an empty SQLite instance.
+ *
+ * Falls back to running the pass inline if the self-fetch fails or times out
+ * (e.g. due to Vercel deployment protection on preview builds).
  */
 async function triggerPassViaFetch(run: ContentRun, pass: 2 | 3 | 4 | 5): Promise<void> {
   const baseUrl = process.env.VERCEL_URL
     ? `https://${process.env.VERCEL_URL}`
     : "http://localhost:3000";
+
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), 8_000); // 8s timeout
+
   try {
-    await fetch(`${baseUrl}/api/content-engine/${run.id}/run-pass`, {
+    const resp = await fetch(`${baseUrl}/api/content-engine/${run.id}/run-pass`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ run, pass }),
+      signal: controller.signal,
     });
-  } catch (err) {
-    // If the self-fetch fails, mark the run as failed
-    updateContentRun(run.id, {
-      status: "failed",
-      error: `Failed to trigger pass ${pass}: ${err instanceof Error ? err.message : String(err)}`,
-    });
+    clearTimeout(timer);
+    if (resp.ok) return; // Pass 2 successfully delegated to a new Lambda
+  } catch {
+    clearTimeout(timer);
+    // Self-fetch timed out or failed (e.g. deployment protection) — fall through
   }
+
+  // Fallback: run the pass inline in the current Lambda.
+  const weekNum = (pass - 1) as 1 | 2 | 3 | 4;
+  const refreshed = getContentRun(run.id);
+  if (refreshed) await runWeekPass(refreshed, pass, `week_${weekNum}` as ContentRunStatus);
 }
 
 /**
