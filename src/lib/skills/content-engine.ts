@@ -189,6 +189,43 @@ const TOOLS: Anthropic.Messages.Tool[] = [
 
 // ─── Core agent runner ──────────────────────────────────────────────────────
 
+/**
+ * In test mode (CONTENT_ENGINE_TEST_MODE=1), skip the real Claude API call
+ * and write minimal stub files so the pipeline routing can be validated
+ * end-to-end in seconds.
+ */
+async function runAgentPassStub(
+  pass: number,
+  workDir: string,
+  onProgress?: (stage: string, pct: number) => void,
+  baseProgress = 0
+): Promise<void> {
+  onProgress?.(`stub pass ${pass}: writing files`, baseProgress + 0.05);
+  if (pass === 1) {
+    await fs.writeFile(
+      path.join(workDir, "run-state.json"),
+      JSON.stringify({
+        trendingTopics: ["GTM strategy", "brand building", "IEI platform"],
+        hookSelections: ["Problem-agitate-solve", "Authority proof", "Social proof"],
+      }),
+      "utf8"
+    );
+  } else if (pass <= 4) {
+    const weekNum = pass - 1;
+    await fs.writeFile(
+      path.join(workDir, `week-${weekNum}-draft.md`),
+      `# Week ${weekNum} — GTM Content Draft (stub)\n\n## Monday\nHOOK (0–3 seconds)\nStub hook for day 1\n`,
+      "utf8"
+    );
+  } else {
+    // pass 5: assembly
+    await fs.writeFile(path.join(workDir, "week-4-draft.md"), `# Week 4 stub\n`, "utf8");
+    await fs.writeFile(path.join(workDir, "master-calendar.md"), `# Master Calendar stub\n`, "utf8");
+    await fs.writeFile(path.join(workDir, "index.json"), JSON.stringify({ assetCount: 84 }), "utf8");
+  }
+  onProgress?.(`stub pass ${pass}: done`, baseProgress + 0.17);
+}
+
 async function runAgentPass(
   prompt: string,
   systemPrompt: string,
@@ -399,7 +436,11 @@ export const contentEngineSkill: ContentEngineSkill = {
     }
 
     onProgress?.(`pass ${pass}: invoking agent`, baseProgress + 0.02);
-    await runAgentPass(prompt, systemPrompt, workDir, onProgress, baseProgress + 0.02, 0.15);
+    if (process.env.CONTENT_ENGINE_TEST_MODE === "1") {
+      await runAgentPassStub(pass, workDir, onProgress, baseProgress + 0.02);
+    } else {
+      await runAgentPass(prompt, systemPrompt, workDir, onProgress, baseProgress + 0.02, 0.15);
+    }
 
     // Move files from workDir back to outputDir
     onProgress?.(`pass ${pass}: collecting outputs`, baseProgress + 0.17);
