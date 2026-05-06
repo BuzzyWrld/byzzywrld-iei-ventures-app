@@ -221,13 +221,17 @@ async function triggerPassViaFetch(run: ContentRun, pass: 2 | 3 | 4 | 5): Promis
     ? `https://${process.env.VERCEL_URL}`
     : "http://localhost:3000";
 
+  const bypassToken = process.env.VERCEL_BYPASS_TOKEN;
+  const headers: Record<string, string> = { "Content-Type": "application/json" };
+  if (bypassToken) headers["x-vercel-protection-bypass"] = bypassToken;
+
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), 8_000); // 8s timeout
 
   try {
     const resp = await fetch(`${baseUrl}/api/content-engine/${run.id}/run-pass`, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers,
       body: JSON.stringify({ run, pass }),
       signal: controller.signal,
     });
@@ -235,7 +239,7 @@ async function triggerPassViaFetch(run: ContentRun, pass: 2 | 3 | 4 | 5): Promis
     if (resp.ok) return; // Pass 2 successfully delegated to a new Lambda
   } catch {
     clearTimeout(timer);
-    // Self-fetch timed out or failed (e.g. deployment protection) — fall through
+    // Self-fetch timed out or failed — fall through to inline execution
   }
 
   // Fallback: run the pass inline in the current Lambda.
