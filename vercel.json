@@ -1,3 +1,13 @@
 {
-  "installCommand": "npm ci --include=optional"
+  "functions": {
+    "src/app/api/content-engine/route.ts": {
+      "maxDuration": 300
+    },
+    "src/app/api/content-engine/[id]/route.ts": {
+      "maxDuration": 300
+    },
+    "src/app/api/content-engine/[id]/approve/route.ts": {
+      "maxDuration": 300
+    }
+  }
 }

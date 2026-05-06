@@ -1,22 +1,25 @@
 /**
- * Content Engine skill adapter.
+ * Content Engine skill adapter — direct Anthropic SDK implementation.
  *
- * Runs the IEI 4-week content calendar generation as 5 sequential agent passes.
- * Each pass invokes Claude via @anthropic-ai/claude-agent-sdk with the full
- * SKILL.md + 5 reference files inlined into the system prompt.
+ * Runs the IEI 4-week content calendar generation as 5 sequential passes.
+ * Each pass calls Claude via @anthropic-ai/sdk with a Write/Read tool loop,
+ * writing output files to a temp working directory.
  *
- * Pass 1  — market analysis + hook selections + run-state.json
+ * This approach avoids the @anthropic-ai/claude-agent-sdk binary dependency
+ * (240 MB per platform), which exceeds Vercel's 250 MB Lambda limit.
+ *
+ * Pass 1  — market analysis + hook selections → run-state.json
  * Pass 2  — Week 1: 7 days × 3 assets
  * Pass 3  — Week 2 (reads Week 1 as benchmark)
  * Pass 4  — Week 3 (reads Weeks 1–2 as benchmark)
  * Pass 5  — Week 4 + master calendar assembly
  *
- * Enable:
+ * Required env:
  *   ANTHROPIC_API_KEY=sk-ant-...
- *   SKILL_ADAPTER=agent-sdk        (shared with brand-playbook)
- *   CLAUDE_MODEL=sonnet            (haiku is too weak for 84-asset generation)
+ *   CLAUDE_MODEL=claude-sonnet-4-6   (haiku is too weak for 84-asset generation)
  */
 
+import Anthropic from "@anthropic-ai/sdk";
 import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
@@ -55,7 +58,7 @@ async function loadSystemPrompt(): Promise<string> {
     "You are executing the IEI Content Engine skill. The full SKILL.md procedure and all 5 reference files are below. Follow the procedure exactly.",
     "",
     "CRITICAL RULES:",
-    "1. Write ALL output files using the Write tool into the current working directory.",
+    "1. Write ALL output files using the Write tool. File paths must be plain filenames (e.g. run-state.json, week-1-draft.md) — no directory prefix.",
     "2. ALL reference files are pre-loaded (brand-context, tone-guard, 7-day-matrix, asset-formats, hook-library). Do NOT attempt to Read any reference file path.",
     "3. Do not ask clarifying questions. Proceed directly to the pass specified in the user prompt.",
     "4. No emojis in any output file.",
@@ -70,12 +73,11 @@ async function loadSystemPrompt(): Promise<string> {
 
 // ─── Per-pass user prompts ─────────────────────────────────────────────────
 
-function buildPass1Prompt(intake: ContentRunIntake, workDir: string): string {
+function buildPass1Prompt(intake: ContentRunIntake): string {
   return [
     `Execute STEP 1 of the Content Engine skill (Market Analysis + Hook Selection).`,
-    `Working directory: ${workDir}`,
     "",
-    "Write these files to the working directory:",
+    "Write this file using the Write tool:",
     "  run-state.json  — market analysis results, hook selections, variety tracker init",
     "",
     intake.contextNotes ? `Additional context for this campaign:\n${intake.contextNotes}` : "",
@@ -89,8 +91,7 @@ function buildPass1Prompt(intake: ContentRunIntake, workDir: string): string {
 }
 
 function buildWeekPrompt(
-  weekNumber: 1 | 2 | 3 | 4,
-  workDir: string,
+  weekNumber: 1 | 2 | 3,
   intake: ContentRunIntake,
   priorWeekContents: string[]
 ): string {
@@ -105,9 +106,8 @@ function buildWeekPrompt(
 
   return [
     `Execute STEP 2 of the Content Engine skill: generate Week ${weekNumber}.`,
-    `Working directory: ${workDir}`,
     "",
-    `Write exactly this file:`,
+    `Write exactly this file using the Write tool:`,
     `  week-${weekNumber}-draft.md  — all 7 days × 3 assets for Week ${weekNumber}`,
     "",
     "Before writing any asset:",
@@ -120,23 +120,22 @@ function buildWeekPrompt(
     "",
     intake.contextNotes ? `Campaign context: ${intake.contextNotes}` : "",
     "",
-    "After writing week-" + weekNumber + "-draft.md, print the Week Complete summary block.",
+    `After writing week-${weekNumber}-draft.md, print the Week Complete summary block.`,
     "Start by calling the Write tool for the first asset. No text before the first tool call.",
   ]
     .filter(Boolean)
     .join("\n");
 }
 
-function buildPass5Prompt(workDir: string, intake: ContentRunIntake, weeks1to3: string[]): string {
+function buildPass5Prompt(intake: ContentRunIntake, weeks1to3: string[]): string {
   const priorContext = weeks1to3
     .map((c, i) => `### Week ${i + 1} (approved)\n${c}`)
     .join("\n\n");
 
   return [
     `Execute STEP 4 of the Content Engine skill: generate Week 4, then assemble the master calendar.`,
-    `Working directory: ${workDir}`,
     "",
-    "Write these files:",
+    "Write these files using the Write tool:",
     "  week-4-draft.md      — all 7 days × 3 assets for Week 4",
     "  master-calendar.md   — full 4-week calendar assembled from weeks 1–4",
     "  index.json           — JSON index with run metadata and file references",
@@ -160,42 +159,33 @@ function buildPass5Prompt(workDir: string, intake: ContentRunIntake, weeks1to3: 
     .join("\n");
 }
 
-// ─── SDK loader (shared pattern from agent-sdk.ts) ─────────────────────────
+// ─── Anthropic tool definitions ─────────────────────────────────────────────
 
-type SdkMessage = {
-  type: string;
-  subtype?: string;
-  message?: { content?: Array<{ type: string; name?: string; input?: unknown; text?: string }> };
-  result?: string;
-  is_error?: boolean;
-  total_cost_usd?: number;
-  num_turns?: number;
-  duration_ms?: number;
-  errors?: string[];
-  permission_denials?: Array<{ tool_name: string; tool_input: unknown }>;
-  error?: string;
-  stop_reason?: string | null;
-};
-
-type AgentSdkDeps = {
-  query: (args: {
-    prompt: string;
-    options: Record<string, unknown>;
-  }) => AsyncIterable<SdkMessage>;
-};
-
-async function loadAgentSdk(): Promise<AgentSdkDeps> {
-  try {
-    const moduleName = "@anthropic-ai/claude-agent-sdk";
-    const mod = (await import(/* @vite-ignore */ moduleName)) as unknown as AgentSdkDeps;
-    return mod;
-  } catch {
-    throw new ContentEngineError(
-      "@anthropic-ai/claude-agent-sdk is not installed. Run: npm install @anthropic-ai/claude-agent-sdk",
-      "SDK_NOT_INSTALLED"
-    );
-  }
-}
+const TOOLS: Anthropic.Messages.Tool[] = [
+  {
+    name: "Write",
+    description: "Write text content to a file in the working directory. Use plain filenames only (e.g. run-state.json), no path prefixes.",
+    input_schema: {
+      type: "object" as const,
+      properties: {
+        file_path: { type: "string", description: "Filename to write (plain name, no directory prefix)" },
+        content: { type: "string", description: "Full file content to write" },
+      },
+      required: ["file_path", "content"],
+    },
+  },
+  {
+    name: "Read",
+    description: "Read a file from the working directory.",
+    input_schema: {
+      type: "object" as const,
+      properties: {
+        file_path: { type: "string", description: "Filename to read" },
+      },
+      required: ["file_path"],
+    },
+  },
+];
 
 // ─── Core agent runner ──────────────────────────────────────────────────────
 
@@ -207,60 +197,113 @@ async function runAgentPass(
   baseProgress = 0,
   progressRange = 0.18
 ): Promise<void> {
-  const { query } = await loadAgentSdk();
-  const model = process.env.CLAUDE_MODEL ?? "sonnet";
+  if (!process.env.ANTHROPIC_API_KEY) {
+    throw new ContentEngineError("ANTHROPIC_API_KEY is not set", "NO_API_KEY");
+  }
+
+  const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
+  const model = process.env.CLAUDE_MODEL ?? "claude-sonnet-4-6";
 
   if (VERBOSE) console.log(`[content-engine] model=${model} workDir=${workDir}`);
 
-  const stream = query({
-    prompt,
-    options: {
-      systemPrompt,
-      model,
-      cwd: workDir,
-      permissionMode: "bypassPermissions",
-      dangerouslySkipPermissions: true,
-      allowedTools: ["Write", "Read", "Edit", "WebSearch"],
-    },
-  });
+  const messages: Anthropic.Messages.MessageParam[] = [
+    { role: "user", content: prompt },
+  ];
 
   let toolCalls = 0;
-  let result: SdkMessage | null = null;
+  let turns = 0;
+  const MAX_TURNS = 120;
 
-  for await (const msg of stream) {
-    if (VERBOSE) console.log(`[content-engine] ${msg.type}${msg.subtype ? `/${msg.subtype}` : ""}`);
+  while (turns < MAX_TURNS) {
+    turns++;
 
-    if (msg.type === "assistant") {
-      for (const block of msg.message?.content ?? []) {
-        if (block.type === "tool_use") {
-          toolCalls++;
-          const pct = Math.min(baseProgress + toolCalls * (progressRange / 30), baseProgress + progressRange - 0.01);
-          const input = block.input as { file_path?: string; query?: string } | undefined;
-          const detail = input?.file_path ?? input?.query?.slice(0, 50) ?? "";
-          onProgress?.(`${block.name}: ${detail}`, pct);
-          if (VERBOSE) console.log(`[content-engine]   → ${block.name} ${detail}`);
-        } else if (block.type === "text" && block.text && VERBOSE) {
-          console.log(`[content-engine]   text: ${block.text.slice(0, 100)}`);
-        }
-      }
-    } else if (msg.type === "result") {
-      result = msg;
+    const response = await client.messages.create({
+      model,
+      max_tokens: 16000,
+      system: systemPrompt,
+      messages,
+      tools: TOOLS,
+    });
+
+    if (VERBOSE) {
+      console.log(`[content-engine] turn ${turns}: stop_reason=${response.stop_reason} blocks=${response.content.length}`);
     }
+
+    // Handle tool use blocks
+    const toolUseBlocks = response.content.filter(
+      (b): b is Anthropic.Messages.ToolUseBlock => b.type === "tool_use"
+    );
+
+    if (toolUseBlocks.length > 0) {
+      const toolResults: Anthropic.Messages.ToolResultBlockParam[] = [];
+
+      for (const block of toolUseBlocks) {
+        toolCalls++;
+        const pct = Math.min(
+          baseProgress + toolCalls * (progressRange / 40),
+          baseProgress + progressRange - 0.01
+        );
+
+        let result: string;
+
+        if (block.name === "Write") {
+          const input = block.input as { file_path: string; content: string };
+          const filename = path.basename(input.file_path); // strip any dir prefix
+          const dest = path.join(workDir, filename);
+          await fs.writeFile(dest, input.content, "utf8");
+          result = `Written: ${filename} (${input.content.length} chars)`;
+          onProgress?.(`Write: ${filename}`, pct);
+          if (VERBOSE) console.log(`[content-engine]   → Write ${filename} (${input.content.length} chars)`);
+        } else if (block.name === "Read") {
+          const input = block.input as { file_path: string };
+          const filename = path.basename(input.file_path);
+          const src = path.join(workDir, filename);
+          try {
+            result = await fs.readFile(src, "utf8");
+            onProgress?.(`Read: ${filename}`, pct);
+          } catch {
+            result = `Error: file not found: ${filename}`;
+          }
+          if (VERBOSE) console.log(`[content-engine]   → Read ${filename} -> ${result.length} chars`);
+        } else {
+          result = `Error: unknown tool ${block.name}`;
+        }
+
+        toolResults.push({
+          type: "tool_result",
+          tool_use_id: block.id,
+          content: result,
+        });
+      }
+
+      // Add assistant response + tool results and continue
+      messages.push({ role: "assistant", content: response.content });
+      messages.push({ role: "user", content: toolResults });
+      continue;
+    }
+
+    // No tool use — check stop reason
+    if (response.stop_reason === "end_turn") {
+      if (VERBOSE) console.log(`[content-engine] pass complete in ${turns} turns, ${toolCalls} tool calls`);
+      return;
+    }
+
+    if (response.stop_reason === "max_tokens") {
+      // Model ran out of tokens mid-response; ask it to continue
+      messages.push({ role: "assistant", content: response.content });
+      messages.push({ role: "user", content: "Continue from where you left off." });
+      continue;
+    }
+
+    // Any other stop reason (e.g. stop_sequence) — treat as done
+    if (VERBOSE) console.log(`[content-engine] stop_reason=${response.stop_reason}, ending pass`);
+    return;
   }
 
-  if (VERBOSE && result) {
-    console.log(
-      `[content-engine] pass result: subtype=${result.subtype} turns=${result.num_turns} cost=$${result.total_cost_usd?.toFixed(3)}`
-    );
-  }
-
-  if (result?.is_error || result?.subtype !== "success") {
-    const hint = result?.errors?.join("; ") ?? result?.result ?? result?.error;
-    throw new ContentEngineError(
-      `content engine pass failed (${result?.subtype ?? "unknown"}): ${hint ?? "no details"}`,
-      "PASS_FAILED"
-    );
-  }
+  throw new ContentEngineError(
+    `content engine pass exceeded max turns (${MAX_TURNS})`,
+    "MAX_TURNS_EXCEEDED"
+  );
 }
 
 // ─── Extract hook summary from a week file ─────────────────────────────────
@@ -269,12 +312,10 @@ async function extractHookSummary(weekFile: string): Promise<string[]> {
   try {
     const content = await fs.readFile(weekFile, "utf8");
     const hookLines: string[] = [];
-    // Find HOOK lines in each day's video script section
     const hookMatches = content.matchAll(/^HOOK \(0[–-]3 seconds\)\n([^\n]+)/gm);
     for (const m of hookMatches) {
       hookLines.push(m[1].trim().slice(0, 80));
     }
-    // Fallback: grab the first non-empty line after each ## heading
     if (hookLines.length < 7) {
       const dayMatches = content.matchAll(/^## (?:Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday)[^\n]*\n+([^\n]+)/gm);
       for (const m of dayMatches) {
@@ -290,7 +331,7 @@ async function extractHookSummary(weekFile: string): Promise<string[]> {
 // ─── Skill implementation ───────────────────────────────────────────────────
 
 export const contentEngineSkill: ContentEngineSkill = {
-  id: "content-engine@1",
+  id: "content-engine@2",
 
   async runPass(
     pass: 1 | 2 | 3 | 4 | 5,
@@ -330,7 +371,7 @@ export const contentEngineSkill: ContentEngineSkill = {
     let prompt: string;
 
     if (pass === 1) {
-      prompt = buildPass1Prompt(intake, workDir);
+      prompt = buildPass1Prompt(intake);
     } else if (pass >= 2 && pass <= 4) {
       const weekNumber = (pass - 1) as 1 | 2 | 3;
       const priorWeeks: string[] = [];
@@ -342,7 +383,7 @@ export const contentEngineSkill: ContentEngineSkill = {
           // week not yet written — skip
         }
       }
-      prompt = buildWeekPrompt(weekNumber, workDir, intake, priorWeeks);
+      prompt = buildWeekPrompt(weekNumber, intake, priorWeeks);
     } else {
       // pass 5 — week 4 + assembly
       const priorWeeks: string[] = [];
@@ -354,7 +395,7 @@ export const contentEngineSkill: ContentEngineSkill = {
           // already handled
         }
       }
-      prompt = buildPass5Prompt(workDir, intake, priorWeeks);
+      prompt = buildPass5Prompt(intake, priorWeeks);
     }
 
     onProgress?.(`pass ${pass}: invoking agent`, baseProgress + 0.02);
@@ -395,7 +436,6 @@ export const contentEngineSkill: ContentEngineSkill = {
   async run(intake: ContentRunIntake, ctx: ContentSkillRunContext): Promise<ContentEngineResult> {
     const { outputDir, onProgress } = ctx;
 
-    // Run all 5 passes sequentially
     onProgress?.("market analysis", 0.02);
     await this.runPass(1, randomUUID(), intake, ctx);
 
@@ -413,7 +453,6 @@ export const contentEngineSkill: ContentEngineSkill = {
 
     onProgress?.("complete", 1);
 
-    // Read the index to return metadata
     const indexPath = path.join(outputDir, "index.json");
     let assetCount = 84;
     try {
