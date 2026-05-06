@@ -28,7 +28,7 @@ function contentRunDir(runId: string): string {
 export function enqueueContentRun(
   intake: ContentRunIntake,
   opts: { tenantId?: string; userId?: string } = {}
-): ContentRun {
+): { run: ContentRun; work: Promise<void> } {
   const id = randomUUID();
   const run: ContentRun = {
     id,
@@ -40,17 +40,16 @@ export function enqueueContentRun(
     userId: opts.userId,
   };
   createContentRun(run);
-  void runPass1(run);
-  return run;
+  return { run, work: runPass1(run) };
 }
 
 /**
  * Called by the approval API after a user approves a week.
  * Advances the run to the next pass.
  */
-export async function advanceContentRun(runId: string): Promise<ContentRun | null> {
+export async function advanceContentRun(runId: string): Promise<{ run: ContentRun | null; work: Promise<void> | null }> {
   const run = getContentRun(runId);
-  if (!run) return null;
+  if (!run) return { run: null, work: null };
 
   const nextPass: Record<ContentRunStatus, (() => Promise<void>) | null> = {
     week_1_review: () => runWeekPass(run, 3, "week_2"),
@@ -69,8 +68,8 @@ export async function advanceContentRun(runId: string): Promise<ContentRun | nul
   };
 
   const fn = nextPass[run.status];
-  if (fn) void fn();
-  return getContentRun(runId);
+  const work = fn ? fn() : null;
+  return { run: getContentRun(runId), work };
 }
 
 // ─── Pass runners ──────────────────────────────────────────────────────────
@@ -94,7 +93,7 @@ async function runPass1(run: ContentRun): Promise<void> {
 
     // Automatically start Week 1 after analysis
     const refreshed = getContentRun(id);
-    if (refreshed) void runWeekPass(refreshed, 2, "week_1");
+    if (refreshed) await runWeekPass(refreshed, 2, "week_1");
   } catch (err) {
     updateContentRun(id, {
       status: "failed",

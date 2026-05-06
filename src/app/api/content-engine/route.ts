@@ -1,3 +1,4 @@
+import { after } from "next/server";
 import { NextRequest } from "next/server";
 import { enqueueContentRun } from "@/lib/content-engine-runner";
 import { listContentRuns } from "@/lib/db";
@@ -24,6 +25,7 @@ export async function POST(request: NextRequest) {
     contextNotes: typeof body.contextNotes === "string" ? body.contextNotes : undefined,
   };
 
-  const run = enqueueContentRun(intake, { tenantId: tenant.id, userId: user.id });
+  const { run, work } = enqueueContentRun(intake, { tenantId: tenant.id, userId: user.id });
+  after(work);
   return Response.json({ run }, { status: 202 });
 }

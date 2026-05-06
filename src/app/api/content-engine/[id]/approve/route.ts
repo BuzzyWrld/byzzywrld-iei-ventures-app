@@ -1,3 +1,4 @@
+import { after } from "next/server";
 import { NextRequest } from "next/server";
 import { advanceContentRun } from "@/lib/content-engine-runner";
 import { getContentRun, updateContentRun } from "@/lib/db";
@@ -33,6 +34,7 @@ export async function POST(
   updateContentRun(id, { outputs: { ...run.outputs, weeks } });
 
   // Advance to the next pass (triggers async agent run)
-  const updated = await advanceContentRun(id);
+  const { run: updated, work } = await advanceContentRun(id);
+  if (work) after(work);
   return Response.json({ run: updated });
 }
