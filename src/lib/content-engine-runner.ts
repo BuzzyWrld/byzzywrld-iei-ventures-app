@@ -233,7 +233,7 @@ async function triggerPassViaFetch(run: ContentRun, pass: 2 | 3 | 4 | 5): Promis
   if (bypassToken) headers["x-vercel-protection-bypass"] = bypassToken;
 
   const controller = new AbortController();
-  const timer = setTimeout(() => controller.abort(), 8_000); // 8s timeout
+  const timer = setTimeout(() => controller.abort(), 20_000); // 20s timeout — generous for cold starts
 
   try {
     const resp = await fetch(`${baseUrl}/api/content-engine/${run.id}/run-pass`, {
