@@ -68,6 +68,10 @@ export interface ContentRunOutputs {
   indexFile?: string;
   /** Total assets generated (should be 84 when complete) */
   assetCount?: number;
+  /** S3 URL of the rendered brand explainer video (set after Remotion Lambda render completes) */
+  brandVideoUrl?: string;
+  /** Render ID for tracking (Remotion Lambda) */
+  brandVideoRenderId?: string;
   /** Trending topics identified in market analysis */
   trendingTopics?: TrendingTopic[];
   hookSelections?: Record<"topic1" | "topic2" | "topic3", HookSelection>;

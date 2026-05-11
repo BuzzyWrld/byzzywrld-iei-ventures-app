@@ -12,6 +12,8 @@ import { randomUUID } from "node:crypto";
 import { createContentRun, getContentRun, updateContentRun, upsertContentRun } from "./db";
 import { contentEngineSkill } from "./skills/content-engine";
 import { OUTPUTS_ROOT } from "./storage";
+import { isVideoRenderEnabled, renderBrandVideo } from "./video-render";
+import { listBrands } from "./db";
 import type {
   ContentRun,
   ContentRunIntake,
@@ -169,6 +171,11 @@ async function runWeekPass(
           assetCount,
         },
       });
+
+      // Fire-and-forget: render brand explainer video if Remotion is configured
+      if (isVideoRenderEnabled()) {
+        void renderBrandVideoForRun(id, run.tenantId);
+      }
     } else {
       updateContentRun(id, {
         status: reviewStatus,
@@ -264,6 +271,72 @@ export function runPassFromRequest(run: ContentRun, pass: 2 | 3 | 4 | 5): Promis
 
 export function contentRunFileUrl(runId: string, filename: string): string {
   return `/api/content-engine/${runId}/files/${filename.split("/").map(encodeURIComponent).join("/")}`;
+}
+
+/**
+ * Look up the tenant's most recent brand, extract brand.json, and trigger
+ * a Remotion Lambda render. Updates the content run with the video URL
+ * when done. Runs asynchronously — does not block content engine completion.
+ */
+async function renderBrandVideoForRun(runId: string, tenantId: string): Promise<void> {
+  try {
+    const brands = listBrands({ tenantId });
+    const brand = brands.find((b) => b.status === "complete");
+    if (!brand) {
+      console.log(`[brand-video] skipping — no completed brand found for tenant ${tenantId}`);
+      return;
+    }
+
+    // Read brand.json from the brand's output directory
+    const brandOutDir = path.join(OUTPUTS_ROOT, "brands", brand.id);
+    const brandJsonPath = path.join(brandOutDir, "brand.json");
+    if (!fs.existsSync(brandJsonPath)) {
+      console.log(`[brand-video] skipping — brand.json not found at ${brandJsonPath}`);
+      return;
+    }
+
+    const brandData = JSON.parse(fs.readFileSync(brandJsonPath, "utf8")) as {
+      name?: string;
+      tagline?: string;
+      colors?: { primary: string; secondary: string; accent: string; neutral: string };
+      typography?: { heading: string; body: string };
+      mission?: string;
+      ica?: string;
+    };
+
+    const result = await renderBrandVideo(
+      {
+        brandName: brandData.name ?? brand.intake.companyName,
+        tagline: brandData.tagline ?? "",
+        colors: brandData.colors ?? { primary: "#FFCC00", secondary: "#1A1A1A", accent: "#FFD633", neutral: "#F5F5F5" },
+        typography: brandData.typography ?? { heading: "Inter", body: "Inter" },
+        mission: brandData.mission,
+        ica: brandData.ica,
+      },
+      (pct) => {
+        updateContentRun(runId, {
+          progressStage: `rendering video ${Math.round(pct * 100)}%`,
+        });
+      }
+    );
+
+    if (result.outputUrl) {
+      const current = getContentRun(runId);
+      const existingOutputs = current?.outputs ?? { weeks: [] };
+      updateContentRun(runId, {
+        outputs: {
+          ...existingOutputs,
+          brandVideoUrl: result.outputUrl,
+          brandVideoRenderId: result.renderId,
+        },
+      });
+      console.log(`[brand-video] saved video URL to content run ${runId}: ${result.outputUrl}`);
+    } else {
+      console.warn(`[brand-video] render failed for run ${runId}: ${result.error}`);
+    }
+  } catch (err) {
+    console.error(`[brand-video] unexpected error for run ${runId}:`, err);
+  }
 }
 
 export { getContentRun, contentRunDir };

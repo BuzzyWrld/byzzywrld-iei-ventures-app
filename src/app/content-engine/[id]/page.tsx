@@ -232,6 +232,45 @@ export default function ContentEngineRunPage() {
         </div>
       )}
 
+      {/* Brand video */}
+      {run.status === "complete" && run.outputs.brandVideoUrl && (
+        <div className="card p-5">
+          <div className="font-mono text-[10.5px] uppercase tracking-[0.14em] mb-3" style={{ color: "var(--color-text-muted)" }}>
+            Brand Explainer Video
+          </div>
+          <video
+            src={run.outputs.brandVideoUrl}
+            controls
+            className="w-full rounded"
+            style={{ maxHeight: 420, background: "#000" }}
+          />
+          <div className="flex gap-2 mt-3">
+            <a
+              href={run.outputs.brandVideoUrl}
+              className="btn btn-secondary btn-sm"
+              download
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Download MP4
+            </a>
+          </div>
+        </div>
+      )}
+
+      {/* Video rendering in progress */}
+      {run.status === "complete" && !run.outputs.brandVideoUrl && run.progressStage?.startsWith("rendering video") && (
+        <div className="card p-5">
+          <div className="font-mono text-[10.5px] uppercase tracking-[0.14em] mb-2" style={{ color: "var(--color-text-muted)" }}>
+            Brand Explainer Video
+          </div>
+          <div className="flex items-center gap-2 text-sm" style={{ color: "var(--color-text-muted)" }}>
+            <span className="animate-pulse">◉</span>
+            <span>{run.progressStage}</span>
+          </div>
+        </div>
+      )}
+
       {/* Error state */}
       {run.status === "failed" && run.error && (
         <div
