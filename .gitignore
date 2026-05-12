@@ -42,6 +42,14 @@ yarn-error.log*
 *.db-shm
 *.db-wal
 
+# sensitive / internal docs
+/api keys/
+vercel-env-vars.md
+/IEI .md Files/
+/IEI Ventures/
+/script standards/
+*.docx
+
 # vercel
 .vercel
 

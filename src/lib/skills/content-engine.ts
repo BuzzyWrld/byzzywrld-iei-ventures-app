@@ -159,6 +159,81 @@ function buildPass5Prompt(intake: ContentRunIntake, weeks1to3: string[]): string
     .join("\n");
 }
 
+// ─── Lightweight Pass 1 (no agentic loop) ──────────────────────────────────
+
+/**
+ * Run Pass 1 as a single non-agentic API call.
+ * Returns JSON for market analysis + hook selections in ~10-30s
+ * instead of the 300s+ agentic loop approach.
+ */
+async function runPass1Lightweight(
+  intake: ContentRunIntake,
+  workDir: string,
+  onProgress?: (stage: string, pct: number) => void,
+  baseProgress = 0
+): Promise<void> {
+  const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
+
+  const prompt = `You are a content strategist for a brand. Analyze the market context and generate a run-state.json for a 4-week content calendar campaign.
+
+${intake.contextNotes ? `Campaign context: ${intake.contextNotes}` : ""}
+${intake.campaignStartDate ? `Start date: ${intake.campaignStartDate}` : ""}
+
+Return ONLY valid JSON (no markdown fences, no commentary) with this exact structure:
+{
+  "trendingTopics": ["topic1", "topic2", "topic3", "topic4", "topic5"],
+  "hookSelections": ["hook1", "hook2", "hook3", "hook4", "hook5", "hook6", "hook7"],
+  "varietyTracker": {
+    "usedHooks": [],
+    "usedFormats": [],
+    "usedTopics": []
+  },
+  "marketAnalysis": {
+    "targetAudience": "description of ideal customer avatar",
+    "painPoints": ["pain1", "pain2", "pain3"],
+    "competitors": ["competitor1", "competitor2", "competitor3"],
+    "contentThemes": ["theme1", "theme2", "theme3", "theme4"],
+    "toneDirection": "description of brand voice direction"
+  }
+}
+
+Requirements:
+- trendingTopics: 5 relevant trending topics for this brand/industry
+- hookSelections: 7 diverse hook types from this list: Problem-agitate-solve, Authority proof, Social proof, Contrarian take, Pattern interrupt, Storytelling, Data-driven, Question-based, Metaphor, Behind-the-scenes
+- marketAnalysis: thorough but concise analysis
+- All content should be specific to the brand context provided`;
+
+  onProgress?.("calling Haiku for market analysis", baseProgress + 0.05);
+
+  const response = await client.messages.create({
+    model: "claude-haiku-4-5-20251001",
+    max_tokens: 4096,
+    messages: [{ role: "user", content: prompt }],
+  });
+
+  onProgress?.("parsing market analysis", baseProgress + 0.12);
+
+  const textBlock = response.content.find((b) => b.type === "text");
+  if (!textBlock || textBlock.type !== "text") {
+    throw new ContentEngineError("Pass 1: no text response from API", "NO_RESPONSE");
+  }
+
+  // Extract JSON — handle possible markdown fences
+  let jsonStr = textBlock.text.trim();
+  if (jsonStr.startsWith("```")) {
+    jsonStr = jsonStr.replace(/^```(?:json)?\n?/, "").replace(/\n?```$/, "");
+  }
+
+  // Validate it's parseable JSON
+  const parsed = JSON.parse(jsonStr);
+  if (!parsed.trendingTopics || !parsed.hookSelections) {
+    throw new ContentEngineError("Pass 1: invalid run-state structure", "INVALID_RESPONSE");
+  }
+
+  await fs.writeFile(path.join(workDir, "run-state.json"), JSON.stringify(parsed, null, 2), "utf8");
+  onProgress?.("market analysis complete", baseProgress + 0.15);
+}
+
 // ─── Anthropic tool definitions ─────────────────────────────────────────────
 
 const TOOLS: Anthropic.Messages.Tool[] = [
@@ -232,14 +307,16 @@ async function runAgentPass(
   workDir: string,
   onProgress?: (stage: string, pct: number) => void,
   baseProgress = 0,
-  progressRange = 0.18
+  progressRange = 0.18,
+  opts?: { modelOverride?: string; maxTokens?: number }
 ): Promise<void> {
   if (!process.env.ANTHROPIC_API_KEY) {
     throw new ContentEngineError("ANTHROPIC_API_KEY is not set", "NO_API_KEY");
   }
 
   const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
-  const model = process.env.CLAUDE_MODEL ?? "claude-sonnet-4-6";
+  const model = opts?.modelOverride ?? process.env.CLAUDE_MODEL ?? "claude-sonnet-4-6";
+  const maxTokens = opts?.maxTokens ?? 16000;
 
   if (VERBOSE) console.log(`[content-engine] model=${model} workDir=${workDir}`);
 
@@ -250,17 +327,47 @@ async function runAgentPass(
   let toolCalls = 0;
   let turns = 0;
   const MAX_TURNS = 120;
+  const WALL_CLOCK_LIMIT_MS = 250_000; // 250s — leaves ~50s for post-processing
+  const startTime = Date.now();
 
   while (turns < MAX_TURNS) {
+    const elapsed = Date.now() - startTime;
+    if (elapsed > WALL_CLOCK_LIMIT_MS) {
+      console.warn(`[content-engine] wall-clock limit reached (${Math.round(elapsed / 1000)}s) after ${turns} turns, ${toolCalls} tool calls — returning partial results`);
+      onProgress?.("time limit reached — saving partial results", baseProgress + progressRange - 0.01);
+      return;
+    }
+
     turns++;
 
-    const response = await client.messages.create({
-      model,
-      max_tokens: 16000,
-      system: systemPrompt,
-      messages,
-      tools: TOOLS,
-    });
+    // Calculate remaining time and cap this API call to leave 30s for post-processing
+    const remaining = WALL_CLOCK_LIMIT_MS - (Date.now() - startTime);
+    const callTimeout = Math.max(remaining - 30_000, 30_000); // at least 30s per call
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), callTimeout);
+
+    let response: Anthropic.Messages.Message;
+    try {
+      response = await client.messages.create(
+        {
+          model,
+          max_tokens: maxTokens,
+          system: systemPrompt,
+          messages,
+          tools: TOOLS,
+        },
+        { signal: controller.signal }
+      );
+    } catch (err) {
+      clearTimeout(timer);
+      if (controller.signal.aborted) {
+        console.warn(`[content-engine] API call timed out after ${Math.round(callTimeout / 1000)}s on turn ${turns} — returning partial results`);
+        onProgress?.("API call timed out — saving partial results", baseProgress + progressRange - 0.01);
+        return;
+      }
+      throw err;
+    }
+    clearTimeout(timer);
 
     if (VERBOSE) {
       console.log(`[content-engine] turn ${turns}: stop_reason=${response.stop_reason} blocks=${response.content.length}`);
@@ -400,45 +507,51 @@ export const contentEngineSkill: ContentEngineSkill = {
       // outputDir may be empty on pass 1 — that is fine
     }
 
-    onProgress?.(`loading skill system prompt`, 0.02);
-    const systemPrompt = await loadSystemPrompt();
-
     const baseProgress = (pass - 1) * 0.18;
 
-    let prompt: string;
-
-    if (pass === 1) {
-      prompt = buildPass1Prompt(intake);
-    } else if (pass >= 2 && pass <= 4) {
-      const weekNumber = (pass - 1) as 1 | 2 | 3;
-      const priorWeeks: string[] = [];
-      for (let w = 1; w < weekNumber; w++) {
-        try {
-          const content = await fs.readFile(path.join(outputDir, `week-${w}-draft.md`), "utf8");
-          priorWeeks.push(content);
-        } catch {
-          // week not yet written — skip
-        }
-      }
-      prompt = buildWeekPrompt(weekNumber, intake, priorWeeks);
-    } else {
-      // pass 5 — week 4 + assembly
-      const priorWeeks: string[] = [];
-      for (let w = 1; w <= 3; w++) {
-        try {
-          const content = await fs.readFile(path.join(outputDir, `week-${w}-draft.md`), "utf8");
-          priorWeeks.push(content);
-        } catch {
-          // already handled
-        }
-      }
-      prompt = buildPass5Prompt(intake, priorWeeks);
-    }
-
-    onProgress?.(`pass ${pass}: invoking agent`, baseProgress + 0.02);
+    // Test mode: skip system prompt loading and use stubs
     if (process.env.CONTENT_ENGINE_TEST_MODE === "1") {
+      onProgress?.(`pass ${pass}: invoking stub`, baseProgress + 0.02);
       await runAgentPassStub(pass, workDir, onProgress, baseProgress + 0.02);
+    } else if (pass === 1) {
+      // Pass 1: single non-agentic API call for market analysis.
+      // Uses a lightweight prompt (no 43KB system prompt, no tool loop) to stay under 60s.
+      onProgress?.(`pass 1: market analysis (lightweight)`, baseProgress + 0.02);
+      await runPass1Lightweight(intake, workDir, onProgress, baseProgress + 0.02);
     } else {
+      onProgress?.(`loading skill system prompt`, 0.02);
+      const systemPrompt = await loadSystemPrompt();
+
+      let prompt: string;
+
+      if (pass >= 2 && pass <= 4) {
+        const weekNumber = (pass - 1) as 1 | 2 | 3;
+        const priorWeeks: string[] = [];
+        for (let w = 1; w < weekNumber; w++) {
+          try {
+            const content = await fs.readFile(path.join(outputDir, `week-${w}-draft.md`), "utf8");
+            priorWeeks.push(content);
+          } catch {
+            // week not yet written — skip
+          }
+        }
+        prompt = buildWeekPrompt(weekNumber, intake, priorWeeks);
+      } else {
+        // pass 5 — week 4 + assembly
+        const priorWeeks: string[] = [];
+        for (let w = 1; w <= 3; w++) {
+          try {
+            const content = await fs.readFile(path.join(outputDir, `week-${w}-draft.md`), "utf8");
+            priorWeeks.push(content);
+          } catch {
+            // already handled
+          }
+        }
+        prompt = buildPass5Prompt(intake, priorWeeks);
+      }
+
+      onProgress?.(`pass ${pass}: invoking agent`, baseProgress + 0.02);
+      // Passes 2–5 (week generation) use Sonnet with the full system prompt for quality.
       await runAgentPass(prompt, systemPrompt, workDir, onProgress, baseProgress + 0.02, 0.15);
     }
 

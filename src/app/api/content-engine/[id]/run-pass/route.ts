@@ -3,6 +3,8 @@ import { NextRequest } from "next/server";
 import { runPassFromRequest } from "@/lib/content-engine-runner";
 import type { ContentRun } from "@/lib/skills/content-engine-contract";
 
+export const maxDuration = 300;
+
 /**
  * POST /api/content-engine/[id]/run-pass
  *
@@ -30,6 +32,12 @@ export async function POST(
     return Response.json({ error: "invalid pass number" }, { status: 400 });
   }
 
-  after(runPassFromRequest(body.run, pass));
+  after(async () => {
+    try {
+      await runPassFromRequest(body.run, pass);
+    } catch (err) {
+      console.error(`[content-engine] run-pass ${pass} failed:`, err);
+    }
+  });
   return Response.json({ ok: true });
 }

@@ -14,6 +14,7 @@ import { contentEngineSkill } from "./skills/content-engine";
 import { OUTPUTS_ROOT } from "./storage";
 import { isVideoRenderEnabled, renderBrandVideo } from "./video-render";
 import { listBrands } from "./db";
+import { persistRun, fetchRun } from "./blob-runs";
 import type {
   ContentRun,
   ContentRunIntake,
@@ -25,6 +26,25 @@ function contentRunDir(runId: string): string {
   const dir = path.join(OUTPUTS_ROOT, "content-runs", runId);
   if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
   return dir;
+}
+
+/**
+ * Update SQLite and fire-and-forget persist to Vercel Blob.
+ * The Blob write is async but we don't await it for progress updates
+ * (too frequent). For state transitions we await it.
+ */
+function updateAndPersist(id: string, patch: Partial<ContentRun>, await_blob = false): void | Promise<void> {
+  updateContentRun(id, patch);
+  const run = getContentRun(id);
+  if (run) {
+    const p = persistRun(run);
+    if (await_blob) return p;
+  }
+}
+
+async function createAndPersist(run: ContentRun): Promise<void> {
+  createContentRun(run);
+  await persistRun(run);
 }
 
 export function enqueueContentRun(
@@ -42,6 +62,8 @@ export function enqueueContentRun(
     userId: opts.userId,
   };
   createContentRun(run);
+  // Don't persist "pending" to Blob — runPass1 immediately sets "analysis" and awaits that persist.
+  // A fire-and-forget "pending" write here races with runPass1's "analysis" write and can overwrite it.
   return { run, work: runPass1(run) };
 }
 
@@ -78,31 +100,56 @@ export async function advanceContentRun(runId: string): Promise<{ run: ContentRu
 
 async function runPass1(run: ContentRun): Promise<void> {
   const { id, intake } = run;
+  console.log(`[content-engine] runPass1 started for ${id}`);
   updateContentRun(id, { status: "analysis", progressStage: "market analysis", progressPct: 0 });
+  await persistRun(getContentRun(id)!); // Blob: AWAIT so status is visible to polls before proceeding
+  console.log(`[content-engine] runPass1 persisted "analysis" to Blob for ${id}`);
+
+  // Safety: persist "failed" to Blob at 270s so the UI isn't stuck if Lambda times out
+  const safetyTimer = setTimeout(async () => {
+    console.error(`[content-engine] Pass 1 approaching 300s timeout — persisting safety state`);
+    try {
+      updateContentRun(id, {
+        status: "failed",
+        error: "Pass 1 exceeded 270s safety limit. The market analysis took too long. Try again — subsequent attempts may hit warm Lambdas.",
+      });
+      const snap = getContentRun(id);
+      if (snap) await persistRun(snap);
+    } catch { /* best-effort */ }
+  }, 270_000);
 
   try {
     const outputDir = contentRunDir(id);
     await contentEngineSkill.runPass(1, id, intake, {
       outputDir,
       onProgress: (stage, pct) => {
+        // Update local SQLite only — no Blob writes during pass execution.
+        // Blob writes from onProgress race with the final state persist and can
+        // overwrite "week_1" with stale "analysis". Pass 1 is <5s anyway.
         updateContentRun(id, { progressStage: stage, progressPct: pct * 0.18 });
       },
     });
+    clearTimeout(safetyTimer);
 
     // Read run-state.json to extract trending topics + hook selections
     const outputs = mergeRunState(id, outputDir, run.outputs.weeks ?? []);
-    updateContentRun(id, { outputs });
+    // Transition to week_1 BEFORE persisting — prevents stale "analysis" from racing
+    updateContentRun(id, { status: "week_1", outputs, progressStage: "delegating week 1 generation", progressPct: 0.18 });
 
-    // Trigger Week 1 in a fresh Lambda invocation so it gets its own 300s budget.
-    // Pass the current run state in the body so the receiving Lambda can restore it
-    // even if it starts with an empty SQLite.
+    // Persist before delegation so the next Lambda can also read from Blob
     const refreshed = getContentRun(id);
-    if (refreshed) await triggerPassViaFetch(refreshed, 2);
+    if (refreshed) {
+      await persistRun(refreshed);
+      await triggerPassViaFetch(refreshed, 2);
+    }
   } catch (err) {
+    clearTimeout(safetyTimer);
     updateContentRun(id, {
       status: "failed",
       error: err instanceof Error ? err.message : String(err),
     });
+    const failed = getContentRun(id);
+    if (failed) await persistRun(failed);
   }
 }
 
@@ -113,12 +160,15 @@ async function runWeekPass(
 ): Promise<void> {
   const { id, intake } = run;
   updateContentRun(id, { status: nextStatus, progressStage: `generating ${nextStatus.replace("_", " ")}`, progressPct: (pass - 1) * 0.18 });
+  await persistRun(getContentRun(id)!);
 
   try {
     const outputDir = contentRunDir(id);
     const result = await contentEngineSkill.runPass(pass, id, intake, {
       outputDir,
       onProgress: (stage, pct) => {
+        // Update local SQLite only — no Blob writes during pass execution.
+        // Fire-and-forget Blob writes race with the final state persist.
         updateContentRun(id, {
           progressStage: stage,
           progressPct: (pass - 1) * 0.18 + pct * 0.18,
@@ -127,8 +177,9 @@ async function runWeekPass(
     });
 
     if (!result) {
-      // Pass 1 only — shouldn't happen for passes 2–5
       updateContentRun(id, { status: "failed", error: "pass returned no week result" });
+      const f = getContentRun(id);
+      if (f) await persistRun(f);
       return;
     }
 
@@ -184,11 +235,17 @@ async function runWeekPass(
         outputs: { ...current?.outputs, weeks },
       });
     }
+
+    // Persist final state of this pass to Blob
+    const final = getContentRun(id);
+    if (final) await persistRun(final);
   } catch (err) {
     updateContentRun(id, {
       status: "failed",
       error: err instanceof Error ? err.message : String(err),
     });
+    const f = getContentRun(id);
+    if (f) await persistRun(f);
   }
 }
 
@@ -220,39 +277,56 @@ function mergeRunState(
  * Trigger a week pass in a fresh Lambda invocation via self-fetch.
  * Each pass gets its own 300s maxDuration budget this way.
  *
- * Falls back to running the pass inline if the self-fetch fails or times out
- * (e.g. due to Vercel deployment protection on preview builds).
+ * If the self-fetch fails, the run is marked failed with a diagnostic message
+ * rather than running the pass inline (which would exceed the 300s budget).
  */
 async function triggerPassViaFetch(run: ContentRun, pass: 2 | 3 | 4 | 5): Promise<void> {
-  const baseUrl = process.env.VERCEL_URL
-    ? `https://${process.env.VERCEL_URL}`
-    : "http://localhost:3000";
+  // Prefer the stable production URL over the deployment-specific VERCEL_URL
+  const host =
+    process.env.VERCEL_PROJECT_PRODUCTION_URL ??
+    process.env.VERCEL_URL;
+  const baseUrl = host ? `https://${host}` : "http://localhost:3000";
 
   const bypassToken = process.env.VERCEL_BYPASS_TOKEN;
   const headers: Record<string, string> = { "Content-Type": "application/json" };
   if (bypassToken) headers["x-vercel-protection-bypass"] = bypassToken;
 
+  const url = `${baseUrl}/api/content-engine/${run.id}/run-pass`;
+  console.log(`[content-engine] self-fetch pass ${pass} → ${url}`);
+
   const controller = new AbortController();
-  const timer = setTimeout(() => controller.abort(), 20_000); // 20s timeout — generous for cold starts
+  const timer = setTimeout(() => controller.abort(), 25_000);
 
   try {
-    const resp = await fetch(`${baseUrl}/api/content-engine/${run.id}/run-pass`, {
+    const resp = await fetch(url, {
       method: "POST",
       headers,
       body: JSON.stringify({ run, pass }),
       signal: controller.signal,
     });
     clearTimeout(timer);
-    if (resp.ok) return; // Pass 2 successfully delegated to a new Lambda
-  } catch {
+
+    if (resp.ok) {
+      console.log(`[content-engine] pass ${pass} delegated successfully`);
+      return;
+    }
+
+    const text = await resp.text().catch(() => "");
+    console.error(`[content-engine] self-fetch returned ${resp.status}: ${text}`);
+  } catch (err) {
     clearTimeout(timer);
-    // Self-fetch timed out or failed — fall through to inline execution
+    const msg = err instanceof Error ? err.message : String(err);
+    console.error(`[content-engine] self-fetch failed: ${msg}`);
   }
 
-  // Fallback: run the pass inline in the current Lambda.
-  const weekNum = (pass - 1) as 1 | 2 | 3 | 4;
-  const refreshed = getContentRun(run.id);
-  if (refreshed) await runWeekPass(refreshed, pass, `week_${weekNum}` as ContentRunStatus);
+  // Do NOT run inline — it would exceed the 300s budget.
+  // Mark the run so the UI can show a retry option.
+  updateContentRun(run.id, {
+    status: "failed",
+    error: `Pass ${pass} delegation failed (self-fetch to ${url}). Check VERCEL_PROJECT_PRODUCTION_URL and VERCEL_BYPASS_TOKEN env vars. Re-trigger via the dashboard.`,
+  });
+  const failed = getContentRun(run.id);
+  if (failed) await persistRun(failed);
 }
 
 /**
