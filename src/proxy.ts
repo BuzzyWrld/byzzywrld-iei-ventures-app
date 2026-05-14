@@ -38,17 +38,16 @@ export function proxy(request: NextRequest) {
   requestHeaders.set("x-iei-host", host);
 
   /* ---- auth gate ---- */
-  // DEV_BYPASS: auth gate disabled for testing. Re-enable before launch.
-  // const { pathname } = request.nextUrl;
-  // if (isProtected(pathname)) {
-  //   const cookie = request.cookies.get(SESSION_COOKIE);
-  //   if (!cookie?.value) {
-  //     const url = request.nextUrl.clone();
-  //     url.pathname = "/login";
-  //     url.searchParams.set("next", pathname);
-  //     return NextResponse.redirect(url);
-  //   }
-  // }
+  const { pathname } = request.nextUrl;
+  if (isProtected(pathname)) {
+    const cookie = request.cookies.get(SESSION_COOKIE);
+    if (!cookie?.value) {
+      const url = request.nextUrl.clone();
+      url.pathname = "/login";
+      url.searchParams.set("next", pathname);
+      return NextResponse.redirect(url);
+    }
+  }
 
   return NextResponse.next({ request: { headers: requestHeaders } });
 }

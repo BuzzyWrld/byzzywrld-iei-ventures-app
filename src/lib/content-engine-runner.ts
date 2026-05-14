@@ -28,29 +28,10 @@ function contentRunDir(runId: string): string {
   return dir;
 }
 
-/**
- * Update SQLite and fire-and-forget persist to Vercel Blob.
- * The Blob write is async but we don't await it for progress updates
- * (too frequent). For state transitions we await it.
- */
-function updateAndPersist(id: string, patch: Partial<ContentRun>, await_blob = false): void | Promise<void> {
-  updateContentRun(id, patch);
-  const run = getContentRun(id);
-  if (run) {
-    const p = persistRun(run);
-    if (await_blob) return p;
-  }
-}
-
-async function createAndPersist(run: ContentRun): Promise<void> {
-  createContentRun(run);
-  await persistRun(run);
-}
-
-export function enqueueContentRun(
+export async function enqueueContentRun(
   intake: ContentRunIntake,
   opts: { tenantId?: string; userId?: string } = {}
-): { run: ContentRun; work: Promise<void> } {
+): Promise<{ run: ContentRun; work: Promise<void> }> {
   const id = randomUUID();
   const run: ContentRun = {
     id,
@@ -61,7 +42,7 @@ export function enqueueContentRun(
     tenantId: opts.tenantId ?? "default",
     userId: opts.userId,
   };
-  createContentRun(run);
+  await createContentRun(run);
   // Don't persist "pending" to Blob — runPass1 immediately sets "analysis" and awaits that persist.
   // A fire-and-forget "pending" write here races with runPass1's "analysis" write and can overwrite it.
   return { run, work: runPass1(run) };
@@ -72,7 +53,7 @@ export function enqueueContentRun(
  * Advances the run to the next pass.
  */
 export async function advanceContentRun(runId: string): Promise<{ run: ContentRun | null; work: Promise<void> | null }> {
-  const run = getContentRun(runId);
+  const run = await getContentRun(runId);
   if (!run) return { run: null, work: null };
 
   const nextPass: Record<ContentRunStatus, (() => Promise<void>) | null> = {
@@ -93,7 +74,7 @@ export async function advanceContentRun(runId: string): Promise<{ run: ContentRu
 
   const fn = nextPass[run.status];
   const work = fn ? fn() : null;
-  return { run: getContentRun(runId), work };
+  return { run: await getContentRun(runId), work };
 }
 
 // ─── Pass runners ──────────────────────────────────────────────────────────
@@ -101,19 +82,19 @@ export async function advanceContentRun(runId: string): Promise<{ run: ContentRu
 async function runPass1(run: ContentRun): Promise<void> {
   const { id, intake } = run;
   console.log(`[content-engine] runPass1 started for ${id}`);
-  updateContentRun(id, { status: "analysis", progressStage: "market analysis", progressPct: 0 });
-  await persistRun(getContentRun(id)!); // Blob: AWAIT so status is visible to polls before proceeding
+  await updateContentRun(id, { status: "analysis", progressStage: "market analysis", progressPct: 0 });
+  await persistRun((await getContentRun(id))!); // Blob: AWAIT so status is visible to polls before proceeding
   console.log(`[content-engine] runPass1 persisted "analysis" to Blob for ${id}`);
 
   // Safety: persist "failed" to Blob at 270s so the UI isn't stuck if Lambda times out
   const safetyTimer = setTimeout(async () => {
     console.error(`[content-engine] Pass 1 approaching 300s timeout — persisting safety state`);
     try {
-      updateContentRun(id, {
+      await updateContentRun(id, {
         status: "failed",
         error: "Pass 1 exceeded 270s safety limit. The market analysis took too long. Try again — subsequent attempts may hit warm Lambdas.",
       });
-      const snap = getContentRun(id);
+      const snap = await getContentRun(id);
       if (snap) await persistRun(snap);
     } catch { /* best-effort */ }
   }, 270_000);
@@ -122,11 +103,8 @@ async function runPass1(run: ContentRun): Promise<void> {
     const outputDir = contentRunDir(id);
     await contentEngineSkill.runPass(1, id, intake, {
       outputDir,
-      onProgress: (stage, pct) => {
-        // Update local SQLite only — no Blob writes during pass execution.
-        // Blob writes from onProgress race with the final state persist and can
-        // overwrite "week_1" with stale "analysis". Pass 1 is <5s anyway.
-        updateContentRun(id, { progressStage: stage, progressPct: pct * 0.18 });
+      onProgress: async (stage, pct) => {
+        await updateContentRun(id, { progressStage: stage, progressPct: pct * 0.18 });
       },
     });
     clearTimeout(safetyTimer);
@@ -134,21 +112,21 @@ async function runPass1(run: ContentRun): Promise<void> {
     // Read run-state.json to extract trending topics + hook selections
     const outputs = mergeRunState(id, outputDir, run.outputs.weeks ?? []);
     // Transition to week_1 BEFORE persisting — prevents stale "analysis" from racing
-    updateContentRun(id, { status: "week_1", outputs, progressStage: "delegating week 1 generation", progressPct: 0.18 });
+    await updateContentRun(id, { status: "week_1", outputs, progressStage: "delegating week 1 generation", progressPct: 0.18 });
 
     // Persist before delegation so the next Lambda can also read from Blob
-    const refreshed = getContentRun(id);
+    const refreshed = await getContentRun(id);
     if (refreshed) {
       await persistRun(refreshed);
       await triggerPassViaFetch(refreshed, 2);
     }
   } catch (err) {
     clearTimeout(safetyTimer);
-    updateContentRun(id, {
+    await updateContentRun(id, {
       status: "failed",
       error: err instanceof Error ? err.message : String(err),
     });
-    const failed = getContentRun(id);
+    const failed = await getContentRun(id);
     if (failed) await persistRun(failed);
   }
 }
@@ -159,17 +137,15 @@ async function runWeekPass(
   nextStatus: ContentRunStatus
 ): Promise<void> {
   const { id, intake } = run;
-  updateContentRun(id, { status: nextStatus, progressStage: `generating ${nextStatus.replace("_", " ")}`, progressPct: (pass - 1) * 0.18 });
-  await persistRun(getContentRun(id)!);
+  await updateContentRun(id, { status: nextStatus, progressStage: `generating ${nextStatus.replace("_", " ")}`, progressPct: (pass - 1) * 0.18 });
+  await persistRun((await getContentRun(id))!);
 
   try {
     const outputDir = contentRunDir(id);
     const result = await contentEngineSkill.runPass(pass, id, intake, {
       outputDir,
-      onProgress: (stage, pct) => {
-        // Update local SQLite only — no Blob writes during pass execution.
-        // Fire-and-forget Blob writes race with the final state persist.
-        updateContentRun(id, {
+      onProgress: async (stage, pct) => {
+        await updateContentRun(id, {
           progressStage: stage,
           progressPct: (pass - 1) * 0.18 + pct * 0.18,
         });
@@ -177,14 +153,14 @@ async function runWeekPass(
     });
 
     if (!result) {
-      updateContentRun(id, { status: "failed", error: "pass returned no week result" });
-      const f = getContentRun(id);
+      await updateContentRun(id, { status: "failed", error: "pass returned no week result" });
+      const f = await getContentRun(id);
       if (f) await persistRun(f);
       return;
     }
 
     // Add this week to the weeks array
-    const current = getContentRun(id);
+    const current = await getContentRun(id);
     const weeks: WeekMeta[] = [...(current?.outputs.weeks ?? [])];
     const weekMeta: WeekMeta = {
       weekNumber: result.weekNumber,
@@ -210,7 +186,7 @@ async function runWeekPass(
       } catch {
         // best-effort
       }
-      updateContentRun(id, {
+      await updateContentRun(id, {
         status: "complete",
         progressStage: "complete",
         progressPct: 1,
@@ -228,7 +204,7 @@ async function runWeekPass(
         void renderBrandVideoForRun(id, run.tenantId);
       }
     } else {
-      updateContentRun(id, {
+      await updateContentRun(id, {
         status: reviewStatus,
         progressStage: `week ${result.weekNumber} ready for review`,
         progressPct: pass * 0.18,
@@ -237,14 +213,14 @@ async function runWeekPass(
     }
 
     // Persist final state of this pass to Blob
-    const final = getContentRun(id);
+    const final = await getContentRun(id);
     if (final) await persistRun(final);
   } catch (err) {
-    updateContentRun(id, {
+    await updateContentRun(id, {
       status: "failed",
       error: err instanceof Error ? err.message : String(err),
     });
-    const f = getContentRun(id);
+    const f = await getContentRun(id);
     if (f) await persistRun(f);
   }
 }
@@ -321,25 +297,25 @@ async function triggerPassViaFetch(run: ContentRun, pass: 2 | 3 | 4 | 5): Promis
 
   // Do NOT run inline — it would exceed the 300s budget.
   // Mark the run so the UI can show a retry option.
-  updateContentRun(run.id, {
+  await updateContentRun(run.id, {
     status: "failed",
     error: `Pass ${pass} delegation failed (self-fetch to ${url}). Check VERCEL_PROJECT_PRODUCTION_URL and VERCEL_BYPASS_TOKEN env vars. Re-trigger via the dashboard.`,
   });
-  const failed = getContentRun(run.id);
+  const failed = await getContentRun(run.id);
   if (failed) await persistRun(failed);
 }
 
 /**
  * Entry point for the /run-pass internal endpoint.
- * Restores run state into local SQLite (idempotent upsert) and runs the pass.
+ * Restores run state into Postgres (idempotent upsert) and runs the pass.
  * Returns a promise for use with after().
  */
-export function runPassFromRequest(run: ContentRun, pass: 2 | 3 | 4 | 5): Promise<void> {
-  upsertContentRun(run);
+export async function runPassFromRequest(run: ContentRun, pass: 2 | 3 | 4 | 5): Promise<void> {
+  await upsertContentRun(run);
   // pass 2 = week_1, pass 3 = week_2, pass 4 = week_3, pass 5 = week_4
   const weekNum = (pass - 1) as 1 | 2 | 3 | 4;
-  const refreshed = getContentRun(run.id);
-  if (!refreshed) return Promise.resolve();
+  const refreshed = await getContentRun(run.id);
+  if (!refreshed) return;
   return runWeekPass(refreshed, pass, `week_${weekNum}` as ContentRunStatus);
 }
 
@@ -354,7 +330,7 @@ export function contentRunFileUrl(runId: string, filename: string): string {
  */
 async function renderBrandVideoForRun(runId: string, tenantId: string): Promise<void> {
   try {
-    const brands = listBrands({ tenantId });
+    const brands = await listBrands({ tenantId });
     const brand = brands.find((b) => b.status === "complete");
     if (!brand) {
       console.log(`[brand-video] skipping — no completed brand found for tenant ${tenantId}`);
@@ -362,7 +338,7 @@ async function renderBrandVideoForRun(runId: string, tenantId: string): Promise<
     }
 
     // Read brand.json from the brand's output directory
-    const brandOutDir = path.join(OUTPUTS_ROOT, "brands", brand.id);
+    const brandOutDir = path.join(OUTPUTS_ROOT, brand.id);
     const brandJsonPath = path.join(brandOutDir, "brand.json");
     if (!fs.existsSync(brandJsonPath)) {
       console.log(`[brand-video] skipping — brand.json not found at ${brandJsonPath}`);
@@ -387,17 +363,17 @@ async function renderBrandVideoForRun(runId: string, tenantId: string): Promise<
         mission: brandData.mission,
         ica: brandData.ica,
       },
-      (pct) => {
-        updateContentRun(runId, {
+      async (pct) => {
+        await updateContentRun(runId, {
           progressStage: `rendering video ${Math.round(pct * 100)}%`,
         });
       }
     );
 
     if (result.outputUrl) {
-      const current = getContentRun(runId);
+      const current = await getContentRun(runId);
       const existingOutputs = current?.outputs ?? { weeks: [] };
-      updateContentRun(runId, {
+      await updateContentRun(runId, {
         outputs: {
           ...existingOutputs,
           brandVideoUrl: result.outputUrl,

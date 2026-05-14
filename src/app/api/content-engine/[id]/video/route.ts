@@ -16,7 +16,7 @@ type Params = { params: Promise<{ id: string }> };
 
 export async function GET(_req: Request, ctx: Params) {
   const { id } = await ctx.params;
-  const run = getContentRun(id);
+  const run = await getContentRun(id);
   if (!run) return NextResponse.json({ error: "not found" }, { status: 404 });
 
   return NextResponse.json({
@@ -29,7 +29,7 @@ export async function GET(_req: Request, ctx: Params) {
 
 export async function POST(_req: Request, ctx: Params) {
   const { id } = await ctx.params;
-  const run = getContentRun(id);
+  const run = await getContentRun(id);
   if (!run) return NextResponse.json({ error: "not found" }, { status: 404 });
 
   if (!isVideoRenderEnabled()) {
@@ -40,13 +40,13 @@ export async function POST(_req: Request, ctx: Params) {
   }
 
   // Find the tenant's brand data
-  const brands = listBrands({ tenantId: run.tenantId });
+  const brands = await listBrands({ tenantId: run.tenantId });
   const brand = brands.find((b) => b.status === "complete");
   if (!brand) {
     return NextResponse.json({ error: "No completed brand found for this tenant" }, { status: 400 });
   }
 
-  const brandJsonPath = path.join(OUTPUTS_ROOT, "brands", brand.id, "brand.json");
+  const brandJsonPath = path.join(OUTPUTS_ROOT, brand.id, "brand.json");
   if (!fs.existsSync(brandJsonPath)) {
     return NextResponse.json({ error: "brand.json not found" }, { status: 400 });
   }
@@ -72,15 +72,15 @@ export async function POST(_req: Request, ctx: Params) {
           mission: brandData.mission,
           ica: brandData.ica,
         },
-        (pct) => {
-          updateContentRun(id, { progressStage: `rendering video ${Math.round(pct * 100)}%` });
+        async (pct) => {
+          await updateContentRun(id, { progressStage: `rendering video ${Math.round(pct * 100)}%` });
         }
       );
 
       if (result.outputUrl) {
-        const current = getContentRun(id);
+        const current = await getContentRun(id);
         const existingOutputs = current?.outputs ?? { weeks: [] };
-        updateContentRun(id, {
+        await updateContentRun(id, {
           outputs: {
             ...existingOutputs,
             brandVideoUrl: result.outputUrl,

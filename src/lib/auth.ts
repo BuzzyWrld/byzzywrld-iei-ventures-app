@@ -1,5 +1,5 @@
 /**
- * Local auth using SQLite + iron-session.
+ * Local auth using Neon Postgres + iron-session.
  *
  * Self-hosted on our Next.js server — no Supabase/Clerk external service.
  * Easy to migrate later: the `user_id` shape stays compatible.
@@ -13,7 +13,7 @@
 import bcrypt from "bcryptjs";
 import { cookies } from "next/headers";
 import { getIronSession, type IronSession, type SessionOptions } from "iron-session";
-import { db } from "./db";
+import { findUserByEmail, findUserById, createUser, type UserRow } from "./db";
 
 const SESSION_PASSWORD =
   process.env.AUTH_SECRET ??
@@ -48,39 +48,7 @@ export type User = {
   createdAt: string;
 };
 
-/* ---------- schema ---------- */
-
-let _initialized = false;
-function ensureSchema() {
-  if (_initialized) return;
-  db().exec(`
-    CREATE TABLE IF NOT EXISTS users (
-      id TEXT PRIMARY KEY,
-      email TEXT UNIQUE NOT NULL,
-      password_hash TEXT NOT NULL,
-      name TEXT NOT NULL,
-      tenant_id TEXT NOT NULL DEFAULT 'default',
-      created_at TEXT NOT NULL
-    );
-  `);
-  // Add user_id column to brands if missing.
-  const cols = (db().prepare(`PRAGMA table_info(brands)`).all() as { name: string }[]).map(
-    (c) => c.name
-  );
-  if (!cols.includes("user_id")) {
-    db().exec(`ALTER TABLE brands ADD COLUMN user_id TEXT`);
-  }
-  _initialized = true;
-}
-
-type UserRow = {
-  id: string;
-  email: string;
-  password_hash: string;
-  name: string;
-  tenant_id: string;
-  created_at: string;
-};
+/* ---------- helpers ---------- */
 
 const rowToUser = (r: UserRow): User => ({
   id: r.id,
@@ -98,35 +66,32 @@ export async function signUp(params: {
   name: string;
   tenantId?: string;
 }): Promise<{ user?: User; error?: string }> {
-  ensureSchema();
   const email = params.email.trim().toLowerCase();
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return { error: "invalid email" };
   if (params.password.length < 8) return { error: "password must be 8+ chars" };
-  const existing = db().prepare(`SELECT id FROM users WHERE email = ?`).get(email) as
-    | { id: string }
-    | undefined;
+  const existing = await findUserByEmail(email);
   if (existing) return { error: "email already registered" };
 
   const id = crypto.randomUUID();
   const passwordHash = await bcrypt.hash(params.password, 10);
   const now = new Date().toISOString();
-  db()
-    .prepare(
-      `INSERT INTO users (id, email, password_hash, name, tenant_id, created_at)
-       VALUES (?, ?, ?, ?, ?, ?)`
-    )
-    .run(id, email, passwordHash, params.name.trim(), params.tenantId ?? "default", now);
+  await createUser({
+    id,
+    email,
+    passwordHash,
+    name: params.name.trim(),
+    tenantId: params.tenantId ?? "default",
+    createdAt: now,
+  });
 
   return {
     user: { id, email, name: params.name.trim(), tenantId: params.tenantId ?? "default", createdAt: now },
   };
 }
 
-// Demo credential bypass — Vercel serverless instances each get a fresh /tmp,
-// so SQLite data written during signup is invisible to the login invocation.
-// These hardcoded values let a known demo account work across all instances
-// without any database lookup. The hash is bcrypt(IEIDemo2026!, rounds=10).
-// Override via DEMO_USER_EMAIL / DEMO_USER_PASSWORD_HASH env vars if needed.
+// Demo credential bypass — hardcoded values let a known demo account work
+// across all instances without any database lookup. The hash is
+// bcrypt(IEIDemo2026!, rounds=10). Override via env vars if needed.
 const _DEMO_EMAIL = (process.env.DEMO_USER_EMAIL ?? "demo@ieiv.co").trim().toLowerCase();
 const _DEMO_HASH =
   process.env.DEMO_USER_PASSWORD_HASH ??
@@ -144,10 +109,9 @@ export async function signIn(params: {
   email: string;
   password: string;
 }): Promise<{ user?: User; error?: string }> {
-  ensureSchema();
   const email = params.email.trim().toLowerCase();
 
-  // Demo bypass — must check before SQLite since /tmp may be empty.
+  // Demo bypass.
   if (email === DEMO_USER.email) {
     const hash = process.env.DEMO_USER_PASSWORD_HASH ?? "";
     const ok = await bcrypt.compare(params.password, hash);
@@ -155,21 +119,18 @@ export async function signIn(params: {
     return { user: DEMO_USER };
   }
 
-  const row = db().prepare(`SELECT * FROM users WHERE email = ?`).get(email) as
-    | UserRow
-    | undefined;
+  const row = await findUserByEmail(email);
   if (!row) return { error: "invalid credentials" };
   const ok = await bcrypt.compare(params.password, row.password_hash);
   if (!ok) return { error: "invalid credentials" };
   return { user: rowToUser(row) };
 }
 
-export function getUserById(id: string): User | null {
-  // Demo bypass — the demo user has no SQLite row but must survive page reloads.
+export async function getUserById(id: string): Promise<User | null> {
+  // Demo bypass — the demo user has no DB row but must survive page reloads.
   if (id === DEMO_USER.id) return DEMO_USER;
 
-  ensureSchema();
-  const row = db().prepare(`SELECT * FROM users WHERE id = ?`).get(id) as UserRow | undefined;
+  const row = await findUserById(id);
   return row ? rowToUser(row) : null;
 }
 
@@ -193,7 +154,7 @@ export async function clearSession(): Promise<void> {
 // ─── TESTING BYPASS ──────────────────────────────────────────────────────────
 // Set to true to skip login for all routes during local/staging testing.
 // Flip back to false before going live with real users.
-const DEV_BYPASS = true;
+const DEV_BYPASS = process.env.DEV_BYPASS === "true";
 // ─────────────────────────────────────────────────────────────────────────────
 
 export async function currentUser(): Promise<User | null> {

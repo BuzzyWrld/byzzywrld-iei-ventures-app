@@ -1,13 +1,25 @@
 import { NextRequest } from "next/server";
 import path from "node:path";
-import fs from "node:fs";
-import { brandDir, contentTypeFor } from "@/lib/storage";
+import { brandDir, contentTypeFor, readOutputAsync } from "@/lib/storage";
+import { currentUser } from "@/lib/auth";
+import { getBrand } from "@/lib/db";
 
 export async function GET(
   _req: NextRequest,
   { params }: { params: Promise<{ id: string; file: string[] }> }
 ) {
+  const user = await currentUser();
+  if (!user) return new Response("unauthorized", { status: 401 });
+
   const { id, file } = await params;
+
+  // Ownership check: brand must belong to the user's tenant
+  const brand = await getBrand(id);
+  if (!brand) return new Response("not found", { status: 404 });
+  if (brand.tenantId !== user.tenantId) {
+    return new Response("forbidden", { status: 403 });
+  }
+
   if (!file || file.length === 0) return new Response("not found", { status: 404 });
 
   const rel = file.map((s) => decodeURIComponent(s)).join("/");
@@ -21,12 +33,11 @@ export async function GET(
     return new Response("bad filename", { status: 400 });
   }
 
-  try {
-    const buf = fs.readFileSync(abs);
-    return new Response(new Uint8Array(buf), {
-      headers: { "Content-Type": contentTypeFor(rel) },
-    });
-  } catch {
-    return new Response("not found", { status: 404 });
-  }
+  // Try local fs first, fall back to Vercel Blob on cold start
+  const buf = await readOutputAsync(id, rel);
+  if (!buf) return new Response("not found", { status: 404 });
+
+  return new Response(new Uint8Array(buf), {
+    headers: { "Content-Type": contentTypeFor(rel) },
+  });
 }

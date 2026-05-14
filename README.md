@@ -16,7 +16,7 @@ See `IEI_Ventures_Developer_Brief.html` for the full spec.
 ```bash
 npm install
 npm run dev
-# http://localhost:3000
+# http://localhost:3030
 ```
 
 1. Click **+ New brand**
