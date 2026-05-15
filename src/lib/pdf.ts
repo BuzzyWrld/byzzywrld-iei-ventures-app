@@ -13,12 +13,10 @@
  * The skill writes structure/content; this turns it into the pixel-perfect PDF.
  */
 import fs from "node:fs/promises";
-import { chromium } from "playwright";
 import { PDFDocument } from "pdf-lib";
 
 const TARGET_DPI = 360;
 const DEVICE_SCALE = 3;
-const CSS_DPI = 96; // Chromium's CSS → px baseline
 
 export type RenderPdfOptions = {
   /** Wait for network idle + these extra ms to ensure fonts loaded. Default 500. */
@@ -27,12 +25,43 @@ export type RenderPdfOptions = {
   pageSelector?: string;
 };
 
+/**
+ * Attempt to load Playwright's chromium dynamically.
+ * Returns null on Vercel / serverless where the binary isn't available.
+ */
+async function tryLoadChromium() {
+  try {
+    const pw = await import("playwright");
+    return pw.chromium;
+  } catch {
+    return null;
+  }
+}
+
 export async function renderPdfFromHtml(
   htmlPath: string,
   pdfPath: string,
   opts: RenderPdfOptions = {}
 ): Promise<void> {
   const { extraWaitMs = 500, pageSelector = ".page" } = opts;
+
+  const chromium = await tryLoadChromium();
+  if (!chromium) {
+    // Playwright not available (Vercel Lambda) — write a 1-page placeholder PDF
+    // so downstream code doesn't crash. The HTML playbook is still the primary
+    // deliverable; PDF is a nice-to-have that works in local dev.
+    console.warn("[pdf] Playwright not available — writing placeholder PDF. HTML playbook is still served.");
+    const doc = await PDFDocument.create();
+    const page = doc.addPage([612, 792]);
+    page.drawText("Brand Playbook PDF — view the HTML version for the full experience.", {
+      x: 50,
+      y: 700,
+      size: 14,
+    });
+    const pdfBytes = await doc.save();
+    await fs.writeFile(pdfPath, pdfBytes);
+    return;
+  }
 
   const browser = await chromium.launch({
     args: [
@@ -51,7 +80,6 @@ export async function renderPdfFromHtml(
     const absUrl = htmlPath.startsWith("file://") ? htmlPath : `file://${htmlPath}`;
     await page.goto(absUrl, { waitUntil: "networkidle", timeout: 30000 });
     await page.waitForLoadState("domcontentloaded");
-    // Ensure web fonts are done loading before screenshotting.
     await page.evaluate(() => (document as unknown as { fonts: FontFaceSet }).fonts.ready);
     await page.waitForTimeout(extraWaitMs);
 
@@ -70,9 +98,6 @@ export async function renderPdfFromHtml(
     const doc = await PDFDocument.create();
     for (const buf of screenshots) {
       const img = await doc.embedPng(buf);
-      // PDF page dimensions in points. PNG is deviceScale×CSS px. Real inches
-      // = css_px / CSS_DPI. Want the printable page sized for TARGET_DPI:
-      //   widthPt = (pngPx / TARGET_DPI) * 72
       const widthPt = (img.width / TARGET_DPI) * 72;
       const heightPt = (img.height / TARGET_DPI) * 72;
       const pdfPage = doc.addPage([widthPt, heightPt]);

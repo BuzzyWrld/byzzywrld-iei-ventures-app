@@ -1,91 +1,76 @@
-import Database from "better-sqlite3";
-import path from "node:path";
-import fs from "node:fs";
+import { neon } from "@neondatabase/serverless";
 import type { BrandProject } from "./types";
 import type { ContentRun, ContentRunStatus, ContentRunOutputs } from "./skills/content-engine-contract";
 
-// On Vercel, process.cwd() is read-only. Use /tmp so SQLite can write.
-const DATA_DIR = process.env.VERCEL
-  ? "/tmp/iei-data"
-  : path.join(process.cwd(), "data");
-if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR, { recursive: true });
+// ─── Connection ─────────────────────────────────────────────────────────────
 
-const DB_PATH = path.join(DATA_DIR, "iei.db");
-
-// Cache the DB instance on globalThis so Next dev-mode HMR doesn't open a
-// new connection every time db.ts gets re-evaluated. In a real process
-// restart globalThis is fresh; during hot reload it persists.
-const _g = globalThis as { __iei_db?: Database.Database };
-
-export function db(): Database.Database {
-  if (_g.__iei_db) return _g.__iei_db;
-  const _db = new Database(DB_PATH);
-  _g.__iei_db = _db;
-  _db.pragma("journal_mode = WAL");
-  _db.exec(`
-    CREATE TABLE IF NOT EXISTS brands (
-      id TEXT PRIMARY KEY,
-      created_at TEXT NOT NULL,
-      status TEXT NOT NULL,
-      intake_json TEXT NOT NULL,
-      outputs_json TEXT NOT NULL DEFAULT '{}',
-      error TEXT,
-      progress_stage TEXT,
-      progress_pct REAL
-    );
-  `);
-  // Idempotent migrations for columns added after initial schema.
-  const cols = (_db.prepare(`PRAGMA table_info(brands)`).all() as { name: string }[]).map(
-    (c) => c.name
-  );
-  if (!cols.includes("progress_stage")) {
-    _db.exec(`ALTER TABLE brands ADD COLUMN progress_stage TEXT`);
-  }
-  if (!cols.includes("progress_pct")) {
-    _db.exec(`ALTER TABLE brands ADD COLUMN progress_pct REAL`);
-  }
-  if (!cols.includes("tenant_id")) {
-    _db.exec(`ALTER TABLE brands ADD COLUMN tenant_id TEXT NOT NULL DEFAULT 'default'`);
-  }
-  if (!cols.includes("user_id")) {
-    _db.exec(`ALTER TABLE brands ADD COLUMN user_id TEXT`);
-  }
-  // Mark orphaned 'running' jobs (from a previous crashed process) as failed.
-  //
-  // IMPORTANT: this must run ONCE per actual Node.js process, not once per
-  // module evaluation. Next.js dev-mode HMR re-evaluates server modules when
-  // source changes, which would otherwise re-run this cleanup and clobber
-  // any brand currently mid-build. Storing the flag on globalThis survives
-  // module reload but resets on real process restart — exactly what we want.
-  const g = globalThis as { __iei_cleanup_done?: boolean };
-  // content_runs table — stores state for 5-pass content engine jobs.
-  const createContentRunsTable = `
-    CREATE TABLE IF NOT EXISTS content_runs (
-      id TEXT PRIMARY KEY,
-      created_at TEXT NOT NULL,
-      status TEXT NOT NULL,
-      intake_json TEXT NOT NULL,
-      outputs_json TEXT NOT NULL DEFAULT '{}',
-      error TEXT,
-      progress_stage TEXT,
-      progress_pct REAL,
-      tenant_id TEXT NOT NULL DEFAULT 'default',
-      user_id TEXT
-    )
-  `;
-  _db.prepare(createContentRunsTable).run();
-
-  if (!g.__iei_cleanup_done) {
-    g.__iei_cleanup_done = true;
-    _db.prepare(
-      `UPDATE brands SET status = 'failed', error = 'server restarted while job was running' WHERE status = 'running'`
-    ).run();
-    _db.prepare(
-      `UPDATE content_runs SET status = 'failed', error = 'server restarted while job was running' WHERE status IN ('analysis','week_1','week_2','week_3','week_4')`
-    ).run();
-  }
-  return _db;
+const DATABASE_URL = process.env.DATABASE_URL;
+if (!DATABASE_URL) {
+  throw new Error("DATABASE_URL env var is required (Neon Postgres connection string)");
 }
+
+const sql = neon(DATABASE_URL);
+
+// ─── Schema bootstrap (idempotent) ──────────────────────────────────────────
+
+const _g = globalThis as { __iei_pg_ready?: Promise<void> };
+
+function ensureSchema(): Promise<void> {
+  if (_g.__iei_pg_ready) return _g.__iei_pg_ready;
+  _g.__iei_pg_ready = (async () => {
+    await sql`
+      CREATE TABLE IF NOT EXISTS brands (
+        id TEXT PRIMARY KEY,
+        created_at TEXT NOT NULL,
+        status TEXT NOT NULL,
+        intake_json TEXT NOT NULL,
+        outputs_json TEXT NOT NULL DEFAULT '{}',
+        error TEXT,
+        progress_stage TEXT,
+        progress_pct DOUBLE PRECISION,
+        tenant_id TEXT NOT NULL DEFAULT 'default',
+        user_id TEXT
+      )
+    `;
+    await sql`
+      CREATE TABLE IF NOT EXISTS content_runs (
+        id TEXT PRIMARY KEY,
+        created_at TEXT NOT NULL,
+        status TEXT NOT NULL,
+        intake_json TEXT NOT NULL,
+        outputs_json TEXT NOT NULL DEFAULT '{}',
+        error TEXT,
+        progress_stage TEXT,
+        progress_pct DOUBLE PRECISION,
+        tenant_id TEXT NOT NULL DEFAULT 'default',
+        user_id TEXT
+      )
+    `;
+    await sql`
+      CREATE TABLE IF NOT EXISTS users (
+        id TEXT PRIMARY KEY,
+        email TEXT UNIQUE NOT NULL,
+        password_hash TEXT NOT NULL,
+        name TEXT NOT NULL,
+        tenant_id TEXT NOT NULL DEFAULT 'default',
+        created_at TEXT NOT NULL
+      )
+    `;
+    await sql`
+      CREATE TABLE IF NOT EXISTS tenants (
+        id TEXT PRIMARY KEY,
+        slug TEXT UNIQUE NOT NULL,
+        display_name TEXT NOT NULL,
+        logo_url TEXT,
+        colors_json TEXT NOT NULL,
+        custom_domain TEXT
+      )
+    `;
+  })();
+  return _g.__iei_pg_ready;
+}
+
+// ─── Brands ─────────────────────────────────────────────────────────────────
 
 type Row = {
   id: string;
@@ -113,77 +98,53 @@ const rowToProject = (r: Row): BrandProject => ({
   userId: r.user_id ?? undefined,
 });
 
-export function createBrand(p: BrandProject): void {
-  db()
-    .prepare(
-      `INSERT INTO brands (id, created_at, status, intake_json, outputs_json, error, progress_stage, progress_pct, tenant_id, user_id)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
-    )
-    .run(
-      p.id,
-      p.createdAt,
-      p.status,
-      JSON.stringify(p.intake),
-      JSON.stringify(p.outputs),
-      p.error ?? null,
-      p.progressStage ?? null,
-      p.progressPct ?? null,
-      p.tenantId,
-      p.userId ?? null
-    );
+export async function createBrand(p: BrandProject): Promise<void> {
+  await ensureSchema();
+  await sql`
+    INSERT INTO brands (id, created_at, status, intake_json, outputs_json, error, progress_stage, progress_pct, tenant_id, user_id)
+    VALUES (${p.id}, ${p.createdAt}, ${p.status}, ${JSON.stringify(p.intake)}, ${JSON.stringify(p.outputs)}, ${p.error ?? null}, ${p.progressStage ?? null}, ${p.progressPct ?? null}, ${p.tenantId}, ${p.userId ?? null})
+  `;
 }
 
-export function updateBrand(id: string, patch: Partial<BrandProject>): void {
-  const current = getBrand(id);
+export async function updateBrand(id: string, patch: Partial<BrandProject>): Promise<void> {
+  await ensureSchema();
+  const current = await getBrand(id);
   if (!current) throw new Error(`brand ${id} not found`);
   const next = { ...current, ...patch };
-  db()
-    .prepare(
-      `UPDATE brands
-       SET status = ?, outputs_json = ?, error = ?, progress_stage = ?, progress_pct = ?
-       WHERE id = ?`
-    )
-    .run(
-      next.status,
-      JSON.stringify(next.outputs),
-      next.error ?? null,
-      next.progressStage ?? null,
-      next.progressPct ?? null,
-      id
-    );
+  await sql`
+    UPDATE brands
+    SET status = ${next.status}, outputs_json = ${JSON.stringify(next.outputs)}, error = ${next.error ?? null}, progress_stage = ${next.progressStage ?? null}, progress_pct = ${next.progressPct ?? null}
+    WHERE id = ${id}
+  `;
 }
 
-export function getBrand(id: string): BrandProject | null {
-  const row = db().prepare(`SELECT * FROM brands WHERE id = ?`).get(id) as
-    | Row
-    | undefined;
-  return row ? rowToProject(row) : null;
+export async function getBrand(id: string): Promise<BrandProject | null> {
+  await ensureSchema();
+  const rows = await sql`SELECT * FROM brands WHERE id = ${id}`;
+  return rows.length ? rowToProject(rows[0] as Row) : null;
 }
 
-export function deleteBrand(id: string): void {
-  db().prepare(`DELETE FROM brands WHERE id = ?`).run(id);
+export async function deleteBrand(id: string): Promise<void> {
+  await ensureSchema();
+  await sql`DELETE FROM brands WHERE id = ${id}`;
 }
 
-export function listBrands(opts?: { tenantId?: string; userId?: string }): BrandProject[] {
-  const where: string[] = [];
-  const args: string[] = [];
-  if (opts?.tenantId) {
-    where.push("tenant_id = ?");
-    args.push(opts.tenantId);
+export async function listBrands(opts?: { tenantId?: string; userId?: string }): Promise<BrandProject[]> {
+  await ensureSchema();
+  let rows;
+  if (opts?.tenantId && opts?.userId) {
+    rows = await sql`SELECT * FROM brands WHERE tenant_id = ${opts.tenantId} AND user_id = ${opts.userId} ORDER BY created_at DESC`;
+  } else if (opts?.tenantId) {
+    rows = await sql`SELECT * FROM brands WHERE tenant_id = ${opts.tenantId} ORDER BY created_at DESC`;
+  } else if (opts?.userId) {
+    rows = await sql`SELECT * FROM brands WHERE user_id = ${opts.userId} ORDER BY created_at DESC`;
+  } else {
+    rows = await sql`SELECT * FROM brands ORDER BY created_at DESC`;
   }
-  if (opts?.userId) {
-    where.push("user_id = ?");
-    args.push(opts.userId);
-  }
-  const sql =
-    `SELECT * FROM brands` +
-    (where.length ? ` WHERE ${where.join(" AND ")}` : "") +
-    ` ORDER BY created_at DESC`;
-  const rows = (args.length ? db().prepare(sql).all(...args) : db().prepare(sql).all()) as Row[];
-  return rows.map(rowToProject);
+  return (rows as Row[]).map(rowToProject);
 }
 
-// ─── ContentRun CRUD ─────────────────────────────────────────────────────────
+// ─── ContentRun CRUD ────────────────────────────────────────────────────────
 
 type ContentRunRow = {
   id: string;
@@ -211,94 +172,131 @@ const rowToRun = (r: ContentRunRow): ContentRun => ({
   userId: r.user_id ?? undefined,
 });
 
-export function createContentRun(run: ContentRun): void {
-  db()
-    .prepare(
-      `INSERT INTO content_runs (id, created_at, status, intake_json, outputs_json, error, progress_stage, progress_pct, tenant_id, user_id)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
-    )
-    .run(
-      run.id,
-      run.createdAt,
-      run.status,
-      JSON.stringify(run.intake),
-      JSON.stringify(run.outputs),
-      run.error ?? null,
-      run.progressStage ?? null,
-      run.progressPct ?? null,
-      run.tenantId,
-      run.userId ?? null
-    );
+export async function createContentRun(run: ContentRun): Promise<void> {
+  await ensureSchema();
+  await sql`
+    INSERT INTO content_runs (id, created_at, status, intake_json, outputs_json, error, progress_stage, progress_pct, tenant_id, user_id)
+    VALUES (${run.id}, ${run.createdAt}, ${run.status}, ${JSON.stringify(run.intake)}, ${JSON.stringify(run.outputs)}, ${run.error ?? null}, ${run.progressStage ?? null}, ${run.progressPct ?? null}, ${run.tenantId}, ${run.userId ?? null})
+  `;
 }
 
-/**
- * INSERT OR REPLACE — used by the /run-pass endpoint to restore run state
- * into a fresh Lambda's SQLite when the self-fetch lands on a new instance.
- */
-export function upsertContentRun(run: ContentRun): void {
-  db()
-    .prepare(
-      `INSERT OR REPLACE INTO content_runs (id, created_at, status, intake_json, outputs_json, error, progress_stage, progress_pct, tenant_id, user_id)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
-    )
-    .run(
-      run.id,
-      run.createdAt,
-      run.status,
-      JSON.stringify(run.intake),
-      JSON.stringify(run.outputs),
-      run.error ?? null,
-      run.progressStage ?? null,
-      run.progressPct ?? null,
-      run.tenantId,
-      run.userId ?? null
-    );
+export async function upsertContentRun(run: ContentRun): Promise<void> {
+  await ensureSchema();
+  await sql`
+    INSERT INTO content_runs (id, created_at, status, intake_json, outputs_json, error, progress_stage, progress_pct, tenant_id, user_id)
+    VALUES (${run.id}, ${run.createdAt}, ${run.status}, ${JSON.stringify(run.intake)}, ${JSON.stringify(run.outputs)}, ${run.error ?? null}, ${run.progressStage ?? null}, ${run.progressPct ?? null}, ${run.tenantId}, ${run.userId ?? null})
+    ON CONFLICT (id) DO UPDATE SET
+      status = EXCLUDED.status,
+      intake_json = EXCLUDED.intake_json,
+      outputs_json = EXCLUDED.outputs_json,
+      error = EXCLUDED.error,
+      progress_stage = EXCLUDED.progress_stage,
+      progress_pct = EXCLUDED.progress_pct,
+      tenant_id = EXCLUDED.tenant_id,
+      user_id = EXCLUDED.user_id
+  `;
 }
 
-export function updateContentRun(id: string, patch: Partial<ContentRun>): void {
-  const current = getContentRun(id);
+export async function updateContentRun(id: string, patch: Partial<ContentRun>): Promise<void> {
+  await ensureSchema();
+  const current = await getContentRun(id);
   if (!current) throw new Error(`content run ${id} not found`);
   const next = { ...current, ...patch };
-  db()
-    .prepare(
-      `UPDATE content_runs
-       SET status = ?, outputs_json = ?, error = ?, progress_stage = ?, progress_pct = ?
-       WHERE id = ?`
-    )
-    .run(
-      next.status,
-      JSON.stringify(next.outputs),
-      next.error ?? null,
-      next.progressStage ?? null,
-      next.progressPct ?? null,
-      id
-    );
+  await sql`
+    UPDATE content_runs
+    SET status = ${next.status}, outputs_json = ${JSON.stringify(next.outputs)}, error = ${next.error ?? null}, progress_stage = ${next.progressStage ?? null}, progress_pct = ${next.progressPct ?? null}
+    WHERE id = ${id}
+  `;
 }
 
-export function getContentRun(id: string): ContentRun | null {
-  const row = db()
-    .prepare(`SELECT * FROM content_runs WHERE id = ?`)
-    .get(id) as ContentRunRow | undefined;
-  return row ? rowToRun(row) : null;
+export async function getContentRun(id: string): Promise<ContentRun | null> {
+  await ensureSchema();
+  const rows = await sql`SELECT * FROM content_runs WHERE id = ${id}`;
+  return rows.length ? rowToRun(rows[0] as ContentRunRow) : null;
 }
 
-export function listContentRuns(opts?: { tenantId?: string; userId?: string }): ContentRun[] {
-  const where: string[] = [];
-  const args: string[] = [];
-  if (opts?.tenantId) {
-    where.push("tenant_id = ?");
-    args.push(opts.tenantId);
+export async function listContentRuns(opts?: { tenantId?: string; userId?: string }): Promise<ContentRun[]> {
+  await ensureSchema();
+  let rows;
+  if (opts?.tenantId && opts?.userId) {
+    rows = await sql`SELECT * FROM content_runs WHERE tenant_id = ${opts.tenantId} AND user_id = ${opts.userId} ORDER BY created_at DESC`;
+  } else if (opts?.tenantId) {
+    rows = await sql`SELECT * FROM content_runs WHERE tenant_id = ${opts.tenantId} ORDER BY created_at DESC`;
+  } else if (opts?.userId) {
+    rows = await sql`SELECT * FROM content_runs WHERE user_id = ${opts.userId} ORDER BY created_at DESC`;
+  } else {
+    rows = await sql`SELECT * FROM content_runs ORDER BY created_at DESC`;
   }
-  if (opts?.userId) {
-    where.push("user_id = ?");
-    args.push(opts.userId);
-  }
-  const sql =
-    `SELECT * FROM content_runs` +
-    (where.length ? ` WHERE ${where.join(" AND ")}` : "") +
-    ` ORDER BY created_at DESC`;
-  const rows = (
-    args.length ? db().prepare(sql).all(...args) : db().prepare(sql).all()
-  ) as ContentRunRow[];
-  return rows.map(rowToRun);
+  return (rows as ContentRunRow[]).map(rowToRun);
+}
+
+// ─── Users (auth) ───────────────────────────────────────────────────────────
+
+export type UserRow = {
+  id: string;
+  email: string;
+  password_hash: string;
+  name: string;
+  tenant_id: string;
+  created_at: string;
+};
+
+export async function findUserByEmail(email: string): Promise<UserRow | null> {
+  await ensureSchema();
+  const rows = await sql`SELECT * FROM users WHERE email = ${email}`;
+  return rows.length ? (rows[0] as UserRow) : null;
+}
+
+export async function findUserById(id: string): Promise<UserRow | null> {
+  await ensureSchema();
+  const rows = await sql`SELECT * FROM users WHERE id = ${id}`;
+  return rows.length ? (rows[0] as UserRow) : null;
+}
+
+export async function createUser(user: { id: string; email: string; passwordHash: string; name: string; tenantId: string; createdAt: string }): Promise<void> {
+  await ensureSchema();
+  await sql`
+    INSERT INTO users (id, email, password_hash, name, tenant_id, created_at)
+    VALUES (${user.id}, ${user.email}, ${user.passwordHash}, ${user.name}, ${user.tenantId}, ${user.createdAt})
+  `;
+}
+
+// ─── Tenants ────────────────────────────────────────────────────────────────
+
+export type TenantRow = {
+  id: string;
+  slug: string;
+  display_name: string;
+  logo_url: string | null;
+  colors_json: string;
+  custom_domain: string | null;
+};
+
+export async function upsertTenant(t: { id: string; slug: string; displayName: string; logoUrl?: string; colorsJson: string; customDomain?: string }): Promise<void> {
+  await ensureSchema();
+  await sql`
+    INSERT INTO tenants (id, slug, display_name, logo_url, colors_json, custom_domain)
+    VALUES (${t.id}, ${t.slug}, ${t.displayName}, ${t.logoUrl ?? null}, ${t.colorsJson}, ${t.customDomain ?? null})
+    ON CONFLICT (id) DO UPDATE SET
+      display_name = EXCLUDED.display_name,
+      colors_json = EXCLUDED.colors_json
+  `;
+}
+
+export async function findTenantBySlug(slug: string): Promise<TenantRow | null> {
+  await ensureSchema();
+  const rows = await sql`SELECT * FROM tenants WHERE slug = ${slug}`;
+  return rows.length ? (rows[0] as TenantRow) : null;
+}
+
+export async function findTenantByDomain(domain: string): Promise<TenantRow | null> {
+  await ensureSchema();
+  const rows = await sql`SELECT * FROM tenants WHERE custom_domain = ${domain}`;
+  return rows.length ? (rows[0] as TenantRow) : null;
+}
+
+export async function listTenantRows(): Promise<TenantRow[]> {
+  await ensureSchema();
+  const rows = await sql`SELECT * FROM tenants ORDER BY slug`;
+  return rows as TenantRow[];
 }

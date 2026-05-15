@@ -1,7 +1,10 @@
+import { after } from "next/server";
 import { NextRequest } from "next/server";
 import { getBrand, updateBrand } from "@/lib/db";
 import { currentUser } from "@/lib/auth";
 import { triggerPhase2 } from "@/lib/skill";
+
+export const maxDuration = 300;
 
 export async function PATCH(
   request: NextRequest,
@@ -11,7 +14,7 @@ export async function PATCH(
   if (!user) return Response.json({ error: "unauthorized" }, { status: 401 });
 
   const { id } = await params;
-  const project = getBrand(id);
+  const project = await getBrand(id);
   if (!project) return Response.json({ error: "not found" }, { status: 404 });
   if (project.userId && project.userId !== user.id) {
     return Response.json({ error: "not found" }, { status: 404 });
@@ -27,22 +30,24 @@ export async function PATCH(
     return Response.json({ error: "unknown logo key" }, { status: 400 });
   }
 
-  updateBrand(id, {
+  await updateBrand(id, {
     outputs: {
       ...project.outputs,
       primaryLogoKey: key,
-      // Also flip the top-level logoSvg to the picked one so downstream
-      // components that read logoSvg (project panel header, download list)
-      // show the user's pick.
       logoSvg: picked.url,
     },
   });
 
-  // SEQUENTIAL GENERATION: this is the trigger for Phase 2 (the 6 non-logo
-  // variants). triggerPhase2 is idempotent — if the brand already has those
-  // outputs (from a re-pick or earlier run), it skips. Fire-and-forget; the
-  // UI sees the brand flip back to "running" while Phase 2 runs.
-  triggerPhase2(id);
+  const work = await triggerPhase2(id);
+  if (work) {
+    after(async () => {
+      try {
+        await work;
+      } catch (err) {
+        console.error("[brands] background phase 2 failed:", err);
+      }
+    });
+  }
 
   return Response.json({ ok: true, primaryLogoKey: key });
 }

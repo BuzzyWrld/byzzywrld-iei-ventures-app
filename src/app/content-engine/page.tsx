@@ -42,7 +42,7 @@ export default async function ContentEnginePage() {
   const user = await currentUser();
   if (!user) redirect("/login");
   const tenant = await currentTenant();
-  const runs = listContentRuns({ tenantId: tenant.id, userId: user.id });
+  const runs = await listContentRuns({ tenantId: tenant.id, userId: user.id });
 
   return (
     <>

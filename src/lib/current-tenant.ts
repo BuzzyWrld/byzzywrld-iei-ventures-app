@@ -5,5 +5,5 @@ import { resolveTenant, type Tenant } from "./tenants";
 export async function currentTenant(): Promise<Tenant> {
   const h = await headers();
   const slug = h.get("x-iei-tenant");
-  return resolveTenant(slug);
+  return await resolveTenant(slug);
 }

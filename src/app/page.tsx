@@ -33,7 +33,7 @@ export default async function Home() {
   const user = await currentUser();
   if (!user) redirect("/login");
   const tenant = await currentTenant();
-  const projects = listBrands({ tenantId: tenant.id, userId: user.id });
+  const projects = await listBrands({ tenantId: tenant.id, userId: user.id });
 
   // Most users have one brand — their business. The dashboard's main value
   // is their brand, not a list containing it. Jump them straight in.

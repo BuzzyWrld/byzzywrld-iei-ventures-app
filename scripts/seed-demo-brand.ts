@@ -70,7 +70,7 @@ async function main() {
   console.log(`[seed] adapter=${process.env.SKILL_ADAPTER ?? "stub"}`);
   console.log(`[seed] brand="${intake.companyName}"\n`);
 
-  const project = enqueueBrandBuild(intake, {
+  const { project } = await enqueueBrandBuild(intake, {
     userId: user.id,
     tenantId: user.tenantId,
   });
@@ -83,7 +83,7 @@ async function main() {
 
   while (true) {
     await new Promise((r) => setTimeout(r, 1500));
-    const cur = getBrand(project.id);
+    const cur = await getBrand(project.id);
     if (!cur) {
       console.error("[seed] brand vanished from DB");
       process.exit(1);
@@ -114,14 +114,14 @@ async function main() {
         );
         // Inline the pick + Phase 2 trigger so we don't depend on the dev server.
         const pickedUrl = cur.outputs.logoVariants![0].url;
-        updateBrand(cur.id, {
+        await updateBrand(cur.id, {
           outputs: {
             ...cur.outputs,
             primaryLogoKey: firstKey,
             logoSvg: pickedUrl,
           },
         });
-        triggerPhase2(cur.id);
+        await triggerPhase2(cur.id);
         lastStage = "";
         lastPct = -1;
         continue;

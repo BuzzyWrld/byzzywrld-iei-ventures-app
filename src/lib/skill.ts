@@ -21,10 +21,10 @@ export function newBrandId(): string {
   return randomUUID();
 }
 
-export function enqueueBrandBuild(
+export async function enqueueBrandBuild(
   intake: BrandIntake,
   opts: { tenantId?: string; userId?: string } = {}
-): BrandProject {
+): Promise<{ project: BrandProject; work: Promise<void> }> {
   const id = newBrandId();
   const project: BrandProject = {
     id,
@@ -35,21 +35,21 @@ export function enqueueBrandBuild(
     tenantId: opts.tenantId ?? "default",
     userId: opts.userId,
   };
-  createBrand(project);
-  void runPhase1(project);
-  return project;
+  await createBrand(project);
+  const work = runPhase1(project);
+  return { project, work };
 }
 
 /**
  * Retry a failed (or stuck) brand build using its saved intake. Reuses the
  * same brand ID so the URL and any bookmarks stay valid.
  */
-export function retryBrandBuild(id: string): BrandProject | null {
-  const existing = getBrand(id);
+export async function retryBrandBuild(id: string): Promise<{ project: BrandProject; work: Promise<void> } | null> {
+  const existing = await getBrand(id);
   if (!existing) return null;
   // Wipe previous outputs + error, reset to pending so the UI shows the
   // running state immediately.
-  updateBrand(id, {
+  await updateBrand(id, {
     status: "pending",
     progressStage: "starting",
     progressPct: 0,
@@ -62,9 +62,9 @@ export function retryBrandBuild(id: string): BrandProject | null {
   } catch (err) {
     console.warn(`[skill] retry: couldn't clear outputs dir:`, err);
   }
-  const refreshed = getBrand(id)!;
-  void runPhase1(refreshed);
-  return refreshed;
+  const refreshed = (await getBrand(id))!;
+  const work = runPhase1(refreshed);
+  return { project: refreshed, work };
 }
 
 /**
@@ -73,12 +73,12 @@ export function retryBrandBuild(id: string): BrandProject | null {
  * a prior Phase 2 run, skips re-generation. Called from the
  * /api/brands/[id]/primary-logo PATCH endpoint.
  */
-export function triggerPhase2(id: string): void {
-  const project = getBrand(id);
-  if (!project) return;
+export async function triggerPhase2(id: string): Promise<Promise<void> | null> {
+  const project = await getBrand(id);
+  if (!project) return null;
   // Already done — don't re-fire.
-  if (project.outputs.devBrief && project.outputs.pitchOnePager) return;
-  void runPhase2(project);
+  if (project.outputs.devBrief && project.outputs.pitchOnePager) return null;
+  return runPhase2(project);
 }
 
 /**
@@ -92,7 +92,7 @@ export function triggerPhase2(id: string): void {
  */
 async function runPhase1(project: BrandProject): Promise<void> {
   const { id, intake } = project;
-  updateBrand(id, { status: "running", progressStage: "starting", progressPct: 0 });
+  await updateBrand(id, { status: "running", progressStage: "starting", progressPct: 0 });
 
   const fileUrl = (name?: string) =>
     name ? `/api/brands/${id}/files/${encodeURIComponent(name)}` : undefined;
@@ -101,17 +101,17 @@ async function runPhase1(project: BrandProject): Promise<void> {
 
   // Merge helper: reads current outputs and applies a patch. The UI polls
   // after each merge, so sections light up with green checkmarks as they land.
-  const mergeOutputs = (patch: Partial<BrandOutputs>) => {
-    const current = getBrand(id)?.outputs ?? {};
-    updateBrand(id, { outputs: { ...current, ...patch } });
+  const mergeOutputs = async (patch: Partial<BrandOutputs>) => {
+    const current = (await getBrand(id))?.outputs ?? {};
+    await updateBrand(id, { outputs: { ...current, ...patch } });
   };
 
   try {
     const outDir = brandDir(id);
     const manifest = await skill().run(intake, {
       outputDir: outDir,
-      onProgress: (stage, pct) => {
-        updateBrand(id, { progressStage: stage, progressPct: pct });
+      onProgress: async (stage, pct) => {
+        await updateBrand(id, { progressStage: stage, progressPct: pct });
       },
     });
 
@@ -135,7 +135,7 @@ async function runPhase1(project: BrandProject): Promise<void> {
 
     // Save the main skill outputs IMMEDIATELY so the Brand foundation card
     // flips to green the moment the main skill finishes.
-    mergeOutputs({
+    await mergeOutputs({
       brandJson: fileUrl(manifest.brandJson),
       playbookHtml: fileUrl(manifest.playbookHtml),
       playbookPdf: fileUrl(manifest.playbookPdf),
@@ -157,7 +157,7 @@ async function runPhase1(project: BrandProject): Promise<void> {
     if (intake.uploadedLogoPath) {
       try {
         userUploadedLogoUrl = await copyUploadedLogo(intake.uploadedLogoPath, outDir, id);
-        mergeOutputs({
+        await mergeOutputs({
           logoSvg: userUploadedLogoUrl,
           primaryLogoKey: "user-uploaded",
         });
@@ -169,7 +169,7 @@ async function runPhase1(project: BrandProject): Promise<void> {
     // PHASE 1: generate the 3 logo variants (skipped if user uploaded their own).
     // Once logos exist, we flip to "complete" so the LogoPickerGate appears
     // — the user picks one, then Phase 2 fires via triggerPhase2().
-    updateBrand(id, { progressStage: "designing logo options", progressPct: 0.92 });
+    await updateBrand(id, { progressStage: "designing logo options", progressPct: 0.92 });
 
     if (!userUploadedLogoUrl) {
       try {
@@ -178,7 +178,7 @@ async function runPhase1(project: BrandProject): Promise<void> {
           inspirationUrls: intake.logoInspirationUrls,
         });
         if (variants.length) {
-          mergeOutputs({
+          await mergeOutputs({
             logoVariants: variants.map((v) => ({
               key: v.key,
               title: v.title,
@@ -195,18 +195,18 @@ async function runPhase1(project: BrandProject): Promise<void> {
     if (userUploadedLogoUrl) {
       // User uploaded their own logo — no pick needed. Fire Phase 2
       // straight through without flashing a "complete" state.
-      const refreshed = getBrand(id);
-      if (refreshed) void runPhase2(refreshed);
+      const refreshed = await getBrand(id);
+      if (refreshed) await runPhase2(refreshed);
     } else {
       // Logos generated; let the brand panel reveal the picker.
-      updateBrand(id, {
+      await updateBrand(id, {
         status: "complete",
         progressStage: "awaiting logo pick",
         progressPct: 1,
       });
     }
   } catch (err) {
-    updateBrand(id, {
+    await updateBrand(id, {
       status: "failed",
       error: err instanceof Error ? err.message : String(err),
     });
@@ -224,9 +224,9 @@ async function runPhase2(project: BrandProject): Promise<void> {
   const outDir = brandDir(id);
   const assetUrl = (rel: string) =>
     `/api/brands/${id}/files/${rel.split("/").map(encodeURIComponent).join("/")}`;
-  const mergeOutputs = (patch: Partial<BrandOutputs>) => {
-    const current = getBrand(id)?.outputs ?? {};
-    updateBrand(id, { outputs: { ...current, ...patch } });
+  const mergeOutputs = async (patch: Partial<BrandOutputs>) => {
+    const current = (await getBrand(id))?.outputs ?? {};
+    await updateBrand(id, { outputs: { ...current, ...patch } });
   };
 
   // Reload brand.json fresh — it may have been touched by tweaks etc.
@@ -240,7 +240,7 @@ async function runPhase2(project: BrandProject): Promise<void> {
 
   // Flip status back to running so the brand panel shows the building UI
   // again (stage cards + "usually takes 2-3 minutes" copy).
-  updateBrand(id, {
+  await updateBrand(id, {
     status: "running",
     progressStage: "building the rest of your kit",
     progressPct: 0,
@@ -262,7 +262,7 @@ async function runPhase2(project: BrandProject): Promise<void> {
       try {
         const variants = await generateLandingVariants(brand as never, outDir, 3, intakeCtx);
         if (variants.length) {
-          mergeOutputs({
+          await mergeOutputs({
             landingVariants: variants.map((v) => ({
               key: v.key,
               title: v.title,
@@ -279,7 +279,7 @@ async function runPhase2(project: BrandProject): Promise<void> {
       try {
         const p = await generatePaletteExpansion(brand as never, outDir);
         if (p) {
-          mergeOutputs({
+          await mergeOutputs({
             paletteExpansion: {
               url: assetUrl(p.filename),
               light: p.light,
@@ -296,7 +296,7 @@ async function runPhase2(project: BrandProject): Promise<void> {
       try {
         const assets = await generateSocialKit(brand as never, outDir, intakeCtx);
         if (assets.length) {
-          mergeOutputs({
+          await mergeOutputs({
             socialKit: assets.map((a) => ({
               key: a.key,
               title: a.title,
@@ -314,7 +314,7 @@ async function runPhase2(project: BrandProject): Promise<void> {
       try {
         const p = await generatePitchOnePager(brand as never, outDir, intakeCtx);
         if (p) {
-          mergeOutputs({
+          await mergeOutputs({
             pitchOnePager: {
               htmlUrl: assetUrl(p.htmlFilename),
               pdfUrl: p.pdfFilename ? assetUrl(p.pdfFilename) : undefined,
@@ -329,7 +329,7 @@ async function runPhase2(project: BrandProject): Promise<void> {
       try {
         const e = await generateEmailKit(brand as never, outDir, intakeCtx);
         if (e) {
-          mergeOutputs({
+          await mergeOutputs({
             emailKit: {
               headerUrl: e.headerFilename ? assetUrl(e.headerFilename) : undefined,
               signatureUrl: e.signatureFilename ? assetUrl(e.signatureFilename) : undefined,
@@ -344,7 +344,7 @@ async function runPhase2(project: BrandProject): Promise<void> {
       try {
         const d = await generateDevBrief(brand as never, outDir, intakeCtx);
         if (d) {
-          mergeOutputs({
+          await mergeOutputs({
             devBrief: {
               htmlUrl: assetUrl(d.htmlFilename),
               pdfUrl: d.pdfFilename ? assetUrl(d.pdfFilename) : undefined,
@@ -359,7 +359,7 @@ async function runPhase2(project: BrandProject): Promise<void> {
 
   await Promise.allSettled(tasks);
 
-  updateBrand(id, {
+  await updateBrand(id, {
     status: "complete",
     progressStage: "complete",
     progressPct: 1,

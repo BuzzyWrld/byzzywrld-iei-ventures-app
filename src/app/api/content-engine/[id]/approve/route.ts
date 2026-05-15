@@ -18,7 +18,7 @@ export async function POST(
   if (!user) return Response.json({ error: "unauthorized" }, { status: 401 });
 
   const { id } = await params;
-  const run = getContentRun(id);
+  const run = await getContentRun(id);
   if (!run) return Response.json({ error: "not found" }, { status: 404 });
   if (run.userId && run.userId !== user.id) {
     return Response.json({ error: "not found" }, { status: 404 });
@@ -31,7 +31,7 @@ export async function POST(
   const weeks = run.outputs.weeks.map((w) =>
     w.weekNumber === weekNumber ? { ...w, status: "approved" as const, approvedAt: new Date().toISOString() } : w
   );
-  updateContentRun(id, { outputs: { ...run.outputs, weeks } });
+  await updateContentRun(id, { outputs: { ...run.outputs, weeks } });
 
   // Advance to the next pass (triggers async agent run)
   const { run: updated, work } = await advanceContentRun(id);

@@ -36,7 +36,7 @@ export type SkillManifest = {
  * show useful status ("Generating palette…", "Rendering PDF…"). Optional —
  * skill can ignore it.
  */
-export type ProgressReporter = (stage: string, pct?: number) => void;
+export type ProgressReporter = (stage: string, pct?: number) => void | Promise<void>;
 
 export type SkillRunContext = {
   /** Absolute path. Skill writes all output files here. */

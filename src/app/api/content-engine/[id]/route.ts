@@ -15,7 +15,7 @@ export async function GET(
 
   const { id } = await params;
   // Prefer Blob (authoritative cross-Lambda state) over local SQLite (stale cache)
-  const run = await fetchRun(id) ?? getContentRun(id);
+  const run = await fetchRun(id) ?? await getContentRun(id);
   if (!run) return Response.json({ error: "not found" }, { status: 404 });
   if (run.userId && run.userId !== user.id) {
     return Response.json({ error: "not found" }, { status: 404 });
@@ -47,7 +47,7 @@ export async function POST(
 
   // ALWAYS read from Blob for approvals — local SQLite may have stale state
   // from when this warm Lambda instance first created or touched the run.
-  const run = await fetchRun(id) ?? getContentRun(id);
+  const run = await fetchRun(id) ?? await getContentRun(id);
   if (!run) return Response.json({ error: "not found" }, { status: 404 });
   if (run.userId && run.userId !== user.id) {
     return Response.json({ error: "not found" }, { status: 404 });
@@ -57,10 +57,10 @@ export async function POST(
 
   // week_4_review → complete (no more passes)
   if (run.status === "week_4_review") {
-    upsertContentRun(run);
+    await upsertContentRun(run);
     const { updateContentRun } = await import("@/lib/db");
-    updateContentRun(id, { status: "complete", progressStage: "complete", progressPct: 1 });
-    const final = getContentRun(id);
+    await updateContentRun(id, { status: "complete", progressStage: "complete", progressPct: 1 });
+    const final = await getContentRun(id);
     if (final) await persistRun(final);
     return Response.json({ run: final, message: "calendar complete" });
   }
@@ -79,13 +79,13 @@ export async function POST(
   if (wi >= 0) weeks[wi] = { ...weeks[wi], status: "approved" };
 
   // Update status and persist before delegation
-  upsertContentRun(run);
+  await upsertContentRun(run);
   const { updateContentRun } = await import("@/lib/db");
-  updateContentRun(id, {
+  await updateContentRun(id, {
     outputs: { ...run.outputs, weeks },
     progressStage: `approved week ${weekNum} — generating next`,
   });
-  const updated = getContentRun(id)!;
+  const updated = (await getContentRun(id))!;
   await persistRun(updated);
 
   // Delegate next pass to a fresh Lambda
@@ -96,8 +96,8 @@ export async function POST(
     } catch (err) {
       console.error(`[content-engine] approve → pass ${nextPass} failed:`, err);
       const { updateContentRun: upd } = await import("@/lib/db");
-      upd(id, { status: "failed", error: err instanceof Error ? err.message : String(err) });
-      const snap = getContentRun(id);
+      await upd(id, { status: "failed", error: err instanceof Error ? err.message : String(err) });
+      const snap = await getContentRun(id);
       if (snap) await persistRun(snap);
     }
   });

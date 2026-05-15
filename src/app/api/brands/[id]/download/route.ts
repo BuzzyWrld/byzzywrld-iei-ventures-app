@@ -30,7 +30,7 @@ export async function GET(
   if (!user) return Response.json({ error: "unauthorized" }, { status: 401 });
 
   const { id } = await params;
-  const project = getBrand(id);
+  const project = await getBrand(id);
   if (!project) return Response.json({ error: "not found" }, { status: 404 });
   if (project.userId && project.userId !== user.id) {
     return Response.json({ error: "not found" }, { status: 404 });

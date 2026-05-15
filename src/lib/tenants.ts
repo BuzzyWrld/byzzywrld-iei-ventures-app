@@ -8,7 +8,13 @@
  *   2. `?tenant=slug` query param (for previewing themes)
  *   3. fallback to "iei" (default)
  */
-import { db } from "./db";
+import {
+  upsertTenant,
+  findTenantBySlug,
+  findTenantByDomain,
+  listTenantRows,
+  type TenantRow,
+} from "./db";
 
 export type Tenant = {
   id: string;
@@ -61,44 +67,23 @@ const SEED: Tenant[] = [
   },
 ];
 
-let _initialized = false;
-
-function ensureSchema() {
-  if (_initialized) return;
-  db().exec(`
-    CREATE TABLE IF NOT EXISTS tenants (
-      id TEXT PRIMARY KEY,
-      slug TEXT UNIQUE NOT NULL,
-      display_name TEXT NOT NULL,
-      logo_url TEXT,
-      colors_json TEXT NOT NULL,
-      custom_domain TEXT
-    );
-  `);
-  // Upsert seed tenants so color changes in code take effect immediately.
-  const ups = db().prepare(
-    `INSERT INTO tenants (id, slug, display_name, logo_url, colors_json, custom_domain)
-     VALUES (?, ?, ?, ?, ?, ?)
-     ON CONFLICT(id) DO UPDATE SET
-       display_name = excluded.display_name,
-       colors_json  = excluded.colors_json`
-  );
+let _seeded = false;
+async function ensureSeed(): Promise<void> {
+  if (_seeded) return;
+  _seeded = true;
   for (const t of SEED) {
-    ups.run(t.id, t.slug, t.displayName, t.logoUrl ?? null, JSON.stringify(t.colors), t.customDomain ?? null);
+    await upsertTenant({
+      id: t.id,
+      slug: t.slug,
+      displayName: t.displayName,
+      logoUrl: t.logoUrl,
+      colorsJson: JSON.stringify(t.colors),
+      customDomain: t.customDomain,
+    });
   }
-  _initialized = true;
 }
 
-type Row = {
-  id: string;
-  slug: string;
-  display_name: string;
-  logo_url: string | null;
-  colors_json: string;
-  custom_domain: string | null;
-};
-
-function rowToTenant(r: Row): Tenant {
+function rowToTenant(r: TenantRow): Tenant {
   return {
     id: r.id,
     slug: r.slug,
@@ -109,18 +94,16 @@ function rowToTenant(r: Row): Tenant {
   };
 }
 
-export function getTenantBySlug(slug: string): Tenant | null {
-  ensureSchema();
-  const row = db().prepare(`SELECT * FROM tenants WHERE slug = ?`).get(slug) as Row | undefined;
+export async function getTenantBySlug(slug: string): Promise<Tenant | null> {
+  await ensureSeed();
+  const row = await findTenantBySlug(slug);
   return row ? rowToTenant(row) : null;
 }
 
-export function getTenantByHost(host: string): Tenant | null {
-  ensureSchema();
+export async function getTenantByHost(host: string): Promise<Tenant | null> {
+  await ensureSeed();
   // Exact custom-domain match first.
-  const direct = db()
-    .prepare(`SELECT * FROM tenants WHERE custom_domain = ?`)
-    .get(host) as Row | undefined;
+  const direct = await findTenantByDomain(host);
   if (direct) return rowToTenant(direct);
 
   // Subdomain on ieiventures.* or localhost: slug = first label.
@@ -132,16 +115,16 @@ export function getTenantByHost(host: string): Tenant | null {
   return null;
 }
 
-export function resolveTenant(slug?: string | null): Tenant {
+export async function resolveTenant(slug?: string | null): Promise<Tenant> {
   if (slug) {
-    const t = getTenantBySlug(slug);
+    const t = await getTenantBySlug(slug);
     if (t) return t;
   }
-  return getTenantBySlug(DEFAULT_TENANT_SLUG) ?? DEFAULT_TENANT;
+  return (await getTenantBySlug(DEFAULT_TENANT_SLUG)) ?? DEFAULT_TENANT;
 }
 
-export function listTenants(): Tenant[] {
-  ensureSchema();
-  const rows = db().prepare(`SELECT * FROM tenants ORDER BY slug`).all() as Row[];
+export async function listTenants(): Promise<Tenant[]> {
+  await ensureSeed();
+  const rows = await listTenantRows();
   return rows.map(rowToTenant);
 }

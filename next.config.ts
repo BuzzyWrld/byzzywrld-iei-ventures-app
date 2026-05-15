@@ -9,9 +9,11 @@ const nextConfig: NextConfig = {
   // Include skill files in the Lambda bundle so they're available at runtime
   // via fs.readFile(path.join(process.cwd(), "skills/..."))
   outputFileTracingIncludes: {
-    "/api/content-engine": ["./skills/**/*"],
-    "/api/content-engine/[id]": ["./skills/**/*"],
-    "/api/content-engine/[id]/run-pass": ["./skills/**/*"],
+    "/api/brands": ["./skills/brand-playbook/**/*"],
+    "/api/brands/[id]/retry": ["./skills/brand-playbook/**/*"],
+    "/api/content-engine": ["./skills/content-engine/**/*"],
+    "/api/content-engine/[id]": ["./skills/content-engine/**/*"],
+    "/api/content-engine/[id]/run-pass": ["./skills/content-engine/**/*"],
   },
 };
 

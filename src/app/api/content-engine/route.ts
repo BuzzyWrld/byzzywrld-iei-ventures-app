@@ -13,7 +13,7 @@ export async function GET() {
   const [tenant, user] = await Promise.all([currentTenant(), currentUser()]);
   if (!user) return Response.json({ error: "unauthorized" }, { status: 401 });
   // Try SQLite first; if empty, fall back to Vercel Blob
-  let runs = listContentRuns({ tenantId: tenant.id, userId: user.id });
+  let runs = await listContentRuns({ tenantId: tenant.id, userId: user.id });
   if (runs.length === 0) {
     const blobRuns = await listRunsFromBlob();
     runs = blobRuns.filter(
@@ -37,7 +37,7 @@ export async function POST(request: NextRequest) {
   };
 
   console.log("[content-engine] POST: enqueuing run");
-  const { run, work } = enqueueContentRun(intake, { tenantId: tenant.id, userId: user.id });
+  const { run, work } = await enqueueContentRun(intake, { tenantId: tenant.id, userId: user.id });
   console.log(`[content-engine] POST: run ${run.id} created, scheduling after()`);
 
   // after() takes a callback, not a raw Promise.
