@@ -23,13 +23,13 @@ A Brand Blueprint from IEI Ventures
 # From Idea to Income — Starting With the Brand.
 
 **SUBHEAD (medium, body font):**
-The brand foundation a senior strategist would build, AI-accelerated, and reviewed personally by me — Tab Wolod. Delivered in five days. Built using The IEI Brand System: my proprietary method for turning ideas into income.
+The brand foundation a senior strategist would build, AI-accelerated, and reviewed personally by me — Tab Wolod. Delivered within 24 hours. Built using The IEI Brand System: my proprietary method for turning ideas into income.
 
 **PRIMARY CTA (large button, accent color):**
 [See the Three Blueprints →]
 
 **SECONDARY (small text, below CTA):**
-No subscriptions. One payment. Yours forever.
+No subscriptions. One payment. Yours forever. Love it or full refund within 7 days of preview.
 
 **HERO MEDIA (right side or below):**
 Video embed slot — 90-second Tab intro video. (See `tab-video-script.md` for the script.)
@@ -271,13 +271,13 @@ Founder, IEI Ventures
 ## Things people ask before they buy.
 
 **Q: How long does this actually take?**
-Five business days from your intake call. Sometimes faster. If we need more info from you, it can take longer — but I'll tell you upfront.
+Within 24 hours. AI generates the first draft in about 30 minutes. I personally review every single one before it goes to you — that takes me about 15 minutes per customer. You'll typically have your watermarked preview within 2-6 hours during business hours, max 24.
 
 **Q: What if I don't like the first draft?**
-We talk about it. Every Blueprint includes a refinement pass — I'm not handing you a generic template and ghosting. The whole point is that I'm in the loop.
+You'll see a watermarked preview before you commit. If something's off, hit "Request Revisions" — you'll get one round of refinements free. If after that it still isn't landing, full refund. No drama. The whole point is that I'm in the loop.
 
 **Q: What if I want a refund?**
-24-hour money-back window from purchase, as long as we haven't started your intake call yet. After that, I've started doing work specific to you, so no refunds. Full details in the Terms.
+Love it or full refund within 7 days of your preview, no questions asked. You'll see a watermarked preview first — you don't pay for files you haven't reviewed. If you decline, we just ask you to delete the preview files. Full details in the Terms.
 
 **Q: Do I own everything you make me?**
 Yes — your messaging, your logo, your website, all of it. The IEI Brand System (my method) stays with me. The Outputs (your brand) become yours upon full payment. Full details in the IP Agreement.

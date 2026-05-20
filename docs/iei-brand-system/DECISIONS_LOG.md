@@ -140,6 +140,29 @@
 - Premium upgrade target: 15-25% of customers convert
 
 See `HYBRID_PIVOT.md` for full reasoning + revised economics + Q1-Q4 timeline.
+
+---
+
+## 🔄 DELIVERY MODEL REFINEMENT — confirmed 2026-05-19 (late session)
+
+**Tab put structure around the delivery + refund flow. Locks below replace earlier draft.**
+
+| Decision | Status |
+|---|---|
+| **AI generation completes in ~30 min** | CONFIRMED |
+| **Tab reviews EVERY customer (not 10% spot-check)** | CONFIRMED — 15 min/customer × ~50/month = ~12 hrs/month |
+| **Tab uses a STRUCTURED tweak prompt** (checkbox form, not free-write) | CONFIRMED — see `launch-assets/tab-review-prompt.md` |
+| **Marketed SLA: "Within 24 hours"** | CONFIRMED — typically 2-6 hrs business-day, max 24 |
+| **Customer receives WATERMARKED preview** (not final files) | CONFIRMED — major UX + IP protection win |
+| **Customer "ACCEPTS" to receive clean final files** | CONFIRMED — explicit acceptance moment |
+| **Acceptance closes refund window** (except production defects) | CONFIRMED |
+| **Refund policy:** *"Love it or your money back. 7 days from delivery preview, full refund, no questions asked."* | CONFIRMED |
+| **Refund requires customer to confirm deletion of preview files** | CONFIRMED — IP protection |
+| **Production defects warrant fix/refund anytime** (margin off, corrupted file, missing page, etc.) | CONFIRMED |
+| **Customer revision flow:** Click "Request Revisions" in email → returns to chat → AI asks 1-2 clarifying questions → regenerates | CONFIRMED |
+| **Welcome video records in same session as landing hero video** | CONFIRMED — Task #16 covers both |
+| **Build philosophy:** Tab + Claude design strategy/UX, dev team implements | CONFIRMED |
+| **NEW DOC: `TABS_STORY.md` — Tab's full backstory in her voice** | TO DRAFT — source of truth for About page, press kit, voice reference |
 | **Domain strategy:** | CONFIRMED 2026-05-18 late session | |
 |   – Stage 1 landing: **ieiventures.com/blueprint** | ✓ | Ships fast, no extra domain to buy |
 |   – Register brandblueprint.com (or similar) in parallel | ✓ | For long-term product identity; redirect later |
