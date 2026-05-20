@@ -1,261 +1,265 @@
-# Tab's Story — Source of Truth
+# TABS_STORY.md — Source of Truth
 
-**Purpose:** The definitive version of Tab's backstory, in her own voice. The reference doc anytime her story appears anywhere — landing About page, press kit, investor decks, podcast intros, the AI's understanding of her, LinkedIn bio, conference bios.
-
-**Status:** TEMPLATE — Tab fills in. Claude shapes. Tab approves.
-
-**Owner:** Tab.
-
-**Why this matters:**
-- Right now your story lives scattered across docs (PRODUCT_FRAMING, landing copy, welcome video script, facilitator guide). Bits and pieces.
-- One consistent source = brand voice consistency everywhere.
-- The AI uses this as YOUR reference when generating customer brand narratives — "your story IS the proof your method works."
-- When a journalist asks for your bio, you copy from here. Same when a podcast host asks for intros.
+**Last updated:** 2026-05-20 (deep-session conversational draft)
+**Owner:** Tab (final approval)
+**Editor:** Claude (drafting + shaping)
+**Status:** ✅ Long-form drafted · ⏳ Shorter versions (About page, LinkedIn, investor bio, podcast intro, one-liner) to be polished together after Tab review
 
 ---
 
-## How to fill this in
+## 📜 LONG-FORM NARRATIVE — DRAFT v1
 
-Two options:
-
-**Option A: Self-write.** Fill in each section in raw, messy, Tab-voice prose. Don't polish. I shape after.
-
-**Option B: Conversational.** Tell Claude (in chat) "let's do my story" and answer questions one at a time. I write as we talk. You approve.
-
-Either works. Option B is faster if you're not feeling like writing.
+> **DRAFT — Tab to review.** Written in Tab's voice based on the 2026-05-20 conversation. Read it through once. Mark anywhere it doesn't sound like you. We tighten together.
 
 ---
 
-## SECTION 1 — The Setup (Who you were before)
+### How I Got Here
 
-> **Prompts to answer:**
-> - Who were you before you started IEI? Job? Role?
-> - What was the life situation? (Family? City? Age?)
-> - What were you actually doing day to day?
-> - What was good about it? What was secretly killing you?
+I worked at Verizon Wireless for eleven years — from eighteen to twenty-nine. I started in a call center and learned the deep stuff: protocols, KPIs, performance improvement, quality assurance. I trained agents who'd just hit the floor. I coached people up. And then I moved into operations.
 
-**Tab fills in:**
+For eight years, I lived inside the workforce planning side of the company. Long-term forecasting. The "war room" — later called the work coordination center — where five or six of us watched the service level for every consumer and tech call center in the Northeast. We were tracking call volumes, catching tech issues in real time, managing capacity. I learned how to *read* data. I learned what it actually takes to launch something at scale, on time, with measurable outcomes.
 
-```
-[Write raw. Don't filter. Examples to spark you:
- "I was 11 years deep in corporate. Mid-30s. Director-title, decent paycheck,
-  golden handcuffs. Looked great on LinkedIn. Felt like dying inside."
- "I was managing campaigns for [client type] and good at it. The pay was solid.
-  The work didn't feel mine."]
-```
+The term "go-to-market" — GTM — I learned that at Verizon. The training manager would put up "GTM: Motorola Razor — 30 min training" on the board, and I'd have to schedule it across teams and factor it into shrinkage. One day I asked her what GTM meant. *"Go-to-market. That's what happens when a new product hits."* That stuck. Even years later, when I help a solo founder take an idea to revenue, I'm still using what that training manager taught me without knowing she was teaching me anything.
 
----
+Then I moved to Verizon Communications. That role sucked. I worked through the strike. I worked through snowstorms when nobody else would come in. I had a 401(k) and not much else. If I was going to retire from there, I'd have to stay until I was sixty. And I just knew — there had to be something more than this.
 
-## SECTION 2 — The Itch (Why you left / when it started)
+So I gave myself thirty days. I told myself: *if I'm still complaining every day at the end of thirty days, I'm out.* Thirty days came and I was still miserable. So I quit.
 
-> **Prompts to answer:**
-> - What was the moment you knew you couldn't stay?
-> - Did you leave clean, or burn out, or get pushed?
-> - What were you chasing? (Money? Freedom? Impact? Generational wealth? All of it?)
-> - What did you tell yourself? What were you afraid of?
+And then I had to figure out what to do.
 
-**Tab fills in:**
+### The Quit Years
 
-```
-[From facilitator guide we have:
- "I left corporate in 2016 after eleven years. I knew I was not going back.
-  I had this deep longing to do something purposeful with my life. I wanted
-  to make an impact. I wanted to monetize off of it. And I wanted generational
-  wealth — for myself and for my family."
+Side hustles were already in my blood. Before I'd even quit Verizon, I'd been running things. I sold Noni Juice in MLM. I rapped. I had an entertainment company with my boys — we sold T-shirts off a full screen printer I'd financed for sixteen grand in my apartment. I ran an internet radio show. I DJed. I started a cleaning and organizing company called **Kingdom Klean**.
 
-Expand: what was the moment? Who told you not to do it? Who told you GO?
-What did the night before look like? What did the day after feel like?]
-```
+I tried everything. And in between trying, I wrote a book — **From Stuck to Bucks** — released in 2017. Seven steps to take an idea you love AND are good at, and turn it into income. That book has the original brand framework that became The IEI Brand System. I just didn't call it that yet.
 
----
+The name "**Ideas Equal Income**" came from a play on a Baltimore law firm jingle. *Saiontz & Kirk Personal Injury Lawyers: "If you have a phone, you have a lawyer."* In my head: if you have an idea, you have an income. That kept ringing. Wouldn't leave me alone. So I made it the name.
 
-## SECTION 3 — The Wandering (Side hustles + side roads)
+### Building Websites Saved My Life
 
-> **Prompts to answer:**
-> - What did you try before IEI clicked?
-> - The cleaning company (Kingdom Clean) — tell that story
-> - The MLM stuff
-> - The entertainment company / radio / DJing
-> - What was the longest "this is it" moment that turned out not to be?
-> - What did you learn from each one?
+The first real client work came in 2018. I started building websites on Wix because Wix had CRM and event management and design — all in one — and I could *get in there.* I charged four hundred bucks a website.
 
-**Tab fills in:**
+But every single client did the same thing. I'd pull up a template, ask them what colors they wanted, what words they wanted on the About page, what their products were called — and they'd go blank.
 
-```
-[From facilitator guide: "A cleaning company. I had that — Kingdom Clean.
- Multilevel marketing things. I tried those. An entertainment company —
- I was hosting events, running an internet radio show, DJing."
+I didn't know "call to action" or "top of the fold" yet, but I knew which questions to ask. *"What does this color mean to you? What's the most important thing you want someone to see? How are you explaining yourself?"*
 
-Expand each. Specifically:
-- What did Kingdom Clean teach you about running a business?
-- What did MLM teach you about what you WON'T do?
-- What did the entertainment hustle teach you about audience?
-- Were there other side roads not yet named?]
-```
+I was asking the questions of The IEI Brand System before I had a name for any of it.
 
----
+The whole time, I was also surviving. I burned through my 401(k) — about $20K after taxes. I faced housing insecurity. I drove Lyft. I filed bankruptcy. I went into debt. I worked overnight security for $13 an hour. That's where I built websites — at the desk overnight, while my body recovered from the day before.
 
-## SECTION 4 — The Click (Ideas Equal Income)
+It was brutal. And I want to say it out loud because most founders don't. The "I left corporate to chase my dream" version is a lie of omission. The truth is I went from $65K to $13/hour on purpose because I needed the time, even though I had no safety net.
 
-> **Prompts to answer:**
-> - When did "Ideas Equal Income" first show up?
-> - Was it a moment, a season, a conversation?
-> - Why "ideas"? Why "income"? Why those specific words?
-> - What did you do the first week you had the phrase?
+I also deal with mental health challenges — and I'm vocal about that, because too many entrepreneurs are quietly drowning. Some days I don't want to get out of bed. Technically I don't have to. But I only eat what I kill. That's the deal.
 
-**Tab fills in:**
+### The D.U.M.I Moment
 
-```
-[From facilitator guide: "One thing just kept ringing. Kept coming back.
- Wouldn't leave me alone. Ideas. Equal. Income. IDEAS EQUAL INCOME.
- Your ideas DO equal income. Everything we see in the world around us —
- every product, every service, every business — started with an idea.
- I believe that no idea is a bad idea."
+One of my best friends co-owns a Baltimore brand called **D.U.M.I Apparel** — which stands for "Don't Underestimate My Intelligence." (In Baltimore, "dummy" is a term of endearment. Outsiders miss that.)
 
-Expand:
-- Where were you when it landed?
-- Who did you tell first?
-- What did you do with it — register a domain? Start writing? Just sit with it?]
-```
+I went to JD — the co-founder — and said *"I'd love to do your website."* She said yes, we bartered, clothes for design work. I built it. It looked good. But I had blank sections everywhere — About page, mission, product descriptions — and I had to ask her: *"What do I put here? And here? And here?"*
+
+She looked at me and said: ***"Tab. You know my brand better than I do."***
+
+I'll never forget that. That moment got me clear — clear on the questions I needed to be asking every client. Who are you? What do you do? Who do you serve? Why do you stand out? How do you do it? Those five questions became the spine of what I now call **The ABCs of Branding — Authentic Brand Creation.**
+
+I started saying it out loud: **"I break brands like DJs break records."** It's not a slogan. It's how I work. I take something whole and pull it apart so we can see what it actually is.
+
+### The System I Didn't Know I Had
+
+For years after, I ran every kind of marketing project I could find. Fundraising campaigns. Events. Social impact 360. Local-business growth. SEO. Community partnerships — I built sixty-plus during COVID for a Baltimore mental health clinic, including Kennedy Krieger and House of Ruth. I went viral on TikTok as a comedian on the side. I project-managed across teams when I had to. I did all of this for years.
+
+The pattern that kept tripping me up: I'd get tied up under one or two big clients and lose all my own runway. Great experience, no leverage.
+
+And the truth I didn't say out loud until 2026, in a conversation with my AI thought partner Claude, was: **"I have a system."** I'd been building it for nine years. I just hadn't named it as a system.
+
+That system is **The IEI Brand System.** Six modules. The Fourfold Path to Meaningful Marketing — Ideation, Impact, Implementation, Income. Two books — *From Stuck to Bucks* and *Know Thy Business* — that already document the philosophy. I'd built it. I just hadn't seen it as a thing.
+
+### Buzzy Brought My Baby Back
+
+Buzzy — Ryan, who I call my little Jedi — was my intern about three years ago. Marketing degree, mom's a marketing professor, but I was the one who taught him how brand work actually feels in the trenches. He hasn't had to get a job since he's been under my tutelage. We've been building together that whole time.
+
+A month ago he called me. *"Tab, I built this app with my developer Henrique. Let's call it IEI Ventures, it's yours. You made it. I'm coming to you. It's a venture thing, and an incubator thing. I'm doing the same on my end."*
+
+I almost smacked him through the phone. Not because I was mad. Because I was so deeply moved that *(1)* he didn't betray me and run with my IP, and *(2)* he brought the sum of all my work back to me — my baby back to me, fully formed. Sometimes, even though you know you have it, it takes someone else to point it out. He believes in me like I believe in him. Facts.
+
+That's how Brand Blueprint is here. That's how IEI Ventures is real.
+
+### Why I Do This
+
+I'm doing this for the businesses that will still be in business in ten years because they can finally explain what they actually do. I'm doing it for the founders who get to OWN land and houses and create a lifestyle, instead of being bound to a low-paying job with no hope. I'm doing it for the innovators who get to share what they've built with a world that can finally understand it.
+
+I'm doing it for **Baltimore** — every block of it. For the underserved, intentionally disinvested communities the system was built to forget. Baltimore is one of the poorest cities in America with some of the greatest resources, and we deserve equity in business-building, same as anyone.
+
+I'm doing it for **Black generational wealth.** My dad's family was stripped of about 80 acres of land. Bought out. We're owed a fair shot — same as everyone is.
+
+I'm doing it for my **younger self** who didn't know any of this was possible. For my **future family, my wife, my kids**. For my **uncle Steve** who's always worried about my stability but tells everyone I'm going to be a millionaire. For my **Pop, who said he did it his way like Sinatra. RIP.** For my **Nanny** — my grandmother, RIP — and for my **Grandma Jean**, who doubted me but somewhere knew. For my friends **Britni and Brandon** — who've quietly held me up with money in my bank account and seeds planted for my future. For **Liquida Chancey** and **Dave "Chap" Loveless** — my people. For the **Black Butterfly Network**. For my **EASE team — Ecosystem Awareness Solutions for Everyone**. For my **aunties**, especially **Aunt Jenny**, who taught me that sometimes the best thing you can do is ask for help.
+
+I'm doing it for **God** — because I said I would. I said I will serve. This is a gift, and a gift doesn't belong to the one who carries it. It belongs to the people it's for.
+
+I want to be a champion for people's visions. Everyone deserves a chance to see their idea come to life — at least see the MVP, at least see a glimpse of the vision they were given. Most people don't get to live inside their vision. I want to change that.
+
+Brand Blueprint can't fail. Not because I'm naïve about business — but because the need is real. Even the people who don't realize they need it, need it. Our job isn't to convince everyone. It's to find the ones who already know they do.
+
+**Long live the light bulb moments.**
+
+— Tab Wolod
 
 ---
 
-## SECTION 5 — The First Real Work (Building websites + the D.U.M.I moment)
+## ✏️ TAB'S NOTES TO CLAUDE (after first read)
 
-> **Prompts to answer:**
-> - How did you go from "I have a phrase" to "I'm working with paying clients"?
-> - The Wix websites — when did that start?
-> - The D.U.M.I story (Jaydee) — tell it in full
-> - Why did Jaydee's "you know my brand better than I do" change everything?
-> - What were the next 5-10 clients like? Patterns you noticed?
-
-**Tab fills in:**
+> Use this space to mark up the draft above. Things to flag:
+> - Anywhere it doesn't sound like you
+> - Anything you want cut (private or off-tone)
+> - Anything you want added that we missed
+> - Anything that needs a different word/phrase
+> - Anything that's flat-out wrong
 
 ```
-[From facilitator guide we have a lot here. Specifically:
-- "I started in 2017 building websites. Just websites. That was it."
-- "And every single client I had — the same thing happened. I'd pull up
-   a website template and ask them for their About page. And they'd go blank."
-- D.U.M.I full story (Jaydee bartering, the blank About sections, the
-   "Tab, you know my brand better than I do" moment)
-- "That moment got me really clear. Clear on what questions I needed to ask
-   my clients."
-
-Expand:
-- What other clients showed the same pattern?
-- When did you realize this was the real work, not the websites?
-- What was the moment you stopped being a website builder and started
-   being a brand strategist?]
+[Tab's notes go here]
 ```
 
 ---
 
-## SECTION 6 — The System (Building The IEI Brand System)
+## 🎯 SHORTER VERSIONS — TO POLISH TOMORROW
 
-> **Prompts to answer:**
-> - When did you start formalizing the questions / frameworks?
-> - The 6 modules — how did each module come into focus?
-> - The 10 worksheets — what came first, what came last?
-> - "Lock It In" — where did that ritual come from?
-> - When did you start teaching it (vs. just doing it for clients)?
-> - The first time you facilitated a workshop — how did it go?
+Once the long-form is approved, Claude generates these (each is a different lens on the same story):
 
-**Tab fills in:**
-
-```
-[We have method names + structure from the facilitator guide. What's
-missing is the EVOLUTION:
-- What was Module 1 in version 1?
-- What did you cut along the way?
-- What's the most recent thing you added to the system?
-- When did you name it "The IEI Brand System" specifically?]
-```
-
----
-
-## SECTION 7 — The Now (IEI Ventures + Brand Blueprint)
-
-> **Prompts to answer:**
-> - Why IEI Ventures (not just IEI Agency)?
-> - The pivot from "agency that does brand work" to "company with a portfolio of products"
-> - Ashley's role — your partner
-> - The brand app (Brand Blueprint), the music app, VoltBay — how did each emerge?
-> - What does "from idea to income" mean to you NOW vs. when you first said it?
-
-**Tab fills in:**
-
-```
-[Mostly net-new. The GTM doc we have references the portfolio approach
-but doesn't explain the why. Help me here:
-- What changed in your business / life that made "Ventures" the right shape?
-- Why three products? What do they have in common?
-- What's the vision for IEI Ventures in 5 years?]
-```
-
----
-
-## SECTION 8 — The Why (The deeper reason)
-
-> **Prompts to answer:**
-> - If you had to name the ONE deep reason you do this work — what is it?
-> - Who do you carry with you when you do it?
-> - What would disappoint you if Brand Blueprint didn't exist?
-> - What does success actually look like — not in dollars, in lives?
-
-**Tab fills in:**
-
-```
-[This is the soul section. Slow down. Be honest. Examples from your work:
-- "A world where no brilliant idea dies in someone's notes app."
-- "I want to see every entrepreneur or someone with a brilliant idea launch
-   that idea into the world."
-
-But go deeper:
-- Is this about your mom, your kid, your community, your past self?
-- What's the wound under all of this?
-- (And don't write it if it's not for public consumption — note it for
-   yourself, we'll know what to share publicly vs. keep internal.)]
-```
-
----
-
-## OUTPUTS — what we generate from your filled-in story
-
-Once you fill in the sections above (any combination — even partial is useful), I generate these versions:
-
-| Output | Length | Use case |
+| Version | Length | Status |
 |---|---|---|
-| **Full Story (long form)** | 800-1200 words | Press kit, podcast intros, conference bios, About page sub-section |
-| **About Page Story** | 200-300 words | The "Meet Tab" section of ieiventures.com/blueprint |
-| **Investor / Partner Bio** | 100-150 words | Pitch decks, partnership outreach, board introductions |
-| **LinkedIn Bio** | 60 words | Profile summary |
-| **Short Intro (for podcasts/speaking)** | 30-40 words | "I'm Tab Wolod. I'm the founder of IEI Ventures, and I help founders turn ideas into income..." |
-| **One-liner** | 15 words | Bio tagline, IG bio, email signature |
-| **Welcome Video Reference** | (script anchors) | The version of your story Tab references when recording videos |
-| **AI Voice Reference** | (internal) | The version the brand-playbook skill uses as canonical Tab — so when AI references "the founder's story," it has THE story, not fragments |
-
-All versions stay TRUE to your voice (per BRAND_VOICE_SPEC.md). Different lengths for different contexts.
+| About Page (Brand Blueprint landing) | 200-300 words | ⏳ TODO |
+| Investor / Partner Bio | 100-150 words | ⏳ TODO |
+| LinkedIn Bio | 60 words | ⏳ TODO |
+| Podcast / Speaking Intro | 30-40 words | ⏳ TODO |
+| One-liner (IG bio, email signature, etc.) | 15 words | ⏳ TODO |
 
 ---
 
-## How to start
+## 🔒 INTERNAL-ONLY (NEVER published)
 
-**If you want to start NOW:**
-- Pick the section that's easiest for you (Section 5 — D.U.M.I — usually flows fast since you've told it many times)
-- Write raw into that section
-- Move to the next section when you're ready
-- Or DM Claude "let's do Section 4" and we go conversationally
+These were shared in trust during the deep session. Captured here for AI/team context, NOT for any public-facing surface. If Tab later chooses to share publicly, she'll explicitly mark them up.
 
-**If you want to schedule it:**
-- Block 60-90 min on your calendar this week
-- Open this doc + just write
-- Send me what you have, I shape
-
-**Don't try to do all 8 sections at once.** It's a lot of psychic weight to put down. 2-3 sections per sitting is plenty.
+- **Specific bipolar diagnosis** — the public-facing language is "mental health challenges." Tab is vocal about challenges generally; the specific diagnosis stays internal.
+- **Current financial situation** — transportation insecurity, barely making bills as of May 2026. This is the URGENCY context behind why Brand Blueprint needs to ship and work — but it's not in the public story.
+- **Specific Under Armour grievances** — the public-facing version critiques corporate-values mismatch generally without naming the company. The full receipts (warehouse treatment, $11-13/hr team pay, hidden predators/racists, burning truck trailers, broken $100M Cherry Hill promise, dirt-cheap land deal) stay internal.
 
 ---
 
-**Owner:** Tab
-**Editor:** Claude
-**Final approval:** Tab
-**Used by:** all customer-facing surfaces requiring Tab's story
+## 📌 KEY MILESTONES + DATES (for accuracy)
+
+| When | What |
+|---|---|
+| 1996–2007 | Verizon Wireless call center → ops → training (18→29 years old) |
+| 2007–2016 | Verizon resource management → war room → workforce planning |
+| ~2014 | Promoted to interim supervisor of preplan team (SharePoint era) |
+| Late 2016 | Moved to Verizon Communications. Worked through the strike + snowstorms. The 30-day deadline. **QUIT.** |
+| 2017 | **Published "From Stuck to Bucks"** — original 7-step brand framework |
+| 2018 | Started building Wix websites at $400 each |
+| ~2018–2019 | D.U.M.I / Jaydee — *"You know my brand better than I do."* |
+| 2019 | Outpatient mental health clinic in Baltimore — $2K/month, then COVID, then pivot to digital marketing for them |
+| 2019 | Security supervisor for Under Armour via Allied Universal — $65K, 65 people, "hell" |
+| 2019 onward | Insurance sales in between, Lyft, the bankruptcy, the housing instability |
+| Various | Published **"Know Thy Business"** — mind-body connection for business owners |
+| ~2023 | Met Buzzy (Ryan) as intern via D.U.M.I orbit (Mikey collection / TLC Loyalty collection) |
+| April 2026 | Buzzy + Henrique surprise — *"Let's call it IEI Ventures, it's yours."* |
+| May 2026 | Brand Blueprint MVP in development with Tab + Buzzy + Henrique + Claude as thought partner |
+
+---
+
+## 👥 PEOPLE TAB CARRIES (full list captured)
+
+**Family:**
+- Her father · her mother · her future family / wife / kids
+- **Uncle Steve** — worries about her stability but calls her a future millionaire
+- **Pop (RIP)** — *"He did it his way like Sinatra."*
+- **Nanny (RIP)** — her grandmother
+- **Grandma Jean** — doubted her, but somewhere knew
+- **Aunt Jenny** — taught her *"Sometimes the best thing you can do is ask for help."*
+- All her aunties — *"the ones I have, and the ones I don't have."*
+
+**Friends + chosen family:**
+- **Britni** — sends money out of nowhere when needed
+- **Brandon** — always in her corner, planting seeds for the future
+- **Liquida Chancey** — her people
+- **Dave "Chap" Loveless** — her people
+
+**Business + community:**
+- **Buzzy (Ryan)** and **Henrique** — IEI Ventures co-builders
+- **D.U.M.I Apparel** team (Jaydee + co-founders + Mikey)
+- **Black Butterfly Network**
+- **EASE team — Ecosystem Awareness Solutions for Everyone**
+- All her past clients
+- Underserved + intentionally disinvested communities everywhere
+- **Baltimore — everything Baltimore**
+
+**Self:**
+- Her younger self — to prove she could do it
+
+**Higher:**
+- God — *"because I said I would. I said I will serve."*
+- Ancestors and the universe
+
+---
+
+## 💎 LINES FOR THE BRAND LIBRARY
+
+Candidate Tab-voice signature phrases that emerged during the session. Adding these to `BRAND_VOICE_SPEC.md` as proprietary phrase candidates:
+
+- **"I break brands like DJs break records."**
+- **"A brand cannot be valued. It can only be expressed."**
+- **"The foundation for the founder."**
+- **"From Idea to Income."** (existing — confirmed again)
+- **"Ideas Equal Income."** (existing — origin story now documented: Saiontz & Kirk play)
+- **"Long live the light bulb moments."** (existing)
+- **"I only eat what I kill."** (raw, true, Tab voice)
+- **"He brought my baby back to me."** (the Buzzy moment — narrative quote)
+- **"Sometimes, even though you know you have it, it takes others to point it out."**
+- **"Everyone needs it, but only the ones who know they do are our target audience."**
+- **"You have to be right so your business can be right."** (from *Know Thy Business*)
+- **"Authentic Brand Creation" / "ABC brand"**
+- **"The Fourfold Path to Meaningful Marketing"** (existing)
+- **"Champion for people's visions."**
+- **"Building at the speed of thought."** (from Buzzy + Henrique era)
+- **"We give what we have. We're very loving."** (Baltimore truth, brand value)
+- **"Sometimes the best thing you can do is ask for help."** (Aunt Jenny)
+- **"We're doing this for Black generational wealth."**
+- **"Intentionally disinvested communities."** (precise word choice)
+- **"Niching down and rallying around the people who rally for you."**
+
+---
+
+## 🌍 BRAND PILLARS THAT EMERGED FROM THE STORY
+
+These weren't in earlier docs and should propagate into BRAND_VOICE_SPEC + PRODUCT_FRAMING:
+
+1. **Translator, not creator** — Tab translates the founder's vision into language. *"With the gift God gave me to translate what it is into words you can express and use."*
+2. **Mutual translation** — the through-line of her life is mentor/student translation moments (Jaydee → Tab, Tab → Buzzy, Buzzy → Tab). Brand Blueprint productizes that mutual translation.
+3. **Real before AI** — the methodology is hand-built over 8+ years. AI accelerates it, didn't invent it.
+4. **Two foundations** — Verizon ops (launch + measure) + Wix client work (the 5 questions). Most agencies have one. Tab has both.
+5. **Founder-as-foundation** — *"You have to be right so your business can be right."* Mind-body-business connection.
+6. **Faith-conditional voice** — *"If they're faithful, we go deep. We mirror what they bring."*
+7. **Niche-affirming** — *"If a founder is audacious enough and stands firm on their reasoning, we rally with them."* (Counter to "everyone is your customer" agency-speak.)
+8. **Baltimore communal** — *"We give what we have. We're very loving."*
+9. **Black equity in business-building** — explicit. Generational wealth as a stated outcome.
+10. **Sustainable entrepreneurial programs** — bigger than Brand Blueprint. IEI Ventures = ecosystem.
+
+---
+
+## 📚 IP MONETIZATION OPPORTUNITIES FLAGGED
+
+Tab said: *"I need to monetize off these — now we have two books in the IP library."*
+
+For a future strategy moment (not MVP):
+
+- **From Stuck to Bucks** + **Know Thy Business** — package as:
+  - Free chapter at landing-page signup (lead magnet)
+  - Bundled bonus with Brand Blueprint Premium upgrade
+  - Stand-alone purchase in IEI Ventures store
+  - Book club for Brand Blueprint alumni (community building)
+  - Audio versions read by Tab (recording project)
+- **Tab's TikTok comedy presence** — viral content channel waiting to be activated
+- **The 7-step framework in From Stuck to Bucks** — could be its own micro-product or workshop offering
+- **EASE — Ecosystem Awareness Solutions for Everyone** — appears to be a sister org/team. Worth its own framing later.
+
+---
+
+**End of TABS_STORY.md v1.**
