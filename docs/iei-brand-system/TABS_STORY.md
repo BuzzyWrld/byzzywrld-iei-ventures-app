@@ -45,6 +45,8 @@ I didn't know "call to action" or "top of the fold" yet, but I knew which questi
 
 I was asking the questions of The IEI Brand System before I had a name for any of it.
 
+And every bit of what I learned, I taught myself. I studied — books, podcasts, YouTube, late-night research, anything I could get my hands on. I investigated every framework I came across. I tested it on real clients. I kept what worked, threw out what didn't, and reiterated until it was sharp. No MBA. No agency apprenticeship. No marketing degree. Just years of self-teaching, testing in the trenches, and refining the craft on people who paid me to figure it out alongside them. The IEI Brand System is what's left after that filter.
+
 The whole time, I was also surviving. I burned through my 401(k) — about $20K after taxes. I faced housing insecurity. I drove Lyft. I filed bankruptcy. I went into debt. I worked overnight security for $13 an hour. That's where I built websites — at the desk overnight, while my body recovered from the day before.
 
 It was brutal. And I want to say it out loud because most founders don't. The "I left corporate to chase my dream" version is a lie of omission. The truth is I went from $65K to $13/hour on purpose because I needed the time, even though I had no safety net.
@@ -241,6 +243,7 @@ These weren't in earlier docs and should propagate into BRAND_VOICE_SPEC + PRODU
 8. **Baltimore communal** — *"We give what we have. We're very loving."*
 9. **Black equity in business-building** — explicit. Generational wealth as a stated outcome.
 10. **Sustainable entrepreneurial programs** — bigger than Brand Blueprint. IEI Ventures = ecosystem.
+11. **Self-taught authority** — no MBA, no agency apprenticeship, no marketing degree. Studied every book/podcast/YouTube channel she could find, tested on real clients, kept what worked, reiterated. Authority is earned, not credentialed.
 
 ---
 
