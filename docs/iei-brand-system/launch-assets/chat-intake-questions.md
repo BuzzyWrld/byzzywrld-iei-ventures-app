@@ -25,9 +25,184 @@
 
 ---
 
+## 🎬 The Welcome Moment (before Q1)
+
+The very first thing the customer sees when chat loads — BEFORE any questions. This sets trust, expectations, and tone. Critical for adoption.
+
+### Screen layout (mobile + desktop)
+
+```
+┌────────────────────────────────────────────┐
+│  IEI VENTURES  ·  Brand Blueprint          │
+│  ─────────────────────────────────────     │
+│                                            │
+│  ┌──────────────────────────────────────┐  │
+│  │                                      │  │
+│  │  🎬 [Tab welcome video — 60-90 sec]  │  │
+│  │     Auto-plays MUTED                  │  │
+│  │     Captions ON by default            │  │
+│  │     Tap to unmute                     │  │
+│  │                                      │  │
+│  └──────────────────────────────────────┘  │
+│                                            │
+│  Hey {{firstName}} — welcome.              │
+│                                            │
+│  Here's what to expect:                    │
+│  • About 15 minutes of conversation         │
+│  • Type your answers like you're texting    │
+│  • Skip anything you're not sure about     │
+│  • Pause and come back anytime             │
+│  • Tab personally reviews before delivery   │
+│                                            │
+│  Your Brand Blueprint will be in your      │
+│  inbox within 24 hours.                    │
+│                                            │
+│         ┌─────────────────────────┐         │
+│         │  I'm ready — let's go   │         │
+│         └─────────────────────────┘         │
+│                                            │
+│  ─────────────────────────────────────     │
+│  Your spot is saved. Close anytime.        │
+└────────────────────────────────────────────┘
+```
+
+### Tab's welcome video script (~75-90 seconds)
+
+```
+[CAMERA OPENS — Tab smiling, looking directly at lens]
+
+"Hey — welcome.
+
+I'm Tab. So glad you're here.
+
+First thing — thank you. Your trust means everything.
+
+Here's how this works:
+
+I built a system called The IEI Brand System over years of
+working with founders just like you. Today you're about to go
+through that system — guided by my AI brand strategist, which
+I built specifically to ask you the same questions I'd ask
+if we were sitting across from each other.
+
+It takes about 15 minutes. Type your answers like you're
+texting a friend. Don't overthink it.
+
+If you don't know an answer — skip it.
+If you don't understand a question — tap the question mark
+for examples.
+If life happens and you need to leave — close the tab.
+Your spot is saved. Come back when you're ready.
+
+When you're done, our AI builds your first draft.
+I personally review it.
+Within 24 hours, your full Brand Blueprint lands in your inbox.
+
+That's it. Let's build.
+
+Long live the light bulb moments."
+
+[TAB SMILES — END]
+```
+
+**Recording notes for Tab:**
+- One Loom session also includes the landing-hero video (Task #16) — record both at once
+- Same outfit, same backdrop, same energy
+- Look directly at camera, smile early
+- Pause briefly after "your trust means everything" and after "let's build"
+- 75-90 sec is the target — under 60 sec feels rushed, over 100 sec loses people
+
+### Auto-play rules (FE dev)
+
+| Behavior | Spec |
+|---|---|
+| **Auto-play** | YES, muted by default (mobile + desktop) |
+| **Captions** | ON by default (WebVTT track, generated from script) |
+| **Sound** | OFF until user taps unmute icon |
+| **Loop** | NO — plays once, ends on Tab's smile freeze-frame |
+| **Skip** | "I'm ready" button is visible from frame 1 — they can click before video ends |
+| **Replay** | "Watch again" small link below video after first playthrough |
+| **Mobile fallback** | If autoplay blocked → show poster image of Tab + big play button overlay |
+| **Slow connection fallback** | If video > 5s to load → show text-only welcome with a "Tap to watch Tab's welcome" link |
+
+### Helper text below the video
+
+This is the safety net for customers who skip the video, can't hear it, or want a quick reference. Always visible.
+
+```
+Hey {{firstName}} — welcome.
+
+Here's what to expect:
+• About 15 minutes of conversation
+• Type your answers like you're texting me
+• Skip anything you're not sure about
+• Pause and come back anytime
+• Tab personally reviews before delivery
+
+Your Brand Blueprint will be in your inbox within 24 hours.
+```
+
+**Voice rules:**
+- Use customer's first name (pulled from Stripe checkout)
+- "Tab personally reviews" — important trust signal
+- 24-hour SLA promise (matches landing copy)
+- No corporate language, no jargon
+
+### CTA button
+
+| Spec | Value |
+|---|---|
+| **Label** | "I'm ready — let's go" |
+| **Style** | Primary brand color, large, full-width on mobile, sticky-bottom |
+| **Hover state** | Subtle scale + brightness shift |
+| **On click** | Smooth scroll/transition to first chat message (Q1 — the gateway question) |
+| **Keyboard** | Enter key triggers it (for desktop users) |
+
+### Footer text
+
+```
+Your spot is saved. Close anytime — we'll email you a link to come back.
+```
+
+This handles the most common silent anxiety: *"What if I have to leave?"* Tell them it's fine. Reduces bounce.
+
+### The transition from welcome → Q1
+
+When the user clicks "I'm ready — let's go":
+
+1. Welcome screen slides up (or fades) — gentle, not jarring
+2. Chat container appears
+3. Q1 (gateway question) appears as the first chat bubble
+4. Input field focuses (or "Pick one" buttons appear for the gateway)
+
+No jarring page reload. Feels like one continuous experience.
+
+### Welcome-screen field tracking (BE)
+
+Persist these in ChatSession so we can debug + measure:
+
+```ts
+welcomeMoment: {
+  shownAt: string;       // ISO timestamp
+  videoPlayed: boolean;  // did they tap unmute or watch ≥10sec?
+  videoCompleted: boolean; // watched to end?
+  readyClickedAt: string; // when they clicked "I'm ready"
+  timeOnWelcome: number;  // ms between shownAt and readyClickedAt
+}
+```
+
+This data tells us:
+- Is anyone bouncing on the welcome screen?
+- Are people skipping the video?
+- How long are they sitting before clicking "ready"?
+
+If "time on welcome > 3 min" → may indicate confusion. If "≥20% bounce on welcome" → welcome needs work.
+
+---
+
 ## 🌳 The branching gateway question
 
-The very first question routes the customer down one of three paths.
+The very first question (after the Welcome Moment) routes the customer down one of three paths.
 
 ### Q1 — Gateway
 
