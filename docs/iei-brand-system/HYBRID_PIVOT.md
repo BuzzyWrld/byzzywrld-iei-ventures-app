@@ -49,6 +49,8 @@ This is the high-value capture for customers who want the human touch — they S
 
 ---
 
+> **NOTE (2026-05-19 refinement):** The original hybrid pivot assumed Tab spot-checks 10% with full auto-delivery. **That changed.** Tab now reviews EVERY customer (15 min via structured form per `launch-assets/tab-review-prompt.md`), and customers receive a WATERMARKED PREVIEW before final delivery. Customer hits Accept (gets clean files) or Request Revisions or Decline+Refund. See `DECISIONS_LOG.md` for full lock + `launch-assets/customer-revision-flow.md` for the customer-side UX.
+
 ## Why this is better than either alternative
 
 | Vs. concierge-only ($997-$3,997 with Tab in every call) | Vs. self-serve-only ($497 with no Tab option) |
