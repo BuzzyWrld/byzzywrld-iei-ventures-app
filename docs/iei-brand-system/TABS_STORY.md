@@ -93,7 +93,7 @@ I'm doing it for **Baltimore** — every block of it. For the underserved, inten
 
 I'm doing it for **Black generational wealth.** My dad's family was stripped of about 80 acres of land. Bought out. We're owed a fair shot — same as everyone is.
 
-I'm doing it for my **younger self** who didn't know any of this was possible. For my **future family, my wife, my kids**. For my **uncle Steve** who's always worried about my stability but tells everyone I'm going to be a millionaire. For my **Pop, who said he did it his way like Sinatra. RIP.** For my **Nanny** — my grandmother, RIP — and for my **Grandma Jean**, who doubted me but somewhere knew. For my friends **Britni and Brandon** — who've quietly held me up with money in my bank account and seeds planted for my future. For **Liquida Chancey** and **Dave "Chap" Loveless** — my people. For the **Black Butterfly Network**. For my **EASE team — Ecosystem Awareness Solutions for Everyone**. For my **aunties**, especially **Aunt Jenny**, who taught me that sometimes the best thing you can do is ask for help.
+I'm doing it for my **younger self** who didn't know any of this was possible. For my **future family, my wife, my kids**. For my **uncle Steve** who's always worried about my stability but tells everyone I'm going to be a millionaire. For my **Pop, who said he did it his way like Sinatra. RIP.** For my **Nanny** — my grandmother, RIP — and for my **Grandma Jean**, who doubted me but somewhere knew. For my friends **Britni and Brandon** — who've quietly held me up with money in my bank account and seeds planted for my future. For **Liquida Chancey** and **Dave "Chap" Loveless** — my people. For the **Black Butterfly Network**. For my **EASE team — Ecosystem Awareness Solutions for Everyone**. For my **aunties**, especially **Aunt Jenni**, who taught me that sometimes the best thing you can do is ask for help.
 
 I'm doing it for **God** — because I said I would. I said I will serve. This is a gift, and a gift doesn't belong to the one who carries it. It belongs to the people it's for.
 
@@ -175,7 +175,7 @@ These were shared in trust during the deep session. Captured here for AI/team co
 - **Pop (RIP)** — *"He did it his way like Sinatra."*
 - **Nanny (RIP)** — her grandmother
 - **Grandma Jean** — doubted her, but somewhere knew
-- **Aunt Jenny** — taught her *"Sometimes the best thing you can do is ask for help."*
+- **Aunt Jenni** — taught her *"Sometimes the best thing you can do is ask for help."*
 - All her aunties — *"the ones I have, and the ones I don't have."*
 
 **Friends + chosen family:**
