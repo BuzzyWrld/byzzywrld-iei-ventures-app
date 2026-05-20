@@ -41,19 +41,57 @@ You authorize us (via our payment processor, Stripe, Inc.) to charge your select
 
 ## 4. Refund Policy
 
-We offer a 24-hour refund window from the time of purchase, **provided that your intake call has not yet begun**. After the intake call begins — or if 24 hours have passed since purchase, whichever comes first — the service is non-refundable, because we have begun substantive work specific to you.
+**"Love it or your money back."**
 
-To request a refund within the eligible window, email [REFUND EMAIL] with your order confirmation. We will process eligible refunds within 5-10 business days back to your original payment method.
+You receive a **watermarked preview** of your Brand Blueprint before any final files are delivered to you. You have full opportunity to review the preview, request revisions (one round included), or decline before committing to the final purchase.
 
-We may, at our sole discretion, offer partial refunds, credits, or service credits in cases where we materially fail to deliver. We do not offer refunds based on customer dissatisfaction with creative or strategic choices — branding is inherently subjective and you have the right to revise the deliverables on your own after delivery.
+### 4a. 7-Day Money-Back Window (after preview)
+
+You may request a full refund within **7 calendar days of receiving your watermarked preview**, no questions asked, by clicking the "Decline + Refund" button in your delivery email or by emailing [REFUND EMAIL]. Refunds are processed within 5-10 business days back to your original payment method.
+
+To receive a refund, you confirm that:
+- You have not used the watermarked preview files commercially;
+- You will delete all preview files you downloaded;
+- You understand your access to the brand files will be revoked.
+
+These obligations protect IEI Ventures' intellectual property and ensure the refund process is fair to both parties.
+
+### 4b. Acceptance Closes the Refund Window
+
+When you click "Accept Final Delivery" in your preview email, you confirm:
+- You have reviewed the deliverables and find them satisfactory;
+- You wish to receive the clean (unwatermarked) final files;
+- You waive your right to a full refund under section 4a.
+
+After acceptance, refunds are NOT available based on subjective dissatisfaction with creative or strategic choices. Branding is inherently subjective and you exercised your judgment when you accepted.
+
+### 4c. Production Defects (Post-Acceptance)
+
+If, after acceptance, you discover a **production defect** in your final files — examples include corrupted files, missing pages, wrong dimensions, broken logos, typos in your business name on cover materials — we will repair the defect at no charge and re-deliver within 3 business days. If the defect is unrepairable, we will issue a full refund at our discretion.
+
+Production defects do NOT include subjective complaints (e.g., "I don't like this color anymore," "I want a different tagline") — those should be addressed during the preview-and-revisions phase.
+
+### 4d. One Free Revision Round (Before Acceptance)
+
+If your preview is close but needs adjustments, you may request **one round of revisions free** by clicking "Request Revisions" in your delivery email. Our AI will ask 1-2 clarifying questions and regenerate the affected sections. Tab will personally review the revised output before sending you the updated preview.
+
+Additional revision rounds beyond the first are available via:
+- **Premium upgrade** (+$1,000 — includes a 60-min Brand-Storming call with Tab and unlimited revisions until you love it);
+- **Single Refinement Pass** ($297 — one more round of AI revisions with Tab's review).
+
+### 4e. Discretionary Adjustments
+
+Outside the standard refund window, IEI Ventures may, at our sole discretion, offer partial refunds, credits, or service credits in cases where extenuating circumstances apply. Decisions are made on a case-by-case basis.
 
 ---
 
 ## 5. Delivery Timeline
 
-We aim to deliver completed Brand Blueprints within **5 business days** of your completed intake call. Delivery may take longer during high-demand periods, when additional information from you is required, or for the Full Suite tier, which involves more deliverables.
+We aim to deliver your watermarked preview within **24 hours** of completing your chat intake. AI generation typically completes within 30 minutes; Tab personally reviews every Brand Blueprint before it is sent to you, which adds review time (typically 2-6 hours during business hours).
 
-If delivery will be delayed beyond 10 business days from your intake call, we will email you with an updated timeline.
+If delivery will be delayed beyond 48 hours, we will email you with an updated timeline.
+
+Once you accept your preview by clicking "Accept Final Delivery," your clean (unwatermarked) final files are delivered immediately via secure download link valid for 90 days.
 
 ---
 
