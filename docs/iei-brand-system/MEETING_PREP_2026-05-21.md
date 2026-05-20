@@ -57,6 +57,23 @@ So the AI's voice + the landing About section + investor bios all pull from one 
 
 Tab met with attorney 2026-05-20. TOS draft is updated for the new refund/watermark model. Legal package details: [`LEGAL_CHECKLIST.md`](https://github.com/Buzzy-Ventures/iei-ventures/blob/docs/brand-system-launch-package/docs/iei-brand-system/LEGAL_CHECKLIST.md)
 
+### 8. Brand vocabulary lock — Tab finished Task #17 (late session 2026-05-20)
+
+Tab completed the brand vocabulary work. Significant additions to `BRAND_VOICE_SPEC.md`:
+
+- **18+ new proprietary phrases** confirmed for verbatim use
+- **"Brand Ethos"** as a new IEI concept (broader than "brand identity" — covers identity + origin + pillars + why + essence)
+- **"Tab Affirmation Mode"** as a third voice layer for the chat AI: BOOM! · THAT'S IT · Now we're cooking with the hot sauce · Go head · Speak your truth · Wow · No judgement · I'm proud of you
+- **Word preferences locked**: Founder/Entrepreneur > business owner, Investment > purchase, Brand Ethos > brand identity, Tribe/Ideal client context-dependent
+- **"What is marketing?"** — Tab definition: marketing = the full GTM system, not just promo. Use definition where context warrants.
+- **Anti-hustle-culture philosophy**: "Smarter not harder. Strategize. Execute. Make notes. Iterate."
+- **Banned/cautioned**: "side hustle" (for customers), "hustle culture" (push back), "manifest your dreams" (→ "make your idea tangible")
+- **Energy rules per scenario** (pricing pushback, perfectionism, emotional shares, brave goals, "everyone is my customer" responses)
+
+Read: [`BRAND_VOICE_SPEC.md`](https://github.com/Buzzy-Ventures/iei-ventures/blob/docs/brand-system-launch-package/docs/iei-brand-system/BRAND_VOICE_SPEC.md) — scroll to "ADDITIONS FROM TAB VOCABULARY SESSION — 2026-05-20"
+
+**This unblocks BE Task #11 (SKILL.md updates)** once Tab also finishes #18 visual references.
+
 ---
 
 ## 📋 YOUR QUEUE — by role
@@ -79,6 +96,10 @@ Tab met with attorney 2026-05-20. TOS draft is updated for the new refund/waterm
 
 **🟡 Days 8-30:**
 4. Task #20 — Synthesis review page
+
+**🆕 NEW from late-session vocabulary work (2026-05-20):**
+5. **Task #28** — Self-identification dropdown + optional pronoun field in chat intake (FE side; pairs with BE). ~0.5 dev day combined.
+6. **Task #29** — "Long live the light bulb moments" transition screen flourish between chat modules. ~0.5 dev day.
 
 ### ⚙️ HENRIQUE (BE)
 
@@ -104,6 +125,10 @@ Tab met with attorney 2026-05-20. TOS draft is updated for the new refund/waterm
 **🟡 Days 8-30:**
 7. Task #9 — Synthesis bridge
 8. Task #23 — Premium upgrade flow
+
+**🆕 NEW from late-session vocabulary work (2026-05-20):**
+9. **Task #28** — Self-identification + pronoun field in chat (BE side; pairs with FE). Add to ChatSession schema.
+10. **Task #30 URGENT** — Privacy + anonymization refinement. Personal narrative purged after delivery + 30 days; business data retained for baseline. Customer-facing reassurance language at sensitive questions (Q11/Q12). Needs attorney sign-off. ~1 dev day BE + 0.5 day legal review.
 
 ---
 
@@ -145,22 +170,35 @@ These need a call before coding starts:
 5. **Skip behavior on the 3 required questions** (Q1 gateway, Q3 brand name, Q22 ideal customer, Q24 offering) — confirm we hard-block skip OR allow with consequences?
 6. **Resume token + magic-link** — how long does an abandoned chat session stay resumable? (Doc says 30 min triggers email, but session stays alive how long? 7 days? 30?)
 
+**🆕 Three design decisions from late-session vocabulary work — discuss in meeting:**
+
+7. **Where does the "Brand Ethos" concept get taught to the customer?** Tab introduced "Brand Ethos" as a broader-than-identity concept. We need to surface this somewhere — landing About section? Delivery email teaching moment? In-chat helper text? (Adds a small content task wherever we land it.)
+
+8. **Pre-purchase intake preview / vetting:** Tab wants customers to know what's coming in the chat BEFORE they pay (so they don't blame us when they realize they need 15 min of focus). Options: (a) expandable "What we'll ask you" section on landing, (b) sample questions in the post-checkout confirmation email, (c) both. Pick approach.
+
+9. **"I'd advise against it" recommendation engine in chat AI:** when customer's stated choice conflicts with best practice (e.g., "I want to serve everyone"), AI should provide a recommendation + caveat ("can't guarantee this won't affect the rest of your build") but respect their final call. Decide: simple rule-based detection or LLM-judged? Where in chat does this trigger?
+
 ---
 
 ## 🚦 WHAT'S BLOCKING WHOM
 
 ```
-Tab #17 (vocabulary) ──┐
-                       ├──→ BE #11 (SKILL.md updates)
-Tab #18 (visual refs)──┘
+Tab #17 (vocabulary) ──✓ DONE 2026-05-20 ───┐
+                                            ├──→ BE #11 (SKILL.md updates)
+Tab #18 (visual refs) ──── STILL TO COME ──┘
 
 Tab #3 (Stripe Payment Links) ──→ FE #2 (landing site CTA) → end-to-end test #7
 
 Tab #25 (chat intake questions) ──✓ DONE → FE #8 + BE #19 can start
 
-FE #2 (landing) + BE #19 + BE #21 + BE #22 ──→ Tab #7 (end-to-end test)
-                                                  ↓
-                                              First paying customer
+FE #2 (landing) + BE #19 + BE #21 + BE #22 + BE #26 ──→ Tab #7 (end-to-end test)
+                                                          ↓
+                                                      First paying customer
+
+# New from late session 2026-05-20:
+Task #28 (self-id + pronoun) ──→ touches FE #8 + BE #19
+Task #29 (light bulb transition) ──→ touches FE #8
+Task #30 (privacy + anonymization) ──→ URGENT, must land before launch
 ```
 
 ---

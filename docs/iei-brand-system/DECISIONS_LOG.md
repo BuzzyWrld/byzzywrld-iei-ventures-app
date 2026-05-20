@@ -176,6 +176,37 @@ See `HYBRID_PIVOT.md` for full reasoning + revised economics + Q1-Q4 timeline.
 
 ---
 
+---
+
+## 🎙️ VOCABULARY + VOICE LOCK — 2026-05-20
+
+Tab completed the brand vocabulary session (Task #17). Full additions captured in `BRAND_VOICE_SPEC.md` under "ADDITIONS FROM TAB VOCABULARY SESSION — 2026-05-20." Locked:
+
+| Decision | Status |
+|---|---|
+| **18+ new proprietary Tab phrases — all confirmed for verbatim use** | CONFIRMED 2026-05-20 |
+| **"Brand Ethos" as new IEI concept** (broader than identity — includes identity, origin, pillars, why, essence) | CONFIRMED 2026-05-20 |
+| **Tab Affirmation Mode as a third voice layer** (BOOM! · THAT'S IT · Now we're cooking with the hot sauce · Go head · Speak your truth · Wow · No judgement · I'm proud of you) | CONFIRMED 2026-05-20 |
+| **Word preferences:** Founder/Entrepreneur > business owner. Investment > purchase. Brand Ethos > brand identity. Tribe/Ideal client context-dependent. | CONFIRMED 2026-05-20 |
+| **"What is marketing?" — Tab definition = full GTM system, not promo** | CONFIRMED 2026-05-20 |
+| **Anti-hustle-culture philosophy: "smarter not harder"** | CONFIRMED 2026-05-20 |
+| **Banned/cautioned:** "side hustle" (for customers), "hustle culture" (push back), "manifest your dreams" (→ "make your idea tangible") | CONFIRMED 2026-05-20 |
+| **Energy rules per customer scenario** (pricing, perfectionism, emotional why, brave goal, niche resistance) | CONFIRMED 2026-05-20 |
+
+## 🛠️ PRODUCT ASKS FROM VOCABULARY SESSION (already tasked + design questions for team)
+
+Tasks created from vocabulary session — for transparency:
+1. **Task #28** — Self-identification + pronoun field in chat intake (FE+BE)
+2. **Task #29** — "Long live the light bulb moments" transition screen between modules (FE)
+3. **Task #30** — URGENT: Privacy + anonymization refinement (BE + Legal)
+
+Design decisions to lock in the upcoming team meeting (NOT yet tasked):
+4. **"Brand Ethos" concept explanation** on landing/delivery — needs a teaching moment in the customer journey
+5. **Pre-purchase intake preview / vetting** so customer knows what they're getting into before Stripe checkout
+6. **Recommendation engine for "I'd advise against it" moments** — AI provides recommendation + caveat when customer's stated choice conflicts with best practice, but respects their final call
+
+---
+
 ## Notes for dev team
 
 - This is a **living document**. Every Tab call/text/message that contains a decision gets logged here.
