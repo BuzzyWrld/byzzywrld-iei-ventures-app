@@ -207,6 +207,36 @@ Design decisions to lock in the upcoming team meeting (NOT yet tasked):
 
 ---
 
+---
+
+## 🌐 DELIVERABLE EXPANSION — 3-PAGE WEBSITE (2026-05-21)
+
+Tab expanded the website deliverable from 1 page to **3 pages**. Approved during Stripe setup conversation.
+
+| Page | Purpose | Content sources from intake |
+|---|---|---|
+| **Home** | Hero (offering + 1-liner) + about preview + how-to-buy CTA + contact footer | Q4 (what you do) + Q24 (offering) + Q26 (6-month goal) |
+| **About** | Story + mission/vision/values + founder section | Q10-Q15 (story) + Q8-Q10 (mission/vision/values) |
+| **Flex page** | Customer-selected: services / products / events / booking links / mix | NEW Q24b in chat intake (`flexPageType`) |
+
+**Stripe product description updated** to remove Tab's name + IEI Brand System reference, and to reflect 3-page website. Tab confirmed test-mode setup with $0 payment link first.
+
+**Affected files (all updated 2026-05-21):**
+- landing-page-copy.md
+- chat-intake-questions.md (NEW Q24b added)
+- email-templates.md
+- STAGE1_LAUNCH_PLAN.md
+- HYBRID_PIVOT.md
+- TEAM_TASKS.md + TEAM_BUILD_PLAN.md
+- README.md
+- launch-assets/tab-video-script.md
+- launch-assets/soft-launch-outreach.md
+- legal/TERMS_OF_SERVICE.md
+
+**New task created:** Task #31 — BE dev updates SKILL.md to generate 3 HTML files (home.html, about.html, flex.html) instead of single landing.html. Required for MVP launch.
+
+---
+
 ## Notes for dev team
 
 - This is a **living document**. Every Tab call/text/message that contains a decision gets logged here.

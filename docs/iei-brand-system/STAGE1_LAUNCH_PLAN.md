@@ -12,7 +12,7 @@
 
 | Tier | Price | What the customer gets | Tab review time est. |
 |---|---|---|---|
-| **Blueprint Basic** | **$750** | Brand messaging (mission · vision · values · voice · 3 tagline options · IG bio) · 3 logo options · brand kit (color palette + typography + logo system) · 1-page website · GTM checklist customized to their stated goals | ~2 hrs |
+| **Blueprint Basic** | **$750** | Brand messaging (mission · vision · values · voice · 3 tagline options · IG bio) · 3 logo options · brand kit (color palette + typography + logo system) · 3-page website (Home + About + flex) · GTM checklist customized to their stated goals | ~2 hrs |
 | **Blueprint + Content** | **$1,500** | Everything in Basic + double the brand assets + content (first 5 social posts per the 5-Post Framework, master AI prompt for ongoing content, Canva templates copy-paste ready) | ~3.5 hrs |
 | **Full Suite** | **$3,000** | Everything in + Content + ideal client profile (WS7) + 6-part offering doc (WS8) + 7-part brand narrative + 6-week Fourfold Path GTM roadmap + 90-day content calendar | ~5 hrs |
 

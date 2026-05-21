@@ -30,7 +30,7 @@ What the customer gets:
 3. 5 business days later → email delivery with ZIP containing:
    - Brand Playbook (PDF)
    - 3 logo options + brand kit (SVG + PDF)
-   - 1-page website (HTML)
+   - 3-page website (Home + About + flex) (HTML)
    - GTM checklist customized to their stated goal
    - Brand messaging doc
 4. No Zoom call required. No Tab in loop for the happy path.

@@ -18,7 +18,7 @@
 ```
 Hey [Name] — quick one.
 
-Just launched Brand Blueprint — my IEI Brand System productized so founders can get the full brand foundation (messaging, logo, brand kit, 1-page website, GTM checklist) in 5 days, AI-built and reviewed by me personally. $997-$3,997 depending on what you need.
+Just launched Brand Blueprint — my IEI Brand System productized so founders can get the full brand foundation (messaging, logo, brand kit, 3-page website, GTM checklist) in 5 days, AI-built and reviewed by me personally. $997-$3,997 depending on what you need.
 
 Three reasons I'm telling you specifically:
 1. You [SPECIFIC THING — "have been talking about relaunching X" / "mentioned you were stuck on Y" / "I built your last brand 3 years ago and it's time"]
@@ -96,7 +96,7 @@ We've been LinkedIn connected for a while but haven't actually crossed paths. Ho
 
 Saw your recent post on [SPECIFIC POST OR COMMENT — proves you actually looked]. Hit something for me — because what you described is exactly what I built Brand Blueprint to solve.
 
-It's my IEI Brand System productized. Founders get a complete brand foundation in 5 days — messaging, logo, kit, 1-page website, GTM checklist. AI does the build, I review every line personally. $997-$3,997.
+It's my IEI Brand System productized. Founders get a complete brand foundation in 5 days — messaging, logo, kit, 3-page website, GTM checklist. AI does the build, I review every line personally. $997-$3,997.
 
 If even slightly interesting: ieiventures.com/blueprint
 
@@ -212,7 +212,7 @@ Don't write a novel in DM. Send the link + one specific thing:
 ```
 Yeah — landing page has everything: ieiventures.com/blueprint
 
-Here's the punchline: 5 days, full brand foundation (messaging, logo, kit, 1-page website, GTM checklist), AI does the build, I personally review every output before you see it. $997-$3,997 depending on which tier.
+Here's the punchline: 5 days, full brand foundation (messaging, logo, kit, 3-page website, GTM checklist), AI does the build, I personally review every output before you see it. $997-$3,997 depending on which tier.
 
 If after looking you want to talk it through — 15 min here: [CALENDLY DISCOVERY LINK]
 ```

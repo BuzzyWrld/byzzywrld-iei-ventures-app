@@ -645,6 +645,23 @@ The very first question (after the Welcome Moment) routes the customer down one 
 >
 > Just your main 1-2 offerings. We can add more later."
 
+### Q24b — Your flex page
+
+**Chat message:**
+> "Last thing about your offering — your Brand Blueprint includes a 3-page website. **Home and About are standard.** For your **3rd page**, what fits best?
+>
+> ☐ Services I offer (with descriptions)
+> ☐ Products (with photos)
+> ☐ Upcoming events
+> ☐ Booking links (Calendly, calls, consults)
+> ☐ A mix of the above"
+
+**Helper "?" text:**
+> "Pick what makes sense for how YOUR customers will want to engage with you online. You can change this later — but picking now helps us build the right page out of the gate."
+
+**Field:** `flexPageType` (`services | products | events | booking | mixed`)
+**Skip allowed?** Yes (defaults to `mixed` if skipped)
+
 **Helper "?" text:**
 > "Don't overthink the price — even a rough number is fine. We can refine. The point is to have something specific people can buy."
 

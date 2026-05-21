@@ -21,7 +21,7 @@ You confirm that you are at least 18 years old, have the legal authority to ente
 
 ## 2. What Brand Blueprint Is
 
-Brand Blueprint is a digital, AI-assisted brand-development service that produces a set of brand deliverables based on information you provide. The service runs through three steps:
+Brand Blueprint is a digital, AI-assisted brand-development service that produces a set of brand deliverables based on information you provide, including brand messaging, logo options, brand kit (colors + typography), a 3-page website (Home + About + a customer-selected flex page), and a personalized go-to-market checklist. The service runs through three steps:
 
 1. **Intake.** You complete a structured intake (currently a 60-minute one-on-one call with Tab Wolod; later, an in-app chat experience).
 2. **Generation + Human Review.** Our AI system, built around our proprietary methodology ("The IEI Brand System"), generates draft deliverables. Tab Wolod personally reviews and refines every output before delivery.

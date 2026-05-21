@@ -129,7 +129,7 @@ For Basic:
 - `BrandBlueprint_{{brand_name}}_Playbook.pdf` — your full brand foundation, designed and ready to reference
 - `BrandBlueprint_{{brand_name}}_Logo_Options.zip` — 3 logo options, SVG + PNG, each in light + dark versions
 - `BrandBlueprint_{{brand_name}}_BrandKit.pdf` — colors, fonts, logo usage rules
-- `BrandBlueprint_{{brand_name}}_Website.zip` — 1-page website, HTML + assets, ready to deploy
+- `BrandBlueprint_{{brand_name}}_Website.zip` — 3-page website (Home + About + flex page), HTML + assets, ready to deploy
 - `BrandBlueprint_{{brand_name}}_GTM_Checklist.pdf` — your 6-week roadmap, customized to your goal
 
 For + Content (add):
