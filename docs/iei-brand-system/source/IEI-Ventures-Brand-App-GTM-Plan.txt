@@ -1,0 +1,154 @@
+Brand App — Go-To-Market & Bankroll Plan
+
+An IEI Ventures innovation. A working plan to take the brand/marketing app from near-market MVP to revenue — with a licensing path for the music app. Prepared for Ashley Harris and Tabitha Wolod.
+
+Portfolio context — IEI Ventures
+
+IEI Ventures is the parent company. Its innovations arm holds a portfolio of products — the brand/marketing app, the music app, and VoltBay — each a product under the IEI Ventures parent.
+
+Brand approach.  Each product goes to market under its own name and identity and leads in customer-facing materials. IEI Ventures stays behind the scenes as the parent company — named in legal, ownership, and investor contexts, not in day-to-day product marketing.
+
+Why it helps.  A portfolio under one parent means shared infrastructure (legal, finance, brand standards) and a stronger story for investors and partners — IEI Ventures is a company with a pipeline, not a single bet.
+
+To decide.  Confirm with an attorney whether each product should be its own LLC under IEI Ventures or a product line within it. This affects liability, licensing, and any future sale of a single product.
+
+Where things stand
+
+Brand app.  MVP ready, final testing underway, near market. Needs bankroll to launch.
+
+Music app.  Simple final MVP built. Plan: license / white-label it — keep ownership, others pay to use it.
+
+Strategy.  One-to-one sales and business cohorts first; enterprise, white-label, and licensing as it scales.
+
+Brand app — the go-to-market sequence
+
+With a near-market product, the discipline is simple: land paying customers fast, prove it works, then climb to larger deals. Move through these stages in order — do not skip ahead to enterprise before Stage 1 and 2 give you proof.
+
+Stage 1 — One-to-one sales (start here)
+
+Sell directly to individual customers. Fast to launch, small deal size, builds proof and early cash.
+
+Needs: one clear price, a simple sign-up and checkout, and a repeatable short pitch.
+
+Goal: a first handful of paying users and honest feedback before scaling spend.
+
+Stage 2 — Business cohorts (the core motion)
+
+Onboard groups of similar businesses together. Higher value per deal, efficient to sell and support at once.
+
+Needs: a defined group offer, onboarding that scales, and one or two reference customers willing to vouch.
+
+Goal: predictable repeatable revenue and proof points that unlock the bigger deals.
+
+Stage 3 — Enterprise sales
+
+Large organizations, larger contracts. Long cycles measured in months, with procurement and security review.
+
+Needs: a security and data-handling summary, customer references, a contract template, and patience.
+
+Price high enough that the long sales cycle is worth it.
+
+Stage 4 — White-label & licensing
+
+Other companies run the app under their own brand (white-label), or pay for the right to use the technology (licensing).
+
+Strong recurring revenue, but requires clean brand separation and protective agreements (see IP & legal below).
+
+Sequencing principle: Stages 1–2 prove demand and generate cash quickly. Use that proof and revenue to pursue Stages 3–4, which take longer but pay far more.
+
+
+
+Bankroll — funding the launch
+
+With a near-market MVP and early cohort demand, weigh these paths before assuming a raise is required. They are not mutually exclusive — several can run in parallel.
+
+Revenue-funded (try this first)
+
+Sell Stage 1 and Stage 2 customers, use that cash to fund the launch.
+
+No equity given up, full ownership kept, and real revenue is the strongest proof for any future raise or partnership.
+
+Customer-funded
+
+An enterprise or white-label partner pays an upfront deal that bankrolls the launch.
+
+The strongest position of all — a customer validates and funds you at the same time.
+
+Non-dilutive capital
+
+Grants, small-business competitions, accelerators, revenue-based financing.
+
+Capital without giving up equity. Worth pursuing in parallel with sales.
+
+Raise (angel / pre-seed)
+
+Outside investment in exchange for equity. Faster capital, but you give up ownership.
+
+Best only if growth is genuinely capital-constrained and the upside is large. A signed cohort or one enterprise deal first will dramatically improve the terms.
+
+Recommendation: get to first revenue before raising. One signed cohort or enterprise deal changes both the bank balance and the negotiating power.
+
+Music app — the licensing / white-label path
+
+The plan is to keep ownership and let others pay to use it — not to sell it outright. This is usually the stronger wealth path for a built product: recurring revenue, the asset stays with IEI Ventures, and it can still be sold later, for more, from a position of strength.
+
+License models to consider
+
+White-label.  Another company runs the music app under their own brand for their users.
+
+Usage / seat licensing.  Charge per user, per use, by term, or by territory for the right to use the technology.
+
+Platform / API licensing.  A larger platform integrates your app's functionality and pays for it.
+
+What licensing requires before any deal
+
+A written licensing or white-label agreement defining scope, term, fees, and territory.
+
+Clear IP ownership — IEI Ventures must own the app cleanly before licensing it out.
+
+Clarity on who owns customer data and who handles support under a white-label arrangement.
+
+Brand separation so a white-label partner's use does not dilute or confuse your own brand.
+
+IP & legal — protect the assets first
+
+Both apps become licensable assets only if the IP underneath them is owned and protected. Before any white-label or licensing deal:
+
+Trademarks.  Register the product names and logos. Inexpensive, fast, and the core asset for a software product.
+
+Copyright.  Software is automatically copyrighted; registration strengthens enforcement. The code is an asset.
+
+Ownership.  Confirm IEI Ventures — not the individuals — owns the apps via written IP assignment agreements.
+
+Agreements.  Use NDAs before sharing the product with any partner, and a proper licensing agreement before any white-label or licensing deal.
+
+Patents.  Most software is not patentable. Pursue a patent only if a professional prior-art search confirms a genuine, non-obvious invention.
+
+First 90 days — a focused plan
+
+Days 1–30
+
+Finish testing and launch the brand app to first one-to-one customers.
+
+Set one clear price and a simple checkout. Start collecting feedback and revenue.
+
+Register trademarks for both product names; confirm IP assignment to IEI Ventures.
+
+Days 31–60
+
+Package the business-cohort offer; sign the first cohort.
+
+Secure one or two reference customers willing to be quoted.
+
+Draft a licensing / white-label agreement template for the music app.
+
+Days 61–90
+
+Begin enterprise outreach using cohort proof points.
+
+Open first music-app licensing conversations.
+
+Decide the bankroll path based on actual revenue — revenue-funded, customer-funded, or raise.
+
+This document is general business guidance, not legal or financial advice. Confirm company structure, IP ownership, licensing agreements, and any fundraising with qualified legal and financial professionals.
+

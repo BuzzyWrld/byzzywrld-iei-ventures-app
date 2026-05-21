@@ -1,0 +1,4462 @@
+THE IEI BRAND SYSTEM
+
+Facilitator Script & Course Guide
+
+Tab Wolod  ·  IEI Agency  ·  LIVING DOCUMENT — Keep editing until done
+
+
+
+HOW TO READ THIS DOCUMENT
+
+TAB SAYS — Read these lines conversationally. They are prompts, not scripts. Make them yours.
+
+FACILITATOR NOTE — Your behind-the-scenes instruction. What to watch for, how to coach, what to do.
+
+ON SCREEN — What to put on the whiteboard or slide at this moment.
+
+CASE STUDY — Your own story woven in as the teaching example.
+
+EXERCISE — What participants do. Always includes a timer.
+
+
+
+AUDIENCE: Experienced entrepreneurs, freelancers, who have been doing something for a while but need to organize it into one clear income-generating offer.
+
+
+
+OPENING — Welcome, House Rules & Tab's Introduction
+
+TIMING: 30 minutes total  ·  Do not rush this. The foundation of trust is built here.
+
+
+
+STEP 1: Welcome & Safe Space Declaration
+
+TIMING: 5 minutes
+
+
+
+TAB SAYS:
+
+Hey everybody — welcome. I am so glad you are here.
+
+Before we do anything — I want you to know something. This is a safe space.
+
+What that means is: what happens in this room stays in this room.
+
+Your ideas, your story, your business — all of it is safe here.
+
+You can share as much or as little as you want. Camera on or off. Your comfort comes first.
+
+We are going to do some real work today. And real work requires real trust.
+
+So let's start there.
+
+
+
+FACILITATOR NOTE:
+
+Have your title slide on screen before anyone arrives.
+
+Play music while people are joining — it sets a warm, intentional tone.
+
+Greet people by name as they come in if you can see who's joining.
+
+Do NOT start the content until you've given everyone 3-5 minutes to settle.
+
+Welcome in. I'm Tab Wolod — Founder and Brand Strategist at IEI Agency. I help mission-driven founders and organizations turn ideas into clear brands that drive offers, content & revenue. 
+
+
+
+STEP 2: IP Disclaimer & Consent
+
+TIMING: 5 minutes  ·  This is non-negotiable. Everyone must consent before you proceed.
+
+
+
+ON SCREEN:
+
+Put the IP disclaimer on the screen and drop the text in the chat simultaneously.
+
+
+
+--- SCREEN TEXT ---
+
+INTELLECTUAL PROPERTY & CONFIDENTIALITY AGREEMENT
+
+
+
+By participating in this session you agree to the following:
+
+
+
+1. Everything shared in this room — ideas, business concepts, strategies, personal stories — is the intellectual property of the person sharing it.
+
+2. You will not copy, replicate, share, or use another participant's idea, offer, or concept without their explicit written permission.
+
+3. This session is being recorded for training and quality purposes. The recording and all IP associated with this course is the property of IEI Agency.
+
+4. You may share your own work publicly. You may not share anyone else's.
+
+5. If you do not agree to these terms, please let me know now and your registration will be fully refunded.
+
+
+
+If you AGREE — type AGREE in the chat now.
+
+--- END SCREEN TEXT ---
+
+
+
+TAB SAYS:
+
+Everybody — please look at what's on your screen. I've also dropped this in the chat.
+
+This is our IP and confidentiality agreement.
+
+Everything that gets built in this room today belongs to the person who built it.
+
+Your ideas are YOUR intellectual property. And so is everyone else's.
+
+If you agree to these terms — type AGREE in the chat right now.
+
+I'll wait.
+
+
+
+FACILITATOR NOTE:
+
+Pause and wait. Actually read the chat. Acknowledge people as they type AGREE.
+
+Say something like: 'I see you, Marcus. Got you, Tamika. Thank you.'
+
+If someone does NOT type AGREE — follow up privately in DM. Do not call them out publicly.
+
+Once the majority have agreed, continue. Say: 'Thank you everybody. We're protected. Let's build.'
+
+
+
+
+
+STEP 3: Housekeeping
+
+TIMING: 5 minutes
+
+
+
+TAB SAYS:
+
+Quick housekeeping before we get into it.
+
+
+
+ONE — AI. Throughout today I'm going to give you AI prompts. Using them is completely optional.
+
+If you'd rather not use AI — that is totally fine. I can work with you 1:1.
+
+Just know that working through it manually takes more time, so we may need to stay in breakout rooms a little longer.
+
+
+
+TWO — Recording. This session is being recorded for training and quality purposes.
+
+The recording belongs to IEI Agency. You won't be shared publicly without your permission.
+
+
+
+THREE — 1:1 Time. You will have opportunities to meet with me directly today.
+
+During exercises I will pop into breakout rooms. During the break I'll be available.
+
+If you want dedicated time after the session — we can talk about that too.
+
+
+
+FOUR — Testimonials. If you have a good experience today — and I believe you will —
+
+I'd love for you to record a quick video testimonial. You can do it in the breakout room or at the end.
+
+Totally optional. But deeply appreciated.
+
+
+
+FIVE — Feedback survey. I'll send one after the session. Please fill it out.
+
+It helps me make this better for the next group.
+
+
+
+Any questions before we get started?
+
+
+
+FACILITATOR NOTE:
+
+Give 60 seconds for questions in the chat. Answer briefly. Do not get pulled into a rabbit hole.
+
+If someone asks a content question — 'That's actually what we're about to get into. Hold that thought.'
+
+
+
+
+
+STEP 4: Tab's Introduction & The Course Premise
+
+TIMING: 15 minutes  ·  This is the teaching moment disguised as an intro. Take your time.
+
+
+
+TAB SAYS:
+
+Alright. Let me introduce myself — and I want to do it intentionally.
+
+Because how I introduce myself is actually the FIRST thing I'm going to teach you today.
+
+
+
+My name is Tab Wolod.
+
+I am the Founder and Brand Strategist at IEI Agency — Ideas Equal Income.
+
+I help early-stage entrepreneurs and founders turn scattered ideas into clear brands,
+
+structured offers, and sustainable revenue — so their ideas actually become income.
+
+
+
+That's my one-liner. We'll come back to that.
+
+
+
+Now let me tell you how I got here.
+
+
+
+I started in 2017 building websites.
+
+Just websites. That was it.
+
+And every single client I had — the same thing happened.
+
+I'd pull up a website template and ask them for their About page.
+
+And they'd go blank.
+
+They didn't know what to write. They couldn't explain who they were,
+
+what they did, who they served, or why anyone should choose them.
+
+
+
+At first I thought — that's their problem. I build websites. Not words.
+
+But it kept happening. Over and over.
+
+And I started to realize — the website wasn't the problem.
+
+The brand was the problem.
+
+More specifically — they didn't have a brand SYSTEM.
+
+No clear identity. No defined audience. No structured offer.
+
+Just... an idea floating around in their head that they couldn't package.
+
+
+
+And I knew that feeling. Because I was living it too.
+
+I had ideas. I had skills. I had clients.
+
+But I couldn't clearly explain what I did or why someone should hire me over anyone else.
+
+
+
+So I went to YouTube university.
+
+I downloaded every free resource I could find.
+
+I paid for high-end coaching programs.
+
+And it still took way longer than it should have.
+
+
+
+Because what I was looking for didn't exist yet.
+
+So I built it.
+
+
+
+I built a system — a series of frameworks and questions —
+
+that help any founder articulate who they are, what they do, who they serve,
+
+why they stand out, and how they do it.
+
+And then connect all of that to a real offer and a clear path to income.
+
+
+
+That system is IEI.
+
+And what I'm about to teach you today — is that system.
+
+
+
+FACILITATOR NOTE:
+
+Pause after 'So I built it.' Let it land.
+
+This is the moment people lean in. Don't rush past it.
+
+Your vulnerability here — admitting you lived the same struggle — is what creates trust.
+
+The more real you are in this intro, the more they will share in the exercises.
+
+
+
+
+
+TAB SAYS:
+
+Now here's what makes today different from any other workshop you've been to.
+
+
+
+As we go through each part of the course — I'm not just going to teach you the framework.
+
+I'm going to show you how I applied it to myself.
+
+My story. My brand. My offers. My narrative.
+
+All of it woven in — in real time — so you can see exactly how it works.
+
+
+
+Because that's what a brand system does.
+
+It takes everything you've lived, everything you know, everything you're good at —
+
+and it turns it into something the market can receive.
+
+
+
+By the time we're done today — you're going to have that for yourself.
+
+Not just inspiration. Not just ideas.
+
+A real foundation. Built by you. Today.
+
+
+
+Ready? Let's go.
+
+
+
+ON SCREEN:
+
+Slide or whiteboard — put this up as you say 'Ready? Let's go.':
+
+
+
+THE IEI BRAND SYSTEM
+
+Everything starts with ONE BIG IDEA.
+
+
+
+THE IEI BRAND SYSTEM — Show this on screen as the master map for the whole day.
+
+This is the system. Proven. Tested. Used with dozens of entrepreneurs. You are inside it right now.
+
+─────────────────────────────────────────────
+
+MODULE 1 — ONE BRILLIANT IDEA
+
+What you love + What you’re good at = The one idea worth building
+
+MODULE 2 — WHO ARE YOU? (Defining Your Brand)
+
+Identity · Story · Mission · Voice · Secret Sauce
+
+MODULE 3 — WHO ARE THEY? (Defining Your Ideal Client)
+
+Demographics · Psychographics · Where to find them
+
+MODULE 4 — WHAT DO THEY NEED? (Creating Your Offering)
+
+The 6-part offering framework · Value-based pricing · Your sellable package
+
+MODULE 5 — THE NARRATIVE (Your Story Is Your Strategy)
+
+Origin · Why · Struggle · Turning Point · Who you serve · How you help · The Invitation
+
+MODULE 6 — THE REVENUE PATH (Getting It Out There)
+
+Your first 3 clients · Your platform · Your message · Your next 48 hours
+
+
+
+PARTICIPANT WORKBOOK: https://docs.google.com/document/d/1Ulr6yNliT-Vz_7FsKmlbRvVWXMBeAYKU/edit?usp=drive_link&ouid=109776516534809010336&rtpof=true&sd=true
+
+
+
+
+
+
+
+IEI Agency  ·  Ideas Equal Income  ·  Tab Wolod  ·  ieiagency.com
+
+
+
+THE IEI BRAND SYSTEM — FACILITATOR SCRIPT
+
+MODULE 1: THE ONE BRILLIANT IDEA
+
+Living Document — Keep editing until done
+
+TIMING: 45 minutes total  ·  Teaching (15 min)  ·  Lesson (10 min)  ·  Activity + Breakout (15 min)  ·  Reflection (5 min)
+
+
+
+PART 1: TEACHING — Tab's Narrative
+
+PURPOSE: Tab shares her personal story of how she got to her One Brilliant Idea. This is not just an intro — it is the first demonstration of what narrative looks like. Participants see, in real time, how a personal story connects to a brand.
+
+
+
+[ TAB SAYS ]
+
+Before we get into the work — I want to share something with you.
+
+Because this is not just a course about building a brand.
+
+This is a course about building YOUR brand. From your story. From your life. From what you know.
+
+And the best way I know how to teach that is to show you how I did it.
+
+So everything I teach today — I'm going to walk you through using myself as the case study.
+
+That way you're not just learning a concept. You're watching it work in real time.
+
+
+
+So. Let me tell you how I got here.
+
+
+
+I left corporate in 2016 after eleven years.
+
+Eleven years. And I knew — I KNEW — I was not going back.
+
+I had this deep longing to do something purposeful with my life.
+
+I wanted to make an impact. I wanted to monetize off of it. And I wanted generational wealth.
+
+For myself and for my family.
+
+
+
+And I kept having ideas. All these ideas.
+
+A cleaning company. I had that — Kingdom Clean.
+
+Multilevel marketing things. I tried those.
+
+An entertainment company — I was hosting events, running an internet radio show, DJing.
+
+I had ideas everywhere.
+
+
+
+But one thing just kept ringing. Kept coming back. Wouldn't leave me alone.
+
+Ideas. Equal. Income.
+
+IDEAS EQUAL INCOME.
+
+Your ideas DO equal income. Everything we see in the world around us — every product, every service, every business — started with an idea.
+
+I believe that no idea is a bad idea.
+
+Every idea deserves to be investigated. Tested. Given a chance.
+
+Long live the light bulb moments. That's how I look at ideas.
+
+
+
+And so I started asking myself — okay. If everything starts with an idea, what's MY idea?
+
+Not the cleaning company. Not the entertainment stuff.
+
+What is the ONE thing that sits at the intersection of what I LOVE and what I'm GOOD AT?
+
+
+
+I looked at what I had. I'd been building Wix websites — because every business I started, I built my own site. Kingdom Clean had a website. The entertainment company had a website. I just always ended up updating the website myself.
+
+So I knew how to build websites. That was something I was good at.
+
+And then I looked at what I loved. I loved seeing people bring their ideas to life.
+
+I had friends starting businesses. I knew people with ideas everywhere.
+
+And I just — I loved watching someone go from 'I have this idea' to 'this thing is real.'
+
+
+
+So I married the two.
+
+What I was good at: building websites on Wix.
+
+What I loved: helping people bring their ideas to life.
+
+
+
+And that became my One Brilliant Idea:
+
+Help early-stage entrepreneurs build an online presence by creating engaging, educational websites on Wix.
+
+
+
+That was my value proposition — then.
+
+It evolved. We'll get to that. But that was the start.
+
+And it all began with asking one simple question: what do I love, and what am I good at?
+
+
+
+That is what YOU are about to answer.
+
+And I promise you — the answer is already inside you.
+
+We're just going to find it together.
+
+
+
+
+
+[ ON SCREEN DURING TEACHING ]
+
+Slide or whiteboard — keep this visible while you talk:
+
+
+
+IDEAS EQUAL INCOME
+
+Everything around us started with an idea.
+
+No idea is a bad idea — every idea deserves to be investigated.
+
+Long live the light bulb moments.
+
+
+
+When you say 'I married the two' — draw or reveal this on screen:
+
+
+
+[THINGS I LOVE]  +  [THINGS I'M GOOD AT]  =  ONE BRILLIANT IDEA
+
+
+
+Write Tab's example underneath:
+
+Loved: Helping people bring ideas to life
+
+Good at: Building Wix websites
+
+= Helping early-stage entrepreneurs build an online presence through Wix
+
+
+
+
+
+PART 2: LESSON — The One Brilliant Idea Framework
+
+TIMING: 10 minutes
+
+PURPOSE: Teach the concept simply and clearly before participants do the activity. They should be able to explain the Brilliant Idea framework to someone else before they try to apply it.
+
+
+
+[ TAB SAYS ]
+
+Okay. So here's the framework.
+
+It's two lists and one equation.
+
+
+
+List one: Things I Love.
+
+What do you enjoy doing? What are your passions? What would you do even if nobody paid you?
+
+What topics could you talk about for hours?
+
+
+
+List two: Things I'm Good At.
+
+What skills do you have? What do people come to you for?
+
+What have you been paid to do — or could be paid to do?
+
+What do you do better than most people around you?
+
+
+
+And then — the equation.
+
+You look at both lists. And you find ONE thing from each column that could work together.
+
+Something that makes you say: oh. THAT. That's it.
+
+
+
+Now — I want to give you a silly example so you can see how this works.
+
+Let's say I love cats. And I love coffee. I'm also good at creating cozy spaces.
+
+What do I do with that? Cat cafe. That's a business.
+
+It sounds ridiculous. But someone did that. And it worked.
+
+Because they took what they loved, married it with what they were good at, and made something real.
+
+
+
+Now here's what I want you to understand.
+
+This is for people who have ALREADY been doing something.
+
+You've been running a business. You've been freelancing. You've had a side hustle.
+
+You're not starting from zero — you're starting from experience.
+
+The goal of this exercise is not to invent something new.
+
+The goal is to look at what's already in you — and get clear on the ONE thing to build from.
+
+
+
+One thing. Not five. Not a menu. One.
+
+That's your brilliant idea. And that's where we start.
+
+
+
+[ FACILITATOR NOTE ]
+
+The cat cafe example usually gets a laugh — use it. It loosens the room and makes the concept feel approachable.
+
+Key line to watch for: 'You're not starting from zero — you're starting from experience.' This is important for this audience. They may feel like they don't have enough or haven't done enough. Remind them that what they've already been doing IS the material.
+
+Before moving to the activity, check in: 'Does this make sense so far? Any questions before we go into the exercise?' Keep it quick — 60 seconds max.
+
+
+
+[ ON SCREEN DURING LESSON ]
+
+Keep this framework visible the entire time you're teaching:
+
+
+
+THE ONE BRILLIANT IDEA
+
+─────────────────────────────────────────
+
+THINGS I LOVE          THINGS I'M GOOD AT
+
+─────────────────────────────────────────
+
+              ONE OUTSTANDING IDEA
+
+         (where the two columns meet)
+
+
+
+Example to write on screen as you talk through it:
+
+Love cats + Love coffee + Good at creating cozy spaces = Cat Cafe
+
+Love helping people + Good at Wix websites = Online presence for early-stage entrepreneurs
+
+
+
+
+
+PART 3: ACTIVITY — Find Your One Brilliant Idea
+
+TIMING: 15 minutes  ·  Individual work (7 min)  ·  Breakout rooms (8 min)
+
+
+
+[ TAB SAYS — LAUNCHING THE ACTIVITY ]
+
+Alright. Your turn.
+
+Open your workbook — or grab a piece of paper if that's easier.
+
+You're going to make two lists.
+
+Left side: everything you love. Passions, interests, topics, activities — anything you'd do for free.
+
+Right side: everything you're good at. Skills, experience, things people come to you for.
+
+Don't filter. Don't edit. Just dump everything out.
+
+You have 7 minutes. I'll be watching the chat. Go.
+
+
+
+Timer 7 minutes
+
+Write what you love and what you’re good at
+
+Let’s try to marry the two. If you’re idea is already solid lets lock in your brilliant idea
+
+
+
+
+
+
+
+
+
+
+
+
+
+PART 4: REFLECTION — Locking in the Idea
+
+TIMING: 5 minutes  ·  Full group back together
+
+
+
+[ ON SCREEN — CLOSING THE MODULE ]
+
+Put this on screen as the transition to Module 2:
+
+
+
+MY ONE BRILLIANT IDEA:
+
+I love: _______________________________
+
+I'm good at: _______________________________
+
+= _______________________________
+
+
+
+Tell participants: 'Write this in your workbook before we move on. This is the anchor for everything else.'
+
+
+
+
+
+
+
+
+
+IEI Agency  ·  Ideas Equal Income  ·  Tab Wolod  ·  ieiagency.com
+
+
+
+THE IEI BRAND SYSTEM — FACILITATOR SCRIPT
+
+MODULE 2: DEFINING YOUR BRAND
+
+The ABCs of Branding — Authentic Brand Creation
+
+Living Document — Keep editing until done
+
+TIMING: 50 minutes total  ·  Teaching (15 min)  ·  Lesson (15 min)  ·  Activity (15 min)  ·  Reflection + Q&A + Break (5 min)
+
+
+
+TRANSITION IN FROM MODULE 1: 'Your idea is locked. Beautiful. Now we need to build a brand around it. And that starts with the most important question of all — who are YOU?'
+
+
+
+PART 1: TEACHING — Tab's Narrative
+
+TIMING: 15 minutes
+
+PURPOSE: Tab shares the D.U.M.I story — her first real branding client. This illustrates exactly why defining your brand matters and where the 5 questions came from. Jaydee saying 'you know it better than I do' is the moment IEI was born.
+
+
+
+[ TAB SAYS ]
+
+Alright. So we got our brilliant ideas locked in.
+
+Does anybody want to share? Drop it in the chat or unmute real quick.
+
+
+
+(Take 1-2 quick shares. Celebrate them. Keep moving.)
+
+
+
+I love that. Beautiful.
+
+Now — let me tell you what happened next in my story.
+
+Because this is the part where things got real.
+
+
+
+So I locked in what I was going to do.
+
+Help early-stage entrepreneurs build an online presence through Wix websites.
+
+And I needed my first real client.
+
+
+
+So I went to someone I knew. One of my good friends.
+
+She's one of the co-owners of a street brand called D.U.M.I.
+
+D.U.M.I Apparel. Street brand. Really cool.
+
+And I walked up to her — Jaydee — and I said:
+
+'Jaydee. I would LOVE to do your website.'
+
+And she said — 'Alright cool. We can barter. Some clothing for the website.'
+
+Done. Let's go.
+
+
+
+So I pulled up ecommerce templates — they're selling products.
+
+And I started asking her the questions I needed to build the site.
+
+What colors do you want?
+
+She really didn't have colors in mind.
+
+Okay. What products are you selling? Can I get a list?
+
+Do you have any language for the site? Copy? An About page? Anything?
+
+
+
+And she was like — no.
+
+
+
+So I built what I could. I put together a really cool looking site.
+
+Came back. She liked it.
+
+But then she saw all the blank spaces.
+
+The About section. The mission. The brand description. The product copy.
+
+All the places where the words were supposed to go.
+
+I pointed to each one and said:
+
+'I don't know what to put here. Or here. Or here. Or here. Or here.'
+
+
+
+And Jaydee looked at me and said:
+
+'Tab. You know it better than I do.'
+
+
+
+I will never forget that moment.
+
+'You know it better than I do.'
+
+
+
+Now — it wasn't the first time something like that had happened.
+
+But that moment got me really clear.
+
+Clear on what questions I needed to ask my clients.
+
+So that THEY could get clear on these things for themselves.
+
+
+
+Who are you as a brand? How are you representing yourself?
+
+What do you do?
+
+Who do you serve?
+
+What makes you stand out?
+
+How do you do what you do?
+
+
+
+THAT is the information that should go on a website.
+
+THAT is the information that should go in every piece of content you create.
+
+And if you can't answer those questions — nothing else works.
+
+Not the website. Not the content. Not the offers. Nothing.
+
+
+
+Let me show you what I mean.
+
+I'm going to pull up the D.U.M.I website right now.
+
+And we're going to look at it together — and see how the brand shows up.
+
+Or doesn't.
+
+And then we're going to apply the same lens to YOUR brand.
+
+
+
+[ FACILITATOR NOTE ]
+
+Pull up the D.U.M.I website live on screen: https://dumiapparel.wixsite.com/mysite-4
+
+Walk through it with the class. Point out:
+
+Where the brand identity shows up (or is missing)
+
+Where the messaging is clear (or isn't)
+
+What questions you would have asked Jaydee to fill in the gaps
+
+Key coaching line: 'Look at this. A brand lives here — in these words, this language, this story. If the words aren't there, the brand isn't there. That's what we're fixing today.'
+
+Keep this section tight — 3-4 minutes on the website. Don't go down a rabbit hole. Use it as a visual anchor, then pivot to the lesson.
+
+After the website walkthrough, say: 'That's why these questions matter. That's why we're here. Now let me teach you the framework.'
+
+
+
+[ ON SCREEN DURING TEACHING ]
+
+Step 1 — When Jaydee says the line, put this on screen:
+
+
+
+"Tab, you know my brand better than I do."
+
+— Jaydee, D.U.M.I Apparel
+
+
+
+TAKE THE TIME TO GO THRU OLD SITE: 
+
+
+
+Step 3 — As you walk through the site, point to each section and ask the class:
+
+'What's missing here?'
+
+'What question would you ask to fill this in?'
+
+
+
+Step 4 — Close the website and put the 5 questions on screen (reveal one at a time):
+
+01. Who are you as a brand?
+
+02. What do you do?
+
+03. Who do you serve?
+
+04. What makes you stand out?
+
+05. How do you do it?
+
+
+
+To help my clients develop their brand, I created a robust brand identity framework to help pull the ideas out of their head and onto paper or a digital platform.
+
+
+
+
+
+PART 2: LESSON — The ABCs of Branding
+
+TIMING: 15 minutes
+
+PURPOSE: Introduce Authentic Brand Creation through the 'brand is like a baby' concept. Teach the 5 defining questions in plain human language — not corporate speak. This is where participants begin to see their own brand more clearly.
+
+
+
+[ TAB SAYS ]
+
+Here's what I want you to understand about your brand.
+
+Your brand is like a baby.
+
+
+
+When a baby is born — that baby already has a personality.
+
+A vibe. A whole presence.
+
+But it can't speak for itself yet.
+
+Someone has to learn it. Understand it. Give it language.
+
+And the better you understand that baby — the better you can communicate who they are to the world.
+
+
+
+Your brand is the same way.
+
+It already exists inside you.
+
+It has a personality. A voice. A way of showing up.
+
+But most of us have never sat down to actually LEARN our own brand.
+
+We haven't given it language.
+
+And so when someone asks — what do you do? — we fumble.
+
+Not because we don't know. But because we've never defined it clearly enough to say it out loud.
+
+
+
+What I teach is called the ABCs of Branding.
+
+Authentic Brand Creation.
+
+And I need YOU to embody your brand.
+
+Not perform it. Not polish it. Embody it.
+
+Because that's what authentic means.
+
+It comes from YOU. From your story. From your life. From what you know.
+
+
+
+So we're going to answer five questions.
+
+And I'm going to ask them in a different way than you've probably heard before.
+
+Because most brand frameworks ask them in corporate speak.
+
+I want to ask them in human speak.
+
+
+
+THE 5 DEFINING QUESTIONS — Taught One at a Time
+
+
+
+[ QUESTION 1: WHO ARE YOU? ]
+
+Not your job title. Not your LinkedIn headline. Not your resume.
+
+I mean — if you walked into a room, how would somebody describe you?
+
+What's the energy you bring? What do people feel when they're around you?
+
+What is the thing you've lived through — the experience, the journey, the story — that positions you to do this work?
+
+Because your brand isn't separate from your story. Your brand IS your story, packaged as a solution.
+
+
+
+Coaching line if someone is stuck: 'What do people always say about you? What's the compliment you get over and over?'
+
+
+
+[ QUESTION 2: WHAT DO YOU ACTUALLY DO? ]
+
+Not the fancy version. Not the polished pitch.
+
+What activities do you do — or have you done — involving your brilliant idea?
+
+What would someone watch you do if they shadowed you for a day?
+
+We're not writing the one-liner yet. We're just naming the activities. Plain language.
+
+List them out. Everything. We'll distill it down in a minute.
+
+
+
+FACILITATOR NOTE: This question strips away the marketing language and gets to the real work. People often realize they do more than they thought — or they realize they've been describing their outputs instead of their process.
+
+Coaching line: 'Don't describe the result yet. Just tell me what you actually DO. The verbs.'
+
+
+
+[ QUESTION 3: WHO DO YOU DO IT FOR? ]
+
+Who have you already done this for?
+
+Who is the specific person you want to serve?
+
+And I need you to get specific. Not 'entrepreneurs.' Not 'small businesses.'
+
+What KIND of person? What stage are they in? What are they dealing with right now?
+
+What is the thing keeping them up at night that your brilliant idea can solve?
+
+
+
+FACILITATOR NOTE: This is where most people resist. They want to say 'everyone.' Push back gently every time. 'That's still too broad. Who specifically? If you could fill your client roster with one type of person — who would it be?'
+
+
+
+[ QUESTION 4: WHAT MAKES YOU STAND OUT? ]
+
+There are other people in your space. Other people with a similar brilliant idea.
+
+Why would someone choose YOU?
+
+This is usually three things: your story, your method, and your results.
+
+What have you lived through that gives you credibility?
+
+What's the specific way you do what you do?
+
+And what happens after someone works with you? What changes for them?
+
+
+
+FACILITATOR NOTE: People often underestimate this one. They think they don't stand out. Remind them: 'Your story alone makes you different. Nobody has lived what you've lived and built what you're building from it. That IS your differentiation.'
+
+
+
+[ QUESTION 5: HOW DO YOU DO IT? ]
+
+Your process. Your method. Your secret sauce.
+
+How do you get someone from where they are to where they want to be?
+
+Is it a system? A series of sessions? A framework? A product?
+
+Describe it simply. How would you explain it to a friend?
+
+Because here's what I learned — oftentimes, your HOW is exactly what makes you special.
+
+My how is a system. A series of frameworks and questions.
+
+And that system IS IEI. The how became the brand.
+
+
+
+FACILITATOR NOTE: End the lesson here and connect back to the D.U.M.I example: 'These are the exact questions I should have asked Jaydee before I built that website. Now you have them. Let's apply them to YOUR brand.'
+
+
+
+[ ON SCREEN DURING LESSON ]
+
+Keep the 5 questions visible the entire time — reveal each one as you teach it:
+
+
+
+THE ABCs OF BRANDING — AUTHENTIC BRAND CREATION
+
+─────────────────────────────────────────────────
+
+Q1: WHO ARE YOU? (Your story + identity)
+
+Q2: WHAT DO YOU ACTUALLY DO? (Activities, plain language)
+
+Q3: WHO DO YOU DO IT FOR? (Specific person, specific pain)
+
+Q4: WHAT MAKES YOU STAND OUT? (Story + method + results)
+
+Q5: HOW DO YOU DO IT? (Your process — your secret sauce)
+
+
+
+
+
+PART 3: ACTIVITY — Define Your Brand
+
+TIMING: 15 minutes  ·  Individual work (10 min)  ·  Optional AI layer (5 min)
+
+PURPOSE: Participants answer all 5 questions for their own brand using the simplified Brand Definition Worksheet. This is the long math — raw truth before polish. No AI on this first pass.
+
+
+
+[ TAB SAYS — Launching the Activity ]
+
+Alright. Your turn.
+
+Open your workbook to the Brand Definition Worksheet.
+
+You're going to answer all five questions for YOUR brand.
+
+And here's the rule — no AI yet. Not on this first pass.
+
+I need your raw truth. Your actual words. Your real story.
+
+We'll polish it with AI after. But first — we do the long math.
+
+You have 10 minutes. Write like you're talking to a friend. Messy is perfect.
+
+Go.
+
+
+
+BRAND DEFINITION WORKSHEET — Embedded Reference
+
+(This is the worksheet participants complete. Have this available as a separate handout or in the workbook.)
+
+
+
+THE ABCs OF BRANDING — My Brand Definition
+
+Name: ___________________________  Business/Brand: ___________________________
+
+Instructions: Answer every question in your own words. Write like you're talking to a friend. No editing. No AI yet. Raw truth only — we polish it after.
+
+
+
+Q1: WHO ARE YOU?
+
+If you walked into a room, how would somebody describe you? What's your energy, your vibe, your story?
+
+What have you lived through that positions you to do this work?
+
+_______________________________________________
+
+_______________________________________________
+
+_______________________________________________
+
+Q2: WHAT DO YOU ACTUALLY DO?
+
+List the activities — plain language. What do you literally do involving your brilliant idea?
+
+Don't describe the result yet. Just name the verbs. What do you DO?
+
+_______________________________________________
+
+_______________________________________________
+
+_______________________________________________
+
+Q3: WHO DO YOU DO IT FOR?
+
+Who have you already served? Who do you WANT to serve? Be specific.
+
+What kind of person? What stage are they in? What is keeping them up at night?
+
+_______________________________________________
+
+_______________________________________________
+
+_______________________________________________
+
+Q4: WHAT MAKES YOU STAND OUT?
+
+Why would someone choose YOU over someone else with a similar offering?
+
+Think: your story + your method + your results. What's your edge?
+
+_______________________________________________
+
+_______________________________________________
+
+_______________________________________________
+
+Q5: HOW DO YOU DO IT?
+
+Describe your process. Your method. Your secret sauce.
+
+How do you get someone from where they are to where they want to be?
+
+_______________________________________________
+
+_______________________________________________
+
+_______________________________________________
+
+MY BRAND IN ONE SENTENCE (fill in after Q&A):
+
+I help _______________ (who) do _______________ (what) so they can _______________ (why it matters).
+
+_______________________________________________
+
+
+
+[ FACILITATOR NOTE — During Activity ]
+
+Start a 10-minute timer on screen.
+
+Circulate in the chat. Drop encouragement: 'Keep going. Raw truth. No editing.'
+
+At 5 minutes: 'Halfway. If you're stuck on any question — skip it and come back. Keep moving forward.'
+
+At 8 minutes: 'Two minutes. Finish the question you're on. We'll share in a moment.'
+
+After 10 minutes — optional AI layer:
+
+'If you want to use AI to help polish your answers, here are the prompts. You have 5 minutes. If not — sit with what you wrote and we'll share.'
+
+
+
+[ AI PROMPTS — Optional Layer ]
+
+Put these in the chat for participants who want to use AI:
+
+
+
+PROMPT 1: Using my answers below, please write a refined 3-5 sentence brand introduction that is clear, confident, and emotionally strong. [PASTE your answers to Q1-Q5]
+
+PROMPT 2: Based on my answers, give me 5 tagline options that capture who I am and what I do. [PASTE your answers]
+
+PROMPT 3: Rewrite my answer to 'What makes me stand out?' so it sounds bold, specific, and memorable. [PASTE Q4 answer]
+
+
+
+
+
+PART 4: REFLECTION + Q&A + BREAK
+
+TIMING: 5 minutes reflection  ·  Then open Q&A  ·  Then break
+
+
+
+[ TAB SAYS ]
+
+Okay. Let's hear from a few people.
+
+I want to know — which question was the hardest for you?
+
+And which one surprised you? Because usually one of them does.
+
+
+
+(Take 2-3 shares. React to what's strong. Pull out the gold in what people say.)
+
+
+
+Here's what I want you to notice.
+
+Those five questions — that's what was missing from the D.U.M.I website.
+
+That's what was missing from every blank space I pointed to.
+
+When you can answer those five questions clearly — your brand has language.
+
+And when your brand has language — people can find it, understand it, and buy it.
+
+
+
+Now — before we go to break, I want to open it up.
+
+Any questions on what we just went through?
+
+Anything you want to work through with me before we keep going?
+
+Unmute or drop it in the chat.
+
+
+
+(Hold space for 2-3 minutes of open Q&A. Address questions briefly. If something needs a longer answer — 'let's hold that for the 1:1 time or the breakout.')
+
+
+
+Alright. Take 10 minutes. Grab some water. Stretch.
+
+When we come back — we're going deep into who you serve.
+
+And I'm going to tell you something that might be uncomfortable.
+
+Everyone is not your client.
+
+Back in 10.
+
+
+
+[ FACILITATOR NOTE ]
+
+The Q&A here is intentionally short — 2-3 minutes. This is not a coaching session yet. If someone has a complex question, say: 'That's exactly what we'll work through in the 1:1 time. Remind me during the break.'
+
+Watch for the person who had a breakthrough on Q4 or Q5 — the 'what makes me stand out' moment. That person's share can energize the whole room. Invite them: 'You had something on Q4 — want to share it?'
+
+The break transition line — 'Everyone is not your client' — is intentional. It creates anticipation for Module 3. Say it with a little weight. Let them think about it while they're on break.
+
+Use the break to check in privately with anyone who seemed stuck or frustrated during the activity.
+
+
+
+[ ON SCREEN — Reflection and Close ]
+
+During reflection, put this on screen and write participant highlights as they share:
+
+
+
+THE ABCs OF BRANDING — AUTHENTIC BRAND CREATION
+
+Q1: WHO ARE YOU?
+
+Q2: WHAT DO YOU DO?
+
+Q3: WHO DO YOU SERVE?
+
+Q4: WHAT MAKES YOU STAND OUT?
+
+Q5: HOW DO YOU DO IT?
+
+
+
+During the break transition, put this on screen:
+
+COMING UP: MODULE 3 — WHO DO YOU SERVE?
+
+(Hint: It's not everyone.)
+
+
+
+
+
+MODULE 2 — QUICK REFERENCE
+
+
+
+TOTAL TIME: 50 minutes + break
+
+
+
+TEACHING — Tab's narrative (15 min) · D.U.M.I story · Jaydee says 'you know it better than I do' · That moment clarified the 5 questions · Pull up the D.U.M.I website live · Walk through it as a visual example
+
+LESSON — The ABCs of Branding (15 min) · Brand is like a baby · Authentic Brand Creation · 5 questions taught in plain human language · One at a time with coaching notes for each
+
+ACTIVITY — Brand Definition Worksheet (10 min) · No AI on first pass · Raw truth only · Timer on screen
+
+AI LAYER — Optional (5 min) · 3 prompts in chat · Brand intro · Taglines · Stand-out statement
+
+REFLECTION + Q&A (5 min) · Which question was hardest? · Which surprised you? · Open Q&A · Break transition
+
+
+
+WORKBOOK PAGE: Brand Definition Worksheet — the 5 questions with write-in lines + one-sentence brand statement at the bottom.
+
+ON SCREEN: D.U.M.I website (https://dumiapparel.wixsite.com/mysite-4) · The 5 questions revealed one at a time · Participant highlights during reflection.
+
+TRANSITION LINE: 'When we come back — we're going deep into who you serve. Everyone is not your client.'
+
+
+
+
+
+IEI Agency  ·  Ideas Equal Income  ·  Tab Wolod  ·  ieiagency.com
+
+
+
+THE IEI BRAND SYSTEM — FACILITATOR SCRIPT
+
+MODULE 3: WHO DO YOU SERVE?
+
+Ideal Client + Dream 100 Lite — Know Your Person, Find Your People
+
+Living Document — Keep editing until done
+
+TIMING: 50 minutes total  ·  Teaching (15 min)  ·  Lesson (10 min)  ·  Activity + Worksheet (20 min)  ·  Reflection (5 min)
+
+
+
+TRANSITION IN FROM MODULE 2: 'When we come back — we're going deep into who you serve. And I'm going to say something that might be uncomfortable. Everyone is not your client.'
+
+
+
+SLIDE NOTES — Module 3
+
+These are the key moments that need to be on screen. Pull these into your slide deck.
+
+
+
+SLIDE: Opening slide: 'WHO DO YOU SERVE?' — large text, clean slide
+
+SLIDE: Tab's UVP at that point in business: 'I help early-stage entrepreneurs build an online presence through engaging Wix websites — so their ideas can be found, understood, and transacted with online.'
+
+SLIDE: The pattern Tab noticed: JUST STARTED · HAD AN IDEA · LIMITED BUDGET · NEEDED TO BE FOUND ONLINE · NEEDED THEIR BRAND DEFINED FIRST
+
+SLIDE: The lesson header: 'EVERYONE IS NOT YOUR CLIENT'
+
+SLIDE: The long math slide: Three columns — DEMOGRAPHICS · PSYCHOGRAPHICS · WHERE TO FIND THEM
+
+SLIDE: The key question: 'Who specifically? What stage? What pain? What have they already tried?'
+
+SLIDE: AI Prompt slide — put the prompt text on screen so participants can copy it
+
+
+
+PART 1: TEACHING — Tab's Narrative
+
+TIMING: 15 minutes
+
+PURPOSE: Tab shares the next chapter of her story — noticing a pattern in her early clients. Dummy wasn't the first. She kept getting the same type of client. That pattern became her ideal client profile. This is how defining your audience connects to the real work.
+
+
+
+[ TAB SAYS ]
+
+Alright. Welcome back.
+
+I told you I was going to say something uncomfortable.
+
+Here it is: everyone is not your client.
+
+
+
+I know. You've heard it before. But stick with me — because I want to show you what it actually looks like when you figure out who your person is.
+
+Because for me — it didn't start with a strategy session or a target market analysis.
+
+It started with a pattern.
+
+
+
+Dummy wasn't my first client.
+
+By the time I built that site, I had already been helping people with websites for a while.
+
+And I kept seeing the same type of person showing up.
+
+
+
+They had just started a business. Or they were about to.
+
+They had an idea — sometimes a really good one.
+
+They had some activity. Maybe some early sales. Maybe just a lot of energy and zero infrastructure.
+
+They needed a way for people to find them online. A website. A place to transact.
+
+Limited budget. Starting from the bottom.
+
+But — and this is important — before they needed a website, they needed their brand defined.
+
+They needed to understand themselves first.
+
+Because you can't build a website for someone who doesn't know what to say.
+
+You can't write copy for someone who hasn't defined who they are.
+
+
+
+And so my ideal client — at that point in my business — looked like this.
+
+Early-stage entrepreneur. Just getting started or just getting serious.
+
+Had an idea. Had some hustle. Had limited resources.
+
+Needed to be found online and needed help figuring out what to say when people found them.
+
+
+
+And my value proposition — at that point — was:
+
+I help early-stage entrepreneurs build an online presence through engaging Wix websites
+
+so their ideas can be found, understood, and transacted with online.
+
+
+
+That was it. Simple. Specific. Built from what I kept seeing in the market.
+
+Not from a spreadsheet. From paying attention.
+
+
+
+Now — that evolved. IEI evolved.
+
+As I kept working with these clients, I realized the website wasn't even the real need.
+
+The real need was the brand system underneath it.
+
+And THAT became IEI. But we'll get to that.
+
+
+
+The point right now is this:
+
+I found my person by paying attention to who kept showing up.
+
+And once I got clear on who they were — everything got easier.
+
+My content started resonating. My offers started converting.
+
+Because I stopped talking to everyone and started talking to ONE specific person.
+
+With one specific situation. And one specific need.
+
+That's what we're going to do for you right now.
+
+
+
+[ FACILITATOR NOTE ]
+
+The line 'You can't build a website for someone who doesn't know what to say' is a callback to Module 2 — the Dummy story. Reference it: 'Sound familiar? That's why we did Module 2 first.'
+
+Say Tab's UVP at that time slowly and clearly. Then say: 'That's not what IEI looks like today. But that was the right UVP for that stage. Your UVP will evolve too. Right now we just need the one that's true for where YOU are.'
+
+Watch for people who are nodding hard at 'paid attention to who kept showing up.' Acknowledge it: 'Some of you already know who your person is. You've been serving them. You just haven't named it yet. That's what we're about to do.'
+
+
+
+[ ON SCREEN DURING TEACHING ]
+
+SLIDE: Tab's UVP at that point — put it on screen word for word:
+
+
+
+"I help early-stage entrepreneurs build an online presence through engaging Wix websites
+
+so their ideas can be found, understood, and transacted with online."
+
+
+
+Then reveal the pattern she noticed — one line at a time:
+
+Just started (or about to start)
+
+Had an idea · Had some hustle
+
+Limited budget · Starting from the bottom
+
+Needed to be found online
+
+Needed their brand defined FIRST
+
+
+
+
+
+PART 2: LESSON — The Long Math on Your Ideal Client
+
+TIMING: 10 minutes
+
+PURPOSE: Teach the concept of the ideal client in three layers — who they are (demographics), how they think and feel (psychographics), and where to find them (Dream 100 lite). The long math first — specificity before polish.
+
+
+
+[ TAB SAYS ]
+
+Here's how we're going to think about your ideal client.
+
+Three layers. And we do the long math on all three before we write anything clean.
+
+
+
+Layer one — WHO they are. The demographics.
+
+This is the surface stuff. Age range. Gender if it's relevant. Location. Income level.
+
+What stage of business or life are they in? What do they do for work?
+
+This layer tells us what we're working with.
+
+
+
+Layer two — HOW they think and feel. The psychographics.
+
+This is where it gets real.
+
+What do they value? What are they afraid of? What keeps them up at night?
+
+What have they already tried that didn't work?
+
+What do they say to themselves when they're stuck?
+
+This layer tells us how to talk to them.
+
+Because if you can say what your client is thinking better than they can say it themselves —
+
+they will trust you instantly. They will feel seen. And they will buy.
+
+
+
+Layer three — WHERE to find them. The Dream 100 lite.
+
+Once you know who they are and how they think — where are they already hanging out?
+
+What are they watching, reading, listening to?
+
+Who do they follow? What communities are they in?
+
+This layer tells us where to show up so they can find us.
+
+
+
+Most people skip straight to layer three.
+
+They start posting on Instagram and wonder why nobody responds.
+
+Because they skipped layers one and two.
+
+They don't actually know who they're talking to yet.
+
+We do the long math first. All three layers. Then we know exactly where to show up and what to say.
+
+
+
+[ FACILITATOR NOTE ]
+
+The psychographics layer is the most important one for this audience. Spend a little extra time here.
+
+Key coaching line: 'If you can describe your client's pain better than they can — they will feel understood. And understood people buy. That's not manipulation — that's empathy in action.'
+
+Before moving to the activity, say: 'Let me give you the example again — at the time, my client was stressed about being invisible online. They had a business but nobody could find it. They'd tried posting on social media but it wasn't consistent. They'd looked at website builders and felt overwhelmed. That was their pain. THAT'S what I spoke to. And it worked.'
+
+
+
+[ ON SCREEN DURING LESSON ]
+
+Three-column layout — build it out live on the whiteboard or reveal on slide:
+
+
+
+LAYER 1: DEMOGRAPHICS          LAYER 2: PSYCHOGRAPHICS          LAYER 3: WHERE TO FIND THEM
+
+Who they are                   How they think & feel            Where they already hang out
+
+Age / gender / location        What they value                  Social platforms
+
+Income / life stage            What they fear                   Podcasts / YouTube
+
+Business stage                 What keeps them up at night      Communities / groups
+
+Occupation                     What they've already tried       Influencers they follow
+
+                               What they say when stuck         Events / networking
+
+
+
+
+
+PART 3: ACTIVITY — Ideal Client + Dream 100 Lite Worksheet
+
+TIMING: 20 minutes  ·  Individual work (15 min)  ·  AI layer (5 min)
+
+PURPOSE: Participants complete the three-layer ideal client worksheet for their specific brilliant idea. Long math first — raw, specific, no polish. AI prompts available after to sharpen the language.
+
+
+
+[ TAB SAYS — Launching the Activity ]
+
+Alright. We're going deep now.
+
+Open your workbook to the Ideal Client Worksheet.
+
+You're going to go through all three layers for YOUR person.
+
+And I need you to be specific. Push past the first obvious answer every single time.
+
+If you write 'entrepreneurs' — cross it out and go deeper.
+
+If you write 'people who need help' — cross it out and go deeper.
+
+I want to know the ONE person. Their situation. Their pain. Their world.
+
+You have 15 minutes. Long math first. Go.
+
+
+
+IDEAL CLIENT + DREAM 100 LITE WORKSHEET
+
+(Embedded reference — this is the worksheet participants complete. Also available as a separate handout.)
+
+
+
+WHO DO YOU SERVE? — Ideal Client Profile
+
+Name: ___________________________  Brilliant Idea: ___________________________
+
+Instructions: Answer every question as specifically as possible. Push past the first obvious answer. The more specific you get, the easier everything else becomes — your content, your offers, your messaging, your pricing.
+
+
+
+LAYER 1: WHO THEY ARE — Demographics
+
+Age range:
+
+_______________________________________________
+
+
+
+Gender (if relevant to your work):
+
+_______________________________________________
+
+
+
+Location (local, national, global?):
+
+_______________________________________________
+
+
+
+Income level or budget range:
+
+_______________________________________________
+
+
+
+What stage of business or life are they in?
+
+_______________________________________________
+
+_______________________________________________
+
+
+
+What do they do for work or what have they been doing?
+
+_______________________________________________
+
+_______________________________________________
+
+
+
+Are they a beginner, intermediate, or experienced at what they're trying to do?
+
+_______________________________________________
+
+_______________________________________________
+
+
+
+LAYER 2: HOW THEY THINK & FEEL — Psychographics
+
+What do they value most? (time, money, relationships, freedom, impact, status...)
+
+_______________________________________________
+
+_______________________________________________
+
+
+
+What are they afraid of? What is their biggest fear related to what you offer?
+
+_______________________________________________
+
+_______________________________________________
+
+_______________________________________________
+
+
+
+What keeps them up at night? What is the specific pain or problem?
+
+_______________________________________________
+
+_______________________________________________
+
+_______________________________________________
+
+
+
+What have they already tried that didn't work?
+
+_______________________________________________
+
+_______________________________________________
+
+_______________________________________________
+
+
+
+What do they say to themselves when they're stuck? (Write it in their voice.)
+
+_______________________________________________
+
+_______________________________________________
+
+
+
+Example: "I just wish someone would..."
+
+_______________________________________________
+
+
+
+What do they want more than anything? (The deep want, not the surface want.)
+
+_______________________________________________
+
+_______________________________________________
+
+_______________________________________________
+
+
+
+What would make them feel truly understood — what would make them say 'yes, that's me'?
+
+_______________________________________________
+
+_______________________________________________
+
+_______________________________________________
+
+
+
+LAYER 3: WHERE TO FIND THEM — Dream 100 Lite
+
+Now that you know who they are and how they think — where are they already spending their time? This tells you where to show up so they can find you.
+
+
+
+What social media platforms are they most active on?
+
+_______________________________________________
+
+_______________________________________________
+
+
+
+What podcasts do they listen to? (Name specific shows if possible.)
+
+_______________________________________________
+
+_______________________________________________
+
+
+
+What YouTube channels or online content do they consume?
+
+_______________________________________________
+
+_______________________________________________
+
+
+
+Who are the influencers, thought leaders, or experts they follow?
+
+_______________________________________________
+
+_______________________________________________
+
+
+
+What communities, groups, or networks are they part of? (Online or in person.)
+
+_______________________________________________
+
+_______________________________________________
+
+
+
+What events, conferences, or networking spaces do they attend?
+
+_______________________________________________
+
+_______________________________________________
+
+
+
+What do they search online when they have the problem you solve?
+
+_______________________________________________
+
+_______________________________________________
+
+
+
+SYNTHESIS — My Ideal Client in One Clear Statement
+
+Using everything you just wrote — describe your ideal client in 2-3 sentences. Be specific. Name their situation, their pain, and what they need.
+
+
+
+My ideal client is:
+
+_______________________________________________
+
+_______________________________________________
+
+_______________________________________________
+
+_______________________________________________
+
+
+
+They need:
+
+_______________________________________________
+
+_______________________________________________
+
+
+
+I reach them by:
+
+_______________________________________________
+
+_______________________________________________
+
+
+
+[ FACILITATOR NOTE — During Activity ]
+
+Start a 15-minute timer on screen.
+
+Circulate in the chat. Common sticking points to watch for:
+
+'I don't know who my client is yet.' — Coaching line: 'Who have you already done this for, even informally? Start there. That person IS your ideal client for now.'
+
+'My client is everyone.' — Coaching line: 'Tell me the ONE person who would benefit most from your brilliant idea. Not the only person — just the ONE. Start with that person.'
+
+'I don't know what keeps them up at night.' — Coaching line: 'What would YOU have said when you were in their position? Or ask someone in your network who fits the description.'
+
+Layer 3 sticking point: 'I don't know where they hang out.' — Coaching line: 'Where do YOU hang out? Your ideal client is often in the same spaces you are. Start there.'
+
+At 12 minutes: 'Three more minutes — get to the synthesis section at the bottom. That's the most important line on the page.'
+
+
+
+[ AI PROMPTS — Optional Layer ]
+
+After 15 minutes of individual work — put these in the chat:
+
+
+
+PROMPT 1: Using this target demographic information, please create: (1) A full demographics profile. (2) A psychographics breakdown — lifestyle, values, pain points, aspirations. (3) Where they hang out online and offline. [PASTE your Layer 1 + Layer 2 answers]
+
+
+
+PROMPT 2: Based on my ideal client description, what niche communities are they in? What specific podcasts, Facebook groups, Instagram accounts, YouTube channels, and events would they follow or attend? [PASTE your ideal client synthesis]
+
+
+
+PROMPT 3: Using the following information about my ideal client, write a 2-3 sentence description I can use in my marketing to make them immediately feel seen and understood. [PASTE your Layer 2 answers — especially what they say when stuck and what they want most]
+
+
+
+
+
+PART 4: REFLECTION — Locking in Your Person
+
+TIMING: 5 minutes  ·  Full group back together
+
+
+
+[ TAB SAYS ]
+
+Okay. Come back together.
+
+Who got clear on their person? Drop it in the chat or unmute.
+
+I want to hear — who is your ideal client and what is the ONE thing they need?
+
+
+
+(Take 2-3 shares. React to what's specific. Push back on anything still too broad.)
+
+
+
+Look at what just happened.
+
+You went from 'I serve entrepreneurs' to 'I serve this specific person in this specific situation with this specific pain.'
+
+That's the shift. And everything changes when you make it.
+
+Your content changes. Your offers change. Your conversations change.
+
+Because now you're not talking to the crowd — you're talking to the person.
+
+And the person always listens.
+
+
+
+Now. We've got three things locked in.
+
+Your brilliant idea. Your brand identity. Your ideal client.
+
+One more module before the break.
+
+And this is where it starts to become money.
+
+We're going to build your offer.
+
+
+
+[ FACILITATOR NOTE ]
+
+If someone shares an ideal client that's still too broad — gently push one more time: 'That's getting there. Now tell me — what is the ONE thing keeping that person up at night? Just one. That's the sharpener.'
+
+Use the three class examples from Module 1 to demonstrate the sharpening:
+
+Nonprofit friend: 'Not nonprofits broadly — first-time executive directors of early-stage nonprofits in urban communities who've never applied for a federal grant and feel overwhelmed by the compliance side.'
+
+Comedy IG friend: 'Not comedians — up-and-coming comedians with 1k-10k followers who are posting consistently but not growing because their content isn't optimized for the algorithm.'
+
+Admin friend: 'Not businesses — founders and executives who are grinding in task mode and have lost sight of the bigger vision. They need an operational partner who values HOW they work, not just WHAT they produce.'
+
+Transition line: 'Three things locked. Now let's build the thing you're going to sell them.'
+
+
+
+[ ON SCREEN — Reflection and Transition ]
+
+During reflection — put this on screen and fill in as people share:
+
+
+
+MY IDEAL CLIENT IS:
+
+_________________________________
+
+THEY NEED:
+
+_________________________________
+
+I REACH THEM BY:
+
+_________________________________
+
+
+
+Transition slide — put this up as you close Module 3:
+
+
+
+YOU NOW HAVE:
+
+✦ Your One Brilliant Idea
+
+✦ Your Brand Identity — who you are, what you do, why you stand out
+
+✦ Your Ideal Client — who they are, what they need, where to find them
+
+
+
+NEXT: MODULE 4 — THE OFFER
+
+Let's build the thing you're going to sell them.
+
+
+
+
+
+MODULE 3 — QUICK REFERENCE
+
+
+
+TOTAL TIME: 50 minutes
+
+
+
+TEACHING — Tab's narrative (15 min) · Dummy wasn't the first client · Noticed a pattern · Named the ideal client · Stated UVP at that point in business · The evolution to IEI
+
+LESSON — Three layers of ideal client (10 min) · Layer 1: Demographics · Layer 2: Psychographics (the most important layer) · Layer 3: Dream 100 Lite — where to find them
+
+ACTIVITY — Ideal Client Worksheet (15 min) · All three layers · Individual work · Timer on screen · Key coaching lines for sticking points
+
+AI LAYER — Optional (5 min) · 3 prompts in chat · Full profile · Niche communities · Seen-and-understood description
+
+REFLECTION (5 min) · 2-3 shares · Push to specificity · Three class examples ready · Transition to Module 4
+
+
+
+WORKBOOK PAGE: Ideal Client + Dream 100 Lite Worksheet — three layers + synthesis section.
+
+ON SCREEN: Tab's UVP at that point · The pattern she noticed · Three-column demographics/psychographics/where to find them · Participant ideal client statements during reflection · Transition slide.
+
+TRANSITION LINE: 'Three things locked. Now let's build the thing you're going to sell them.'
+
+
+
+
+
+IEI Agency  ·  Ideas Equal Income  ·  Tab Wolod  ·  ieiagency.com
+
+
+
+THE IEI BRAND SYSTEM — FACILITATOR SCRIPT
+
+MODULE 4: WHAT DO THEY NEED?
+
+Creating Your Offering — From Idea to Sellable Package
+
+Living Document — Keep editing until done
+
+TIMING: 50 minutes total  ·  Teaching (15 min)  ·  Lesson (15 min)  ·  Activity (15 min)  ·  Reflection (5 min)
+
+
+
+TRANSITION IN FROM MODULE 3: 'Three things locked. Your idea. Your brand. Your ideal client. Now — let's build the thing you're going to sell them.'
+
+
+
+SLIDE NOTES — Module 4
+
+Key moments that need to go on screen. Pull these into your slide deck.
+
+
+
+SLIDE: Opening slide: 'WHAT DO THEY NEED?' — large text, clean
+
+SLIDE: The evolution of Tab's UVP — show all three stages on one slide, one line at a time
+
+SLIDE: Stage 1: 'I help early-stage entrepreneurs build an online presence through Wix websites'
+
+SLIDE: Stage 2: 'I help early-stage entrepreneurs define their brand AND build an online presence — so they know what to say and have a place to say it'
+
+SLIDE: Stage 3: 'I help early-stage entrepreneurs and founders turn scattered ideas into clear brands, structured offers, and sustainable revenue'
+
+SLIDE: The 6-part offer framework — one element at a time as you teach it
+
+SLIDE: The offer template: 'I offer [NAME] — a [FORMAT] for [WHO], that helps them [PROBLEM], by delivering [DELIVERABLES], so they can [OUTCOME]. Investment: $[PRICE].'
+
+SLIDE: Pressure test questions — put these on screen during the activity
+
+
+
+PART 1: TEACHING — Tab's Narrative
+
+TIMING: 15 minutes
+
+PURPOSE: Tab shares how her business evolved — from websites to brand consultation to a packaged system. This demonstrates exactly what it looks like when you realize your offering is bigger than you thought — and how you package it. Participants see the UVP evolving in real time.
+
+
+
+[ TAB SAYS ]
+
+Alright. Let me tell you what happened next.
+
+Because this is the part of my story where I realized something important.
+
+What I was selling wasn't what I thought I was selling.
+
+
+
+I started out doing websites. You know this.
+
+But every time I sat down with a client to build their site —
+
+I found myself doing something else first.
+
+I was asking questions. A lot of questions.
+
+Who are you? What do you do? Who do you serve? What makes you different?
+
+I was doing brand work before I even opened a template.
+
+And I started to realize — THAT was the real work.
+
+The website was just the container.
+
+The brand was the thing that went inside it.
+
+
+
+So I had a choice to make.
+
+I could keep treating the brand work as a freebie —
+
+something I just did as part of building the site.
+
+Or I could recognize it for what it was:
+
+a skill, a process, a system — and package it.
+
+
+
+And here's what I learned about packaging something.
+
+You can't just say 'I do brand strategy.'
+
+That's not an offering. That's a category.
+
+An offering is specific.
+
+It has a who. A what. A how. A deliverable. An outcome. A price.
+
+When you can describe all of those things clearly —
+
+you have something someone can say yes to.
+
+Before that — you just have an idea.
+
+
+
+And so I started building the package.
+
+I needed it to be three things:
+
+Scalable — so I could do it with multiple clients without reinventing the wheel.
+
+Specific — so the client knew exactly what they were getting.
+
+Low cost to entry — so the right people could say yes without a huge barrier.
+
+
+
+And as I did that — my UVP started to evolve.
+
+Watch this.
+
+
+
+When I started, I said:
+
+'I help early-stage entrepreneurs build an online presence through Wix websites.'
+
+
+
+That's fine. That's true. But it only describes one part of what I was doing.
+
+
+
+Then I realized what I was actually doing and it became:
+
+'I help early-stage entrepreneurs define their brand AND build an online presence —
+
+so they know what to say and have a place to say it.'
+
+
+
+Better. Closer. But still not the full picture.
+
+
+
+Because as I kept going — as the brand intake became a consultation became a framework —
+
+the full picture became clear:
+
+'I help early-stage entrepreneurs and founders turn scattered ideas into clear brands,
+
+structured offers, and sustainable revenue — so their ideas actually become income.'
+
+
+
+That's IEI.
+
+Ideas Equal Income.
+
+And it didn't start there. It evolved there.
+
+Because I kept looking at what I was actually doing —
+
+and asking: what is this, really? Who is it for? What do they get?
+
+And I packaged the answer.
+
+
+
+That's what you're about to do.
+
+You're going to look at your brilliant idea, your brand, your ideal client —
+
+and you're going to build the package.
+
+The thing someone can say yes to. Today.
+
+
+
+[ FACILITATOR NOTE ]
+
+Reveal the three UVP stages on screen one at a time as you say them. Pause between each one. Let the evolution land.
+
+The three packaging criteria — scalable, specific, low cost to entry — are worth writing on the whiteboard. Ask the class: 'Which of these is hardest for you right now?' Take a quick show of hands or chat response.
+
+Key line to land: 'You can't just say I do brand strategy. That's not an offering. That's a category.' This is the moment people realize why their current pitch isn't working. Let it sit.
+
+End the teaching section by connecting back to them: 'That's what YOU are about to do. You're going to look at what you've been doing and package it into something someone can say yes to today.'
+
+
+
+[ ON SCREEN DURING TEACHING ]
+
+Step 1 — The realization moment. Put this on screen:
+
+
+
+'The website was just the container.
+
+The brand was the thing that went inside it.'
+
+
+
+Step 2 — The three packaging criteria. Write on whiteboard or reveal on slide:
+
+
+
+A great offering is:
+
+1. SCALABLE — repeatable, not reinvented every time
+
+2. SPECIFIC — the client knows exactly what they're getting
+
+3. LOW COST TO ENTRY — the right people can say yes
+
+
+
+Step 3 — The UVP evolution. Reveal one line at a time:
+
+
+
+STAGE 1: 'I help early-stage entrepreneurs build an online presence through Wix websites.'
+
+STAGE 2: 'I help early-stage entrepreneurs define their brand AND build an online presence
+
+           — so they know what to say and have a place to say it.'
+
+STAGE 3: 'I help early-stage entrepreneurs and founders turn scattered ideas into clear brands,
+
+           structured offers, and sustainable revenue — so their ideas actually become income.'
+
+
+
+
+
+PART 2: LESSON — What Goes Into an Offering
+
+TIMING: 15 minutes
+
+PURPOSE: Teach the 6-part offering framework simply and clearly. Every participant should be able to name all 6 parts before they start the activity. This is not about having a perfect offer — it is about having a defined one.
+
+
+
+[ TAB SAYS ]
+
+Here's what most people do when they try to create an offering.
+
+They name it something cool. They pick a price. And they stop there.
+
+And then they wonder why nobody buys it.
+
+
+
+Because naming and pricing is not an offering.
+
+An offering is a complete picture.
+
+It answers six questions. And ALL six need to be answered.
+
+If even one is missing — your offer is leaking.
+
+
+
+Here are the six:
+
+
+
+ONE — WHO is it for?
+
+Not everyone. The specific person from Module 3.
+
+Your offer should speak directly to that one person.
+
+If someone reads your offer description and says 'that's me' — you've got it right.
+
+
+
+TWO — What PROBLEM does it solve?
+
+The specific pain. The thing keeping your ideal client up at night.
+
+Not the general frustration — the exact problem.
+
+If you can name their problem better than they can — they will trust you instantly.
+
+
+
+THREE — What IS it?
+
+Define it clearly. Is it a session? A package? A workshop? A product?
+
+How long does it take? How is it delivered?
+
+One-on-one or group? Virtual or in person?
+
+Clarity here is what makes someone feel safe saying yes.
+
+
+
+FOUR — What does it take to CREATE it?
+
+This one is for you, not the client.
+
+What time, tools, materials, or preparation do you need?
+
+This is how you know if the price makes sense.
+
+If it takes you 10 hours to deliver and you charge $97 — we have a problem.
+
+Know your inputs before you set your price.
+
+
+
+FIVE — What are the DELIVERABLES?
+
+What does the client actually walk away with?
+
+List everything. The session, the document, the recording, the follow-up.
+
+The more concrete the deliverables — the easier it is to sell.
+
+'You will walk away with X, Y, and Z' is far more powerful than 'you will feel better.'
+
+
+
+SIX — What is the OUTCOME?
+
+What changes for them after this offering?
+
+This is the transformation. The before and after.
+
+And this is what you lead with — not the features, the outcome.
+
+People don't buy the gym membership — they buy the version of themselves that goes to the gym.
+
+
+
+Six questions. When you can answer all six — you have an offering.
+
+Not just an idea. Not just a price.
+
+Something real. Something someone can say yes to.
+
+Now — before we get to the price. I need to talk to you about how to VALUE what you’re building.
+
+Because most people price their offering based on time. How long it takes. How much work goes in.
+
+That’s not how value works.
+
+Value-based pricing means you price based on the TRANSFORMATION. The outcome. What changes for your client after working with you.
+
+Not the hour. Not the session. Not the document. The result of all of it.
+
+And sometimes — the most valuable thing you give someone isn’t a number. It’s a system.
+
+Let me share something that happened recently. And I want this on the screen because it’s the best example I have.
+
+
+
+[ ON SCREEN — TESTIMONIAL SLIDE ]
+
+Put this on screen as a quote slide. Read it out loud. Pause after.
+
+
+
+“Tab, you didn’t get me everything that I thought I would get in these few months.
+
+But you helped me to understand and walked me through everything that it took.
+
+And I’ve been able to generate a few thousand dollars.
+
+And now I know that I can continue generating thousands of dollars.”
+
+— IEI Client, after 90 days of brand coaching
+
+
+
+[ TAB SAYS — UNPACKING THE TESTIMONIAL ]
+
+Read that again.
+
+She didn’t get the huge number she was expecting.
+
+But she got something worth more than the number she expected.
+
+She got the SYSTEM.
+
+She understands what it takes. She generated a few thousand dollars. And she knows she can keep generating thousands.
+
+Not because I gave her a number. Because I gave her a system.
+
+That is value-based pricing.
+
+Your price should reflect what the client walks away OWNING. Not just what they experience in the session.
+
+If your offering gives someone a system they can use for the rest of their business life — what is THAT worth?
+
+That’s the question you answer when you set your price.
+
+Not ‘how long will this take me’ — but ‘what will this give them that they can keep?’
+
+
+
+[ FACILITATOR NOTE — TESTIMONIAL MOMENT ]
+
+Read the testimonial out loud slowly. Don’t rush it. Pause after “Now I know that I can continue generating thousands of dollars.”
+
+Then ask the room: “What did she actually buy? The sessions? The documents? Or the system?” Let them answer.
+
+This moment reframes how people think about pricing — especially those who are undercharging because they are pricing their time instead of their transformation.
+
+Also add to SLIDE NOTES: The testimonial needs its own clean quote slide — large text, simple background, attribution at the bottom. This is one of the most important slides in the whole deck.
+
+
+
+Let’s build yours.
+
+
+
+[ CASE STUDY — TAB’S CURRENT INTRODUCTORY OFFER ]
+
+Before participants build their own — Tab walks through her current introductory offer as a live example of all 6 parts completed. This shows exactly what a finished offering looks like in the real world.
+
+
+
+[ TAB SAYS — LIVE EXAMPLE ]
+
+Before you build yours — let me show you what this looks like when it’s done.
+
+This is my current introductory offer. It’s called the Idea to Income Diagnostic.
+
+Let me walk you through all six parts.
+
+
+
+ONE — WHO is it for?
+
+Early-stage founders and entrepreneurs who have a brilliant idea but can’t package it, price it, or explain it.
+
+TWO — What PROBLEM does it solve?
+
+They’re scattered — no clear brand, no defined offer, no path to revenue. They know what they want to do but can’t make it make sense.
+
+THREE — What IS it?
+
+A 90-minute 1:1 virtual session. I take them through my full brand and offer framework. It’s structured, specific, and results in a deliverable the same day.
+
+FOUR — What are my INPUTS?
+
+My time (90 min session + 30 min prep and doc creation). My framework. My intake form. My Summary Document template.
+
+FIVE — What are the DELIVERABLES?
+
+A 1-2 page Diagnostic Summary Document — their brand concept, defined audience, first offer structured and priced, and 3 clear action steps. They walk away with a document they can build everything from.
+
+SIX — What is the OUTCOME?
+
+They stop guessing. They walk away knowing exactly who they are, what they’re selling, who it’s for, and what to do next. The scattered feeling is gone. They have a foundation.
+
+PRICE: $250.
+
+
+
+Six parts. All answered. Clear. Specific. Someone can say yes to that today.
+
+If you want to go deeper after today — this is your next step. The link is in the chat right now.
+
+https://calendly.com/ideasequalincome/idea-to-income-diagnostic
+
+Now — let’s build yours.
+
+
+
+[ FACILITATOR NOTE — CASE STUDY MOMENT ]
+
+Put the 6-part breakdown of the Diagnostic on screen as you walk through it. One part at a time. This is the visual anchor for the whole lesson.
+
+Drop the Calendly link in the chat when you say it out loud. Say it naturally — not as a sales pitch. This is an example AND an invitation. If someone in the room wants to go deeper, the door is open.
+
+Also add to the SLIDE NOTES: Show the Diagnostic as a completed 6-part example on screen — each part labeled and filled in. Then show the Calendly link. Let it sit for 10 seconds before moving to the activity.
+
+
+
+[ FACILITATOR NOTE ]
+
+Point 4 — what it takes to create it — often surprises people. They haven't thought about their own time as an input. Spend a moment here: 'Before you set your price — know what it costs YOU. Your time, your energy, your prep. That's the floor.'
+
+The gym membership line usually lands well. If it gets a reaction — let it breathe. Then move on.
+
+Before the activity, check in: 'Any questions on the six parts? Anything that's already tripping you up?' Take 60 seconds max. If something needs more explanation — 'hold that, let's see if it answers itself once you start filling it in.'
+
+Coaching line for the lesson close: 'Your offering doesn't have to be perfect. It has to be defined. A defined imperfect offer beats an undefined perfect idea every single time.'
+
+
+
+[ ON SCREEN DURING LESSON ]
+
+Build the 6-part framework on screen — reveal one at a time as you teach:
+
+
+
+THE 6-PART OFFERING FRAMEWORK
+
+─────────────────────────────────────────
+
+1. WHO  — Who is it specifically for?
+
+2. PROBLEM  — What specific pain does it solve?
+
+3. WHAT  — What is it? Format, length, delivery method?
+
+4. INPUTS  — What does it take YOU to create and deliver?
+
+5. DELIVERABLES  — What does the client walk away with?
+
+6. OUTCOME  — What changes for them? The transformation.
+
+
+
+After teaching all six — put the offer template on screen:
+
+
+
+MY OFFER:
+
+"I offer [NAME] — a [FORMAT] for [WHO],
+
+ that helps them [PROBLEM],
+
+ by delivering [DELIVERABLES],
+
+ so they can [OUTCOME].
+
+ Investment: $[PRICE]."
+
+
+
+
+
+PART 3: ACTIVITY — Build Your Offering
+
+TIMING: 15 minutes  ·  Individual work (12 min)  ·  AI layer (3 min)
+
+PURPOSE: Participants complete the Module 4 worksheet — building their offering using all 6 parts. The worksheet is the Idea to Income Diagnostic Part 3 adapted into a fill-in format. Long math first, AI polish after.
+
+
+
+[ TAB SAYS — Launching the Activity ]
+
+Alright. Open your Module 4 worksheet — 'What Do They Need?'
+
+You're building your offering right now. All six parts.
+
+Start with who it's for and the problem it solves — those should be easy because you locked them in Module 3.
+
+The harder parts are the deliverables and the price. Push through those.
+
+Don't leave the price blank. Write something down. We can adjust — but you need a number.
+
+You have 12 minutes. Go.
+
+
+
+[ FACILITATOR NOTE — During Activity ]
+
+Start a 12-minute timer on screen.
+
+The most common sticking points — and how to coach through them:
+
+
+
+STUCK ON WHAT IT IS: 'What's the simplest version? If you stripped everything away — what are you actually doing? Start there. One thing.'
+
+STUCK ON DELIVERABLES: 'What would you hand someone at the end? A document? A recording? A plan? A product? List every single thing they walk away with — even the small stuff.'
+
+STUCK ON PRICE: 'Don't think about what feels comfortable. Think about what the outcome is worth. Then think about what it costs you to deliver it. Your price lives somewhere between those two numbers.'
+
+TOO MANY OFFERS: 'Which one could you deliver this week if someone said yes right now? That's the one. Pick it. We'll build the rest later.'
+
+'IS THIS A REAL BUSINESS?': 'If someone has the problem and would pay to solve it — it's a real business. We'll test it in the next module.'
+
+
+
+At 9 minutes: 'Three more minutes — make sure you've filled in the price and the outcome. Those are the most important lines on the page.'
+
+At 12 minutes: 'Pens down. If you want to run the AI prompts — you have 3 minutes. They're on the AI Prompts page of your worksheet.'
+
+
+
+[ AI PROMPTS — Optional (in worksheet) ]
+
+These are already on the Module 4 AI Prompts page. Remind participants:
+
+Prompt 1: Full structured offer description
+
+Prompt 2: Offer copy in their brand voice
+
+Prompt 3: 30-second pitch version
+
+Prompt 4: Objection handling
+
+Tell them: 'You don't need all four right now. If you only have 3 minutes — do Prompt 1. That gives you the structured description you can work from.'
+
+
+
+
+
+PART 4: REFLECTION — Locking in the Offer
+
+TIMING: 5 minutes  ·  Full group back together
+
+
+
+[ TAB SAYS ]
+
+Come back together.
+
+I want to hear from a few people.
+
+Tell me — what is your offering? Say it out loud using the template.
+
+'I offer [name] — a [format] for [who], that helps them [problem], by delivering [deliverables], so they can [outcome]. Investment: $[price].'
+
+Who's got one? Unmute or drop it in the chat.
+
+
+
+(Take 2-3 shares. Repeat their offer back to them. Clean up the language as you hear it. This is live coaching.)
+
+
+
+Look at what just happened.
+
+You walked in today with an idea.
+
+You now have a brand. An ideal client. And an offering.
+
+That's not nothing. That's a business.
+
+
+
+Now — the last thing we need is the secret sauce.
+
+How do you take all of this and actually get it in front of people?
+
+How do you weave your story, your brand, your offer into content that converts?
+
+That's Module 5. And that's where it all comes together.
+
+Take a break. Grab some food. I'll be here if you want a quick 1:1.
+
+Back in 20.
+
+
+
+[ FACILITATOR NOTE ]
+
+This is your live coaching moment. When someone reads their offer — repeat it back, cleaned up. 'So what I heard is: you offer X for Y person who struggles with Z. They walk away with A and B. For $C. Is that right?' Then ask the room: 'Does that land? Is that clear?' Let the group validate each other.
+
+If someone's offer is still vague — gently push one more time: 'What do they walk away with? Name one concrete thing.' Get them to ONE deliverable if nothing else.
+
+Common breakthrough moment: someone realizes their price is too low once they say it out loud. Don't fix it for them — ask: 'Does that feel worth your time?' Let them answer.
+
+Use the break transition intentionally. 'Module 5 is where it all comes together' creates anticipation. Say it like a promise.
+
+
+
+[ ON SCREEN — Reflection and Break Transition ]
+
+During reflection — put the offer template on screen and fill in as people share:
+
+
+
+I offer _______________________
+
+For _______________________
+
+That helps them _______________________
+
+They walk away with _______________________
+
+So they can _______________________
+
+Investment: $_______________________
+
+
+
+Break transition slide — put this up as you close:
+
+
+
+YOU NOW HAVE:
+
+✦ Your One Brilliant Idea — locked
+
+✦ Your Brand Identity — defined
+
+✦ Your Ideal Client — named
+
+✦ Your Offering — built
+
+
+
+NEXT AFTER BREAK: MODULE 5 — THE SECRET SAUCE
+
+How to weave it all together into content that converts.
+
+
+
+
+
+MODULE 4 — QUICK REFERENCE
+
+
+
+TOTAL TIME: 50 minutes + 20-minute break after
+
+
+
+TEACHING — Tab's narrative (15 min) · Realized the brand work was the real work · The choice to package it · Three criteria: scalable, specific, low cost to entry · UVP evolution shown in 3 stages
+
+LESSON — The 6-part offering framework (15 min) · Who · Problem · What it is · Inputs (for you) · Deliverables · Outcome · The offer template at the end
+
+ACTIVITY — Module 4 worksheet (12 min) · All 6 parts · No skipping the price · Timer on screen · Coaching lines for each sticking point
+
+AI LAYER — Optional (3 min) · 4 prompts on AI Prompts page · Recommend Prompt 1 if short on time
+
+REFLECTION (5 min) · 2-3 people say their offer out loud using the template · Live coaching on language · Break transition
+
+
+
+WORKSHEET: Module 4 — What Do They Need? (in the combined worksheet document)
+
+ON SCREEN: The realization moment · 3 packaging criteria · UVP evolution (3 stages) · 6-part framework · Offer template · Progress checklist · Break transition slide.
+
+BREAK: 20 minutes after Module 4. Tab available for 1:1 questions during break.
+
+TRANSITION LINE: 'Module 5 is where it all comes together. How to take everything you just built and get it in front of the right people.'
+
+
+
+
+
+IEI Agency  ·  Ideas Equal Income  ·  Tab Wolod  ·  ieiagency.com  ·  twolod@ieiagency.com
+
+
+
+THE IEI BRAND SYSTEM — FACILITATOR SCRIPT
+
+MODULE 5: THE NARRATIVE
+
+Your Story Is Your Strategy — Build It, Own It, Use It
+
+Living Document — Keep editing until done
+
+TIMING: 55 minutes total  ·  Teaching / Reveal (20 min)  ·  Lesson (15 min)  ·  Activity (15 min)  ·  Reflection (5 min)
+
+
+
+TRANSITION IN FROM BREAK: 'Welcome back. This is the module I've been building toward the whole day. Because everything I'm about to teach you — you've already seen. You just didn't know you were watching it happen.'
+
+
+
+SLIDE NOTES — Module 5
+
+Key moments that need to go on screen. Pull these into your slide deck.
+
+
+
+SLIDE: Opening slide: 'THE NARRATIVE — Your story is your strategy.'
+
+SLIDE: The reveal slide: Tab's 7-part narrative pulled from across the course — show each part with a one-line summary of what she shared
+
+SLIDE: Origin: 'Left corporate 2016. 11 years. Had a deep longing to do something purposeful.'
+
+SLIDE: Why: 'Impact. Income. Generational wealth. Every idea deserves a chance.'
+
+SLIDE: The Struggle: 'YouTube university. Free downloads. High-end programs. Still took longer than it should.'
+
+SLIDE: The Turning Point: 'JD said: Tab, you know my brand better than I do.'
+
+SLIDE: Who I Serve: 'Early-stage founders. Scattered. Good at what they do but can't package it.'
+
+SLIDE: How I Help: 'A system. Frameworks and questions that extract the clarity already inside you.'
+
+SLIDE: The Invitation: 'The Idea to Income Diagnostic. Your next step.'
+
+SLIDE: The 7-part narrative framework — one part at a time as you teach it
+
+SLIDE: The 3-part simplified version for the activity: Origin/Why/Struggle → Who You Serve & Why → Why Your Offer Is The Solution
+
+SLIDE: The content map: AWARENESS posts · TRUST posts · CONVERT posts — with percentages (50/30/20)
+
+SLIDE: The 5-post content map table — fill in live with participants during activity
+
+
+
+PART 1: TEACHING — The Reveal
+
+TIMING: 20 minutes  ·  This is the payoff of everything they've seen all day.
+
+PURPOSE: Tab reveals that she has been building her narrative in front of them all day — and they didn't realize it. This is the most powerful teaching moment in the course because it shows the concept in action before explaining it. Participants see narrative as a living, working tool — not a static bio.
+
+
+
+[ TAB SAYS ]
+
+Welcome back.
+
+I want to ask you something.
+
+What do you know about me right now that you didn't know this morning?
+
+
+
+(Pause. Let people answer in the chat or out loud.)
+
+
+
+You know I left corporate in 2016 after eleven years.
+
+You know I had a deep longing to do something purposeful — to make an impact, build income, create generational wealth.
+
+You know I had side hustles. A cleaning company. MLM. An entertainment company. A radio show.
+
+You know that 'Ideas Equal Income' kept ringing and wouldn't stop.
+
+You know I went to YouTube university and downloaded every free resource I could find.
+
+And you know it still took longer than it should have.
+
+
+
+You know about JD. And the Dummy website. And the blank spaces.
+
+And the moment she said: 'Tab, you know my brand better than I do.'
+
+
+
+You know who I serve — early-stage founders who are scattered. Good at what they do but can't package it.
+
+You know how I help — through a system. A series of frameworks and questions that extract the clarity already inside you.
+
+And you know my offer — the Idea to Income Diagnostic. $250. 90 minutes. Everything they need to stop guessing.
+
+
+
+That's a lot.
+
+And here's what I need you to understand:
+
+I didn't give you a bio.
+
+I didn't hand you a resume.
+
+I didn't read you a LinkedIn profile.
+
+
+
+I told you my narrative.
+
+
+
+And piece by piece — across every single module today — you were watching me build it.
+
+The origin. The why. The struggle. The turning point. Who I serve. How I help. The invitation.
+
+Every module was a chapter.
+
+And now you know me. You trust me. And you understand what I do and why it matters.
+
+
+
+That's what a narrative does.
+
+It doesn't just tell people what you do.
+
+It makes them feel like they know you.
+
+And people do business with people they know.
+
+
+
+Now it's your turn.
+
+We're going to build yours.
+
+And I promise you — everything you need is already in this room.
+
+You've been answering the questions all day.
+
+We just have to put them together.
+
+
+
+[ FACILITATOR NOTE ]
+
+The reveal moment is everything. Take your time with it. Say each piece of the narrative slowly — origin, why, struggle, turning point, who you serve, how you help, the invitation. Let people sit with the recognition that they've been watching a narrative build all day.
+
+Watch the chat here. People will have reactions — 'I didn't even realize.' 'That's exactly what I want to do.' 'This is clicking.' Acknowledge them.
+
+The line 'I didn't give you a bio. I told you my narrative.' is the conceptual pivot. Let it land before you move on.
+
+End this section with genuine warmth — 'everything you need is already in this room.' They have been doing the work. This module is the synthesis.
+
+
+
+[ ON SCREEN — THE REVEAL SLIDE ]
+
+Put Tab's full narrative on screen — one line per part, revealed one at a time as she names each one:
+
+
+
+TAB'S NARRATIVE — BUILT ACROSS THIS COURSE
+
+─────────────────────────────────────────────────────
+
+ORIGIN: Left corporate 2016. 11 years. Deep longing to do something purposeful.
+
+WHY: Impact. Income. Generational wealth. Every idea deserves a chance.
+
+THE STRUGGLE: YouTube university. Downloads. Programs. Still took longer than it should.
+
+THE TURNING POINT: I needed people to know that a brand was deeper than a website, it required thought a system, understanding their brand
+
+WHO I SERVE: Early-stage founders. Scattered. Good at what they do. Can't package it.
+
+HOW I HELP: A system. Frameworks and questions that extract the clarity inside you.
+
+THE INVITATION: The Idea to Income Diagnostic. $250. 90 minutes. Stop guessing.
+
+
+
+
+
+PART 2: LESSON — The 7 Parts of a Brand Narrative
+
+TIMING: 15 minutes
+
+PURPOSE: Teach the 7-part narrative framework using Tab's story as the live example for each part. Then show how narrative connects directly to content — every post is a piece of the story. Introduce the content map: Awareness, Trust, Convert.
+
+
+
+[ TAB SAYS ]
+
+Here's the framework. Seven parts. You've seen all seven in action today.
+
+Now let me name them so you can build yours.
+
+
+
+Part one — THE ORIGIN.
+
+How you started. What happened. The moment or season that led you here.
+
+Not your whole life story — the part that connects to what you do now.
+
+For me: leaving corporate, the side hustles, the deep longing, Ideas Equal Income.
+
+
+
+Part two — THE WHY.
+
+Why this matters to you personally.
+
+What would disappoint you if this business didn't exist?
+
+For me: impact, income, generational wealth. Believing every idea deserves a chance.
+
+
+
+Part three — THE STRUGGLE.
+
+What you went through to figure it out.
+
+The hard part. The long road. What didn't work before it did.
+
+This is the part that makes people trust you — because you lived it.
+
+For me: YouTube university. The downloads. The programs. Taking longer than it should.
+
+
+
+Part four — THE TURNING POINT.
+
+The moment things clicked. The realization. The shift.
+
+For me: people needed brands, not websites or logos and they needed a path or framework to help them get their ideas to income. 
+
+
+
+Part five — WHO YOU SERVE.
+
+Who you feel called to serve — and WHY you feel called to THEM.
+
+This is the connection between your story and their story.
+
+For me: early-stage founders who are scattered. Good at what they do. Can't package it.
+
+I serve them because I WAS them.
+
+
+
+Part six — HOW YOU HELP.
+
+Your secret sauce. Your method. The specific way you solve the problem.
+
+Not just what you do — the HOW that makes you different.
+
+For me: a system. Frameworks and questions that extract the clarity already inside you.
+
+
+
+Part seven — THE INVITATION.
+
+Why your offer is the answer to their specific pain.
+
+The natural next step that flows from everything above.
+
+For me: the Idea to Income Diagnostic. Because once I know your story, your audience, and your offer — I can give you the roadmap.
+
+
+
+Seven parts. That's the narrative.
+
+And here's the secret: you don't tell all seven in every piece of content.
+
+You pick one. You tell that chapter.
+
+And over time — post by post, conversation by conversation — people piece it together.
+
+They come to know you. Trust you. And when the time is right — they buy.
+
+
+
+HOW NARRATIVE CONNECTS TO CONTENT
+
+
+
+[ TAB SAYS — CONTENT CONNECTION ]
+
+Here's how the narrative becomes content.
+
+Every post you create lives in one of three buckets.
+
+
+
+AWARENESS posts — these get new eyes on your brand.
+
+You're teaching something. Sharing a truth. Naming a pain point.
+
+You're not selling — you're showing up. Being useful. Being real.
+
+These posts are chapters from your origin, your why, your struggle.
+
+
+
+TRUST posts — these deepen the relationship.
+
+Testimonials. Behind the scenes. Client wins. Your turning point story.
+
+These posts say: I've been where you are. And here's what happened when I figured it out.
+
+
+
+CONVERT posts — these ask for the action.
+
+Your offer. Your CTA. Your booking link.
+
+These posts come from your invitation — the natural next step.
+
+
+
+The ratio I recommend: 50% Awareness. 30% Trust. 20% Convert.
+
+If you're posting all day and nothing is converting — you're probably heavy on Convert and light on Awareness and Trust.
+
+You haven't told enough of the story yet.
+
+The narrative builds the relationship. The relationship makes the sale.
+
+
+
+[ FACILITATOR NOTE ]
+
+After teaching the 7 parts — ask: 'Which part of your narrative do you already know? Which one is fuzzy?' Take 2-3 quick answers. This warms them up for the activity.
+
+The content ratio (50/30/20) is simple and memorable. Write it on the whiteboard. People will take a photo of it.
+
+Key coaching line: 'You don't tell all seven in every post. You pick one chapter. Over time people piece together the whole story — and they come to know you.' This removes the pressure of 'saying everything' in one piece of content.
+
+Before launching the activity: 'For the activity we're going to simplify this into 3 parts. Because 7 is a lot to write at once. But all 3 will contain all 7 — because the parts naturally group together.'
+
+
+
+[ ON SCREEN DURING LESSON ]
+
+The 7 parts — reveal one at a time with Tab's example next to each:
+
+
+
+1. ORIGIN — How you started / the moment that led you here
+
+2. THE WHY — Why this matters to you personally
+
+3. THE STRUGGLE — What you went through before it clicked
+
+4. THE TURNING POINT — The moment everything shifted
+
+5. WHO YOU SERVE — Who you feel called to and why
+
+6. HOW YOU HELP — Your method, your secret sauce
+
+7. THE INVITATION — Why your offer is the answer
+
+
+
+Content map — put this on screen and leave it up through the activity:
+
+
+
+AWARENESS (50%) — Teach / Share truth / Name the pain
+
+           Posts from: Origin, Why, Struggle
+
+
+
+TRUST (30%) — Testimonials / Behind the scenes / Turning point stories
+
+           Posts from: Turning Point, Who You Serve
+
+
+
+CONVERT (20%) — Your offer / CTA / Booking link
+
+           Posts from: How You Help, The Invitation
+
+
+
+
+
+PART 3: ACTIVITY — Write Your Narrative + Map Your Content
+
+TIMING: 15 minutes  ·  Narrative writing (10 min)  ·  Content map (5 min)
+
+PURPOSE: Participants write their 3-part narrative and map their first 5 pieces of content. This is the synthesis of everything from Modules 1-4. By the end of this activity every participant has a working narrative and a content plan they can execute today.
+
+
+
+[ TAB SAYS — Launching the Activity ]
+
+Alright. Open your workbook to the narrative section.
+
+We're going to write your narrative in 3 parts.
+
+I've simplified the 7 down to 3 — but all 7 are in there.
+
+
+
+Part 1 is your origin, your why, and your struggle — all together.
+
+How you started. Why it matters. What you went through to figure it out.
+
+
+
+Part 2 is who you serve and why you feel called to them.
+
+The connection between your story and their story.
+
+
+
+Part 3 is why your offer is the solution.
+
+Why what you built is the answer to their specific pain.
+
+
+
+You have 10 minutes for the narrative. Write like you're talking to a friend.
+
+Messy is perfect. We polish later.
+
+Then 5 minutes to map your first 5 pieces of content.
+
+Go.
+
+
+
+NARRATIVE WORKSHEET — Embedded Reference
+
+(This is the worksheet participants complete. Also available as a separate handout in the worksheet document.)
+
+
+
+MY BRAND NARRATIVE
+
+Name: ___________________________  Brilliant Idea: ___________________________
+
+Instructions: Write in your own voice. Raw and real. These are prompts — not a script. Answer the questions that feel most natural first. You can come back and fill in the gaps.
+
+
+
+PART 1: ORIGIN + WHY + STRUGGLE
+
+How did you get here? Why does this matter to you? What did you go through to figure it out?
+
+Prompts: How did you start? What were you doing before this? What kept pulling you toward this idea? What was hard? What did you try that didn't work? What would disappoint you if this business didn't exist?
+
+_______________________________________________
+
+_______________________________________________
+
+_______________________________________________
+
+_______________________________________________
+
+
+
+PART 2: WHO YOU SERVE + WHY YOU FEEL CALLED TO THEM
+
+Who is the specific person you're here to help — and what connects YOUR story to THEIR struggle?
+
+Prompts: Who do you see yourself in? Who would you have been the perfect help for earlier in your life? What is their pain and how does your story make you the right person to solve it?
+
+_______________________________________________
+
+_______________________________________________
+
+_______________________________________________
+
+_______________________________________________
+
+
+
+PART 3: WHY YOUR OFFER IS THE SOLUTION
+
+Why is what you built the answer to their specific problem? What makes your method, your approach, your offering the thing that works?
+
+Prompts: What does your offering do that other options don't? What's the transformation? Why you — specifically — and not someone else?
+
+_______________________________________________
+
+_______________________________________________
+
+_______________________________________________
+
+_______________________________________________
+
+
+
+MY CONTENT MAP — First 5 Posts
+
+Give every post a job. Pull from your narrative — pick one chapter per post. Every post should point toward your offer.
+
+
+
+POST 1  ·  AWARENESS
+
+Topic / Story chapter: _______________________________________________
+
+Platform: _______________  Format: _______________  Points to offer: _______________
+
+POST 2  ·  AWARENESS
+
+Topic / Story chapter: _______________________________________________
+
+Platform: _______________  Format: _______________  Points to offer: _______________
+
+POST 3  ·  TRUST
+
+Topic / Story chapter: _______________________________________________
+
+Platform: _______________  Format: _______________  Points to offer: _______________
+
+POST 4  ·  TRUST
+
+Topic / Story chapter: _______________________________________________
+
+Platform: _______________  Format: _______________  Points to offer: _______________
+
+POST 5  ·  CONVERT
+
+Topic / Story chapter: _______________________________________________
+
+Platform: _______________  Format: _______________  Points to offer: _______________
+
+
+
+[ FACILITATOR NOTE — During Activity ]
+
+Start a 10-minute timer for the narrative. Then a 5-minute timer for the content map.
+
+Circulate in the chat during narrative writing. Most people will struggle with Part 1 — the origin and struggle. Coaching line: 'Don't try to make it pretty. Just tell me what happened. Start with the first thing that comes to mind and keep writing.'
+
+During the content map — the most common sticking point is Post 5 (Convert). Coaching line: 'Your convert post is simple — describe your offer, name the outcome, give the link. That's it. You don't have to be clever. Just be clear.'
+
+If someone finishes early — ask them to read their Part 1 narrative back to themselves and circle the most powerful sentence. That sentence is their hook line for content.
+
+
+
+[ AI PROMPTS — Optional ]
+
+Put these in the chat for participants who want to polish their narrative:
+
+
+
+PROMPT 1: Turn my raw narrative into a compelling brand story that shows transformation, connects emotionally, and positions my brand as the solution. Keep it in my voice — real, personal, not corporate. [PASTE your 3-part narrative]
+
+
+
+PROMPT 2: Pull the single most powerful sentence from my narrative that I could use as a hook for social media content. [PASTE your Part 1 narrative]
+
+
+
+PROMPT 3: Turn my narrative into a LinkedIn caption that feels real and personal and ends with a clear call to action. [PASTE your full narrative]
+
+
+
+PROMPT 4: Based on my narrative and my offer, write 5 social media post ideas — 2 awareness, 2 trust, 1 convert. Give me a topic, a hook line, and a CTA for each one. [PASTE narrative + offer statement]
+
+
+
+
+
+PART 4: REFLECTION — Owning Your Narrative
+
+TIMING: 5 minutes  ·  Full group back together
+
+
+
+[ TAB SAYS ]
+
+Come back.
+
+I want to hear from a few people.
+
+Read me your Part 1 — your origin, your why, your struggle.
+
+Just a few sentences. However far you got. Don't overthink it.
+
+
+
+(Take 2-3 shares. React genuinely. Pull out what's powerful. Name it.)
+
+
+
+Listen to what just happened in this room.
+
+You just heard three people's stories — and I guarantee you felt something.
+
+You connected. You recognized yourself in someone else's struggle.
+
+You leaned in.
+
+
+
+That's what narrative does.
+
+It doesn't just communicate. It connects.
+
+And connection is what turns a stranger into a follower, a follower into a client, a client into an advocate.
+
+
+
+Your narrative is not separate from your brand.
+
+It IS your brand.
+
+It's how you position yourself. How you talk to your audience. How you present your offer.
+
+Every piece of content you create from this day forward — comes from this.
+
+
+
+One more module.
+
+We're going to talk about how to get this in front of people.
+
+How to take everything you built today and actually launch it.
+
+That's Module 6. Let's finish strong.
+
+
+
+[ FACILITATOR NOTE ]
+
+When people share their narrative — reflect back what you heard. 'What I heard in that was...' Name the most powerful moment specifically. This validates them and models how to recognize a strong narrative element.
+
+The line 'Connection is what turns a stranger into a follower, a follower into a client, a client into an advocate' — write it on the whiteboard. People will screenshot it.
+
+Do NOT rush the transition to Module 6. Let this moment breathe. People have just done something vulnerable — they wrote their real story and read it out loud. Honor that before moving on.
+
+
+
+[ ON SCREEN — Reflection and Transition ]
+
+During reflection — put this on screen:
+
+
+
+YOUR NARRATIVE IS NOT SEPARATE FROM YOUR BRAND.
+
+IT IS YOUR BRAND.
+
+
+
+Transition slide for Module 6:
+
+
+
+YOU NOW HAVE:
+
+✦ Your One Brilliant Idea — locked
+
+✦ Your Brand Identity — defined
+
+✦ Your Ideal Client — named
+
+✦ Your Offering — built
+
+✦ Your Narrative — written
+
+
+
+LAST MODULE: HOW TO GET IT OUT THERE
+
+Module 6 — The Revenue Path
+
+
+
+
+
+MODULE 5 — QUICK REFERENCE
+
+
+
+TOTAL TIME: 55 minutes
+
+
+
+TEACHING / THE REVEAL (20 min) · Ask what they know about Tab · Walk through her full narrative piece by piece · Reveal that they've been watching it build all day · 'I didn't give you a bio. I told you my narrative.'
+
+LESSON — 7-part framework (15 min) · Each part named with Tab's example · How narrative connects to content · Awareness / Trust / Convert · The 50/30/20 ratio · Simplify to 3 parts for the activity
+
+ACTIVITY (15 min) · 3-part narrative written (10 min) · Content map — first 5 posts (5 min) · AI prompts optional · Coaching lines for sticking points
+
+REFLECTION (5 min) · 2-3 people share Part 1 · Reflect back what's powerful · 'Your narrative IS your brand' · Transition to Module 6
+
+
+
+WORKSHEET: Module 5 Narrative Worksheet — 3-part narrative + 5-post content map (build this as a separate worksheet using the embedded reference above).
+
+ON SCREEN: The reveal slide (Tab's full 7-part narrative) · 7-part framework with Tab's examples · Content map with 50/30/20 ratio · 'Your narrative IS your brand' · Transition checklist.
+
+TRANSITION LINE: 'One more module. Let's talk about how to get this in front of people. Module 6 — The Revenue Path.'
+
+
+
+
+
+IEI Agency  ·  Ideas Equal Income  ·  Tab Wolod  ·  ieiagency.com  ·  twolod@ieiagency.com
+
+
+
+THE IEI BRAND SYSTEM — FACILITATOR SCRIPT
+
+MODULE 6: CONTENT & COMMUNICATIONS
+
+The 5-Post Framework — Walk Out Ready to Post Today
+
+Living Document — Keep editing until done
+
+TIMING: 55 minutes total  ·  Teaching (15 min)  ·  Lesson (15 min)  ·  Activity — Write 5 Posts (20 min)  ·  Close (5 min)
+
+
+
+TRANSITION IN FROM MODULE 5: 'Your narrative is written. Your system is built. One module left — and this is the one that gets it in front of people. Let's talk about content.'
+
+
+
+SLIDE NOTES — Module 6
+
+Key moments that need to go on screen.
+
+
+
+SLIDE: Opening slide: 'CONTENT & COMMUNICATIONS — Walk out ready to post today.'
+
+SLIDE: The Brand System progress tracker — show ALL 6 modules lit up. This is the payoff slide.
+
+SLIDE: Tab's content example — show a real post she's published and label the parts: HOOK · NARRATIVE · AUDIENCE CONNECTION · OFFER · CTA
+
+SLIDE: The 5-post framework — one slide per post type, revealed as she teaches each one
+
+SLIDE: Platform tips — quick-reference chart: LinkedIn / Instagram / TikTok for each post type
+
+SLIDE: The master AI prompt — put the full prompt on screen so participants can copy it
+
+SLIDE: The Brand System complete — final slide showing all 6 locked in. 'You built this today.'
+
+SLIDE: Closing CTA: Idea to Income Diagnostic link + BRANDDAY code
+
+
+
+PART 1: TEACHING — How Tab Uses Content
+
+TIMING: 15 minutes
+
+PURPOSE: Tab shows how she actually uses content — not theoretically, but in practice. She pulls up a real post and shows how the Brand System lives inside it. Every element of what participants built today is present in the post. This is the proof that the system works.
+
+
+
+[ TAB SAYS ]
+
+Alright. Last module.
+
+And this is the one that makes everything real.
+
+Because everything you built today — the idea, the brand, the client, the offer, the narrative —
+
+none of it matters if nobody sees it.
+
+Content is how people find you.
+
+Content is how they come to know you.
+
+Content is how your brand system gets out into the world and starts working for you.
+
+
+
+Let me show you what I mean.
+
+I'm going to pull up a piece of content I've put out.
+
+And I want you to watch what happens when I break it down.
+
+Because I want you to see — the Brand System is in there.
+
+Every single piece we built today. In one post.
+
+
+
+(Pull up a real LinkedIn or Instagram post — Tab walks through it live.)
+
+
+
+See the hook? That's from my narrative. My origin story.
+
+See who I'm talking to? That's my ideal client. Their specific pain.
+
+See what I'm offering? That's my offer. Positioned in the context of their problem.
+
+See the call to action? That's the invitation. The next step.
+
+Every element of the Brand System — in one post.
+
+
+
+Here's the secret about content that most people miss.
+
+You don't need to create something new every time.
+
+You need to tell the same story — your story — in different ways.
+
+Different chapters. Different angles. Different formats.
+
+But always rooted in the same system.
+
+Because consistency is what builds trust. And trust is what builds income.
+
+
+
+And here's what I want you to walk out of this room with today.
+
+Not just an idea of what to post — but actual posts.
+
+Written. Done. Ready to go.
+
+That's what we're doing in the next 20 minutes.
+
+
+
+[ FACILITATOR NOTE ]
+
+Pull up a REAL post — LinkedIn or Instagram. Something you've actually published. Walk through it slowly and label each element out loud as you point to it on screen: hook, narrative, ideal client, offer connection, CTA.
+
+If you have engagement on the post — show the comments. Social proof in real time is more powerful than any teaching.
+
+Key line: 'You don't need to create something new every time. You need to tell the same story in different ways.' Write it on the whiteboard. People will screenshot it.
+
+The energy here should be momentum — they're close to the finish line. Keep it moving. This is the action module.
+
+
+
+[ ON SCREEN DURING TEACHING ]
+
+Step 1 — The Brand System progress tracker. ALL 6 modules lit up. Hold this for 10 seconds before speaking.
+
+
+
+THE IEI BRAND SYSTEM — COMPLETE
+
+✦ Module 1: One Brilliant Idea — LOCKED
+
+✦ Module 2: Who Are You? — DEFINED
+
+✦ Module 3: Who Are They? — NAMED
+
+✦ Module 4: What Do They Need? — BUILT
+
+✦ Module 5: The Narrative — WRITTEN
+
+✦ Module 6: Content & Communications — IN PROGRESS
+
+
+
+Step 2 — Tab's real post on screen. Label the parts live:
+
+
+
+HOOK ← from the narrative (origin / struggle / turning point)
+
+BODY ← speaks to the ideal client's pain
+
+CONNECTION ← why Tab is the right person
+
+OFFER ← positioned as the solution
+
+CTA ← the next step
+
+
+
+
+
+PART 2: LESSON — The 5-Post Content Framework
+
+TIMING: 15 minutes
+
+PURPOSE: Teach the 5-post framework — each post type with its job, what to write, and platform-specific tips for LinkedIn, Instagram, and TikTok. Participants leave with a clear template for every post they will ever write.
+
+
+
+[ TAB SAYS ]
+
+Here's the framework. Five posts. Each one has a job.
+
+And every single one connects back to the Brand System you built today.
+
+This is not random content. This is strategic storytelling.
+
+
+
+The ratio is simple: 50% Awareness. 30% Trust. 20% Convert.
+
+That's 2 Awareness posts. 2 Trust posts. 1 Convert post. Every week.
+
+You stay consistent. You build the relationship. When the time is right — they buy.
+
+Let me break down each one.
+
+
+
+THE 5-POST FRAMEWORK
+
+
+
+POST 1 — AWARENESS — Teach Something
+
+JOB: Get new eyes on your brand. Teach from your expertise. No selling.
+
+WHAT TO WRITE: Share a lesson from your brilliant idea or brand identity. What do you know that your ideal client needs to hear? Teach one thing clearly. Pull from Module 2 — who you are and what you know.
+
+PLATFORM TIPS:
+
+LinkedIn: 150-300 words. Start with a bold statement or question. End with a question to drive comments.
+
+Instagram: Caption under 150 words. Hook in the first line — it gets cut off. Use line breaks. Add hashtags at the end.
+
+TikTok: 30-60 second video. Say the hook in the first 3 seconds. Teach one thing. End with 'comment CLARITY for more.' Add caption as text overlay.
+
+MY VERSION (write it now):
+
+Hook: _______________________________________________
+
+_______________________________________________
+
+_______________________________________________
+
+_______________________________________________
+
+CTA: _______________________________________________
+
+
+
+POST 2 — AWARENESS — Share Your Story
+
+JOB: Let people into your world. Origin, struggle, turning point. No selling.
+
+WHAT TO WRITE: Pick one chapter from your narrative (Module 5). Tell that chapter. Make it specific — one moment, one realization, one shift. This is how people come to know you. Pull from Part 1 of your narrative.
+
+PLATFORM TIPS:
+
+LinkedIn: 200-400 words. Personal and direct. Start with 'I' or a moment in time. End with what you learned.
+
+Instagram: Photo or graphic with a caption. The image stops the scroll — the caption builds the connection. Keep it under 300 words.
+
+TikTok: Story-style video. Talk to the camera. No script. Just the real version. 45-90 seconds.
+
+MY VERSION (write it now):
+
+Hook: _______________________________________________
+
+_______________________________________________
+
+_______________________________________________
+
+_______________________________________________
+
+CTA: _______________________________________________
+
+
+
+POST 3 — TRUST — Show Proof
+
+JOB: Deepen the relationship. Social proof, client wins, results. Still not selling — just showing.
+
+WHAT TO WRITE: Share a client result, a testimonial, or a before-and-after. If you don't have a client yet — share YOUR own transformation. You are the first case study. Pull from Module 3 — what your ideal client walks away with.
+
+PLATFORM TIPS:
+
+LinkedIn: Quote the client if you can. Describe the situation, the work, the result. Keep it specific — numbers if possible.
+
+Instagram: Carousel works well here. Slide 1: the result. Slides 2-5: the story behind it. Final slide: CTA.
+
+TikTok: React to a comment or question. 'Someone asked me...' format builds trust fast.
+
+MY VERSION (write it now):
+
+Hook: _______________________________________________
+
+_______________________________________________
+
+_______________________________________________
+
+_______________________________________________
+
+CTA: _______________________________________________
+
+
+
+POST 4 — TRUST — Connection Post
+
+JOB: Speak directly to your ideal client's pain. Make them feel seen.
+
+WHAT TO WRITE: Describe your ideal client's exact situation — their struggle, their frustration, what they've tried. Pull from Module 3 — the psychographics. Write it so specifically that they say 'how did you know?' Then connect it to your story.
+
+PLATFORM TIPS:
+
+LinkedIn: Start with 'If you...' or 'Sound familiar?' Call out the situation. Then share why you understand it personally.
+
+Instagram: Short and punchy. 5-7 lines max. Use the 'If this is you — keep reading' format.
+
+TikTok: Point to camera. 'This one is for you if...' Direct, personal, fast.
+
+MY VERSION (write it now):
+
+Hook: _______________________________________________
+
+_______________________________________________
+
+_______________________________________________
+
+_______________________________________________
+
+CTA: _______________________________________________
+
+
+
+POST 5 — CONVERT — Present Your Offer
+
+JOB: Ask for the action. Clear offer. Clear CTA. No fluff.
+
+WHAT TO WRITE: Present your offer using the statement from Module 4. Name it, say who it's for, say what they walk away with, give the price, give the link. Make it easy to say yes. This post comes AFTER you've built awareness and trust — so the audience is warm.
+
+PLATFORM TIPS:
+
+LinkedIn: 150-250 words. Lead with the outcome, not the features. End with one clear CTA — a link, a DM, a booking.
+
+Instagram: Graphic with the offer name and price. Caption describes the transformation and includes the link in bio.
+
+TikTok: Show the offer. Walk through what they get. End with 'link in bio' or 'comment [word] and I'll send you the details.'
+
+MY VERSION (write it now):
+
+Hook: _______________________________________________
+
+_______________________________________________
+
+_______________________________________________
+
+_______________________________________________
+
+CTA: _______________________________________________
+
+
+
+[ FACILITATOR NOTE — AFTER TEACHING ALL 5 ]
+
+Before the activity — put the platform quick-reference on screen and give 60 seconds for questions. 'Any questions on the framework before you start writing?'
+
+Remind them: 'You already have everything you need to write all 5. Your worksheets have the source material. Module 2 feeds Posts 1 and 2. Module 3 feeds Post 4. Module 4 feeds Post 5. Module 5 feeds Posts 2 and 3. Just open your workbook and pull from it.'
+
+This is important — they should not start from scratch. They are assembling, not creating.
+
+
+
+
+
+PART 3: ACTIVITY — Write Your 5 Posts
+
+TIMING: 20 minutes  ·  Writing (15 min)  ·  Master AI Prompt (5 min)
+
+PURPOSE: Participants write all 5 posts using their Brand System as source material. The worksheet has the framework built in — hook, body, CTA for each post. The master AI prompt is available for anyone who wants to generate a first draft faster.
+
+
+
+[ TAB SAYS — Launching the Activity ]
+
+Alright. You have 15 minutes to write your 5 posts.
+
+Open your workbook to the Content & Communications section.
+
+Your source material is everything you built today.
+
+Module 2 is your brand and your story. Pull from there for Posts 1 and 2.
+
+Module 3 is your ideal client. Pull from there for Post 4.
+
+Module 4 is your offer. Pull from there for Post 5.
+
+Module 5 is your narrative. Pull from there for Posts 2 and 3.
+
+You are not creating from scratch. You are assembling what you already built.
+
+Write the hook first. Then the body. Then the CTA.
+
+Keep it simple. Keep it real. Keep it in your voice.
+
+Go.
+
+
+
+[ FACILITATOR NOTE — During Activity ]
+
+Start a 15-minute timer on screen.
+
+The most common sticking points:
+
+'I don't know what to write for my hook.' — Coaching line: 'Look at your narrative Part 1. Find the most surprising or painful moment. That's your hook. The sentence that made you go oh when you wrote it.'
+
+'My convert post feels too salesy.' — Coaching line: 'Lead with the outcome, not the price. What do they walk away with? Say that first. Then the price. Then the link.'
+
+'I can't write all 5 in 15 minutes.' — Coaching line: 'Write the hook for all 5 first. Then go back and fill in the body. Done is better than perfect. You can polish later.'
+
+'Should I post all 5 today?' — Coaching line: 'Post one today. Schedule the rest. But yes — one goes out today before you go to sleep.'
+
+At 12 minutes: 'Three more minutes — if you only finish 3 posts that's fine. Make sure Post 5 (your convert post) is one of them.'
+
+
+
+THE MASTER AI PROMPT — Copy-Paste Ready
+
+After 15 minutes of writing — put this on screen and in the chat. Participants who want to use AI to generate or polish their posts paste this in one shot.
+
+
+
+THE MASTER AI PROMPT:
+
+--- COPY FROM HERE ---
+
+
+
+Using the following information about my brand, please write 5 social media posts in my voice:
+
+
+
+MY BRAND IDENTITY: [paste your Module 2 answers — who you are, what you do, your voice, your secret sauce]
+
+MY IDEAL CLIENT: [paste your Module 3 Lock It In — who they are, their pain, where to find them]
+
+MY OFFER: [paste your Module 4 offer statement]
+
+MY NARRATIVE: [paste your Module 5 three-part narrative]
+
+
+
+Please write:
+
+POST 1 — AWARENESS: A teaching post that shares one lesson from my expertise. Hook + teach + question to drive engagement.
+
+POST 2 — AWARENESS: A story post from my origin or struggle. Specific moment. What I learned. No selling.
+
+POST 3 — TRUST: A proof post — a client result or my own transformation. Specific and real.
+
+POST 4 — TRUST: A connection post that speaks directly to my ideal client's pain. Make them feel seen.
+
+POST 5 — CONVERT: My offer, positioned around the transformation. Clear CTA.
+
+
+
+Write each post in my brand voice. Each post needs: a hook (first line that stops the scroll), a body (2-4 short paragraphs), and a CTA (one clear next step). Keep them real, direct, and human — not corporate.
+
+--- END OF PROMPT ---
+
+
+
+[ FACILITATOR NOTE — Master Prompt ]
+
+Put this prompt on screen as a slide. Give people 3-4 minutes to copy it, paste their answers in, and run it. Walk around the chat — react to what people get back.
+
+Tell them: 'This prompt is yours. Save it. Every time you launch something new — update the offer section and run it again. The rest stays the same.'
+
+This prompt is the takeaway that keeps giving. It combines everything from all 6 modules into one output they can use immediately and repeatedly.
+
+
+
+
+
+THE CLOSE — You Built This Today
+
+TIMING: 5 minutes  ·  This is the moment. Don't rush it.
+
+
+
+[ TAB SAYS ]
+
+Alright. Come back together.
+
+I want to take a moment before we close.
+
+
+
+Look at what you walked in with this morning.
+
+An idea. Maybe a business. Maybe a side hustle. Maybe just a feeling that there was something more.
+
+
+
+Look at what you're walking out with.
+
+
+
+A brilliant idea — locked.
+
+A brand identity — defined.
+
+An ideal client — named.
+
+An offering — built.
+
+A narrative — written.
+
+And five pieces of content — ready to go.
+
+
+
+That is the IEI Brand System.
+
+Idea. Brand. Client. Offer. Narrative. Content.
+
+Six pieces. One system. Your ideas made into income.
+
+
+
+This didn't happen by accident.
+
+You did the work today. Real work. With real deliverables.
+
+And I need you to own that before you leave this room.
+
+
+
+Now — one more thing before you go.
+
+If you want to go deeper — if you want to take what you built today and go ten times further —
+
+I do that 1:1 in something called the Idea to Income Diagnostic.
+
+90 minutes. We go through everything you built today at a deeper level.
+
+You walk away with a summary document that is the foundation of your brand.
+
+Normally $250. For everyone in this room — use code BRANDDAY for $197.
+
+The link is in the chat. Book it before tonight if you can — while this is all fresh.
+
+
+
+And one last ask.
+
+If today was valuable — I would love a video testimonial from you.
+
+30 seconds. Tell me what clicked. What you're walking out with. What changed.
+
+You can record right now in the breakout rooms or send it to me after.
+
+
+
+Thank you for being here. Thank you for trusting the process.
+
+Now go post something.
+
+Ideas equal income. Let's go build.
+
+
+
+[ FACILITATOR NOTE — THE CLOSE ]
+
+Do NOT rush this. Give the close the weight it deserves. People just spent a full day doing vulnerable, real work. Honor that.
+
+The list of what they built — say it slowly. Let each one land. Watch the chat as you say them — people will respond.
+
+The Diagnostic offer should feel like a natural next step — not a pitch. You're giving them a path forward, not selling them something. Say it warmly.
+
+Drop the Calendly link and BRANDDAY code in the chat: https://calendly.com/ideasequalincome/idea-to-income-diagnostic
+
+For testimonials — open breakout rooms immediately after the close. Make it easy. Some people will stay and record. Others will send later. Both are fine.
+
+Stay on for 15-20 minutes after for anyone who wants a quick 1:1. This is where bookings happen.
+
+
+
+[ ON SCREEN — THE CLOSE ]
+
+The final Brand System slide — all 6 modules complete:
+
+
+
+THE IEI BRAND SYSTEM — YOU BUILT THIS TODAY
+
+─────────────────────────────────────────────────
+
+✦ Module 1: One Brilliant Idea — LOCKED
+
+✦ Module 2: Who Are You? — DEFINED
+
+✦ Module 3: Who Are They? — NAMED
+
+✦ Module 4: What Do They Need? — BUILT
+
+✦ Module 5: The Narrative — WRITTEN
+
+✦ Module 6: Content & Communications — DONE
+
+─────────────────────────────────────────────────
+
+IDEAS EQUAL INCOME.
+
+
+
+Then the next steps slide:
+
+
+
+YOUR NEXT STEPS — RIGHT NOW:
+
+1. Post one piece of content today
+
+2. Book your Idea to Income Diagnostic — code BRANDDAY for $197
+
+    https://calendly.com/ideasequalincome/idea-to-income-diagnostic
+
+3. Record your video testimonial
+
+4. Fill out the feedback survey (coming to your email)
+
+
+
+
+
+MODULE 6 — QUICK REFERENCE
+
+
+
+TOTAL TIME: 55 minutes
+
+
+
+TEACHING (15 min) · Brand System progress tracker — all 6 lit up · Pull up a real post · Label the parts live · 'You don't need something new every time — tell the same story differently'
+
+LESSON (15 min) · 5-post framework taught one at a time · Platform tips for LinkedIn, IG, TikTok per post · Ratio: 50% Awareness / 30% Trust / 20% Convert
+
+ACTIVITY (15 min) · Write all 5 posts using worksheets as source material · They are assembling not creating · Coaching lines for sticking points
+
+MASTER AI PROMPT (5 min) · On screen + in chat · Pulls from all 6 modules · Tell them to save it — it works every time they launch something new
+
+THE CLOSE (5 min) · Slow. Intentional. Honor the work · List what they built · Diagnostic offer with BRANDDAY code · Testimonials · 'Go post something'
+
+
+
+WORKSHEET: Module 6 Content & Communications — 5-post framework with hook/body/CTA lines for each + the master AI prompt (build as a separate worksheet).
+
+ON SCREEN: Brand System complete tracker · Tab's real post labeled · 5-post framework slides · Platform tips · Master AI prompt · Final Brand System complete slide · Next steps slide.
+
+AFTER SESSION: Send feedback survey within 24 hours. Follow up with everyone who stayed for Q&A. Post your own content recap of the session that day.
+
+
+
+
+
+MODULE 6 WORKSHEET — Content & Communications
+
+(Embed this in the combined worksheet document as Module 6. Participants fill this in during the activity.)
+
+
+
+MY CONTENT & COMMUNICATIONS PLAN
+
+Name: ___________________________  Brand: ___________________________
+
+My platform(s): ___________________________  Posting frequency: ___________________________
+
+Source material reminder: Module 2 = Posts 1 & 2  ·  Module 3 = Post 4  ·  Module 4 = Post 5  ·  Module 5 = Posts 2 & 3
+
+
+
+
+
+POST 1 — AWARENESS: TEACH SOMETHING
+
+Hook (first line — stops the scroll):
+
+_______________________________________________
+
+Body:
+
+_______________________________________________
+
+_______________________________________________
+
+_______________________________________________
+
+CTA (one clear next step):
+
+_______________________________________________
+
+Platform: _______________  Format: _______________  Post date: _______________
+
+
+
+POST 2 — AWARENESS: SHARE YOUR STORY
+
+Hook (first line — stops the scroll):
+
+_______________________________________________
+
+Body:
+
+_______________________________________________
+
+_______________________________________________
+
+_______________________________________________
+
+CTA (one clear next step):
+
+_______________________________________________
+
+Platform: _______________  Format: _______________  Post date: _______________
+
+
+
+POST 3 — TRUST: SHOW PROOF
+
+Hook (first line — stops the scroll):
+
+_______________________________________________
+
+Body:
+
+_______________________________________________
+
+_______________________________________________
+
+_______________________________________________
+
+CTA (one clear next step):
+
+_______________________________________________
+
+Platform: _______________  Format: _______________  Post date: _______________
+
+
+
+POST 4 — TRUST: CONNECTION POST
+
+Hook (first line — stops the scroll):
+
+_______________________________________________
+
+Body:
+
+_______________________________________________
+
+_______________________________________________
+
+_______________________________________________
+
+CTA (one clear next step):
+
+_______________________________________________
+
+Platform: _______________  Format: _______________  Post date: _______________
+
+
+
+POST 5 — CONVERT: PRESENT YOUR OFFER
+
+Hook (first line — stops the scroll):
+
+_______________________________________________
+
+Body:
+
+_______________________________________________
+
+_______________________________________________
+
+_______________________________________________
+
+CTA (one clear next step):
+
+_______________________________________________
+
+Platform: _______________  Format: _______________  Post date: _______________
+
+
+
+
+
+MASTER AI PROMPT — Save This
+
+Copy this entire prompt. Paste your answers where indicated. Run it in ChatGPT, Claude, or your preferred AI tool. Save it — use it every time you launch something new.
+
+
+
+Using the following information about my brand, please write 5 social media posts in my voice:
+
+MY BRAND IDENTITY: [paste Module 2 answers]
+
+MY IDEAL CLIENT: [paste Module 3 Lock It In]
+
+MY OFFER: [paste Module 4 offer statement]
+
+MY NARRATIVE: [paste Module 5 three-part narrative]
+
+
+
+Please write:
+
+POST 1 — AWARENESS: Teaching post. Hook + lesson + engagement question.
+
+POST 2 — AWARENESS: Story post from my origin or struggle. Real moment. What I learned.
+
+POST 3 — TRUST: Proof post. Client result or my own transformation. Specific.
+
+POST 4 — TRUST: Connection post. Speak to my ideal client's pain. Make them feel seen.
+
+POST 5 — CONVERT: My offer. Lead with transformation. Clear CTA.
+
+
+
+Write in my brand voice. Each post: hook + body (2-4 short paragraphs) + CTA. Real, direct, human. Not corporate.
+
+
+
+
+
+IEI Agency  ·  Ideas Equal Income  ·  Tab Wolod  ·  ieiagency.com  ·  twolod@ieiagency.com
+

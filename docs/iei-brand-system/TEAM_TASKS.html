@@ -1,0 +1,216 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>TEAM_TASKS</title>
+<style>
+@page { size: Letter; margin: 0.6in 0.7in; }
+* { box-sizing: border-box; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+  font-size: 11pt;
+  line-height: 1.5;
+  color: #1a1a1a;
+  max-width: 100%;
+  margin: 0;
+  padding: 0;
+}
+h1 { font-size: 24pt; margin: 0 0 12pt; color: #0a0a0a; border-bottom: 2px solid #0a0a0a; padding-bottom: 6pt; page-break-after: avoid; }
+h2 { font-size: 16pt; margin: 18pt 0 8pt; color: #0a0a0a; page-break-after: avoid; }
+h3 { font-size: 13pt; margin: 14pt 0 6pt; color: #2a2a2a; page-break-after: avoid; }
+h4 { font-size: 11pt; margin: 10pt 0 4pt; color: #444; text-transform: uppercase; letter-spacing: 0.05em; page-break-after: avoid; }
+p { margin: 0 0 8pt; }
+ul, ol { margin: 0 0 10pt; padding-left: 22pt; }
+li { margin-bottom: 3pt; }
+strong { color: #0a0a0a; }
+em { color: #333; }
+code {
+  font-family: "SF Mono", Monaco, "Cascadia Code", Consolas, monospace;
+  font-size: 9.5pt;
+  background: #f4f4f4;
+  padding: 1pt 4pt;
+  border-radius: 3px;
+  color: #b03060;
+}
+pre {
+  background: #f8f8f8;
+  border-left: 3px solid #888;
+  padding: 8pt 12pt;
+  margin: 8pt 0;
+  overflow-x: auto;
+  page-break-inside: avoid;
+}
+pre code { background: none; padding: 0; color: #222; }
+blockquote {
+  border-left: 3px solid #c0c0c0;
+  padding-left: 12pt;
+  color: #555;
+  font-style: italic;
+  margin: 10pt 0;
+}
+hr { border: none; border-top: 1px solid #ddd; margin: 14pt 0; }
+a { color: #2a5fc7; text-decoration: none; }
+table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 10pt 0;
+  font-size: 10pt;
+  page-break-inside: avoid;
+}
+th, td {
+  border: 1px solid #ccc;
+  padding: 5pt 8pt;
+  text-align: left;
+  vertical-align: top;
+}
+th { background: #f0f0f0; font-weight: 600; color: #0a0a0a; }
+tr:nth-child(even) td { background: #fafafa; }
+.footer { font-size: 8pt; color: #888; text-align: center; margin-top: 24pt; border-top: 1px solid #eee; padding-top: 6pt; }
+</style>
+</head>
+<body>
+<h1>Team Task Assignments — v2 (Hybrid Self-Serve)</h1>
+
+<p><strong>Updated:</strong> 2026-05-19 (post hybrid pivot)<br><strong>Supersedes:</strong> v1 (concierge model). See <code>HYBRID_PIVOT.md</code> for the why.</p>
+
+<hr>
+<h2>THE PRODUCT IN ONE PARAGRAPH</h2>
+
+<p>Brand Blueprint is a <strong>self-serve AI brand-building product at $997</strong>. Customer pays via Stripe → lands in a chat interface that interviews them through Tab's 6-module IEI Brand System → AI generates their complete brand foundation (messaging, 3 logos, brand kit, 1-page website, GTM checklist) → auto-delivered by email within 5 business days. Optional premium upgrade after delivery: <strong>+$1,000 for a 60-min Brand-Storming call with Tab and personal refinement</strong>. The chat IS the interface. No Zoom call required for the standard product. Tab spot-checks 10% of deliveries to monitor quality.</p>
+
+<hr>
+<h2>OWNERSHIP AT A GLANCE</h2>
+
+<ul><li>👤 <strong>Tab</strong> — founder ops, sales, brand IP, creative direction, premium-tier delivery</li><li>💻 <strong>FE Dev</strong> — frontend (landing page, chat UI, review page, admin dashboard)</li><li>⚙️ <strong>BE Dev</strong> — backend (APIs, LLM integration, Stripe webhook, auto-delivery, types, skill prompt)</li></ul>
+
+<hr>
+<h2>👤 TAB'S QUEUE — 12 tasks</h2>
+
+<h3>🔴 URGENT this week (Week 1)</h3>
+
+<table><thead><tr><th>#</th><th>Task</th><th>Effort</th><th>Why urgent</th></tr></thead><tbody><tr><td>#4</td><td>Book attorney + send pre-call brief</td><td>90 min</td><td><strong>MEETING TONIGHT</strong> — launch blocker</td></tr><tr><td>#5</td><td>File trademarks (Brand Blueprint + IEI Ventures)</td><td>2 hrs</td><td>6-12 month examination clock — file ASAP</td></tr><tr><td>#25</td><td><strong>Rewrite intake questions for CHAT delivery</strong></td><td>2 hrs</td><td><strong>BLOCKS chat UI build</strong> — devs need this</td></tr><tr><td>#17</td><td><strong>Curate brand vocabulary</strong> (URGENT now)</td><td>1 hr</td><td><strong>BLOCKS SKILL.md update</strong> — only way you shape output now</td></tr><tr><td>#18</td><td><strong>Compile visual references</strong> (URGENT now)</td><td>2 hrs</td><td><strong>BLOCKS SKILL.md update</strong> — only way you guide visuals</td></tr><tr><td>#3</td><td>Stripe Payment Links (1 for $997, 1 for $1,000 upgrade)</td><td>30 min</td><td>Needed before any sale</td></tr><tr><td>#15</td><td>Register brandblueprint.com (or similar)</td><td>10 min</td><td>Long-term product domain</td></tr><tr><td>#16</td><td>Record 90-sec hero video</td><td>60 min</td><td>Single highest-trust asset on landing</td></tr></tbody></table>
+
+<h3>🟡 Week 2</h3>
+
+<table><thead><tr><th>#</th><th>Task</th><th>Effort</th></tr></thead><tbody><tr><td>#13</td><td>Notion operational dashboard</td><td>45 min</td></tr><tr><td>#14</td><td>Build 20-prospect outreach list</td><td>1 hr</td></tr><tr><td>#7</td><td>End-to-end test of self-serve flow (with friendly customer)</td><td>4 hrs</td></tr></tbody></table>
+
+<h3>🟢 Ongoing (Week 3+)</h3>
+
+<table><thead><tr><th>#</th><th>Task</th><th>Effort</th></tr></thead><tbody><tr><td>#10</td><td>Capture 2 customer video testimonials</td><td>Per customer</td></tr><tr><td><strong>NEW ongoing</strong></td><td>Spot-check 10% of deliveries for quality</td><td>~1-2 hrs/week</td></tr><tr><td><strong>NEW ongoing</strong></td><td>Deliver premium upgrades (when customers opt in)</td><td>~2.5 hrs per upgrade</td></tr></tbody></table>
+
+<p><strong>Total Tab time Week 1:</strong> ~10 hrs (well under 20 hr/week budget — leaves room for sales)</p>
+
+<hr>
+<h2>💻 FRONTEND DEV'S QUEUE — 4 tasks</h2>
+
+<h3>🔴 URGENT Week 1</h3>
+
+<table><thead><tr><th>#</th><th>Task</th><th>Effort</th><th>Notes</th></tr></thead><tbody><tr><td>#2</td><td>Build landing site (simplified to 1 tier $997)</td><td>1-2 days</td><td>Framer recommended. Copy in <code>launch-assets/landing-page-copy.md</code> — just simplify Section 4 (pricing) to 1 card.</td></tr><tr><td>#8</td><td><strong>Chat intake UI</strong> (PROMOTED from Days 8-30 — now MVP-critical)</td><td>3-4 days</td><td>Pairs with BE #19. Coordinate API contract upfront. Wait for Tab's #25 (intake questions) before wiring the actual prompts.</td></tr></tbody></table>
+
+<h3>🟡 Week 2</h3>
+
+<table><thead><tr><th>#</th><th>Task</th><th>Effort</th></tr></thead><tbody><tr><td>#24</td><td>Spot-check admin dashboard (Tab reviews 10% of deliveries)</td><td>1 day</td></tr></tbody></table>
+
+<h3>🟢 Days 8-30 (after MVP ships)</h3>
+
+<table><thead><tr><th>#</th><th>Task</th><th>Effort</th></tr></thead><tbody><tr><td>#20</td><td>Synthesis review/edit page (v2 quality feature)</td><td>2 days</td></tr></tbody></table>
+
+<p><strong>FE Week 1 critical path:</strong> #2 landing → #8 chat UI. Realistically 4-6 days of focused work.</p>
+
+<hr>
+<h2>⚙️ BACKEND DEV'S QUEUE — 7 tasks</h2>
+
+<h3>🔴 URGENT Week 1 (ALL MVP-blocking — the automation backbone)</h3>
+
+<table><thead><tr><th>#</th><th>Task</th><th>Effort</th><th>Pairs with / Notes</th></tr></thead><tbody><tr><td>#19</td><td><strong>Chat intake API</strong></td><td>3 days</td><td>Pairs with FE #8. Wait for Tab's #25 before wiring prompts.</td></tr><tr><td>#21</td><td><strong>Stripe webhook → auto-provision brand project</strong></td><td>1 day</td><td>NEW task. Replaces Tab manually creating projects.</td></tr><tr><td>#22</td><td><strong>Auto-delivery system</strong> (ZIP + email)</td><td>1.5 days</td><td>NEW task. Replaces Tab manually emailing.</td></tr><tr><td>#11</td><td><strong>Apply SKILL_UPDATE.md</strong> (now urgent — no Tab safety net)</td><td>1 day</td><td>Wait for Tab's #17 + #18 first.</td></tr><tr><td>#12</td><td>Extend types.ts with <code>ieiBrandSystem</code> block</td><td>1 hr</td><td>Supports #11.</td></tr></tbody></table>
+
+<h3>🟡 Week 2</h3>
+
+<table><thead><tr><th>#</th><th>Task</th><th>Effort</th></tr></thead><tbody><tr><td>#23</td><td>Premium upgrade flow (+$1,000 Brand-Storming)</td><td>0.5 day</td></tr></tbody></table>
+
+<h3>🟢 Days 8-30 (post-MVP quality leap)</h3>
+
+<table><thead><tr><th>#</th><th>Task</th><th>Effort</th></tr></thead><tbody><tr><td>#9</td><td>Synthesis bridge (Sonnet) — quality multiplier for generation</td><td>2 days</td></tr></tbody></table>
+
+<p><strong>BE Week 1 critical path:</strong> #19 chat API + #21 webhook + #22 auto-delivery + #11 SKILL.md (after Tab unblocks). Realistically 6-7 days of focused work.</p>
+
+<hr>
+<h2>🤝 CROSS-TEAM COORDINATION</h2>
+
+<p>Three pairs MUST sync on contracts BEFORE coding:</p>
+
+<table><thead><tr><th>FE task</th><th>BE task</th><th>They agree on</th></tr></thead><tbody><tr><td>#8 chat UI</td><td>#19 chat API</td><td><code>ChatTurn</code> shape, sessionId format, error format, "complete" signal</td></tr><tr><td>(no FE)</td><td>#21 Stripe webhook</td><td>What payload BE expects from Stripe → brand-project schema</td></tr><tr><td>(no FE)</td><td>#22 auto-delivery</td><td>Email provider choice (Resend/Postmark/Loops), ZIP structure, download URL format</td></tr><tr><td>#20 review page (Wk 3)</td><td>#9 synthesis API (Wk 3)</td><td><code>IEIBrandFoundation</code> JSON shape</td></tr></tbody></table>
+
+<p><strong>Recommended:</strong> 30-min sync meeting Day 1 of Week 1 to lock contracts before either side codes.</p>
+
+<hr>
+<h2>THE CORRECTED LOGICAL SEQUENCE</h2>
+
+<p>The task system shows some legacy dependencies — here's the ACTUAL build order:</p>
+
+<h3>Week 1 (Days 1-7) — Foundation in parallel</h3>
+
+<pre><code>Tab:  Attorney + Trademarks (Day 1)
+      Chat intake questions (#25, ~Day 2)
+      Vocabulary + Visual refs (#17, #18, by Day 4)
+      Domain + Video (#15, #16, by Day 5)
+
+<p>FE:   Landing site (#2, Days 1-3)<br>      Start chat UI (#8, Days 4-7) — wires Tab's #25 questions</p>
+
+<p>BE:   Chat API (#19, Days 1-5)<br>      Stripe webhook (#21, Days 5-6)<br>      Auto-delivery (#22, Days 6-7)<br>      SKILL.md updates (#11, Day 7 — once Tab's #17 + #18 land)<br>      types.ts (#12, 1 hr — opportunistic)<br></code></pre></p>
+
+<h3>Week 2 (Days 8-14) — Integration + test</h3>
+
+<pre><code>Tab:  Stripe Payment Links (#3)
+      Notion dashboard (#13)
+      20-prospect outreach list (#14)
+      End-to-end test with friendly customer (#7) — Day 10-12
+
+<p>FE:   Finish chat UI · spot-check dashboard (#24)<br>BE:   Premium upgrade flow (#23) · bug fixes from #7 testing<br></code></pre></p>
+
+<h3>Week 3 (Days 15-21) — Soft launch</h3>
+
+<pre><code>Tab:  Send 20-prospect outreach → first paying customers
+      Spot-check first deliveries
+
+<p>FE/BE: Stabilize, monitor, fix bugs as real customers hit edge cases<br></code></pre></p>
+
+<h3>Days 22-30 — Real customers + iteration</h3>
+
+<pre><code>Tab:  Capture testimonials · paid ads experiment · Stage 2 prep
+Dev:  Synthesis bridge (#9) · review page (#20) · cleanup
+</code></pre>
+
+<hr>
+<h2>🚨 PRIORITY ESCALATION</h2>
+
+<p>If any task is at risk of slipping more than 2 days:</p>
+
+<table><thead><tr><th>Task type</th><th>Action</th></tr></thead><tbody><tr><td>Tab tasks (legal, trademarks)</td><td>Tell the team — these are launch blockers, real cost to slipping</td></tr><tr><td>Tab tasks (vocab, visuals, chat questions)</td><td>These block dev work — devs sit idle. Tell team immediately.</td></tr><tr><td>FE landing site</td><td>If past Day 5, fall back to Carrd.co single-page (2-hour setup, $19/yr) as temporary</td></tr><tr><td>FE/BE chat</td><td>Cannot ship MVP without it. Escalate immediately. Consider scope cut (skip "skip" button, skip follow-ups, just linear 6-question flow).</td></tr><tr><td>BE webhook + auto-delivery</td><td>Without these, Tab manually orchestrates. Still ship-able as concierge fallback for first 5 customers.</td></tr><tr><td>BE SKILL.md updates</td><td>Without these, generation quality is "good but generic." Ship MVP anyway; quality improves when these land.</td></tr></tbody></table>
+
+<p><strong>One rule for everyone:</strong> if you're making a product decision the docs don't cover — STOP and ask Tab. Empty space in docs = decision not made yet, NOT "use your judgment."</p>
+
+<hr>
+<h2>⚙️ TECH STACK NOTES (for reference)</h2>
+
+<p><strong>Existing infrastructure that doesn't change:</strong><br><ul><li>Next.js (non-standard version — see <code>AGENTS.md</code> at repo root before any code)</li><li>Anthropic Claude Agent SDK (<code>@anthropic-ai/claude-agent-sdk</code>) — already wired in <code>src/lib/skills/agent-sdk.ts</code></li><li>Blob storage for brand projects (<code>src/lib/blob-brands.ts</code>)</li><li>Playwright for HTML → PDF (<code>src/lib/pdf.ts</code>)</li><li>Existing <code>brand-playbook</code> skill at <code>skills/brand-playbook/</code> — gets EDITS not rewrites</li></ul></p>
+
+<p><strong>New dependencies needed:</strong><br><ul><li>Stripe SDK (for webhook signature verification) — <code>npm install stripe</code></li><li>Email provider — pick ONE: Resend (recommended for DX), Postmark, or Loops</li><li>Archiver (for ZIP packaging) — <code>npm install archiver</code></li></ul></p>
+
+<p><strong>Models per call:</strong><br><ul><li>Chat agent (each turn): Claude Haiku</li><li>Brand-playbook generation: Claude Sonnet (or Haiku for cost mode)</li><li>Synthesis bridge (Days 8-30): Claude Sonnet</li><li>Total avg cost per brand: ~$1.50-$2.50</li></ul></p>
+
+<hr>
+<h2>SUGGESTED KICKOFF CALL AGENDA (60 min)</h2>
+
+<table><thead><tr><th>Time</th><th>Topic</th><th>Lead</th></tr></thead><tbody><tr><td>0:00-0:10</td><td>Product overview — read this doc together</td><td>Tab</td></tr><tr><td>0:10-0:15</td><td>Read <code>HYBRID_PIVOT.md</code> for context</td><td>All</td></tr><tr><td>0:15-0:25</td><td>FE: walk through landing simplification + chat UI plan</td><td>FE</td></tr><tr><td>0:25-0:35</td><td>BE: walk through chat API + webhook + auto-delivery</td><td>BE</td></tr><tr><td>0:35-0:45</td><td>Lock cross-team contracts (3 pairs above)</td><td>All</td></tr><tr><td>0:45-0:55</td><td>Risks + open questions</td><td>All</td></tr><tr><td>0:55-0:60</td><td>Each person commits ONE thing they ship by end of Week 1</td><td>All</td></tr></tbody></table>
+
+<hr>
+<h2>REFERENCE DOCS</h2>
+
+<table><thead><tr><th>If you need to understand...</th><th>Read</th></tr></thead><tbody><tr><td>What we're building and why</td><td><code>PRODUCT_FRAMING.md</code></td></tr><tr><td>Why we pivoted to hybrid</td><td><code>HYBRID_PIVOT.md</code></td></tr><tr><td>All confirmed decisions</td><td><code>DECISIONS_LOG.md</code></td></tr><tr><td>The 6 IEI Brand System modules</td><td><code>PRODUCT_FRAMING.md</code> + <code>source/IEI_Complete_Facilitator_Guide.txt</code></td></tr><tr><td>AI voice rules for any output</td><td><code>BRAND_VOICE_SPEC.md</code></td></tr><tr><td>Specific code changes for SKILL.md</td><td><code>SKILL_UPDATE.md</code></td></tr><tr><td>Landing page copy</td><td><code>launch-assets/landing-page-copy.md</code></td></tr><tr><td>Email templates</td><td><code>launch-assets/email-templates.md</code></td></tr><tr><td>Customer journey</td><td><code>STAGE1_LAUNCH_PLAN.md</code> (concierge sections superseded by hybrid)</td></tr><tr><td>Revenue projections</td><td><code>FIRST_90_DAYS_FINANCIAL_MODEL.md</code> (revising soon for hybrid)</td></tr><tr><td>Engineering deep dive</td><td><code>DEV_HANDOFF.md</code></td></tr><tr><td>Notion setup for Tab</td><td><code>OPERATIONAL_DASHBOARD.md</code></td></tr><tr><td>Legal package</td><td><code>LEGAL_CHECKLIST.md</code> + <code>launch-assets/legal/*.md</code></td></tr></tbody></table>
+
+<hr>
+<strong>Last updated:</strong> 2026-05-19
+<div class="footer">IEI Ventures · Brand Blueprint · 2026-05-20</div>
+</body>
+</html>
