@@ -260,3 +260,114 @@ For future Tab + AI reference, here's the inventory of Tab's past work that info
 **Related:** `BRAND_VOICE_SPEC.md` · `SKILL_UPDATE.md` · `chat-intake-questions.md` (Q16-Q21 vibe questions feed the AI decision framework above)
 
 **Last updated:** 2026-05-21
+
+---
+
+# ADDENDUM — Full Visual Catalog Review (2026-05-21, later same day)
+
+After the initial doc shipped, Tab requested a deeper sweep of her ~38-piece visual archive. I reviewed ~26 pieces across 4 extraction batches. The META-INSIGHT (no single Tab look, each brand its own) holds and is REINFORCED. Below are the corrections, new patterns, and expanded aesthetic-family catalog that emerged.
+
+## 🔧 CORRECTIONS to the original doc
+
+### Correction 1 — Tab CAN do quiet luxury (when the brand requires it)
+
+The original doc stated under "Negative Space" that Tab's taste rejects:
+- "Pastel-girlboss aesthetic"
+- "Minimalism that's actually emptiness"
+
+**Eva Mindful Mondays (executive coach client) contradicts this when read absolutely.** Eva's templates use cream + soft yellow + script monogram + serif quotes + sophisticated executive portrait — that's quiet luxury done well. The pattern reconciles as:
+
+> ✅ **Tab does quiet luxury when the BRAND requires it.** Her own work has volume, but she serves clients whose brands need softness (executive coaches, real estate, certain wellness brands). The rule isn't "no quiet luxury" — it's **"no aesthetic for aesthetic's sake."** If quiet serves the brand, Tab can do quiet.
+
+**Updated negative space rule:** the original list still holds for AESTHETIC for its own sake (pastel-girlboss-as-default, minimalism-as-emptiness, tech-startup-gradient-trust). But each can appear if it's the right tool for the brand.
+
+### Correction 2 — Tab works INTERNATIONAL
+
+Original doc emphasized "Baltimore + community grounding" as a constant. **WeSkate Mongu — Zambia's Second National Skateboarding Championship — proves Tab does international work.** The Baltimore/community-grounding constant should be reframed:
+
+> ✅ **Tab grounds in COMMUNITY (wherever that community is).** Baltimore is her home community; the principle is community-rootedness, not Baltimore-specificity. International work (Zambia) carries the same community-action energy as her local work.
+
+## ⭐ NEW PATTERNS that emerged from the full sweep
+
+### Pattern: Chevron arrows as recurring structural motif
+- E.A.S.E. flyer + Infosheet · ZEHBRAS Community CrossFit · several others
+- Use as visual anchor + directional cue + textural element
+- **Decision rule:** chevron arrows can appear when brand needs movement/momentum/direction without bombast
+
+### Pattern: Script accents over bold caps
+- VNC Houston "Houston, get ready to go viral!" (script) over "OCTOBER 4-6TH" (bold caps)
+- Eva Stories "Conversations with Eva" (script) over "INSPIRED LESSONS" (caps)
+- **Decision rule:** script for intimate/personal/invitational moments; bold caps for structural/news/eventful information
+
+### Pattern: Same brand, different palettes per format
+- **Eva's brand** = cream + soft yellow for FEED content (Mindful Mondays); cyan + pink for STORIES content (Live broadcasts)
+- **D.U.M.I.** = black + red for "Loyalty Collection"; dark forest green + black for "Holiday Sale"; red painted texture for WTG collab
+- **Decision rule:** a single brand identity can flex its PALETTE per format/campaign/season without breaking. The brand voice + type discipline stays constant.
+
+### Pattern: Type-only compositions (when the wordplay IS the design)
+- Pump-A-Thon @MamaMilkBank "BREAST-FEED THE NEED" — entire frame is two color-blocked words
+- Good Business Community "CommUNITY" logo — typographic wordplay carries the whole brand mark
+- **Decision rule:** when the wordplay/phrase is strong enough, the design can be JUST type. Don't dilute strong copy with unnecessary imagery.
+
+### Pattern: Multi-host event layouts handled cleanly
+- Toni Harris Taylor "Next Level Virtual Networking" — 7 host headshots in circles + main feature portrait + city skyline
+- Bridge Builders 3-pillar layouts
+- Founders & Feedback 3-up portrait color-block
+- **Decision rule:** for multi-person events, use circular crops + grid arrangement; avoid rectangular passport-photo grid (too sterile)
+
+### Pattern: Co-branding cleanly without competition
+- Black UX Labs + Uber (logos sit equal at bottom)
+- Maryland Neighborhood Exchange + Community Wealth Builders (partner logo as side card)
+- Smalltimore Homes + Baltimore Healthy Start (both logos in footer)
+- VNC Houston (3 sponsor logos in clean horizontal row)
+- **Decision rule:** when partner logos appear, isolate them in a dedicated footer/sidebar zone with consistent sizing — never let them compete with primary brand mark
+
+## 🎨 EXPANDED AESTHETIC-FAMILY CATALOG
+
+The original doc named 7 aesthetic families in the decision framework. After the full sweep, here's the expanded list (12 families) that the AI's taste rules should be able to navigate:
+
+| Family | Hallmarks | Example brand from Tab's portfolio |
+|---|---|---|
+| 1. **Activist-Earth** | Warm tones (peach/terracotta) + repeating typography + raised-fist energy + real Black portraits | Born Brown · BBarr Launch |
+| 2. **Mental Health Activism** | Red + black/navy + stat cards + hashtag chips + real portraits | #StopTheStigma · #STOPTHESTIGMA Round 2 |
+| 3. **Institutional Mental Health** | Deep red + black + diagonal cuts + CEO portrait + bold serif | Parker Psychiatric Services · Person-centered Care · Optimal Phlebotomy |
+| 4. **Streetwear** | Black + red/green/cream + polaroid + film strip + cracked texture + graffiti tags | D.U.M.I. · TLC Loyalty Collection · WTG × DUMI Collab |
+| 5. **Community Mentorship** | Purple + gold + community-action photography + bridge/uplift imagery | Bridge Builders |
+| 6. **Movement / Network** | Teal + white + painted gestural mark + peanut/butterfly texture | BlkBtrFly · E.A.S.E. |
+| 7. **Nightlife / Performer** | Magenta/pink + black + neon + monogram + bold vertical type | Smoke Screen · Courtney Fitch · Fitch Bitch |
+| 8. **Action Sports** | Black + electric green/teal + gritty texture + B&W action photo | WeSkate Mongu · ZEHBRAS CrossFit |
+| 9. **Networking / Speaker** | Navy + white + city skyline + multi-host circles + script accents | Toni Harris Taylor · VNC Houston · Founders & Feedback |
+| 10. **Executive Coach / Quiet Luxury** | Cream + soft yellow + serif + script + sophisticated portrait | Eva (Mindful Mondays + Stories) |
+| 11. **Lifestyle / Real Estate** | Magenta/pink + cream + interior photography + warm portrait | Real Estate Agent Promo |
+| 12. **Institutional-Grant-Program** | Dark teal/navy + yellow + warm shop-owner portrait + clean co-branding | Maryland Neighborhood Exchange · Community Investments |
+
+Plus **brand-with-brand collaborations** (DUMI × WTG, Black UX Labs × Uber, Maryland Exchange × Community Wealth Builders) prove Tab's instinct for handling co-branded work cleanly — a skill the AI should mirror when Brand Blueprint customers have partner/sponsor logos.
+
+## 📂 FULL REVIEW COVERAGE
+
+**Pieces reviewed across all 4 batches (~26 of 38 file containers):**
+
+| Reviewed | Source |
+|---|---|
+| StopTheStigma · Experience · PPS Mission · Without Walls · Smoke Screen · Founders & Feedback | Initial standalones |
+| BlkBtrFly (2) · TLC/DUMI (2) · Bridge Builders (2) · Good Business Community (1) | Batch 0 extraction |
+| Marketing Won't Fix · This is exactly · Your brand isn't a logo | IEI 2026 Content (BB own identity) |
+| E.A.S.E. flyer (uploaded directly) · E.A.S.E. Infosheet (page 5) | E.A.S.E. own brand |
+| BBarr Launch · CFitch · Maryland Neighborhood Exchange · Black UX Labs × Uber · Elite (boxing) | Batch 1 |
+| DUMI ASL Holiday Sale · Eva Mindful Mondays · #StopTheStigma It's Okay · Optimal Phlebotomy · Person-centered Care | Batch 2 |
+| E.A.S.E. Infosheet · ZEHBRAS CrossFit · Toni Harris Taylor Networking · WeSkate Mongu Zambia · WTG × DUMI Collab | Batch 3 |
+| Real Estate Agent · MamaMilkBank Pump-A-Thon · Smalltimore Homes/Healthy Start · Fitch Bitch · VNC Houston · Eva Stories | Batch 4 |
+
+**Pieces NOT reviewed (low-priority or unreadable):**
+- E.A.S.E. Brand Presentation PDF (53MB — PDF rendering tool not available)
+- Kennedy Krieger PDF (296MB — too large)
+- Cyber Security Trifold Brochure PDF (deferred)
+- ISSCDC Register Promo Video (video format)
+- SH_CllctiveGive_Call To Action (28MB — deferred)
+- A few smaller pieces
+
+**The catalog is comprehensive enough for AI taste-rules implementation.** Additional pieces can be added later if specific aesthetic gaps surface during customer generation.
+
+---
+
+**Last addendum:** 2026-05-21 (later same day, after Tab's 3pm meeting prep)
