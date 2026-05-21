@@ -15,25 +15,25 @@
 
 ### How I Got Here
 
-I worked at Verizon Wireless for eleven years — from eighteen to twenty-nine. I started in a call center and learned the deep stuff: protocols, KPIs, performance improvement, quality assurance. I trained agents who'd just hit the floor. I coached people up. And then I moved into operations.
+I worked at Verizon Wireless for eleven years — from eighteen to twenty-nine. I started in a call center on the phones doing customer service, taking up to 64 calls a day, and I rose through the ranks. I learned the deep stuff: protocols, KPIs, performance improvement, quality assurance. I trained agents who'd just hit the floor. I coached people up. And then I moved into operations.
 
-For eight years, I lived inside the workforce planning side of the company. Long-term forecasting. The "war room" — later called the work coordination center — where five or six of us watched the service level for every consumer and tech call center in the Northeast. We were tracking call volumes, catching tech issues in real time, managing capacity. I learned how to *read* data. I learned what it actually takes to launch something at scale, on time, with measurable outcomes.
+For eight years, I lived inside the Workforce Planning side of the company. Long-term forecasting. The "war room" — later called the Work Coordination Center — where five or six of us watched the service level for every consumer and tech call center in the Northeast. We were tracking call volumes, catching tech issues in real time, managing capacity. I learned how to *read* data. I learned what it actually takes to launch something at scale, on time, with measurable outcomes.
 
-The term "go-to-market" — GTM — I learned that at Verizon. The training manager would put up "GTM: Motorola Razor — 30 min training" on the board, and I'd have to schedule it across teams and factor it into shrinkage. One day I asked her what GTM meant. *"Go-to-market. That's what happens when a new product hits."* That stuck. Even years later, when I help a solo founder take an idea to revenue, I'm still using what that training manager taught me without knowing she was teaching me anything.
+The term "go-to-market" — GTM — I learned that at Verizon. Every time a new phone was released, there would be a training for new agents to understand the phone, and the schedule entry would say "GTM." My team did the scheduling, and I managed and tracked the shrinkage. One day I asked the training manager what GTM meant. *"Go-to-market. That's what happens when a new product hits."* That stuck. Years later, when I started helping solo-founders take their ideas to income, I was still using what that training manager taught me without knowing she was teaching me anything.
 
-Then I moved to Verizon Communications. That role sucked. I worked through the strike. I worked through snowstorms when nobody else would come in. I had a 401(k) and not much else. If I was going to retire from there, I'd have to stay until I was sixty. And I just knew — there had to be something more than this.
+Then I moved to Verizon Communications. That role was not enjoyable — I began looking for my escape route. I worked through the strike. I worked through snowstorms when nobody else would come in. I had a 401(k) and not much else. If I was going to retire from there, I'd have to stay until I was sixty. And I just knew — there had to be something more than this.
 
-So I gave myself thirty days. I told myself: *if I'm still complaining every day at the end of thirty days, I'm out.* Thirty days came and I was still miserable. So I quit.
+So I gave myself thirty days. I told myself: *if I'm still complaining every day at the end of thirty days, I'm out.* Thirty days came and I was still miserable. I put in my resignation letter and officially resigned that next month — September of 2016.
 
 And then I had to figure out what to do.
 
 ### The Quit Years
 
-Side hustles were already in my blood. Before I'd even quit Verizon, I'd been running things. I sold Noni Juice in MLM. I rapped. I had an entertainment company with my boys — we sold T-shirts off a full screen printer I'd financed for sixteen grand in my apartment. I ran an internet radio show. I DJed. I started a cleaning and organizing company called **Kingdom Klean**.
+Side hustles were already in my blood. Before I'd even quit Verizon, I'd been running things. I sold Noni Juice in MLM. I rapped. I had an entertainment company with my boys — we attempted to sell T-shirts by using a factory screen printer that I financed for $16k and set up in my apartment. I was a co-host on an internet radio show. I DJed. I started a cleaning and organizing company called **Kingdom Klean**.
 
-I tried everything. And in between trying, I wrote a book — **From Stuck to Bucks** — released in 2017. Seven steps to take an idea you love AND are good at, and turn it into income. That book has the original brand framework that became The IEI Brand System. I just didn't call it that yet.
+I tried everything. And in between trying, I wrote a book — **From Stuck to Bucks** — released in 2017. Seven steps to take an idea you love AND are good at, and turn it into income. That book has the original brand framework that became The IEI Brand System. At the time, I didn't realize I was developing a system.
 
-The name "**Ideas Equal Income**" came from a play on a Baltimore law firm jingle. *Saiontz & Kirk Personal Injury Lawyers: "If you have a phone, you have a lawyer."* In my head: if you have an idea, you have an income. That kept ringing. Wouldn't leave me alone. So I made it the name.
+The name "**Ideas Equal Income**" kept ringing in my head. *If you have an idea, you have an income.* It reminded me of the Saiontz & Kirk law firm jingle: *"If you have a phone, you have a lawyer."* This wouldn't leave me alone. The name itself didn't necessarily make sense — ideas don't equal income; there's something missing. That something was the implementation piece, which I would soon discover was one of my biggest strengths. So I made it the name of my business.
 
 ### Building Websites Saved My Life
 
@@ -57,7 +57,7 @@ I also deal with mental health challenges — and I'm vocal about that, because 
 
 One of my best friends co-owns a Baltimore brand called **D.U.M.I Apparel** — which stands for "Don't Underestimate My Intelligence." (In Baltimore, "dummy" is a term of endearment. Outsiders miss that.)
 
-I went to JD — the co-founder — and said *"I'd love to do your website."* She said yes, we bartered, clothes for design work. I built it. It looked good. But I had blank sections everywhere — About page, mission, product descriptions — and I had to ask her: *"What do I put here? And here? And here?"*
+I went to Jaydee — the co-founder — and said *"I'd love to do your website."* She said yes, we bartered, clothes for design work. I built it. It looked good. But I had blank sections everywhere — About page, mission, product descriptions — and I had to ask her: *"What do I put here? And here? And here?"*
 
 She looked at me and said: ***"Tab. You know my brand better than I do."***
 
@@ -67,7 +67,7 @@ I started saying it out loud: **"I break brands like DJs break records."** It's 
 
 ### The System I Didn't Know I Had
 
-For years after, I ran every kind of marketing project I could find. Fundraising campaigns. Events. Social impact 360. Local-business growth. SEO. Community partnerships — I built sixty-plus during COVID for a Baltimore mental health clinic, including Kennedy Krieger and House of Ruth. I went viral on TikTok as a comedian on the side. I project-managed across teams when I had to. I did all of this for years.
+For years after, I ran every kind of marketing project I could find. Fundraising campaigns. Events. 360 Social Media Management. Local-business growth. SEO. Community partnerships — I built sixty-plus during COVID for a Baltimore mental health clinic, including Kennedy Krieger and House of Ruth. I project-managed across teams when I had to. I did all of this for years.
 
 The pattern that kept tripping me up: I'd get tied up under one or two big clients and lose all my own runway. Great experience, no leverage.
 
@@ -77,23 +77,25 @@ That system is **The IEI Brand System.** Six modules. The Fourfold Path to Meani
 
 ### Buzzy Brought My Baby Back
 
-Buzzy — Ryan, who I call my little Jedi — was my intern about three years ago. Marketing degree, mom's a marketing professor, but I was the one who taught him how brand work actually feels in the trenches. He hasn't had to get a job since he's been under my tutelage. We've been building together that whole time.
+Buzzy — Ryan, who I call my little Jedi — was my intern about three years ago. After his initial tutelage with me, he was on a roll. He went on to get his marketing degree, started his own business, and hasn't had to get a job since. Over the years, we stayed in touch — keeping each other abreast of what was happening in life and business, often laughing about the late nights we worked together when he supported a clothing launch I oversaw for the D.U.M.I brand.
 
-A month ago he called me. *"Tab, I built this app with my developer Henrique. Let's call it IEI Ventures, it's yours. You made it. I'm coming to you. It's a venture thing, and an incubator thing. I'm doing the same on my end."*
+Then in April 2026, out of the blue, he called me. *"Tab, I built this app with my developer Henrique. Let's call it IEI Ventures, it's yours. You made it. I'm coming to you. It's a venture thing, and an incubator thing. I'm doing the same on my end."*
 
-I almost smacked him through the phone. Not because I was mad. Because I was so deeply moved that *(1)* he didn't betray me and run with my IP, and *(2)* he brought the sum of all my work back to me — my baby back to me, fully formed. Sometimes, even though you know you have it, it takes someone else to point it out. He believes in me like I believe in him. Facts.
+Initially, I was shocked. I almost smacked him through the phone. *This kid took my framework and did what?* Then I heard what else he said, and I was so deeply moved — *(1)* he didn't betray me and run with my IP, and *(2)* he brought the sum of all my work back to me. My baby, back to me, fully formed. Sometimes, even though you know you have it, it takes someone else to point it out. He believes in me like I believe in him. Facts.
 
 That's how Brand Blueprint is here. That's how IEI Ventures is real.
 
+**IEI Agency still exists** — it's the home for the mission-driven founders I work with on social impact campaigns and the teaching arm of these same principles. **IEI Ventures is the innovation branch** — a sister company built to take what IEI Agency does one-to-one and productize it so more founders can access it without the agency price tag.
+
 ### Why I Do This
 
-I'm doing this for the businesses that will still be in business in ten years because they can finally explain what they actually do. I'm doing it for the founders who get to OWN land and houses and create a lifestyle, instead of being bound to a low-paying job with no hope. I'm doing it for the innovators who get to share what they've built with a world that can finally understand it.
+I'm doing this for the businesses that will still be in business in ten years because they can finally explain what they actually do, what they offer, who to sell to, and how to sell it. This tool features a personalized marketing checklist so every founder walks away with the *what* AND the *how.* I'm doing it for the founders who get to OWN land and houses and create a lifestyle, instead of being bound to a low-paying job with no hope. I'm doing it for the innovators who get to share what they've built with a world that can finally understand it.
 
-I'm doing it for **Baltimore** — every block of it. For the underserved, intentionally disinvested communities the system was built to forget. Baltimore is one of the poorest cities in America with some of the greatest resources, and we deserve equity in business-building, same as anyone.
+I'm doing it for **Baltimore** — every block of it. For the underserved, intentionally disinvested communities the system was built to forget. Baltimore is one of the poorest cities in America with the most brilliant minds and some of the greatest resources, and we deserve equity in business-building, same as anyone.
 
 I'm doing it for **Black generational wealth.** My dad's family was stripped of about 80 acres of land. Bought out. We're owed a fair shot — same as everyone is.
 
-I'm doing it for my **younger self** who didn't know any of this was possible. For my **future family, my wife, my kids**. For my **uncle Steve** who's always worried about my stability but tells everyone I'm going to be a millionaire. For my **Pop, who said he did it his way like Sinatra. RIP.** For my **Nanny** — my grandmother, RIP — and for my **Grandma Jean**, who doubted me but somewhere knew. For my friends **Britni and Brandon** — who've quietly held me up with money in my bank account and seeds planted for my future. For **Liquida Chancey** and **Dave "Chap" Loveless** — my people. For the **Black Butterfly Network**. For my **EASE team — Ecosystem Awareness Solutions for Everyone**. For my **aunties**, especially **Aunt Jenni**, who taught me that sometimes the best thing you can do is ask for help.
+I'm doing it for my **younger self** who didn't know any of this was possible. For my **Mom**, who has struggled financially and can finally have the life she desired for us. For my **future family, my wife, my kids**. For **Uncle Steve**, who's always worried about my stability but tells everyone I'm going to be a millionaire. For my **Pop (Grandfather, RIP)**, who told me *"Tabby, you did it your way,"* like Frank Sinatra's song. For my **Nanny** — my grandmother, RIP — and for my **Grandma Jean**, who doubted me but somewhere knew. For my friends **Britni and Brandon** — who've quietly held me up with money in my bank account and seeds planted for my future. For **LaQuida Chancey** and **Dave "Chap" Loveless** — my people. For the **Black Butterfly Network**. For my **EASE team — Ecosystem Awareness Solutions for Everyone**. For my **Aunties and the village who raised me** — especially **Aunt Jenni**, who taught me that sometimes the best thing you can do is ask for help.
 
 I'm doing it for **God** — because I said I would. I said I will serve. This is a gift, and a gift doesn't belong to the one who carries it. It belongs to the people it's for.
 
@@ -181,7 +183,7 @@ These were shared in trust during the deep session. Captured here for AI/team co
 **Friends + chosen family:**
 - **Britni** — sends money out of nowhere when needed
 - **Brandon** — always in her corner, planting seeds for the future
-- **Liquida Chancey** — her people
+- **LaQuida Chancey** — her people
 - **Dave "Chap" Loveless** — her people
 
 **Business + community:**
