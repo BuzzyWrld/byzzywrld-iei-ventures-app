@@ -53,9 +53,9 @@ It was brutal. And I want to say it out loud because most founders don't. The "I
 
 I also deal with mental health challenges — and I'm vocal about that, because too many entrepreneurs are quietly drowning. Some days I don't want to get out of bed. Technically I don't have to. But I only eat what I kill. That's the deal.
 
-### The D.U.M.I Moment
+### The D.U.M.I. Moment
 
-One of my best friends co-owns a Baltimore brand called **D.U.M.I Apparel** — which stands for "Don't Underestimate My Intelligence." (In Baltimore, "dummy" is a term of endearment. Outsiders miss that.)
+One of my best friends co-owns a Baltimore brand called **D.U.M.I. Apparel** — which stands for "Don't Underestimate My Intelligence." (In Baltimore, "dummy" is a term of endearment. Outsiders miss that.)
 
 I went to Jaydee — the co-founder — and said *"I'd love to do your website."* She said yes, we bartered, clothes for design work. I built it. It looked good. But I had blank sections everywhere — About page, mission, product descriptions — and I had to ask her: *"What do I put here? And here? And here?"*
 
@@ -77,7 +77,7 @@ That system is **The IEI Brand System.** Six modules. The Fourfold Path to Meani
 
 ### Buzzy Brought My Baby Back
 
-Buzzy — Ryan, who I call my little Jedi — was my intern about three years ago. After his initial tutelage with me, he was on a roll. He went on to get his marketing degree, started his own business, and hasn't had to get a job since. Over the years, we stayed in touch — keeping each other abreast of what was happening in life and business, often laughing about the late nights we worked together when he supported a clothing launch I oversaw for the D.U.M.I brand.
+Buzzy — Ryan, who I call my little Jedi — was my intern about three years ago. After his initial tutelage with me, he was on a roll. He went on to get his marketing degree, started his own business, and hasn't had to get a job since. Over the years, we stayed in touch — keeping each other abreast of what was happening in life and business, often laughing about the late nights we worked together when he supported a clothing launch I oversaw for the D.U.M.I. Apparel brand.
 
 Then in April 2026, out of the blue, he called me. *"Tab, I built this app with my developer Henrique. Let's call it IEI Ventures, it's yours. You made it. I'm coming to you. It's a venture thing, and an incubator thing. I'm doing the same on my end."*
 
@@ -130,11 +130,109 @@ Once the long-form is approved, Claude generates these (each is a different lens
 
 | Version | Length | Status |
 |---|---|---|
-| About Page (Brand Blueprint landing) | 200-300 words | ⏳ TODO |
-| Investor / Partner Bio | 100-150 words | ⏳ TODO |
-| LinkedIn Bio | 60 words | ⏳ TODO |
-| Podcast / Speaking Intro | 30-40 words | ⏳ TODO |
-| One-liner (IG bio, email signature, etc.) | 15 words | ⏳ TODO |
+| About Page (Brand Blueprint landing) | 200-300 words | ✅ v1 below |
+| Investor / Partner Bio | 100-150 words | ✅ v1 below |
+| LinkedIn Bio | 60 words | ✅ v1 below |
+| Podcast / Speaking Intro | 30-40 words | ✅ v1 below |
+| One-liner (IG bio, email signature, etc.) | 15 words | ✅ 3 options below |
+
+---
+
+## 📝 ABOUT PAGE — for Brand Blueprint landing (~250 words)
+
+> **Goal:** Customer-facing. Warm. Real. Ends with permission to start.
+
+---
+
+**I'm Tab Wolod, founder of IEI Ventures. I help founders turn ideas into income — and I've been doing it for nearly a decade.**
+
+I started where most founders are right now: stuck. After eleven years at Verizon Wireless, I quit in September 2016 with nothing but a phrase that kept ringing in my head — *Ideas Equal Income.* I tried everything to turn that phrase into a business. MLM, T-shirts, an internet radio show, a cleaning company. Then I started building Wix websites for friends — and noticed every single client went blank when I asked them about their brand.
+
+That's how I discovered the gap I now build my whole work around: founders have brilliant ideas, but they can't explain them, package them, or sell them. So I built a system to fix that. I call it **The IEI Brand System** — six modules, a four-fold path, ten worksheets. I've used it with dozens of founders. Some are thriving. Others I'm still in the trenches with.
+
+**Brand Blueprint is that system, productized.** It gives any founder the brand foundation they'd otherwise pay an agency $10K+ to build — for a price they can actually afford, in 24 hours, AI-accelerated and personally reviewed by me before it hits your inbox.
+
+I'm doing this for Baltimore. For Black generational wealth. For the founders the gatekeepers won't recognize. For every brilliant idea that deserves a shot at becoming income.
+
+**Long live the light bulb moments. Let's build.**
+
+— Tab
+
+---
+
+## 💼 INVESTOR / PARTNER BIO (~140 words)
+
+> **Goal:** Professional but real. Surface the IP + methodology + portfolio context. Less personal, more strategic.
+
+---
+
+Tab Wolod is the founder of **IEI Ventures**, a portfolio company productizing brand-development and go-to-market methodology for founders priced out of traditional agencies. She built her proprietary methodology — **The IEI Brand System** — over nine years of working with mission-driven founders across brand identity, marketing strategy, fundraising, and social impact. Two published books (*From Stuck to Bucks* and *Know Thy Business*) document the framework.
+
+After eleven years at Verizon Wireless in operations and Workforce Planning, Tab launched her own agency in 2017. She has built dozens of brand foundations for founders and organizations, including 60+ community partnerships during COVID with Baltimore institutions like Kennedy Krieger and House of Ruth. **IEI Ventures** now operates as the innovation arm of her work, launching Brand Blueprint as its first product alongside a music app and VoltBay.
+
+---
+
+## 🔗 LINKEDIN BIO (~60 words)
+
+> **Goal:** Tight identity + what she does + what makes her different. Goes in the LinkedIn "About" section.
+
+---
+
+Founder of **IEI Ventures**. I help mission-driven founders turn ideas into income — starting with the brand.
+
+Built **The IEI Brand System** over nine years and dozens of clients. Now productizing it as **Brand Blueprint** so more founders can afford the brand foundation they were always meant to have.
+
+Baltimore-based, building for everywhere.
+Author of *From Stuck to Bucks* + *Know Thy Business*.
+
+---
+
+## 🎙️ PODCAST / SPEAKING INTRO (~35 words)
+
+> **Goal:** Reads well aloud. A host can drop this verbatim before introducing you.
+
+---
+
+> *"Tab Wolod is the founder of IEI Ventures and the architect of The IEI Brand System. She's spent nearly a decade helping mission-driven founders turn ideas into income — starting with the brand. Tab, welcome."*
+
+---
+
+## ✨ ONE-LINER — 3 options (~15 words each)
+
+> **Goal:** IG bio, email signature, business card, the bottom of every email. Pick one. Edit any.
+
+---
+
+**Option A (mission-forward):**
+> Founder of IEI Ventures. Helping founders turn ideas into income — starting with the brand.
+
+**Option B (signature-forward):**
+> Brand strategist · Founder of IEI Ventures · From Idea to Income, starting with the brand.
+
+**Option C (proprietary-forward):**
+> Founder of IEI Ventures + architect of The IEI Brand System. From Idea to Income.
+
+**My pick:** Option A reads warmest and most accessible. Option C reads most authoritative (best for investor/partner contexts). Option B is the middle. **You could use Option A everywhere day-to-day and Option C for formal/investor surfaces.**
+
+---
+
+## 📌 USAGE MAP — where each version goes
+
+| Surface | Use this version |
+|---|---|
+| Brand Blueprint landing "Meet Tab" section | About Page (~250 words) |
+| ieiventures.com parent site bio | About Page or Investor Bio |
+| Press kit (PDF download) | Investor / Partner Bio (~140 words) |
+| Investor decks | Investor / Partner Bio + photo |
+| LinkedIn "About" section | LinkedIn Bio (~60 words) |
+| LinkedIn headline | One-liner Option C |
+| IG bio (link in bio context) | One-liner Option A or B (depending on profile vibe) |
+| Email signature | One-liner Option A |
+| Podcast pre-recorded intro | Podcast Intro (~35 words) |
+| Conference / event introduction | Podcast Intro (~35 words) |
+| Email signature footer for IEI Ventures team | One-liner Option C |
+
+---
 
 ---
 
@@ -188,7 +286,7 @@ These were shared in trust during the deep session. Captured here for AI/team co
 
 **Business + community:**
 - **Buzzy (Ryan)** and **Henrique** — IEI Ventures co-builders
-- **D.U.M.I Apparel** team (Jaydee + co-founders + Mikey)
+- **D.U.M.I. Apparel** team (Jaydee + co-founders + Mikey)
 - **Black Butterfly Network**
 - **EASE team — Ecosystem Awareness Solutions for Everyone**
 - All her past clients
