@@ -83,6 +83,21 @@ Additional revision rounds beyond the first are available via:
 
 Outside the standard refund window, IEI Ventures may, at our sole discretion, offer partial refunds, credits, or service credits in cases where extenuating circumstances apply. Decisions are made on a case-by-case basis.
 
+### 4f. Automatic Acceptance After 7 Days of Inaction
+
+If you take no action — neither accepting, requesting revisions, nor declining — within **7 calendar days of receiving your watermarked preview email**, your Brand Blueprint will be automatically accepted on your behalf. At that point:
+
+- Clean (unwatermarked) final files will be delivered to your registered email;
+- Your refund eligibility under Section 4a will close;
+- The standard production-defect protections under Section 4c remain available;
+- You will be notified by email when auto-acceptance triggers.
+
+We will also send you reminder emails at **Day 4** and **Day 6** of inaction, clearly stating the upcoming auto-acceptance.
+
+This automatic acceptance protects both parties: you do not lose access to your purchased deliverables indefinitely, and we do not have orders sitting in perpetual limbo.
+
+By purchasing Brand Blueprint, you acknowledge and agree to this automatic-acceptance mechanism. Customers who wish to actively manage their preview should respond within the 7-day window.
+
 ---
 
 ## 5. Delivery Timeline

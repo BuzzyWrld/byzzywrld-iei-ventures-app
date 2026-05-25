@@ -237,6 +237,49 @@ Tab expanded the website deliverable from 1 page to **3 pages**. Approved during
 
 ---
 
+## 🎨 BRAND BLUEPRINT VISUAL IDENTITY — confirmed 2026-05-21
+
+Full spec: `BRAND_BLUEPRINT_VISUAL_IDENTITY.md`
+
+| Decision | Status |
+|---|---|
+| **Direction: "Crafted Vibrant"** — hybrid sister-brand identity inheriting IEI lineage | CONFIRMED |
+| **Strategic positioning:** sister brand under IEI Ventures (family resemblance via cream + IEI Yellow + adjacent lightbulb mark) | CONFIRMED |
+| **AI agent has NO NAME for MVP** — referred to as "your brand strategist" | CONFIRMED |
+| **Logo MVP:** simple "Brand Blueprint" wordmark in Inter Black + adjacent IEI lightbulb. Custom integrated mark = v2. | CONFIRMED |
+| **Palette:** Cream #FAF6EF · Charcoal #1A1A1A · IEI Yellow #FFD400 · Bold Coral #E94F37 · Deep Indigo #1B2A4E | CONFIRMED |
+| **Typography:** Inter (single family, free, Google Fonts). Display weight 900. | CONFIRMED |
+| **Mode A vs Mode B usage map** locked for every product surface | CONFIRMED |
+| **v2 deferred:** custom logo with designer (~$500), Söhne typography upgrade (~$500), branded illustration system | OPEN — funded after Stage 1 revenue |
+
+## 🚶 DELIVERABLE WALKTHROUGH UX — confirmed 2026-05-21/25
+
+Replaces the simple Accept/Decline button flow from earlier hybrid pivot. Full spec updated in `launch-assets/customer-revision-flow.md`.
+
+| Decision | Status |
+|---|---|
+| **Customer email opens guided walkthrough** (one deliverable per screen) | CONFIRMED |
+| **Each screen has ✓ "I've seen this" checkmark** — saves progress server-side, resumable | CONFIRMED |
+| **Customer can re-open any deliverable at any time** | CONFIRMED |
+| **Summary screen offers Accept / Request Revisions / Decline** after all ✓ | CONFIRMED |
+| **7-day auto-acceptance** if no action taken (protects against ghosting) | CONFIRMED — TOS Section 4f added |
+| **Day-4 + Day-6 reminder emails** before auto-acceptance | CONFIRMED — email-templates.md updated |
+| **Auto-acceptance notification email** on Day 7 | CONFIRMED |
+| **NEW TASK #34:** Build walkthrough UI (FE: Buzzy · BE: auto-signoff timer for Henrique) | OPEN |
+
+## 🔧 BACKEND REPO + TASTE-SKILL COORDINATION — confirmed 2026-05-21/25
+
+Tab coordinated with the BE dev (Henrique/Enrique) on infrastructure:
+
+| Decision | Status |
+|---|---|
+| **`content-engine` branch merges to `main`** | IN PROGRESS — pre-merge checklist in flight |
+| **Separate visual references repo** also merges into main | IN PROGRESS — coordination with dev team |
+| **The "taste skill"** = web-scour template matcher that finds website templates matching customer's competition/industry/vibe. Distinct from VISUAL_REFERENCES.md taste catalog. | CONFIRMED |
+| **Complementary architecture:** `VISUAL_REFERENCES.md` taste rules + 12 aesthetic families = AI generation choices · Taste-skill web-scour = real-world template references for AI to mimic structurally | CONFIRMED |
+
+---
+
 ## Notes for dev team
 
 - This is a **living document**. Every Tab call/text/message that contains a decision gets logged here.
