@@ -371,3 +371,42 @@ Plus **brand-with-brand collaborations** (DUMI × WTG, Black UX Labs × Uber, Ma
 ---
 
 **Last addendum:** 2026-05-21 (later same day, after Tab's 3pm meeting prep)
+
+---
+
+# ADDENDUM 2 — Design Anatomy Session Findings (2026-05-25)
+
+After the deep 22-design anatomy session with Tab (full breakdown in `DESIGN_ANATOMY.md`), the following NEW aesthetic families are confirmed and added to the AI's decision framework. Cross-reference `DESIGN_ANATOMY.md` cards for concrete recipes.
+
+## New aesthetic families (added to the 12-family catalog → now 19 families)
+
+| # | Family | Hallmarks | Source cards |
+|---|---|---|---|
+| 13 | **Cinematic Street Pop Art** | Magenta/pop colors + city-skyline B&W backdrop + thought-leader cutout portrait + quote from the person | A4 SH Everyone Deserves A Home |
+| 14 | **Afro Pop Futuristic** | African pattern textures (peanuts, mud-cloth, sunbursts) + popping contemporary palette (teal/yellow) + painted/gestural marks + "By Us \| With Us \| For Us" rallying inline | A6 BR Black to the Future |
+| 15 | **Streetwear Dark/Drippy** | Neon-green halo + red blood-spatter + audio waveform + hexagon wireframe bg + drippy interior on bold caps · STILL POLISHED (jagged but never sloppy) | A11 TLC Why Deny |
+| 16 | **Hypnotic Typography** | Each letter as its own art object (custom shapes per letter) + mathematical rhythm + variation per element | B1 Artscape 2026 |
+| 17 | **Sticker Pop-Art Drippy** | Neon-on-black palette + cutout silhouettes (multiple poses) + drippy-interior bold caps + categorical recruiting lists as design element | B2 POC Queer Creatives |
+| 18 | **Graffiti Realness w/ Sketch Overlays** | Cutout portrait + handwritten scribbled copy radiating from head (thought-bubble metaphor) + sticker-chip categorical info + B&W stars bg pattern | B4 BLK ASS Rhythm Liberation |
+| 19 | **Gathering-Energy Posters** | B&W crowd photo bg full-bleed + color cutout foreground portrait + sticker chips + community-event palette (green/orange/cream) | B5 BLK ASS Block Party |
+
+## New patterns reinforced (already in original framework, now stronger evidence)
+
+- **Editorial w/ Real-Element Clip Art** — real botanical/anatomical photo objects as decoration (turmeric, body silhouettes) — B3 Gut Experience
+- **Vintage Diaspora Poster** — mustard/red/green palette + sunburst/star icons + heritage pattern figure silhouettes — B6 BLK ASS Bashment
+- **Type-as-Art Custom Letterforms** — confirmed across multiple references (B1 Artscape, B7 ROOT WORD, B9 PACK LIGHT)
+- **Pattern-as-Branding Signature** — ONE distinctive recurring texture as visual signature; restraint matters — B10 Honey Dijon pixels
+- **Unexpected Genre Crossover** — "wrong" image creates memorability through surprise — B11 Spirit World racing+DJ
+
+## New Tab capabilities surfaced
+
+- **REBRAND-FROM-LOGO-UP** — when customer has only a logo, Tab extracts brand-kit DNA from it (palette + geometry) and systematizes upward (A9 Black UX Labs × Uber rebrand)
+- **Master template thinking** — Tab builds templates that scale across multiple speakers/events/posts (A7+A8 BR speaker slides identical structure, different content)
+- **Same-brand tone-shift within a campaign** — emotional weight dictates whether to go street-pop (A4) or polished-serious (A5) within one brand system
+- **Campaign-suite cohesion** — designs are not standalone, they FLOW together when seen as a suite (A1 DUMI×TLC NEW RELEASE was part of multi-piece campaign with animated/meme variants)
+
+## "Drippy" as a recurring Tab descriptor
+
+Across multiple designs and reference saves, Tab uses **"drippy"** to describe a specific aesthetic move: bold/heavy type or shape with melting/oozing interior treatment. Now confirmed as part of her design vocabulary. Added to BRAND_VOICE_SPEC.md as both a design and voice descriptor.
+
+**Last addendum:** 2026-05-25 (Design Anatomy session — 22 designs dissected, see `DESIGN_ANATOMY.md`)
