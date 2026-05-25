@@ -76,7 +76,7 @@ If someone has 5 minutes and needs to understand the project:
 
 > **Brand Blueprint** is a digital, AI-assisted version of Tab Wolod's proprietary brand methodology (The IEI Brand System), sold under the **IEI Ventures** parent.
 >
-> Customers pay **$997 / $1,997 / $3,997** for one of three tiers. Each tier delivers a complete brand foundation (messaging, logo, brand kit, 1-page website, GTM checklist + tier-specific add-ons) within 5 business days.
+> Customers pay **$997 / $1,997 / $3,997** for one of three tiers. Each tier delivers a complete brand foundation (messaging, logo, brand kit, 3-page website (Home + About + flex), GTM checklist + tier-specific add-ons) within 5 business days.
 >
 > The MVP launches as a **concierge model**: customers buy via Stripe Payment Link, book a 60-min intake call with Tab via Calendly, Tab runs them through her 6-module IEI Brand System, AI generates first-draft outputs via existing `brand-playbook` skill, **Tab personally reviews every output**, and deliverables ship by email.
 >

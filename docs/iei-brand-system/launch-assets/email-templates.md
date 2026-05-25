@@ -107,7 +107,9 @@ Stay tuned.
 
 ---
 
-## EMAIL 4 — DELIVERY (the big one, sent when Blueprint is ready)
+## EMAIL 4 — DELIVERY (the big one, sent when Tab approves the preview)
+
+> **UPDATED 2026-05-21:** This email now opens the WALKTHROUGH (single CTA), not a 3-button choice. Customer makes Accept/Revise/Decline decisions inside the walkthrough after reviewing each deliverable. Auto-acceptance applies if no action in 7 days (per TOS Section 4f).
 
 **Subject:** Your Brand Blueprint is here — {{brand_name}}
 
@@ -119,7 +121,11 @@ It's here.
 
 Your **{{tier_name}}** for {{brand_name}} is ready. Download everything below.
 
-👉 **[Download Your Brand Blueprint]({{download_link}})**
+👉 **[Walk me through my Brand Blueprint →]({{walkthrough_link}})**
+
+*(Single CTA. The walkthrough takes you screen-by-screen through each piece — Brand Messaging, Logo Options, Brand Kit, Website, GTM Checklist. You ✓ each one as you go. At the end you Accept, request Revisions, or Decline for refund. Your spot saves automatically if you need to leave and come back.)*
+
+⏰ **Auto-acceptance after 7 days of inaction** — if you take no action by [DAY 7 DATE], your Brand Blueprint will be auto-accepted and clean files delivered. We'll remind you on Day 4 and Day 6 if needed. Full details in our Terms.
 
 Inside the ZIP, you'll find:
 
@@ -129,7 +135,7 @@ For Basic:
 - `BrandBlueprint_{{brand_name}}_Playbook.pdf` — your full brand foundation, designed and ready to reference
 - `BrandBlueprint_{{brand_name}}_Logo_Options.zip` — 3 logo options, SVG + PNG, each in light + dark versions
 - `BrandBlueprint_{{brand_name}}_BrandKit.pdf` — colors, fonts, logo usage rules
-- `BrandBlueprint_{{brand_name}}_Website.zip` — 1-page website, HTML + assets, ready to deploy
+- `BrandBlueprint_{{brand_name}}_Website.zip` — 3-page website (Home + About + flex page), HTML + assets, ready to deploy
 - `BrandBlueprint_{{brand_name}}_GTM_Checklist.pdf` — your 6-week roadmap, customized to your goal
 
 For + Content (add):
@@ -179,6 +185,82 @@ Thank you for trusting me with this. Go build.
 Long live the light bulb moments,
 
 **Tab**
+
+---
+
+## EMAIL 4.5a — DAY-4 INACTION REMINDER (sent if customer hasn't started walkthrough)
+
+**Subject:** Quick reminder — your Brand Blueprint is waiting
+
+**Body:**
+
+Hey {{first_name}},
+
+Just a heads up — your Brand Blueprint preview has been sitting in your inbox for 4 days. No pressure, but a couple things to know:
+
+- The walkthrough takes ~15 minutes total
+- You can pause and come back anytime (your spot saves automatically)
+- Per our Terms, if no action is taken by **[DAY 7 DATE]**, your Blueprint is auto-accepted and clean files delivered
+
+👉 **[Walk me through my Brand Blueprint →]({{walkthrough_link}})**
+
+If you've already seen it and just need more time, that's cool — you've got 3 more days before auto-acceptance.
+
+If something's wrong or you have questions, just reply to this email. I read every one.
+
+— Tab
+
+---
+
+## EMAIL 4.5b — DAY-6 FINAL REMINDER (sent if still no action)
+
+**Subject:** Heads up — your Blueprint auto-accepts tomorrow
+
+**Body:**
+
+Hey {{first_name}},
+
+Your Brand Blueprint preview will **auto-accept tomorrow** ({{day_7_date}}) per the Terms you agreed to at checkout.
+
+Auto-acceptance means:
+✅ Clean unwatermarked files will be delivered to your inbox
+✅ Production defect protections remain (typos, broken files, etc.)
+⚠️ Your standard 7-day refund window closes
+
+If you want to actively review, request revisions, or decline for refund — just click below and you'll be walked through everything:
+
+👉 **[Walk me through my Brand Blueprint →]({{walkthrough_link}})**
+
+Either way works. Just wanted you to know what's about to happen.
+
+— Tab
+
+---
+
+## EMAIL 4.5c — AUTO-ACCEPTANCE NOTIFICATION (sent on Day 7 if no action taken)
+
+**Subject:** Your Brand Blueprint has been auto-accepted — clean files inside
+
+**Body:**
+
+Hey {{first_name}},
+
+Per our Terms, your Brand Blueprint was auto-accepted today after 7 days of inactivity on the preview.
+
+Your **clean unwatermarked final files** are now available:
+
+👉 **[Download your Final Brand Blueprint]({{final_download_link}})**
+
+(Download link valid for 90 days.)
+
+A few notes:
+- Your standard refund window has closed
+- Production defects (corrupted files, typos in your business name, broken pages) are still covered — just reply to this email if you spot any
+- The premium upgrade option (+$1,000 for a Brand-Storming call with me to refine personally) is still available if you want it later — just hit me up
+
+Welcome to the founders who shipped. Long live the light bulb moments.
+
+— Tab
 
 ---
 

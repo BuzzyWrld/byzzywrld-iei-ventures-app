@@ -8,30 +8,68 @@
 
 ---
 
-## The flow
+## The flow (UPDATED 2026-05-21 — walkthrough model)
 
 ```
 1. Customer receives delivery email
    ↓
-2. Customer opens watermarked preview, reviews everything
+2. Customer clicks the SINGLE primary CTA: "Walk me through my Brand Blueprint →"
    ↓
-3. Customer clicks one of three buttons in email:
+3. Browser opens ieiventures.com/walkthrough/[brandId]
+   (auth-gated by magic link token in the email)
+   ↓
+4. GUIDED WALKTHROUGH — one deliverable per screen, in this order:
    
-   [ Accept Final Delivery ]   [ Request Revisions ]   [ Decline + Refund ]
+   SCREEN 1 — Brand Messaging      [watermarked preview] → ✓ "I've seen this"
+   SCREEN 2 — Logo Options (3)     [watermarked preview] → ✓ "I've seen this"
+   SCREEN 3 — Brand Kit            [watermarked preview] → ✓ "I've seen this"
+                                    (colors + typography)
+   SCREEN 4 — 3-Page Website       [watermarked preview] → ✓ "I've seen this"
+                                    (Home + About + Flex)
+   SCREEN 5 — GTM Checklist        [watermarked preview] → ✓ "I've seen this"
+   
+   Each ✓ saves progress server-side (resumable if customer leaves + returns)
+   Each screen footer shows: "Auto sign-off in N days if no action taken"
+   Customer can jump back to any prior screen at any time
    ↓
-4. If "Request Revisions":
-   → Browser opens at ieiventures.com/revise/[brandId]
-   → Returns to a NEW chat session (revision mode)
+5. SUMMARY SCREEN — all 5 ✓ — shows:
+   
+   "You've reviewed everything. What now?"
+   
+   [ Accept Final Delivery ]  [ Request Revisions ]  [ Decline + Refund ]
+   
+   OR customer can re-open any deliverable
    ↓
-5. AI asks 1-2 clarifying questions to gather structured revision input
-   ↓
-6. AI regenerates affected sections (or full brand if scope warrants)
-   ↓
-7. New watermarked preview goes back to Tab's review queue
-   ↓
-8. Tab reviews → approves → customer gets updated preview email
-   ↓
-9. Customer accepts OR requests round 2 (paid — see escalation)
+6. Customer chooses one path:
+
+PATH A — ACCEPT FINAL DELIVERY
+   → Clean unwatermarked files generated
+   → Delivered via email + new download links
+   → Refund window closes (except production defects)
+   → Premium upgrade offer email triggers (Day 1)
+   → Exit survey + testimonial flow begins
+
+PATH B — REQUEST REVISIONS
+   → Returns to chat in revision mode
+   → AI asks 1-2 clarifying questions about what to change
+   → Regenerates affected sections
+   → Back to Tab's review queue → approval → customer gets a fresh walkthrough
+
+PATH C — DECLINE + REFUND (within 7 days of preview)
+   → Customer confirms deletion of preview files
+   → Stripe refund initiated (5-10 days)
+   → Brand project archived
+   → Feedback captured for product improvement
+
+⚠️ AUTO-ACCEPTANCE IF NO ACTION
+If customer takes NO action within 7 days of preview email:
+  → Acceptance is automatically triggered (per TOS Section 4f)
+  → Clean files delivered
+  → Refund window closes
+  → Customer notified by email when auto-acceptance triggers
+  → Production defects remain covered
+
+Reminder emails sent at Day 4 + Day 6 of inaction (per email-templates.md).
 ```
 
 ---

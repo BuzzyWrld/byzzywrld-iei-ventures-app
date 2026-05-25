@@ -430,3 +430,35 @@ ADDITIONAL VOICE RULES (2026-05-20 additions):
 
 **Source:** 2026-05-20 vocabulary session (Task #17 — completed).
 **Last updated:** 2026-05-20.
+
+---
+
+# ADDENDUM 2 — Tab Design Descriptors (Design Anatomy session 2026-05-25)
+
+The Design Anatomy session surfaced ~15 additional Tab-voice descriptors and design vocabulary terms that double as voice rules. All confirmed by Tab in conversation. Add to the AI's voice + design rules.
+
+## New Tab design/voice descriptors (use verbatim)
+
+| Term | Use case |
+|---|---|
+| **drippy** | Bold/heavy type or shape with melting/oozing interior treatment · "the text is drippy on the inside" · POC Queer + Why Deny |
+| **hypnotic** | Custom typography that "draws people in" · Artscape lettering style |
+| **dope ass realness** | The combo of grounded photography + authentic copy + bold design = makes you wanna be there |
+| **let's go, everybody's gathering** | Community-event poster energy · BLK ASS Block Party register |
+| **random as shit (positive)** | Unexpected image/content combinations that work because they surprise · Spirit World racing-cars-for-DJ-night |
+| **boom in your face** | High-contrast bold composition that hits immediately · Why Deny register |
+| **real flow, real groovy** | Brand has its shit together — confident, coherent, alive · BR Black to the Future register |
+| **cinematic street pop art** | City-skyline backdrop + magenta pop + thought-leader portrait + quote = Smalltimore Homes register |
+| **Afro Pop Futuristic** | African patterns + popping contemporary palette + community-power energy · BR family |
+| **dope ass show** | Cinematic event-promotion energy · Artscape register |
+| **real shit I would look at** | Tab's personal authenticity test · would she stop scrolling? · TLC Press Release register |
+| **we got our shit together** | A brand performance of competence-with-soul · BR family |
+| **THE FLINT** (speaker naming) | A character/role/nickname pattern Tab uses to elevate participants in event design (speakers become "THE FLINT" not generic speakers) · BR speaker template |
+| **jagged · oozy · emo-a-little-bit** | Mood descriptors for the dark/drippy streetwear register · TLC Why Deny family |
+| **loyalty in the streets** | Community-identity marker copy that signals "we belong to each other" · DUMI/TLC brand |
+
+## Cross-reference
+
+These all live in `BRAND_VOICE_SPEC.md` (this doc) as voice rules, BUT they also appear in `DESIGN_ANATOMY.md` as design rules. **Voice and design are not separate disciplines for Tab — they're the same craft expressed differently.** When the AI generates a piece, both prompt-engineering AND visual-decision rules can pull from this vocabulary.
+
+**Last addendum:** 2026-05-25 (Design Anatomy session findings)

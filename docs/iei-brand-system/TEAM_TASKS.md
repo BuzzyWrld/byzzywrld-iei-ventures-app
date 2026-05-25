@@ -7,7 +7,7 @@
 
 ## THE PRODUCT IN ONE PARAGRAPH
 
-Brand Blueprint is a **self-serve AI brand-building product at $997**. Customer pays via Stripe → lands in a chat interface that interviews them through Tab's 6-module IEI Brand System → AI generates their complete brand foundation (messaging, 3 logos, brand kit, 1-page website, GTM checklist) → auto-delivered by email within 5 business days. Optional premium upgrade after delivery: **+$1,000 for a 60-min Brand-Storming call with Tab and personal refinement**. The chat IS the interface. No Zoom call required for the standard product. Tab spot-checks 10% of deliveries to monitor quality.
+Brand Blueprint is a **self-serve AI brand-building product at $997**. Customer pays via Stripe → lands in a chat interface that interviews them through Tab's 6-module IEI Brand System → AI generates their complete brand foundation (messaging, 3 logos, brand kit, 3-page website (Home + About + flex), GTM checklist) → auto-delivered by email within 5 business days. Optional premium upgrade after delivery: **+$1,000 for a 60-min Brand-Storming call with Tab and personal refinement**. The chat IS the interface. No Zoom call required for the standard product. Tab spot-checks 10% of deliveries to monitor quality.
 
 ---
 

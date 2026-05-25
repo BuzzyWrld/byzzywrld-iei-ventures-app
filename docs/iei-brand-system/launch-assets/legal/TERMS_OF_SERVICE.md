@@ -21,7 +21,7 @@ You confirm that you are at least 18 years old, have the legal authority to ente
 
 ## 2. What Brand Blueprint Is
 
-Brand Blueprint is a digital, AI-assisted brand-development service that produces a set of brand deliverables based on information you provide. The service runs through three steps:
+Brand Blueprint is a digital, AI-assisted brand-development service that produces a set of brand deliverables based on information you provide, including brand messaging, logo options, brand kit (colors + typography), a 3-page website (Home + About + a customer-selected flex page), and a personalized go-to-market checklist. The service runs through three steps:
 
 1. **Intake.** You complete a structured intake (currently a 60-minute one-on-one call with Tab Wolod; later, an in-app chat experience).
 2. **Generation + Human Review.** Our AI system, built around our proprietary methodology ("The IEI Brand System"), generates draft deliverables. Tab Wolod personally reviews and refines every output before delivery.
@@ -82,6 +82,21 @@ Additional revision rounds beyond the first are available via:
 ### 4e. Discretionary Adjustments
 
 Outside the standard refund window, IEI Ventures may, at our sole discretion, offer partial refunds, credits, or service credits in cases where extenuating circumstances apply. Decisions are made on a case-by-case basis.
+
+### 4f. Automatic Acceptance After 7 Days of Inaction
+
+If you take no action — neither accepting, requesting revisions, nor declining — within **7 calendar days of receiving your watermarked preview email**, your Brand Blueprint will be automatically accepted on your behalf. At that point:
+
+- Clean (unwatermarked) final files will be delivered to your registered email;
+- Your refund eligibility under Section 4a will close;
+- The standard production-defect protections under Section 4c remain available;
+- You will be notified by email when auto-acceptance triggers.
+
+We will also send you reminder emails at **Day 4** and **Day 6** of inaction, clearly stating the upcoming auto-acceptance.
+
+This automatic acceptance protects both parties: you do not lose access to your purchased deliverables indefinitely, and we do not have orders sitting in perpetual limbo.
+
+By purchasing Brand Blueprint, you acknowledge and agree to this automatic-acceptance mechanism. Customers who wish to actively manage their preview should respond within the 7-day window.
 
 ---
 
