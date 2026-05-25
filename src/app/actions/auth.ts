@@ -13,7 +13,7 @@ export async function loginAction(
   const { user, error } = await signIn({ email, password });
   if (error || !user) return { error: error ?? "sign-in failed" };
   await setSession(user.id);
-  redirect("/");
+  redirect("/onboarding");
 }
 
 export async function signupAction(
@@ -28,7 +28,7 @@ export async function signupAction(
   const { user, error } = await signUp({ email, password, name, tenantId: tenant.id });
   if (error || !user) return { error: error ?? "sign-up failed" };
   await setSession(user.id);
-  redirect("/");
+  redirect("/onboarding");
 }
 
 export async function logoutAction(): Promise<void> {

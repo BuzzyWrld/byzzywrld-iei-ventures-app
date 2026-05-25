@@ -216,7 +216,7 @@ function Header({ project }: { project: BrandProject }) {
             ID {project.id.slice(0, 8)} · {fmtDate(project.createdAt)}
           </span>
         </div>
-        <h1 className="font-serif leading-[1] mb-2" style={{ fontSize: 72 }}>
+        <h1 className="font-display leading-[1] mb-2" style={{ fontSize: 72 }}>
           {project.intake.companyName}
         </h1>
         <div className="text-base" style={{ color: "var(--color-text-muted)" }}>
@@ -987,7 +987,7 @@ function LogoPickerGate({ project }: { project: BrandProject }) {
     <div className="mb-12">
       <div className="kicker mb-3">Pick your logo to continue</div>
       <h2
-        className="font-serif mb-3"
+        className="font-display mb-3"
         style={{ fontSize: 32, lineHeight: 1.15 }}
       >
         Three directions. Pick one and we&apos;ll build the rest of your brand around it.
@@ -1635,7 +1635,7 @@ function Positioning({ brand }: { brand: LiveBrandJson | null }) {
       <div className="kicker mb-3">Positioning</div>
       {text && (
         <p
-          className="font-serif leading-[1.25]"
+          className="font-display leading-[1.25]"
           style={{ fontSize: 28, maxWidth: "none" }}
         >
           {text}

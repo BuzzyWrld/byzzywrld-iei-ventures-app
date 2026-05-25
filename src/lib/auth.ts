@@ -113,8 +113,7 @@ export async function signIn(params: {
 
   // Demo bypass.
   if (email === DEMO_USER.email) {
-    const hash = process.env.DEMO_USER_PASSWORD_HASH ?? "";
-    const ok = await bcrypt.compare(params.password, hash);
+    const ok = await bcrypt.compare(params.password, _DEMO_HASH);
     if (!ok) return { error: "invalid credentials" };
     return { user: DEMO_USER };
   }

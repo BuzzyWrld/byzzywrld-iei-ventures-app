@@ -11,7 +11,7 @@ export default function LogosPreviewPage() {
       <div className="max-w-[1400px] mx-auto">
         <header className="mb-10">
           <div className="kicker mb-2">Logo directions · wireframe · v0.1</div>
-          <h1 className="font-serif leading-[1.02] mb-2" style={{ fontSize: 48 }}>
+          <h1 className="font-display leading-[1.02] mb-2" style={{ fontSize: 48 }}>
             Three directions. Pick one (or mix).
           </h1>
           <p className="text-base" style={{ color: "var(--color-text-muted)", maxWidth: "60ch" }}>
@@ -35,7 +35,7 @@ export default function LogosPreviewPage() {
           className="mt-10 pt-8 border-t flex flex-wrap items-center justify-between gap-4"
           style={{ borderColor: "var(--color-border)" }}
         >
-          <p className="font-serif" style={{ fontSize: 20 }}>
+          <p className="font-display" style={{ fontSize: 20 }}>
             Which direction feels right?
           </p>
           <Link href="/" className="btn btn-ghost btn-sm">
@@ -354,17 +354,17 @@ const LOGOS_CSS = `
     padding-bottom: 6px;
   }
   .logos-col .num {
-    font-family: var(--font-instrument-serif), serif;
+    font-family: var(--font-display), serif;
     font-size: 40px;
     line-height: 1;
   }
   .logos-col .name {
-    font-family: var(--font-instrument-serif), serif;
+    font-family: var(--font-display), serif;
     font-size: 22px;
   }
   .logos-col .tag {
     margin-left: auto;
-    font-family: var(--font-geist-mono), monospace;
+    font-family: var(--font-mono), monospace;
     font-size: 10px;
     text-transform: uppercase;
     letter-spacing: 0.12em;
@@ -381,7 +381,7 @@ const LOGOS_CSS = `
     top: -9px; left: 14px;
     background: var(--color-surface);
     padding: 0 8px;
-    font-family: var(--font-geist-mono), monospace;
+    font-family: var(--font-mono), monospace;
     font-size: 10px;
     text-transform: uppercase;
     letter-spacing: 0.16em;
@@ -425,7 +425,7 @@ const LOGOS_CSS = `
     border: 1px dashed var(--color-border);
   }
   .icon-cell .cap {
-    font-family: var(--font-geist-mono), monospace;
+    font-family: var(--font-mono), monospace;
     font-size: 9px;
     text-transform: uppercase;
     letter-spacing: 0.1em;
@@ -456,7 +456,7 @@ const LOGOS_CSS = `
     gap: 10px;
   }
   .logos-rationale .r-title {
-    font-family: var(--font-instrument-serif), serif;
+    font-family: var(--font-display), serif;
     font-size: 18px;
   }
   .logos-rationale p {
@@ -467,7 +467,7 @@ const LOGOS_CSS = `
 
   /* ===== Dir 1 — Serif monogram ===== */
   .d1-word {
-    font-family: var(--font-instrument-serif), serif;
+    font-family: var(--font-display), serif;
     letter-spacing: -0.02em;
     color: var(--color-primary);
     display: inline-flex;
@@ -497,7 +497,7 @@ const LOGOS_CSS = `
     align-self: flex-end;
   }
   .d1-word .ventures {
-    font-family: var(--font-geist-mono), monospace;
+    font-family: var(--font-mono), monospace;
     font-weight: 500;
     font-size: 12px;
     text-transform: uppercase;
@@ -505,7 +505,7 @@ const LOGOS_CSS = `
     color: var(--color-primary);
   }
   .d1-icon {
-    font-family: var(--font-instrument-serif), serif;
+    font-family: var(--font-display), serif;
     color: var(--color-primary);
     letter-spacing: -0.04em;
     line-height: 1;
@@ -514,7 +514,7 @@ const LOGOS_CSS = `
 
   /* ===== Dir 2 — Bracketed container ===== */
   .d2-word {
-    font-family: var(--font-geist-sans), sans-serif;
+    font-family: var(--font-body), sans-serif;
     font-weight: 600;
     font-size: 32px;
     letter-spacing: -0.02em;
@@ -530,7 +530,7 @@ const LOGOS_CSS = `
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    font-family: var(--font-geist-mono), monospace;
+    font-family: var(--font-mono), monospace;
     font-weight: 600;
     font-size: 18px;
     letter-spacing: 0;
@@ -546,7 +546,7 @@ const LOGOS_CSS = `
   .d2-mark::before { top: -6px; left: -6px; border-right: none; border-bottom: none; }
   .d2-mark::after { bottom: -6px; right: -6px; border-left: none; border-top: none; }
   .d2-word .ventures {
-    font-family: var(--font-geist-mono), monospace;
+    font-family: var(--font-mono), monospace;
     font-weight: 500;
     font-size: 11px;
     text-transform: uppercase;
@@ -561,7 +561,7 @@ const LOGOS_CSS = `
 
   /* ===== Dir 3 — Typographic rule ===== */
   .d3-word {
-    font-family: var(--font-geist-sans), sans-serif;
+    font-family: var(--font-body), sans-serif;
     font-weight: 500;
     font-size: 30px;
     letter-spacing: -0.015em;
@@ -585,7 +585,7 @@ const LOGOS_CSS = `
   }
   .d3-word .iei { font-weight: 600; letter-spacing: -0.02em; }
   .d3-word .ventures {
-    font-family: var(--font-geist-mono), monospace;
+    font-family: var(--font-mono), monospace;
     font-weight: 500;
     font-size: 11px;
     text-transform: uppercase;

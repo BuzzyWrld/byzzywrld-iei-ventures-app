@@ -39,12 +39,26 @@
   --sh-1:     0 1px 0 rgba(0,0,0,0.5), 0 1px 2px rgba(0,0,0,0.4);
   --sh-2:     0 2px 4px rgba(0,0,0,0.5), 0 4px 12px rgba(0,0,0,0.4);
   --sh-focus: 0 0 0 3px rgba(245,206,0,0.25);
+
+  /* ── Brief token aliases (section 7) ────────────────────── */
+  --black: #0A0A0A;
+  --yellow: #F5CE00;
+  --yellow-hover: #FFD80F;
+  --deep-gold: #C4941A;
+  --chalk: #F7F6F0;
+  --carbon: #181818;
+  --slate: #2A2A2A;
+  --ash: #898989;
+  --green: #50C878;
+  --red: #F87171;
+  --border-y: rgba(245,206,0,0.25);
+  --y-dim: rgba(245,206,0,0.08);
 }
 
 @theme inline {
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-  --font-serif: var(--font-instrument-serif);
+  --font-sans: var(--font-dm-sans);
+  --font-mono: var(--font-ibm-plex-mono);
+  --font-display: var(--font-space-grotesk);
 }
 
 html,
@@ -54,22 +68,20 @@ body {
 }
 
 body {
-  font-family: var(--font-geist-sans), system-ui, sans-serif;
+  font-family: var(--font-dm-sans), 'DM Sans', system-ui, sans-serif;
   font-size: 15px;
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
 }
 
-.font-serif {
-  font-family: var(--font-instrument-serif), Georgia, serif;
-  font-weight: 400;
-  letter-spacing: -0.01em;
+.font-display {
+  font-family: var(--font-space-grotesk), 'Space Grotesk', sans-serif;
 }
 .font-mono {
-  font-family: var(--font-geist-mono), ui-monospace, monospace;
+  font-family: var(--font-ibm-plex-mono), 'IBM Plex Mono', ui-monospace, monospace;
 }
 .kicker {
-  font-family: var(--font-geist-mono), monospace;
+  font-family: var(--font-ibm-plex-mono), 'IBM Plex Mono', monospace;
   font-size: 10.5px;
   text-transform: uppercase;
   letter-spacing: 0.14em;
@@ -84,7 +96,7 @@ body {
   justify-content: center;
   border: 1.5px solid var(--color-primary);
   color: var(--color-primary);
-  font-family: var(--font-geist-mono), monospace;
+  font-family: var(--font-ibm-plex-mono), 'IBM Plex Mono', monospace;
   font-weight: 600;
   background: transparent;
 }
@@ -284,7 +296,7 @@ body {
   padding: 3px 8px 3px 7px;
   border-radius: var(--r-full);
   font-size: 11px;
-  font-family: var(--font-geist-mono), monospace;
+  font-family: var(--font-ibm-plex-mono), 'IBM Plex Mono', monospace;
   font-weight: 500;
   text-transform: uppercase;
   letter-spacing: 0.06em;
@@ -391,7 +403,7 @@ body {
   border: 1px solid var(--color-border);
   border-bottom-width: 2px;
   border-radius: 3px;
-  font-family: var(--font-geist-mono), monospace;
+  font-family: var(--font-ibm-plex-mono), 'IBM Plex Mono', monospace;
   font-size: 10px;
   color: var(--color-text-muted);
   background: var(--color-surface-2);
