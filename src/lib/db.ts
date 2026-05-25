@@ -56,6 +56,11 @@ function ensureSchema(): Promise<void> {
         created_at TEXT NOT NULL
       )
     `;
+    // OAuth columns — idempotent migrations for existing tables
+    await sql`ALTER TABLE users ALTER COLUMN password_hash DROP NOT NULL`.catch(() => {});
+    await sql`ALTER TABLE users ADD COLUMN IF NOT EXISTS oauth_provider TEXT`;
+    await sql`ALTER TABLE users ADD COLUMN IF NOT EXISTS oauth_provider_account_id TEXT`;
+    await sql`ALTER TABLE users ADD COLUMN IF NOT EXISTS image TEXT`;
     await sql`
       CREATE TABLE IF NOT EXISTS tenants (
         id TEXT PRIMARY KEY,
@@ -259,6 +264,27 @@ export async function createUser(user: { id: string; email: string; passwordHash
     INSERT INTO users (id, email, password_hash, name, tenant_id, created_at)
     VALUES (${user.id}, ${user.email}, ${user.passwordHash}, ${user.name}, ${user.tenantId}, ${user.createdAt})
   `;
+}
+
+export async function upsertOAuthUser(input: {
+  email: string;
+  name: string | null;
+  image: string | null;
+  provider: string;
+  providerAccountId: string | null;
+}): Promise<UserRow> {
+  await ensureSchema();
+  const rows = await sql`
+    INSERT INTO users (id, email, password_hash, name, tenant_id, created_at, oauth_provider, oauth_provider_account_id, image)
+    VALUES (${crypto.randomUUID()}, ${input.email}, ${null}, ${input.name ?? "User"}, ${"default"}, ${new Date().toISOString()}, ${input.provider}, ${input.providerAccountId}, ${input.image})
+    ON CONFLICT (email) DO UPDATE SET
+      oauth_provider = EXCLUDED.oauth_provider,
+      oauth_provider_account_id = EXCLUDED.oauth_provider_account_id,
+      name = COALESCE(users.name, EXCLUDED.name),
+      image = COALESCE(users.image, EXCLUDED.image)
+    RETURNING *
+  `;
+  return rows[0] as UserRow;
 }
 
 // ─── Tenants ────────────────────────────────────────────────────────────────
