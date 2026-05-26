@@ -37,7 +37,7 @@
 | – Quick cards that pop | ✓ | |
 | – Brand Kit with quality logo | ✓ | |
 | – Easy copy/paste to Canva | ✓ | |
-| – Website | ✓ | |
+| – Website | ✓ | See override below — was 1 site, now 3 versions |
 | – GTM catered checklist based on their goals | ✓ | |
 | "Existing brand" path as v1 differentiator, visible on preview | CONFIRMED 2026-05-18 | Keep — must show when user previews |
 | English only | CONFIRMED 2026-05-18 | |
@@ -277,6 +277,24 @@ Tab coordinated with the BE dev (Henrique/Enrique) on infrastructure:
 | **Separate visual references repo** also merges into main | IN PROGRESS — coordination with dev team |
 | **The "taste skill"** = web-scour template matcher that finds website templates matching customer's competition/industry/vibe. Distinct from VISUAL_REFERENCES.md taste catalog. | CONFIRMED |
 | **Complementary architecture:** `VISUAL_REFERENCES.md` taste rules + 12 aesthetic families = AI generation choices · Taste-skill web-scour = real-world template references for AI to mimic structurally | CONFIRMED |
+
+---
+
+## 🎨 WEBSITE DELIVERABLE — 3 VIBE VERSIONS — Henrique override 2026-05-26
+
+**Background:** Tab's 2026-05-21 call locked the deliverable as **ONE** 3-page website (home / about / flex) sharing one brand visual system. See `src/lib/variants/landing.ts` header (pre-2026-05-26 version) for the original spec.
+
+**Henrique's override (2026-05-26):** Each customer now ships with **THREE** complete 3-page website versions, each in a distinct vibe. All three vibes use the same brand foundation (mission, voice, positioning, colors) but apply different typography, color emphasis, and layout signature so the customer compares three aesthetic interpretations and picks one to edit. The customer's reasoning: "I want each separate website template to have its own vibe/theme/color/fonts. But the pages themselves obviously have the same fonts" (intra-vibe consistency, inter-vibe distinction).
+
+| Decision | Status |
+|---|---|
+| **3 vibe versions × 3 pages each = 9 HTML outputs** | CONFIRMED 2026-05-26 — Henrique |
+| **Vibes are deterministic per brand** — picked from 5 base vibes by industry + archetype, see `src/lib/variants/vibes.ts` | CONFIRMED 2026-05-26 |
+| **5 base vibes anchored to Tab's FIVE FLAVORS** in `references/design-anatomy.md` (Editorial Density · Type-as-Art · Vintage Diaspora Poster · Pattern-as-Branding · Cinematic Street Pop Art) | CONFIRMED 2026-05-26 |
+| **Within a vibe, all 3 pages share fonts + color strategy + layout signature** — they're one cohesive site, not three random pages | CONFIRMED 2026-05-26 |
+| **Across vibes, fonts + accent + layout differ deliberately** — so the customer sees real choice | CONFIRMED 2026-05-26 |
+| **Token cost:** ~3× the previous build (9 calls vs 3, ~$2 extra per build on OpenRouter Claude 3.7 Sonnet — within $997 unit economics) | NOTED |
+| **Tab loop-in:** Henrique to DM Tab about this so she's not surprised when she sees the change | OPEN |
 
 ---
 

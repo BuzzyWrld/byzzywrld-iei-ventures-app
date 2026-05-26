@@ -675,8 +675,12 @@ function LandingOptions({ project }: { project: BrandProject }) {
     <div className="mb-12">
       <div className="flex items-end justify-between mb-4 flex-wrap gap-2">
         <div>
-          <div className="kicker mb-1">05 · Landing page options</div>
-          <h2 className="text-2xl font-medium tracking-tight">Three layouts</h2>
+          <div className="kicker mb-1">05 · Website options</div>
+          <h2 className="text-2xl font-medium tracking-tight">Three website versions</h2>
+          <div className="text-sm mt-1" style={{ color: "var(--color-text-muted)" }}>
+            Three complete 3-page sites (home / about / flex), each in its own
+            vibe. Pick the one that lands.
+          </div>
         </div>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">

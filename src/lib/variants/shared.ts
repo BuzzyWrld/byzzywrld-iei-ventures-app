@@ -47,6 +47,11 @@ export type IntakeContext = {
   targetAudience?: string;
   logoStyle?: string;
   logoInspirationUrls?: string;
+  /** Customer's Q24b answer — which 3rd-page type fits them. One of
+   *  "services" | "products" | "events" | "booking" | "mixed". Empty means
+   *  the customer was never asked / skipped; landing.ts falls back to
+   *  inferring from offerings + audience signals, defaulting to "mixed". */
+  flexPageType?: string;
 };
 
 export function fontName(
