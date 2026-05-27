@@ -16,12 +16,12 @@ import { getIronSession, type IronSession, type SessionOptions } from "iron-sess
 import { findUserByEmail, findUserById, createUser, type UserRow } from "./db";
 
 const SESSION_PASSWORD =
+  process.env.NEXTAUTH_SECRET ??
   process.env.AUTH_SECRET ??
   "dev-only-insecure-secret-change-in-production-iei-ventures-2026";
 
 if (SESSION_PASSWORD.length < 32) {
-  // iron-session requires at least 32 chars.
-  throw new Error("AUTH_SECRET must be at least 32 characters");
+  throw new Error("NEXTAUTH_SECRET must be at least 32 characters");
 }
 
 const COOKIE_NAME = "iei_session";

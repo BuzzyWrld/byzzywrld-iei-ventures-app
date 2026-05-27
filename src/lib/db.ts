@@ -1,15 +1,6 @@
-import { neon } from "@neondatabase/serverless";
+import { supabase } from "./supabase";
 import type { BrandProject } from "./types";
 import type { ContentRun, ContentRunStatus, ContentRunOutputs } from "./skills/content-engine-contract";
-
-// ─── Connection ─────────────────────────────────────────────────────────────
-
-const DATABASE_URL = process.env.DATABASE_URL;
-if (!DATABASE_URL) {
-  throw new Error("DATABASE_URL env var is required (Neon Postgres connection string)");
-}
-
-const sql = neon(DATABASE_URL);
 
 // ─── Schema bootstrap (idempotent) ──────────────────────────────────────────
 
@@ -18,59 +9,59 @@ const _g = globalThis as { __iei_pg_ready?: Promise<void> };
 function ensureSchema(): Promise<void> {
   if (_g.__iei_pg_ready) return _g.__iei_pg_ready;
   _g.__iei_pg_ready = (async () => {
-    await sql`
-      CREATE TABLE IF NOT EXISTS brands (
-        id TEXT PRIMARY KEY,
-        created_at TEXT NOT NULL,
-        status TEXT NOT NULL,
-        intake_json TEXT NOT NULL,
-        outputs_json TEXT NOT NULL DEFAULT '{}',
-        error TEXT,
-        progress_stage TEXT,
-        progress_pct DOUBLE PRECISION,
-        tenant_id TEXT NOT NULL DEFAULT 'default',
-        user_id TEXT
-      )
-    `;
-    await sql`
-      CREATE TABLE IF NOT EXISTS content_runs (
-        id TEXT PRIMARY KEY,
-        created_at TEXT NOT NULL,
-        status TEXT NOT NULL,
-        intake_json TEXT NOT NULL,
-        outputs_json TEXT NOT NULL DEFAULT '{}',
-        error TEXT,
-        progress_stage TEXT,
-        progress_pct DOUBLE PRECISION,
-        tenant_id TEXT NOT NULL DEFAULT 'default',
-        user_id TEXT
-      )
-    `;
-    await sql`
-      CREATE TABLE IF NOT EXISTS users (
-        id TEXT PRIMARY KEY,
-        email TEXT UNIQUE NOT NULL,
-        password_hash TEXT NOT NULL,
-        name TEXT NOT NULL,
-        tenant_id TEXT NOT NULL DEFAULT 'default',
-        created_at TEXT NOT NULL
-      )
-    `;
-    // OAuth columns — idempotent migrations for existing tables
-    await sql`ALTER TABLE users ALTER COLUMN password_hash DROP NOT NULL`.catch(() => {});
-    await sql`ALTER TABLE users ADD COLUMN IF NOT EXISTS oauth_provider TEXT`;
-    await sql`ALTER TABLE users ADD COLUMN IF NOT EXISTS oauth_provider_account_id TEXT`;
-    await sql`ALTER TABLE users ADD COLUMN IF NOT EXISTS image TEXT`;
-    await sql`
-      CREATE TABLE IF NOT EXISTS tenants (
-        id TEXT PRIMARY KEY,
-        slug TEXT UNIQUE NOT NULL,
-        display_name TEXT NOT NULL,
-        logo_url TEXT,
-        colors_json TEXT NOT NULL,
-        custom_domain TEXT
-      )
-    `;
+    // Using Supabase's rpc to run raw SQL for table creation
+    await supabase.rpc("exec_sql", {
+      query: `
+        CREATE TABLE IF NOT EXISTS brands (
+          id TEXT PRIMARY KEY,
+          created_at TEXT NOT NULL,
+          status TEXT NOT NULL,
+          intake_json TEXT NOT NULL,
+          outputs_json TEXT NOT NULL DEFAULT '{}',
+          error TEXT,
+          progress_stage TEXT,
+          progress_pct DOUBLE PRECISION,
+          tenant_id TEXT NOT NULL DEFAULT 'default',
+          user_id TEXT
+        );
+        CREATE TABLE IF NOT EXISTS content_runs (
+          id TEXT PRIMARY KEY,
+          created_at TEXT NOT NULL,
+          status TEXT NOT NULL,
+          intake_json TEXT NOT NULL,
+          outputs_json TEXT NOT NULL DEFAULT '{}',
+          error TEXT,
+          progress_stage TEXT,
+          progress_pct DOUBLE PRECISION,
+          tenant_id TEXT NOT NULL DEFAULT 'default',
+          user_id TEXT
+        );
+        CREATE TABLE IF NOT EXISTS users (
+          id TEXT PRIMARY KEY,
+          email TEXT UNIQUE NOT NULL,
+          password_hash TEXT,
+          name TEXT NOT NULL,
+          tenant_id TEXT NOT NULL DEFAULT 'default',
+          created_at TEXT NOT NULL,
+          oauth_provider TEXT,
+          oauth_provider_account_id TEXT,
+          image TEXT
+        );
+        CREATE TABLE IF NOT EXISTS tenants (
+          id TEXT PRIMARY KEY,
+          slug TEXT UNIQUE NOT NULL,
+          display_name TEXT NOT NULL,
+          logo_url TEXT,
+          colors_json TEXT NOT NULL,
+          custom_domain TEXT
+        );
+      `,
+    }).then(({ error }) => {
+      // exec_sql RPC may not exist yet; fall back to direct table operations
+      if (error) {
+        console.warn("[db] exec_sql RPC not available, tables must exist in Supabase dashboard");
+      }
+    });
   })();
   return _g.__iei_pg_ready;
 }
@@ -105,10 +96,19 @@ const rowToProject = (r: Row): BrandProject => ({
 
 export async function createBrand(p: BrandProject): Promise<void> {
   await ensureSchema();
-  await sql`
-    INSERT INTO brands (id, created_at, status, intake_json, outputs_json, error, progress_stage, progress_pct, tenant_id, user_id)
-    VALUES (${p.id}, ${p.createdAt}, ${p.status}, ${JSON.stringify(p.intake)}, ${JSON.stringify(p.outputs)}, ${p.error ?? null}, ${p.progressStage ?? null}, ${p.progressPct ?? null}, ${p.tenantId}, ${p.userId ?? null})
-  `;
+  const { error } = await supabase.from("brands").insert({
+    id: p.id,
+    created_at: p.createdAt,
+    status: p.status,
+    intake_json: JSON.stringify(p.intake),
+    outputs_json: JSON.stringify(p.outputs),
+    error: p.error ?? null,
+    progress_stage: p.progressStage ?? null,
+    progress_pct: p.progressPct ?? null,
+    tenant_id: p.tenantId,
+    user_id: p.userId ?? null,
+  });
+  if (error) throw new Error(`createBrand failed: ${error.message}`);
 }
 
 export async function updateBrand(id: string, patch: Partial<BrandProject>): Promise<void> {
@@ -116,37 +116,41 @@ export async function updateBrand(id: string, patch: Partial<BrandProject>): Pro
   const current = await getBrand(id);
   if (!current) throw new Error(`brand ${id} not found`);
   const next = { ...current, ...patch };
-  await sql`
-    UPDATE brands
-    SET status = ${next.status}, outputs_json = ${JSON.stringify(next.outputs)}, error = ${next.error ?? null}, progress_stage = ${next.progressStage ?? null}, progress_pct = ${next.progressPct ?? null}
-    WHERE id = ${id}
-  `;
+  const { error } = await supabase
+    .from("brands")
+    .update({
+      status: next.status,
+      outputs_json: JSON.stringify(next.outputs),
+      error: next.error ?? null,
+      progress_stage: next.progressStage ?? null,
+      progress_pct: next.progressPct ?? null,
+    })
+    .eq("id", id);
+  if (error) throw new Error(`updateBrand failed: ${error.message}`);
 }
 
 export async function getBrand(id: string): Promise<BrandProject | null> {
   await ensureSchema();
-  const rows = await sql`SELECT * FROM brands WHERE id = ${id}`;
-  return rows.length ? rowToProject(rows[0] as Row) : null;
+  const { data, error } = await supabase.from("brands").select("*").eq("id", id).single();
+  if (error && error.code === "PGRST116") return null; // not found
+  if (error) throw new Error(`getBrand failed: ${error.message}`);
+  return data ? rowToProject(data as Row) : null;
 }
 
 export async function deleteBrand(id: string): Promise<void> {
   await ensureSchema();
-  await sql`DELETE FROM brands WHERE id = ${id}`;
+  const { error } = await supabase.from("brands").delete().eq("id", id);
+  if (error) throw new Error(`deleteBrand failed: ${error.message}`);
 }
 
 export async function listBrands(opts?: { tenantId?: string; userId?: string }): Promise<BrandProject[]> {
   await ensureSchema();
-  let rows;
-  if (opts?.tenantId && opts?.userId) {
-    rows = await sql`SELECT * FROM brands WHERE tenant_id = ${opts.tenantId} AND user_id = ${opts.userId} ORDER BY created_at DESC`;
-  } else if (opts?.tenantId) {
-    rows = await sql`SELECT * FROM brands WHERE tenant_id = ${opts.tenantId} ORDER BY created_at DESC`;
-  } else if (opts?.userId) {
-    rows = await sql`SELECT * FROM brands WHERE user_id = ${opts.userId} ORDER BY created_at DESC`;
-  } else {
-    rows = await sql`SELECT * FROM brands ORDER BY created_at DESC`;
-  }
-  return (rows as Row[]).map(rowToProject);
+  let query = supabase.from("brands").select("*").order("created_at", { ascending: false });
+  if (opts?.tenantId) query = query.eq("tenant_id", opts.tenantId);
+  if (opts?.userId) query = query.eq("user_id", opts.userId);
+  const { data, error } = await query;
+  if (error) throw new Error(`listBrands failed: ${error.message}`);
+  return (data as Row[]).map(rowToProject);
 }
 
 // ─── ContentRun CRUD ────────────────────────────────────────────────────────
@@ -179,27 +183,39 @@ const rowToRun = (r: ContentRunRow): ContentRun => ({
 
 export async function createContentRun(run: ContentRun): Promise<void> {
   await ensureSchema();
-  await sql`
-    INSERT INTO content_runs (id, created_at, status, intake_json, outputs_json, error, progress_stage, progress_pct, tenant_id, user_id)
-    VALUES (${run.id}, ${run.createdAt}, ${run.status}, ${JSON.stringify(run.intake)}, ${JSON.stringify(run.outputs)}, ${run.error ?? null}, ${run.progressStage ?? null}, ${run.progressPct ?? null}, ${run.tenantId}, ${run.userId ?? null})
-  `;
+  const { error } = await supabase.from("content_runs").insert({
+    id: run.id,
+    created_at: run.createdAt,
+    status: run.status,
+    intake_json: JSON.stringify(run.intake),
+    outputs_json: JSON.stringify(run.outputs),
+    error: run.error ?? null,
+    progress_stage: run.progressStage ?? null,
+    progress_pct: run.progressPct ?? null,
+    tenant_id: run.tenantId,
+    user_id: run.userId ?? null,
+  });
+  if (error) throw new Error(`createContentRun failed: ${error.message}`);
 }
 
 export async function upsertContentRun(run: ContentRun): Promise<void> {
   await ensureSchema();
-  await sql`
-    INSERT INTO content_runs (id, created_at, status, intake_json, outputs_json, error, progress_stage, progress_pct, tenant_id, user_id)
-    VALUES (${run.id}, ${run.createdAt}, ${run.status}, ${JSON.stringify(run.intake)}, ${JSON.stringify(run.outputs)}, ${run.error ?? null}, ${run.progressStage ?? null}, ${run.progressPct ?? null}, ${run.tenantId}, ${run.userId ?? null})
-    ON CONFLICT (id) DO UPDATE SET
-      status = EXCLUDED.status,
-      intake_json = EXCLUDED.intake_json,
-      outputs_json = EXCLUDED.outputs_json,
-      error = EXCLUDED.error,
-      progress_stage = EXCLUDED.progress_stage,
-      progress_pct = EXCLUDED.progress_pct,
-      tenant_id = EXCLUDED.tenant_id,
-      user_id = EXCLUDED.user_id
-  `;
+  const { error } = await supabase.from("content_runs").upsert(
+    {
+      id: run.id,
+      created_at: run.createdAt,
+      status: run.status,
+      intake_json: JSON.stringify(run.intake),
+      outputs_json: JSON.stringify(run.outputs),
+      error: run.error ?? null,
+      progress_stage: run.progressStage ?? null,
+      progress_pct: run.progressPct ?? null,
+      tenant_id: run.tenantId,
+      user_id: run.userId ?? null,
+    },
+    { onConflict: "id" }
+  );
+  if (error) throw new Error(`upsertContentRun failed: ${error.message}`);
 }
 
 export async function updateContentRun(id: string, patch: Partial<ContentRun>): Promise<void> {
@@ -207,32 +223,35 @@ export async function updateContentRun(id: string, patch: Partial<ContentRun>): 
   const current = await getContentRun(id);
   if (!current) throw new Error(`content run ${id} not found`);
   const next = { ...current, ...patch };
-  await sql`
-    UPDATE content_runs
-    SET status = ${next.status}, outputs_json = ${JSON.stringify(next.outputs)}, error = ${next.error ?? null}, progress_stage = ${next.progressStage ?? null}, progress_pct = ${next.progressPct ?? null}
-    WHERE id = ${id}
-  `;
+  const { error } = await supabase
+    .from("content_runs")
+    .update({
+      status: next.status,
+      outputs_json: JSON.stringify(next.outputs),
+      error: next.error ?? null,
+      progress_stage: next.progressStage ?? null,
+      progress_pct: next.progressPct ?? null,
+    })
+    .eq("id", id);
+  if (error) throw new Error(`updateContentRun failed: ${error.message}`);
 }
 
 export async function getContentRun(id: string): Promise<ContentRun | null> {
   await ensureSchema();
-  const rows = await sql`SELECT * FROM content_runs WHERE id = ${id}`;
-  return rows.length ? rowToRun(rows[0] as ContentRunRow) : null;
+  const { data, error } = await supabase.from("content_runs").select("*").eq("id", id).single();
+  if (error && error.code === "PGRST116") return null;
+  if (error) throw new Error(`getContentRun failed: ${error.message}`);
+  return data ? rowToRun(data as ContentRunRow) : null;
 }
 
 export async function listContentRuns(opts?: { tenantId?: string; userId?: string }): Promise<ContentRun[]> {
   await ensureSchema();
-  let rows;
-  if (opts?.tenantId && opts?.userId) {
-    rows = await sql`SELECT * FROM content_runs WHERE tenant_id = ${opts.tenantId} AND user_id = ${opts.userId} ORDER BY created_at DESC`;
-  } else if (opts?.tenantId) {
-    rows = await sql`SELECT * FROM content_runs WHERE tenant_id = ${opts.tenantId} ORDER BY created_at DESC`;
-  } else if (opts?.userId) {
-    rows = await sql`SELECT * FROM content_runs WHERE user_id = ${opts.userId} ORDER BY created_at DESC`;
-  } else {
-    rows = await sql`SELECT * FROM content_runs ORDER BY created_at DESC`;
-  }
-  return (rows as ContentRunRow[]).map(rowToRun);
+  let query = supabase.from("content_runs").select("*").order("created_at", { ascending: false });
+  if (opts?.tenantId) query = query.eq("tenant_id", opts.tenantId);
+  if (opts?.userId) query = query.eq("user_id", opts.userId);
+  const { data, error } = await query;
+  if (error) throw new Error(`listContentRuns failed: ${error.message}`);
+  return (data as ContentRunRow[]).map(rowToRun);
 }
 
 // ─── Users (auth) ───────────────────────────────────────────────────────────
@@ -248,22 +267,31 @@ export type UserRow = {
 
 export async function findUserByEmail(email: string): Promise<UserRow | null> {
   await ensureSchema();
-  const rows = await sql`SELECT * FROM users WHERE email = ${email}`;
-  return rows.length ? (rows[0] as UserRow) : null;
+  const { data, error } = await supabase.from("users").select("*").eq("email", email).single();
+  if (error && error.code === "PGRST116") return null;
+  if (error) throw new Error(`findUserByEmail failed: ${error.message}`);
+  return data as UserRow | null;
 }
 
 export async function findUserById(id: string): Promise<UserRow | null> {
   await ensureSchema();
-  const rows = await sql`SELECT * FROM users WHERE id = ${id}`;
-  return rows.length ? (rows[0] as UserRow) : null;
+  const { data, error } = await supabase.from("users").select("*").eq("id", id).single();
+  if (error && error.code === "PGRST116") return null;
+  if (error) throw new Error(`findUserById failed: ${error.message}`);
+  return data as UserRow | null;
 }
 
 export async function createUser(user: { id: string; email: string; passwordHash: string; name: string; tenantId: string; createdAt: string }): Promise<void> {
   await ensureSchema();
-  await sql`
-    INSERT INTO users (id, email, password_hash, name, tenant_id, created_at)
-    VALUES (${user.id}, ${user.email}, ${user.passwordHash}, ${user.name}, ${user.tenantId}, ${user.createdAt})
-  `;
+  const { error } = await supabase.from("users").insert({
+    id: user.id,
+    email: user.email,
+    password_hash: user.passwordHash,
+    name: user.name,
+    tenant_id: user.tenantId,
+    created_at: user.createdAt,
+  });
+  if (error) throw new Error(`createUser failed: ${error.message}`);
 }
 
 export async function upsertOAuthUser(input: {
@@ -274,17 +302,45 @@ export async function upsertOAuthUser(input: {
   providerAccountId: string | null;
 }): Promise<UserRow> {
   await ensureSchema();
-  const rows = await sql`
-    INSERT INTO users (id, email, password_hash, name, tenant_id, created_at, oauth_provider, oauth_provider_account_id, image)
-    VALUES (${crypto.randomUUID()}, ${input.email}, ${null}, ${input.name ?? "User"}, ${"default"}, ${new Date().toISOString()}, ${input.provider}, ${input.providerAccountId}, ${input.image})
-    ON CONFLICT (email) DO UPDATE SET
-      oauth_provider = EXCLUDED.oauth_provider,
-      oauth_provider_account_id = EXCLUDED.oauth_provider_account_id,
-      name = COALESCE(users.name, EXCLUDED.name),
-      image = COALESCE(users.image, EXCLUDED.image)
-    RETURNING *
-  `;
-  return rows[0] as UserRow;
+
+  // Check if user exists
+  const { data: existing } = await supabase.from("users").select("*").eq("email", input.email).single();
+
+  if (existing) {
+    // Update OAuth fields
+    const { data, error } = await supabase
+      .from("users")
+      .update({
+        oauth_provider: input.provider,
+        oauth_provider_account_id: input.providerAccountId,
+        name: existing.name || input.name || "User",
+        image: existing.image || input.image,
+      })
+      .eq("email", input.email)
+      .select("*")
+      .single();
+    if (error) throw new Error(`upsertOAuthUser update failed: ${error.message}`);
+    return data as UserRow;
+  }
+
+  // Insert new user
+  const { data, error } = await supabase
+    .from("users")
+    .insert({
+      id: crypto.randomUUID(),
+      email: input.email,
+      password_hash: null,
+      name: input.name ?? "User",
+      tenant_id: "default",
+      created_at: new Date().toISOString(),
+      oauth_provider: input.provider,
+      oauth_provider_account_id: input.providerAccountId,
+      image: input.image,
+    })
+    .select("*")
+    .single();
+  if (error) throw new Error(`upsertOAuthUser insert failed: ${error.message}`);
+  return data as UserRow;
 }
 
 // ─── Tenants ────────────────────────────────────────────────────────────────
@@ -300,29 +356,39 @@ export type TenantRow = {
 
 export async function upsertTenant(t: { id: string; slug: string; displayName: string; logoUrl?: string; colorsJson: string; customDomain?: string }): Promise<void> {
   await ensureSchema();
-  await sql`
-    INSERT INTO tenants (id, slug, display_name, logo_url, colors_json, custom_domain)
-    VALUES (${t.id}, ${t.slug}, ${t.displayName}, ${t.logoUrl ?? null}, ${t.colorsJson}, ${t.customDomain ?? null})
-    ON CONFLICT (id) DO UPDATE SET
-      display_name = EXCLUDED.display_name,
-      colors_json = EXCLUDED.colors_json
-  `;
+  const { error } = await supabase.from("tenants").upsert(
+    {
+      id: t.id,
+      slug: t.slug,
+      display_name: t.displayName,
+      logo_url: t.logoUrl ?? null,
+      colors_json: t.colorsJson,
+      custom_domain: t.customDomain ?? null,
+    },
+    { onConflict: "id" }
+  );
+  if (error) throw new Error(`upsertTenant failed: ${error.message}`);
 }
 
 export async function findTenantBySlug(slug: string): Promise<TenantRow | null> {
   await ensureSchema();
-  const rows = await sql`SELECT * FROM tenants WHERE slug = ${slug}`;
-  return rows.length ? (rows[0] as TenantRow) : null;
+  const { data, error } = await supabase.from("tenants").select("*").eq("slug", slug).single();
+  if (error && error.code === "PGRST116") return null;
+  if (error) throw new Error(`findTenantBySlug failed: ${error.message}`);
+  return data as TenantRow | null;
 }
 
 export async function findTenantByDomain(domain: string): Promise<TenantRow | null> {
   await ensureSchema();
-  const rows = await sql`SELECT * FROM tenants WHERE custom_domain = ${domain}`;
-  return rows.length ? (rows[0] as TenantRow) : null;
+  const { data, error } = await supabase.from("tenants").select("*").eq("custom_domain", domain).single();
+  if (error && error.code === "PGRST116") return null;
+  if (error) throw new Error(`findTenantByDomain failed: ${error.message}`);
+  return data as TenantRow | null;
 }
 
 export async function listTenantRows(): Promise<TenantRow[]> {
   await ensureSchema();
-  const rows = await sql`SELECT * FROM tenants ORDER BY slug`;
-  return rows as TenantRow[];
+  const { data, error } = await supabase.from("tenants").select("*").order("slug");
+  if (error) throw new Error(`listTenantRows failed: ${error.message}`);
+  return data as TenantRow[];
 }
