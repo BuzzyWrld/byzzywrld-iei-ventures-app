@@ -173,9 +173,13 @@ export default function QuestionnairePage() {
 
     // Fire and forget — work runs server-side, /building polls
     // /api/build/status/[buildId] every 3s for progress + completion.
+    // `keepalive: true` makes the browser hold the request open even
+    // after navigation (Chrome/Safari/Firefox all support, body cap
+    // ~64KB which we're well under for 9 questionnaire answers).
     void fetch("/api/build/start", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
+      keepalive: true,
       body: JSON.stringify({
         build_id: buildId,
         session_id: store.sessionId,
