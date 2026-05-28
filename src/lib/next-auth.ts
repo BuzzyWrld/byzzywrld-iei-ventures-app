@@ -32,7 +32,18 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         await setSession(dbUser.id);
         return true;
       } catch (err) {
-        console.error("[auth] signIn callback failed", err);
+        // NextAuth contract: returning false yields ?error=AccessDenied on the
+        // client. That surface hides the real failure, so log the full stack
+        // + the user/provider context server-side for Vercel log triage.
+        const stack = err instanceof Error ? err.stack : undefined;
+        const message = err instanceof Error ? err.message : String(err);
+        console.error("[auth] signIn callback failed", {
+          email: user.email,
+          provider: account?.provider,
+          providerAccountId: account?.providerAccountId,
+          message,
+          stack,
+        });
         return false;
       }
     },
