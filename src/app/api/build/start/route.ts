@@ -95,13 +95,20 @@ export async function POST(request: NextRequest) {
   if (!user) return Response.json({ error: "unauthorized" }, { status: 401 });
 
   const body = await request.json();
-  const { session_id, intake_mode, user_answers } = body;
+  const { session_id, intake_mode, user_answers, build_id } = body;
+  void session_id;
 
   const intake = mapAnswersToBrandIntake(user_answers || {}, intake_mode || "questionnaire");
 
+  // Accept an optional caller-supplied build_id. The questionnaire
+  // frontend pre-generates one client-side so it can navigate to
+  // /building immediately instead of waiting for this inline-awaited
+  // route to return (~3-5 min). If absent, enqueueBrandBuild generates
+  // one as before.
   const { project, work } = await enqueueBrandBuild(intake, {
     tenantId: tenant.id,
     userId: user.id,
+    buildId: typeof build_id === "string" ? build_id : undefined,
   });
 
   // Inline-await — see the maxDuration comment at the top of the file

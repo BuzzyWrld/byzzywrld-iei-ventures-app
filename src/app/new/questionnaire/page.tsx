@@ -160,25 +160,35 @@ export default function QuestionnairePage() {
   }
 
   async function handleFinish() {
-    // Fire build/start
-    try {
-      const res = await fetch("/api/build/start", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          session_id: store.sessionId,
-          intake_mode: "questionnaire",
-          user_answers: store.answers,
-        }),
-      });
-      if (res.ok) {
-        const data = await res.json();
-        store.setBuildId(data.build_id);
-        store.setBuildStatus("processing");
-      }
-    } catch {
-      // Continue to loading regardless — polling will pick up state
-    }
+    // Pre-generate the build_id client-side so we can navigate to
+    // /building immediately while the server-side build runs. The
+    // server uses this hint as project.id so the polling endpoint
+    // can find the row by the time /building polls it (~3s later).
+    // Without this, /api/build/start inline-awaits the full ~3-5min
+    // build before responding, and the user sits on a frozen
+    // questionnaire page the entire time.
+    const buildId = crypto.randomUUID();
+    store.setBuildId(buildId);
+    store.setBuildStatus("processing");
+
+    // Fire and forget — work runs server-side, /building polls
+    // /api/build/status/[buildId] every 3s for progress + completion.
+    void fetch("/api/build/start", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        build_id: buildId,
+        session_id: store.sessionId,
+        intake_mode: "questionnaire",
+        user_answers: store.answers,
+      }),
+    }).catch((err) => {
+      // Surface fire-and-forget failures via the status endpoint —
+      // /building's poller already shows an error state if the brand
+      // row never advances out of "pending".
+      console.error("[questionnaire] build/start fire-and-forget failed:", err);
+    });
+
     router.push("/building");
   }
 

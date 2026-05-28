@@ -23,9 +23,13 @@ export function newBrandId(): string {
 
 export async function enqueueBrandBuild(
   intake: BrandIntake,
-  opts: { tenantId?: string; userId?: string } = {}
+  opts: { tenantId?: string; userId?: string; buildId?: string } = {}
 ): Promise<{ project: BrandProject; work: Promise<void> }> {
-  const id = newBrandId();
+  // Optional caller-supplied buildId. The questionnaire frontend
+  // pre-generates the build_id client-side so it can navigate to
+  // /building immediately, before /api/build/start finishes its
+  // (now-inline-awaited) work. If absent, generate as before.
+  const id = opts.buildId ?? newBrandId();
   const project: BrandProject = {
     id,
     createdAt: new Date().toISOString(),
