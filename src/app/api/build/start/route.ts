@@ -1,10 +1,22 @@
 import { NextRequest } from "next/server";
-import { after } from "next/server";
 import { enqueueBrandBuild } from "@/lib/skill";
 import { currentTenant } from "@/lib/current-tenant";
 import { currentUser } from "@/lib/auth";
 import { BrandIntakeSchema } from "@/lib/types";
 
+// Inline-await the brand-build work below (no `after()`). On Vercel,
+// the `after()` API is best-effort — once the response is sent and
+// the function instance is recycled, the background work dies mid-
+// execution. Symptom: brand row stuck at progress 0.75 / "generating
+// logo" forever, no error logged (2026-05-27 prod smoke test).
+//
+// Trade-off: the POST response itself blocks for ~60-300s while the
+// build runs, instead of returning immediately. The submit button
+// stays in "saving" state during that window, then the page navigates
+// to /building (which redirects to the kit page once status is ready).
+//
+// Long-term fix: move heavy work to a proper queue (Inngest /
+// Trigger.dev / QStash / Vercel Cron + queue). Tracked as task #29.
 export const maxDuration = 300;
 
 /**
@@ -92,21 +104,28 @@ export async function POST(request: NextRequest) {
     userId: user.id,
   });
 
-  after(async () => {
-    try {
-      await work;
-    } catch (err) {
-      console.error("[build/start] background brand build failed:", err);
-    }
-  });
+  // Inline-await — see the maxDuration comment at the top of the file
+  // for why we don't use after() here.
+  try {
+    await work;
+  } catch (err) {
+    console.error("[build/start] brand build failed:", err);
+    return Response.json(
+      {
+        build_id: project.id,
+        status: "error",
+        error: err instanceof Error ? err.message : String(err),
+      },
+      { status: 500 }
+    );
+  }
 
   return Response.json(
     {
       build_id: project.id,
-      status: "processing",
-      eta_seconds: 75,
+      status: "ready",
       poll_url: `/api/build/status/${project.id}`,
     },
-    { status: 202 }
+    { status: 200 }
   );
 }
