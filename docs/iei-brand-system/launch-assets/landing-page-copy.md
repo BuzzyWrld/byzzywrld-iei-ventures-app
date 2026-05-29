@@ -161,7 +161,7 @@ Each one is complete. Each one is reviewed by me. Each one is yours forever — 
 
 ✓ Brand Messaging (Mission · Vision · Values · Voice · 3 Tagline options · 3 IG Bio options)
 ✓ 3 Logo Options + Brand Kit (color palette, typography, logo system)
-✓ 3-Page Website (Home, About, + Flex) (designed, copy-ready)
+✓ 3 Website Concepts to choose from — each a full 3-page site (Home, About, + your custom Flex page), designed + copy-ready. Pick the vibe that's most YOU.
 ✓ GTM Checklist customized to your goals
 ✓ Reviewed personally by Tab
 
