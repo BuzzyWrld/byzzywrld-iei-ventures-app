@@ -280,6 +280,29 @@ Tab coordinated with the BE dev (Henrique/Enrique) on infrastructure:
 
 ---
 
+## 🌐 3-VIBE WEBSITE OVERRIDE — APPROVED 2026-05-26
+
+Dev (Henrique) overrode Tab's 2026-05-21 spec of ONE 3-page website. He shipped THREE 3-page websites (one per aesthetic vibe — customer picks their favorite). **Tab APPROVED the override 2026-05-26.**
+
+| Decision | Status |
+|---|---|
+| **Deliverable = 3 vibe-versions × 3 pages each (Home/About/Flex)** — customer picks favorite | CONFIRMED 2026-05-26 (approved override) |
+| Implication: more value to customer + more generation cost (~3x website tokens) + more for Tab to review per delivery | Accepted |
+| Downstream: landing-page copy should say "3 website concepts to choose from" (not "a 1-page website") | TODO — update landing-page-copy.md |
+| Downstream: walkthrough UI shows the 3 vibe-versions as a picker on the website deliverable screen | Feeds Task #34 |
+| Downstream: Tab review time per customer increases — budget for it | Accepted |
+
+## 📧 EMAIL PROVIDER — confirmed 2026-05-26
+
+| Decision | Status |
+|---|---|
+| **Provider: Resend** (free tier 3,000/mo, 100/day for Stage 1) | CONFIRMED |
+| Account on admin@ieiventures.com · domain ieiventures.com verified | Tab setting up |
+| Full implementation spec: `EMAIL_IMPLEMENTATION.md` | Written, Task #35 |
+| Scheduled reminder emails (Day 4/6/7) via Vercel Cron — reuses existing privacy-purge cron pattern; also closes Task #34 auto-signoff timer | Confirmed approach |
+
+---
+
 ## Notes for dev team
 
 - This is a **living document**. Every Tab call/text/message that contains a decision gets logged here.
