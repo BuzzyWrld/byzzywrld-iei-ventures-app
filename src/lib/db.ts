@@ -259,11 +259,20 @@ export async function listContentRuns(opts?: { tenantId?: string; userId?: strin
 export type UserRow = {
   id: string;
   email: string;
-  password_hash: string;
+  /** Null for accounts created purely via OAuth (no password set). */
+  password_hash: string | null;
   name: string;
   tenant_id: string;
   created_at: string;
+  oauth_provider?: string | null;
+  oauth_provider_account_id?: string | null;
+  image?: string | null;
 };
+
+/** Thrown when an OAuth sign-in matches an existing account by email but the
+ *  OAuth identity (provider + account id) is NOT already linked to it. Callers
+ *  must NOT auto-link — that would allow OAuth account takeover. */
+export const ACCOUNT_EXISTS_DIFFERENT_METHOD = "ACCOUNT_EXISTS_DIFFERENT_METHOD";
 
 export async function findUserByEmail(email: string): Promise<UserRow | null> {
   await ensureSchema();
@@ -307,16 +316,27 @@ export async function upsertOAuthUser(input: {
   const { data: existing } = await supabase.from("users").select("*").eq("email", input.email).single();
 
   if (existing) {
-    // Update OAuth fields
+    // SECURITY: only treat this as the SAME account when the stored OAuth
+    // identity exactly matches the incoming one. An email match alone is NOT
+    // sufficient — otherwise anyone who can present an OAuth login for an
+    // address could hijack a password (or other-provider) account.
+    const sameIdentity =
+      existing.oauth_provider === input.provider &&
+      existing.oauth_provider_account_id != null &&
+      existing.oauth_provider_account_id === input.providerAccountId;
+
+    if (!sameIdentity) {
+      throw new Error(ACCOUNT_EXISTS_DIFFERENT_METHOD);
+    }
+
+    // Same returning OAuth identity — refresh display fields only, never relink.
     const { data, error } = await supabase
       .from("users")
       .update({
-        oauth_provider: input.provider,
-        oauth_provider_account_id: input.providerAccountId,
         name: existing.name || input.name || "User",
         image: existing.image || input.image,
       })
-      .eq("email", input.email)
+      .eq("id", existing.id)
       .select("*")
       .single();
     if (error) throw new Error(`upsertOAuthUser update failed: ${error.message}`);
@@ -340,6 +360,45 @@ export async function upsertOAuthUser(input: {
     .select("*")
     .single();
   if (error) throw new Error(`upsertOAuthUser insert failed: ${error.message}`);
+  return data as UserRow;
+}
+
+/**
+ * Link an OAuth identity to an ALREADY-AUTHENTICATED user (proven via their
+ * existing session). Safe counterpart to the refusal in upsertOAuthUser:
+ * the caller must have verified that `userId` owns the session AND that the
+ * session email matches the OAuth email. Refuses if the OAuth identity is
+ * already attached to a different account.
+ */
+export async function linkOAuthIdentity(input: {
+  userId: string;
+  provider: string;
+  providerAccountId: string;
+  image: string | null;
+}): Promise<UserRow> {
+  await ensureSchema();
+
+  const { data: clash } = await supabase
+    .from("users")
+    .select("id")
+    .eq("oauth_provider", input.provider)
+    .eq("oauth_provider_account_id", input.providerAccountId)
+    .single();
+  if (clash && (clash as { id: string }).id !== input.userId) {
+    throw new Error("OAUTH_IDENTITY_ALREADY_LINKED");
+  }
+
+  const { data, error } = await supabase
+    .from("users")
+    .update({
+      oauth_provider: input.provider,
+      oauth_provider_account_id: input.providerAccountId,
+      image: input.image ?? undefined,
+    })
+    .eq("id", input.userId)
+    .select("*")
+    .single();
+  if (error) throw new Error(`linkOAuthIdentity failed: ${error.message}`);
   return data as UserRow;
 }
 

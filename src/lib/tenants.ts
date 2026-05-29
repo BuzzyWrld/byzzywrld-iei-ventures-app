@@ -68,8 +68,10 @@ const SEED: Tenant[] = [
 ];
 
 // Local dev / DB-less preview: serve tenants from the in-memory SEED so the
-// dashboard renders without Supabase credentials. Mirrors auth.ts DEV_BYPASS.
-const DEV_BYPASS = process.env.DEV_BYPASS === "true";
+// dashboard renders without Supabase credentials. Mirrors auth.ts DEV_BYPASS
+// and is hard-disabled in production so real tenant data always comes from the DB.
+const DEV_BYPASS =
+  process.env.DEV_BYPASS === "true" && process.env.NODE_ENV !== "production";
 function seedTenant(slug: string): Tenant | null {
   return SEED.find((t) => t.slug === slug) ?? null;
 }

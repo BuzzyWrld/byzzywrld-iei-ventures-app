@@ -1,12 +1,22 @@
 "use client";
 
 import Link from "next/link";
-import { useActionState } from "react";
+import { Suspense, useActionState } from "react";
+import { useSearchParams } from "next/navigation";
 import { loginAction } from "@/app/actions/auth";
 import { OAuthButtons } from "@/components/auth/OAuthButtons";
 
 export default function LoginPage() {
+  return (
+    <Suspense fallback={null}>
+      <LoginInner />
+    </Suspense>
+  );
+}
+
+function LoginInner() {
   const [state, formAction, pending] = useActionState(loginAction, null);
+  const linkRequired = useSearchParams().get("error") === "link_required";
 
   return (
     <div
@@ -175,6 +185,26 @@ export default function LoginPage() {
           >
             Sign in to continue building your brand.
           </p>
+
+          {/* Account-takeover guard: Google matched an existing account that
+              isn't linked to it. Tell them to sign in normally then link. */}
+          {linkRequired && (
+            <div
+              style={{
+                border: "1px solid rgba(245,206,0,0.4)",
+                background: "rgba(245,206,0,0.08)",
+                color: "#F5CE00",
+                borderRadius: 6,
+                padding: "12px 14px",
+                fontSize: 12.5,
+                lineHeight: 1.5,
+                marginBottom: 16,
+              }}
+            >
+              An account already exists for this email. Sign in with your email &amp;
+              password, then connect Google from <strong>Settings</strong>.
+            </div>
+          )}
 
           {/* Social auth buttons */}
           <div style={{ marginBottom: 16 }}>

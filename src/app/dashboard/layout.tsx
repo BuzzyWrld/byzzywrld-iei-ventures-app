@@ -11,6 +11,7 @@ const NAV_ITEMS = [
   { icon: '◬', label: 'Content Calendar', href: '/dashboard/content-calendar' },
   { icon: '◇', label: 'Entity Setup', href: '/dashboard/entity-setup' },
   { icon: '▥', label: 'Workspace', href: '/dashboard/workspace' },
+  { icon: '⚙', label: 'Settings', href: '/dashboard/settings' },
 ];
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {

@@ -132,6 +132,8 @@ export async function signIn(params: {
 
   const row = await findUserByEmail(email);
   if (!row) return { error: "invalid credentials" };
+  // OAuth-only accounts have no password_hash — they can't log in by password.
+  if (!row.password_hash) return { error: "invalid credentials" };
   const ok = await bcrypt.compare(params.password, row.password_hash);
   if (!ok) return { error: "invalid credentials" };
   return { user: rowToUser(row) };
@@ -163,9 +165,12 @@ export async function clearSession(): Promise<void> {
 }
 
 // ─── TESTING BYPASS ──────────────────────────────────────────────────────────
-// Set to true to skip login for all routes during local/staging testing.
-// Flip back to false before going live with real users.
-const DEV_BYPASS = process.env.DEV_BYPASS === "true";
+// Skips login (everyone becomes DEMO_USER) for local/staging testing.
+// SECURITY: hard-disabled in production regardless of the env var, so a stray
+// DEV_BYPASS=true can never collapse all users into one shared identity and
+// leak brands across accounts.
+const DEV_BYPASS =
+  process.env.DEV_BYPASS === "true" && process.env.NODE_ENV !== "production";
 // ─────────────────────────────────────────────────────────────────────────────
 
 export async function currentUser(): Promise<User | null> {
