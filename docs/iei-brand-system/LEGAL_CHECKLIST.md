@@ -27,7 +27,7 @@ A click-through TOS that the customer must accept at Stripe checkout. Must addre
 - [ ] Customer grants IEI Ventures a limited license to use their submitted info (name, business, story) to fulfill the service
 - [ ] No warranty on commercial success of the brand
 - [ ] Limitation of liability (capped at amount paid by customer)
-- [ ] Refund policy: full refund within 24 hours of purchase IF intake call has not begun; no refund after intake begins (because work has commenced)
+- [ ] Refund policy (UPDATED — defer to current `TERMS_OF_SERVICE.md` §4, which supersedes any earlier "24-hour" language): customer receives a **watermarked preview** before final files; **7-day money-back window from the preview**, no questions asked; **acceptance closes the window** (except production defects); **automatic acceptance after 7 days of inaction** with Day-4/Day-6 reminder emails (§4f). Please review §4 + §4f specifically — the auto-acceptance / silence-as-acceptance mechanism is new.
 - [ ] Trademark collision disclaimer (customer responsible for clearing their generated brand name + logo with their own trademark counsel before commercial use)
 - [ ] AI-generated content disclosure (per FTC + state AI disclosure trends in 2025-2026)
 - [ ] Governing law + venue
