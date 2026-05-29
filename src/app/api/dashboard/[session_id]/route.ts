@@ -64,22 +64,52 @@ function mapBrand(brand: BrandProject) {
   const colors = bj.colors ?? ({} as Partial<BrandJson["colors"]>);
   const typo = bj.typography ?? ({} as Partial<BrandJson["typography"]>);
 
+  const name = bj.name || brand.intake.companyName || "Untitled Brand";
   const landing = o.landingLiveUrl ?? o.landingVariants?.[0]?.url;
-  const assetEntries = [
-    o.playbookPdf,
-    o.logoSvg,
-    landing,
-    o.pitchOnePager?.pdfUrl,
-    ...(o.socialKit ?? []).map((s) => s.url),
+
+  // Canonical deliverable checklist — drives assets KPIs, brand_score, and the
+  // activity feed from the brand's ACTUAL outputs (no invented numbers).
+  type ActivityIcon = "check" | "world" | "target" | "alert";
+  const deliverables: { key: string; label: string; present: boolean; icon: ActivityIcon }[] = [
+    { key: "logo", label: "Logo", present: !!o.logoSvg, icon: "check" },
+    { key: "playbook", label: "Brand playbook", present: !!(o.playbookPdf || o.playbookHtml), icon: "check" },
+    { key: "landing", label: "Landing page", present: !!landing, icon: "world" },
+    { key: "palette", label: "Palette expansion", present: !!o.paletteExpansion, icon: "check" },
+    { key: "social", label: "Social kit", present: !!o.socialKit?.length, icon: "check" },
+    { key: "pitch", label: "Pitch one-pager", present: !!o.pitchOnePager, icon: "check" },
+    { key: "email", label: "Email kit", present: !!o.emailKit, icon: "check" },
+    { key: "devbrief", label: "Developer brief", present: !!o.devBrief, icon: "check" },
   ];
-  const assetsReady = assetEntries.filter(Boolean).length;
-  const assetsTotal = Math.max(assetsReady, 6);
+  const assetsTotal = deliverables.length;
+  const assetsReady = deliverables.filter((d) => d.present).length;
+
+  const siteStatus: "live" | "deploying" | "offline" = o.landingLiveUrl
+    ? "live"
+    : o.landingVariants?.length
+      ? "deploying"
+      : "offline";
+
+  // Real activity feed: build lifecycle + each delivered asset. Timestamped to
+  // the brand's createdAt (the only timestamp the record carries).
+  const ts = new Date(brand.createdAt).toLocaleString();
+  const activity: { id: string; icon: ActivityIcon; message: string; timestamp: string }[] = [];
+  if (brand.status === "failed") {
+    activity.push({ id: `${brand.id}-err`, icon: "alert", message: brand.error ? `Build failed: ${brand.error}` : "Build failed", timestamp: ts });
+  } else if (brand.status === "running") {
+    activity.push({ id: `${brand.id}-build`, icon: "world", message: brand.progressStage ? `Building: ${brand.progressStage}` : "Build in progress", timestamp: ts });
+  } else if (brand.status === "complete") {
+    activity.push({ id: `${brand.id}-done`, icon: "check", message: `Brand "${name}" build complete`, timestamp: ts });
+  }
+  for (const d of deliverables.filter((x) => x.present)) {
+    activity.push({ id: `${brand.id}-${d.key}`, icon: d.icon, message: `${d.label} ready`, timestamp: ts });
+  }
+  activity.push({ id: `${brand.id}-created`, icon: "check", message: `Brand "${name}" created`, timestamp: ts });
 
   return {
     has_brand: true,
     brand_json: {
       meta: {
-        brand_name: bj.name || brand.intake.companyName || "Untitled Brand",
+        brand_name: name,
         business_type: brand.intake.archetype || "",
         industry: brand.intake.industry || "",
       },
@@ -122,25 +152,21 @@ function mapBrand(brand: BrandProject) {
       brand_score: assetsTotal ? Math.round((assetsReady / assetsTotal) * 100) : 0,
       assets_ready: assetsReady,
       assets_total: assetsTotal,
+      // No lead-gen pipeline yet — there is no leads source on the brand record,
+      // so this stays 0 rather than showing an invented number.
       leads_surfaced: 0,
-      site_status: landing ? "live" : "offline",
+      site_status: siteStatus,
     },
-    recent_activity: [
-      {
-        id: brand.id,
-        icon: brand.status === "complete" ? "check" : "world",
-        message:
-          brand.status === "complete"
-            ? `Brand "${bj.name || brand.intake.companyName}" build complete`
-            : `Brand "${bj.name || brand.intake.companyName}" is building`,
-        timestamp: new Date(brand.createdAt).toLocaleString(),
-      },
-    ],
-    build_progress:
-      brand.status === "complete" ? 1 : brand.progressPct ?? 0,
+    recent_activity: activity.slice(0, 8),
+    build_progress: brand.status === "complete" ? 1 : brand.progressPct ?? 0,
     last_activity_label:
-      brand.progressStage ||
-      (brand.status === "complete" ? "Build complete" : "Building…"),
+      brand.status === "failed"
+        ? "Build failed"
+        : brand.status === "running"
+          ? brand.progressStage || "Building…"
+          : brand.status === "complete"
+            ? "Build complete"
+            : "Ready",
   };
 }
 
