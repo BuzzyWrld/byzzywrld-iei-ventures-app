@@ -3,6 +3,9 @@
 import { useEffect, useState } from 'react';
 import BrandReviewButton from '@/components/BrandReviewButton';
 
+// Fallback tokens — used while loading and as the empty/template state.
+// The real values come from the authenticated user's brand (same source the
+// dashboard uses: /api/dashboard → currentUser() + listBrands).
 const TOKENS = {
   primary: '#F5CE00',
   secondary: '#1A1A2E',
@@ -13,28 +16,68 @@ const TOKENS = {
   font_body: 'DM Sans',
 };
 
-const ASSETS = [
-  { name: 'Logo (Light)', type: 'SVG', status: 'ready', icon: '◐' },
-  { name: 'Logo (Dark)', type: 'SVG', status: 'ready', icon: '◐' },
-  { name: 'Brand Playbook', type: 'PDF', status: 'ready', icon: '▤' },
-  { name: 'Social Kit', type: 'ZIP', status: 'ready', icon: '◬' },
-  { name: 'Email Signature', type: 'HTML', status: 'generating', icon: '◯' },
-  { name: 'Favicon Pack', type: 'ZIP', status: 'ready', icon: '◇' },
-];
+interface Tokens {
+  primary: string;
+  secondary: string;
+  accent?: string;
+  background: string;
+  text: string;
+  font_heading: string;
+  font_body: string;
+}
+
+interface AssetUrls {
+  playbook_pdf?: string;
+  logo_svg?: string;
+  logo_dark_svg?: string;
+  landing_page?: string;
+}
 
 const HEX_RE = /^#(?:[0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/;
 
 export default function BrandKitPage() {
   const [activeTab, setActiveTab] = useState<'colors' | 'typography' | 'assets'>('colors');
+  const [tokens, setTokens] = useState<Tokens>(TOKENS);
+  const [assetUrls, setAssetUrls] = useState<AssetUrls>({});
+  const [brandName, setBrandName] = useState('');
+  const [hasBrand, setHasBrand] = useState<boolean | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function load() {
+      try {
+        // session segment is ignored server-side; response is scoped to the
+        // authenticated user via the session cookie.
+        const res = await fetch('/api/dashboard/current', { credentials: 'include' });
+        if (!res.ok) throw new Error(String(res.status));
+        const json = await res.json();
+        setTokens(json.brand_json?.design_tokens ?? TOKENS);
+        setAssetUrls(json.asset_urls ?? {});
+        setBrandName(json.brand_json?.meta?.brand_name ?? '');
+        setHasBrand(json.has_brand !== false);
+      } catch {
+        setHasBrand(null); // unknown — fall back to template tokens
+      } finally {
+        setLoading(false);
+      }
+    }
+    load();
+  }, []);
+
+  if (loading) {
+    return <div style={{ ...subtextStyle, padding: '8px 0' }}>Loading your brand system…</div>;
+  }
 
   return (
     <div>
       {/* Header */}
       <div style={{ marginBottom: 28 }}>
-        <div style={eyebrowStyle}>Brand Kit · Apex Studio</div>
+        <div style={eyebrowStyle}>Brand Kit{brandName ? ` · ${brandName}` : ''}</div>
         <h1 style={headingStyle}>Your Brand System</h1>
         <p style={subtextStyle}>
-          Everything generated from your intake — colors, typography, logos, and playbook.
+          {hasBrand === false
+            ? 'No brand yet — this is the default template. Create a brand to populate it with your own system.'
+            : 'Everything generated from your intake — colors, typography, logos, and playbook.'}
         </p>
       </div>
 
@@ -63,9 +106,9 @@ export default function BrandKitPage() {
       </div>
 
       {/* Tab Content */}
-      {activeTab === 'colors' && <ColorsPanel />}
-      {activeTab === 'typography' && <TypographyPanel />}
-      {activeTab === 'assets' && <AssetsPanel />}
+      {activeTab === 'colors' && <ColorsPanel tokens={tokens} />}
+      {activeTab === 'typography' && <TypographyPanel tokens={tokens} />}
+      {activeTab === 'assets' && <AssetsPanel assetUrls={assetUrls} />}
     </div>
   );
 }
@@ -75,13 +118,13 @@ interface SwatchColor {
   value: string;
 }
 
-function ColorsPanel() {
+function ColorsPanel({ tokens }: { tokens: Tokens }) {
   const [colors, setColors] = useState<SwatchColor[]>([
-    { label: 'Primary', value: TOKENS.primary },
-    { label: 'Secondary', value: TOKENS.secondary },
-    { label: 'Accent', value: TOKENS.accent },
-    { label: 'Background', value: TOKENS.background },
-    { label: 'Text', value: TOKENS.text },
+    { label: 'Primary', value: tokens.primary },
+    { label: 'Secondary', value: tokens.secondary },
+    { label: 'Accent', value: tokens.accent ?? TOKENS.accent },
+    { label: 'Background', value: tokens.background },
+    { label: 'Text', value: tokens.text },
   ]);
   const [regenerating, setRegenerating] = useState(false);
 
@@ -249,9 +292,9 @@ function HexEditor({ colors, onChange }: HexEditorProps) {
   );
 }
 
-function TypographyPanel() {
-  const [headingFont, setHeadingFont] = useState(TOKENS.font_heading);
-  const [bodyFont, setBodyFont] = useState(TOKENS.font_body);
+function TypographyPanel({ tokens }: { tokens: Tokens }) {
+  const [headingFont, setHeadingFont] = useState(tokens.font_heading);
+  const [bodyFont, setBodyFont] = useState(tokens.font_body);
   const [weights, setWeights] = useState<number[]>([400, 500, 600, 700]);
   const [draftHeading, setDraftHeading] = useState(headingFont);
   const [draftBody, setDraftBody] = useState(bodyFont);
@@ -368,7 +411,16 @@ function TypographyPanel() {
   );
 }
 
-function AssetsPanel() {
+function AssetsPanel({ assetUrls }: { assetUrls: AssetUrls }) {
+  // Catalog metadata + the real, user-scoped URL for each deliverable. An asset
+  // with a URL is "ready" (downloadable); otherwise it's still "generating".
+  const assets = [
+    { name: 'Logo (Light)', type: 'SVG', icon: '◐', url: assetUrls.logo_svg },
+    { name: 'Logo (Dark)', type: 'SVG', icon: '◐', url: assetUrls.logo_dark_svg },
+    { name: 'Brand Playbook', type: 'PDF', icon: '▤', url: assetUrls.playbook_pdf },
+    { name: 'Landing Page', type: 'URL', icon: '◬', url: assetUrls.landing_page },
+  ];
+
   return (
     <div>
       <div style={sectionHeaderStyle}>
@@ -384,32 +436,42 @@ function AssetsPanel() {
       </div>
 
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
-        {ASSETS.map((a) => (
-          <div key={a.name} style={cardStyle}>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 10 }}>
-              <span style={{ fontSize: 16 }}>{a.icon}</span>
-              <span
-                style={{
-                  fontSize: 9,
-                  fontWeight: 700,
-                  letterSpacing: '1px',
-                  textTransform: 'uppercase',
-                  padding: '3px 8px',
-                  borderRadius: 3,
-                  background: a.status === 'ready' ? 'rgba(80,200,120,0.15)' : 'rgba(245,206,0,0.12)',
-                  color: a.status === 'ready' ? '#50C878' : '#F5CE00',
-                }}
-              >
-                {a.status}
-              </span>
+        {assets.map((a) => {
+          const ready = Boolean(a.url);
+          return (
+            <div key={a.name} style={cardStyle}>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 10 }}>
+                <span style={{ fontSize: 16 }}>{a.icon}</span>
+                <span
+                  style={{
+                    fontSize: 9,
+                    fontWeight: 700,
+                    letterSpacing: '1px',
+                    textTransform: 'uppercase',
+                    padding: '3px 8px',
+                    borderRadius: 3,
+                    background: ready ? 'rgba(80,200,120,0.15)' : 'rgba(245,206,0,0.12)',
+                    color: ready ? '#50C878' : '#F5CE00',
+                  }}
+                >
+                  {ready ? 'ready' : 'generating'}
+                </span>
+              </div>
+              <div style={{ fontSize: 13, fontWeight: 600, color: '#fff', marginBottom: 4 }}>{a.name}</div>
+              <div style={{ fontSize: 10, color: 'rgba(255,255,255,0.4)' }}>{a.type} format</div>
+              {ready && (
+                <a
+                  href={a.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{ ...ghostBtnSmStyle, marginTop: 12, display: 'inline-block', textDecoration: 'none' }}
+                >
+                  {a.type === 'URL' ? 'Open' : 'Download'}
+                </a>
+              )}
             </div>
-            <div style={{ fontSize: 13, fontWeight: 600, color: '#fff', marginBottom: 4 }}>{a.name}</div>
-            <div style={{ fontSize: 10, color: 'rgba(255,255,255,0.4)' }}>{a.type} format</div>
-            {a.status === 'ready' && (
-              <button style={{ ...ghostBtnSmStyle, marginTop: 12 }}>Download</button>
-            )}
-          </div>
-        ))}
+          );
+        })}
       </div>
     </div>
   );

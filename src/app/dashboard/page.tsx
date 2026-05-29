@@ -72,6 +72,7 @@ interface DashboardData {
   }[];
   build_progress: number; // 0 to 1
   last_activity_label: string;
+  has_brand?: boolean; // false when the user has no brands yet
 }
 
 // ============================================
@@ -108,6 +109,7 @@ export default function DashboardScreen() {
 
   if (loading) return <DashboardLoading />;
   if (err || !data) return <DashboardError err={err} onRetry={() => location.reload()} />;
+  if (data.has_brand === false) return <DashboardEmpty onStart={() => router.push('/new')} />;
 
   const { brand_json, asset_urls, modules, kpis, recent_activity, build_progress, last_activity_label } = data;
   const brandName = brand_json.meta.brand_name;
@@ -913,6 +915,39 @@ function DashboardLoading() {
           50% { height: 100%; }
         }
       `}</style>
+    </div>
+  );
+}
+
+function DashboardEmpty({ onStart }: { onStart: () => void }) {
+  return (
+    <div style={{ maxWidth: 560 }}>
+      <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: '1.5px', textTransform: 'uppercase', color: 'rgba(255,255,255,0.35)' }}>
+        Dashboard
+      </div>
+      <h1 style={{ fontSize: 28, fontWeight: 700, margin: '10px 0 8px', fontFamily: "'Space Grotesk', sans-serif", color: '#fff' }}>
+        No brand yet
+      </h1>
+      <p style={{ fontSize: 14, color: 'rgba(255,255,255,0.55)', lineHeight: 1.6, marginBottom: 24 }}>
+        You haven&apos;t created a brand foundation yet. Once you do, this dashboard
+        — and your Brand Kit — fill in with your own colors, typography, and assets.
+      </p>
+      <button
+        onClick={onStart}
+        style={{
+          background: '#F5CE00',
+          color: '#0A0A0A',
+          border: 'none',
+          borderRadius: 8,
+          padding: '12px 22px',
+          fontSize: 13,
+          fontWeight: 700,
+          cursor: 'pointer',
+          fontFamily: "'DM Sans', sans-serif",
+        }}
+      >
+        Create your brand
+      </button>
     </div>
   );
 }
