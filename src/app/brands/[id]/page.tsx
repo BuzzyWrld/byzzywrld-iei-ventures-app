@@ -216,7 +216,7 @@ function Header({ project }: { project: BrandProject }) {
             ID {project.id.slice(0, 8)} · {fmtDate(project.createdAt)}
           </span>
         </div>
-        <h1 className="font-serif leading-[1] mb-2" style={{ fontSize: 72 }}>
+        <h1 className="font-display leading-[1] mb-2" style={{ fontSize: 72 }}>
           {project.intake.companyName}
         </h1>
         <div className="text-base" style={{ color: "var(--color-text-muted)" }}>
@@ -675,8 +675,12 @@ function LandingOptions({ project }: { project: BrandProject }) {
     <div className="mb-12">
       <div className="flex items-end justify-between mb-4 flex-wrap gap-2">
         <div>
-          <div className="kicker mb-1">05 · Landing page options</div>
-          <h2 className="text-2xl font-medium tracking-tight">Three layouts</h2>
+          <div className="kicker mb-1">05 · Website options</div>
+          <h2 className="text-2xl font-medium tracking-tight">Three website versions</h2>
+          <div className="text-sm mt-1" style={{ color: "var(--color-text-muted)" }}>
+            Three complete 3-page sites (home / about / flex), each in its own
+            vibe. Pick the one that lands.
+          </div>
         </div>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -987,7 +991,7 @@ function LogoPickerGate({ project }: { project: BrandProject }) {
     <div className="mb-12">
       <div className="kicker mb-3">Pick your logo to continue</div>
       <h2
-        className="font-serif mb-3"
+        className="font-display mb-3"
         style={{ fontSize: 32, lineHeight: 1.15 }}
       >
         Three directions. Pick one and we&apos;ll build the rest of your brand around it.
@@ -1635,7 +1639,7 @@ function Positioning({ brand }: { brand: LiveBrandJson | null }) {
       <div className="kicker mb-3">Positioning</div>
       {text && (
         <p
-          className="font-serif leading-[1.25]"
+          className="font-display leading-[1.25]"
           style={{ fontSize: 28, maxWidth: "none" }}
         >
           {text}

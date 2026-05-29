@@ -15,13 +15,25 @@ import { cookies } from "next/headers";
 import { getIronSession, type IronSession, type SessionOptions } from "iron-session";
 import { findUserByEmail, findUserById, createUser, type UserRow } from "./db";
 
+// Prefer NEXTAUTH_SECRET; AUTH_SECRET kept as legacy fallback during the
+// post-Supabase-migration transition. Treat empty strings as missing so
+// `??` doesn't latch onto a blank value pasted into Vercel.
+const RAW_SECRET =
+  process.env.NEXTAUTH_SECRET?.trim() ||
+  process.env.AUTH_SECRET?.trim() ||
+  undefined;
+
+if (process.env.NODE_ENV === "production" && !RAW_SECRET) {
+  throw new Error(
+    "NEXTAUTH_SECRET must be set in production. iron-session refuses to sign cookies with a fallback dev secret."
+  );
+}
+
 const SESSION_PASSWORD =
-  process.env.AUTH_SECRET ??
-  "dev-only-insecure-secret-change-in-production-iei-ventures-2026";
+  RAW_SECRET ?? "dev-only-insecure-secret-change-in-production-iei-ventures-2026";
 
 if (SESSION_PASSWORD.length < 32) {
-  // iron-session requires at least 32 chars.
-  throw new Error("AUTH_SECRET must be at least 32 characters");
+  throw new Error("NEXTAUTH_SECRET must be at least 32 characters");
 }
 
 const COOKIE_NAME = "iei_session";
@@ -113,8 +125,7 @@ export async function signIn(params: {
 
   // Demo bypass.
   if (email === DEMO_USER.email) {
-    const hash = process.env.DEMO_USER_PASSWORD_HASH ?? "";
-    const ok = await bcrypt.compare(params.password, hash);
+    const ok = await bcrypt.compare(params.password, _DEMO_HASH);
     if (!ok) return { error: "invalid credentials" };
     return { user: DEMO_USER };
   }

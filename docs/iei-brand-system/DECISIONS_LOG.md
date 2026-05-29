@@ -37,7 +37,7 @@
 | – Quick cards that pop | ✓ | |
 | – Brand Kit with quality logo | ✓ | |
 | – Easy copy/paste to Canva | ✓ | |
-| – Website | ✓ | |
+| – Website | ✓ | See override below — was 1 site, now 3 versions |
 | – GTM catered checklist based on their goals | ✓ | |
 | "Existing brand" path as v1 differentiator, visible on preview | CONFIRMED 2026-05-18 | Keep — must show when user previews |
 | English only | CONFIRMED 2026-05-18 | |
@@ -280,17 +280,25 @@ Tab coordinated with the BE dev (Henrique/Enrique) on infrastructure:
 
 ---
 
-## 🌐 3-VIBE WEBSITE OVERRIDE — APPROVED 2026-05-26
+## 🎨 WEBSITE DELIVERABLE — 3 VIBE VERSIONS — ✅ TAB APPROVED 2026-05-26
 
-Dev (Henrique) overrode Tab's 2026-05-21 spec of ONE 3-page website. He shipped THREE 3-page websites (one per aesthetic vibe — customer picks their favorite). **Tab APPROVED the override 2026-05-26.**
+**Background:** Tab's 2026-05-21 call locked the deliverable as **ONE** 3-page website (home / about / flex) sharing one brand visual system. See `src/lib/variants/landing.ts` header (pre-2026-05-26 version) for the original spec.
+
+**Henrique's override (2026-05-26):** Each customer now ships with **THREE** complete 3-page website versions, each in a distinct vibe. All three vibes use the same brand foundation (mission, voice, positioning, colors) but apply different typography, color emphasis, and layout signature so the customer compares three aesthetic interpretations and picks one to edit. Customer reasoning: "I want each separate website template to have its own vibe/theme/color/fonts. But the pages themselves obviously have the same fonts" (intra-vibe consistency, inter-vibe distinction).
+
+**✅ Tab reviewed + APPROVED the override 2026-05-26.** (Resolves the "Tab loop-in: OPEN" item — she's not surprised, she's on board.)
 
 | Decision | Status |
 |---|---|
-| **Deliverable = 3 vibe-versions × 3 pages each (Home/About/Flex)** — customer picks favorite | CONFIRMED 2026-05-26 (approved override) |
-| Implication: more value to customer + more generation cost (~3x website tokens) + more for Tab to review per delivery | Accepted |
-| Downstream: landing-page copy should say "3 website concepts to choose from" (not "a 1-page website") | TODO — update landing-page-copy.md |
+| **3 vibe versions × 3 pages each = 9 HTML outputs** | CONFIRMED 2026-05-26 — Henrique, APPROVED by Tab |
+| **Vibes are deterministic per brand** — picked from 5 base vibes by industry + archetype, see `src/lib/variants/vibes.ts` | CONFIRMED 2026-05-26 |
+| **5 base vibes anchored to Tab's FIVE FLAVORS** in `references/design-anatomy.md` (Editorial Density · Type-as-Art · Vintage Diaspora Poster · Pattern-as-Branding · Cinematic Street Pop Art) | CONFIRMED 2026-05-26 |
+| **Within a vibe, all 3 pages share fonts + color strategy + layout signature** — one cohesive site, not three random pages | CONFIRMED 2026-05-26 |
+| **Across vibes, fonts + accent + layout differ deliberately** — so the customer sees real choice | CONFIRMED 2026-05-26 |
+| **Token cost:** ~3× the previous build (9 calls vs 3, ~$2 extra per build on OpenRouter Claude 3.7 Sonnet — within $997 unit economics) | NOTED + ACCEPTED |
+| Downstream: landing-page copy now says "3 website concepts to choose from" | DONE — landing-page-copy.md updated 2026-05-26 |
 | Downstream: walkthrough UI shows the 3 vibe-versions as a picker on the website deliverable screen | Feeds Task #34 |
-| Downstream: Tab review time per customer increases — budget for it | Accepted |
+| Downstream: Tab review time per customer increases (3 sites to QC, not 1) — budget for it | Accepted |
 
 ## 📧 EMAIL PROVIDER — confirmed 2026-05-26
 

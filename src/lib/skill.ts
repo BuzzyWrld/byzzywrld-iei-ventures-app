@@ -23,9 +23,13 @@ export function newBrandId(): string {
 
 export async function enqueueBrandBuild(
   intake: BrandIntake,
-  opts: { tenantId?: string; userId?: string } = {}
+  opts: { tenantId?: string; userId?: string; buildId?: string } = {}
 ): Promise<{ project: BrandProject; work: Promise<void> }> {
-  const id = newBrandId();
+  // Optional caller-supplied buildId. The questionnaire frontend
+  // pre-generates the build_id client-side so it can navigate to
+  // /building immediately, before /api/build/start finishes its
+  // (now-inline-awaited) work. If absent, generate as before.
+  const id = opts.buildId ?? newBrandId();
   const project: BrandProject = {
     id,
     createdAt: new Date().toISOString(),
@@ -262,12 +266,22 @@ async function runPhase2(project: BrandProject): Promise<void> {
       try {
         const variants = await generateLandingVariants(brand as never, outDir, 3, intakeCtx);
         if (variants.length) {
+          // Each variant is now a whole 3-page vibe-website: a home page +
+          // sibling about/flex pages. The manifest's `url` points at the home
+          // (FE picker previews it in an iframe). `pages[]` lists the about +
+          // flex urls so (a) the FE can deep-link if it wants and (b) the
+          // home's relative nav links to siblings resolve.
           await mergeOutputs({
             landingVariants: variants.map((v) => ({
               key: v.key,
               title: v.title,
               rationale: v.rationale,
               url: assetUrl(v.filename),
+              pages: (v.pages ?? []).map((p) => ({
+                key: p.key,
+                title: p.title,
+                url: assetUrl(p.filename),
+              })),
             })),
           });
         }

@@ -94,11 +94,23 @@ export type LogoVariantRef = {
   url: string;
 };
 
+/**
+ * One website version in the brand kit. Each LandingVariantRef is the HOME
+ * page of a vibe (Editorial Density / Type-as-Art / etc) — `url` previews
+ * that home in the FE picker. The `pages` array lists sibling about + flex
+ * pages of the same vibe; they're published so the home's nav links resolve,
+ * and the FE may deep-link to them. See src/lib/variants/vibes.ts.
+ */
 export type LandingVariantRef = {
+  /** Vibe slug (e.g. "editorial-density") — doubles as the URL subfolder */
   key: string;
+  /** Vibe name shown in the picker UI (e.g. "Editorial Density") */
   title: string;
   rationale: string;
+  /** URL of this vibe's home page */
   url: string;
+  /** About + flex pages of the same vibe — published siblings of the home */
+  pages?: { key: string; title: string; url: string }[];
 };
 
 export type SocialAssetRef = {

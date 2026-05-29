@@ -4,7 +4,7 @@ import { usePathname } from "next/navigation";
 import { NavBar } from "./NavBar";
 import { Footer } from "./Footer";
 
-const BARE_ROUTES = ["/login", "/signup"];
+const BARE_ROUTES = ["/login", "/signup", "/onboarding", "/new", "/building", "/dashboard"];
 
 export function ShellFrame({
   children,

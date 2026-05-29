@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono, Instrument_Serif } from "next/font/google";
+import { Space_Grotesk, DM_Sans, IBM_Plex_Mono } from "next/font/google";
 import { ShellFrame } from "@/components/ShellFrame";
 import { currentTenant } from "@/lib/current-tenant";
 import type { Tenant } from "@/lib/tenants";
@@ -11,23 +11,22 @@ function userInitials(name: string): string {
   return parts.map((p) => p[0]?.toUpperCase() ?? "").join("") || "?";
 }
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const spaceGrotesk = Space_Grotesk({
+  variable: "--font-space-grotesk",
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+});
+
+const dmSans = DM_Sans({
+  variable: "--font-dm-sans",
   subsets: ["latin"],
   weight: ["300", "400", "500", "600", "700"],
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const ibmPlexMono = IBM_Plex_Mono({
+  variable: "--font-ibm-plex-mono",
   subsets: ["latin"],
   weight: ["400", "500"],
-});
-
-const instrumentSerif = Instrument_Serif({
-  variable: "--font-instrument-serif",
-  subsets: ["latin"],
-  weight: ["400"],
-  style: ["normal", "italic"],
 });
 
 export const metadata: Metadata = {
@@ -62,7 +61,7 @@ export default async function RootLayout({
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} ${instrumentSerif.variable}`}
+      className={`${spaceGrotesk.variable} ${dmSans.variable} ${ibmPlexMono.variable}`}
       data-tenant={tenant.slug}
     >
       <head>

@@ -206,7 +206,7 @@ function EmptyState() {
         CE
       </div>
       <h1
-        className="font-serif mt-0 mb-3"
+        className="font-display mt-0 mb-3"
         style={{ fontSize: 36, lineHeight: 1.05 }}
       >
         No calendar runs yet.
