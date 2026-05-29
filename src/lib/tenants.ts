@@ -67,6 +67,13 @@ const SEED: Tenant[] = [
   },
 ];
 
+// Local dev / DB-less preview: serve tenants from the in-memory SEED so the
+// dashboard renders without Supabase credentials. Mirrors auth.ts DEV_BYPASS.
+const DEV_BYPASS = process.env.DEV_BYPASS === "true";
+function seedTenant(slug: string): Tenant | null {
+  return SEED.find((t) => t.slug === slug) ?? null;
+}
+
 let _seeded = false;
 async function ensureSeed(): Promise<void> {
   if (_seeded) return;
@@ -95,6 +102,7 @@ function rowToTenant(r: TenantRow): Tenant {
 }
 
 export async function getTenantBySlug(slug: string): Promise<Tenant | null> {
+  if (DEV_BYPASS) return seedTenant(slug);
   await ensureSeed();
   const row = await findTenantBySlug(slug);
   return row ? rowToTenant(row) : null;
